@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="DropboxNote" representedClassName="DropboxNote" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dayString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasImage" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hasNoteAnnotate" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hasNoteStar" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="imageCreatedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="imageName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageUniqueId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="isDropboxNote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isiCloudNote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isLocalNote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="monthString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteAll" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteAnnotate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteBody" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteCreatedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="noteModifiedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="noteSection" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="syncID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="yearString" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="LocalNote" representedClassName="LocalNote" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dayString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasImage" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hasNoteAnnotate" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hasNoteStar" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="imageCreatedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="imageName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageUniqueId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="isDropboxNote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isiCloudNote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isLocalNote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="monthString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteAll" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteAnnotate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteBody" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteCreatedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="noteModifiedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="noteSection" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="syncID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="yearString" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="DropboxNote" positionX="0" positionY="0" width="128" height="435"/>
+        <element name="LocalNote" positionX="0" positionY="27" width="128" height="433"/>
+    </elements>
+</model>

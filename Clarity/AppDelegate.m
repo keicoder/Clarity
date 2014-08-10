@@ -7,143 +7,174 @@
 //
 
 #import "AppDelegate.h"
+#import "FRLayeredNavigationController/FRLayeredNavigation.h"
+#import "NoteDataManager.h"
+#import "LeftViewController.h"
+
+
+@interface AppDelegate () <FRLayeredNavigationControllerDelegate>
+
+@property (nonatomic, strong) UIStoryboard *storyboard;
+@property (nonatomic, strong) FRLayeredNavigationController *layeredNavigationController;
+
+@end
 
 @implementation AppDelegate
 
-@synthesize managedObjectContext = _managedObjectContext;
-@synthesize managedObjectModel = _managedObjectModel;
-@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
+#pragma mark - didFinishLaunchingWithOptions
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
+    [self applicationDocumentsDirectory];
+    [NSManagedObjectModel mergedModelFromBundles:nil];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+    {
+        //FRLayeredNavigationController
+        self.storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+        LeftViewController *leftViewController = (LeftViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LeftViewController"];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:leftViewController];
+        
+        self.layeredNavigationController = [(FRLayeredNavigationController *)[FRLayeredNavigationController alloc] initWithRootViewController:navigationController configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_LEFT;  //레이어가 노출 될 거리
+            layeredNavigationItem.nextItemDistance = 0; //60;                 //레이어가 가려질 거리;
+            layeredNavigationItem.hasChrome = NO;
+            layeredNavigationItem.hasBorder = NO;
+            layeredNavigationItem.displayShadow = NO;
+        }];
+        
+        self.layeredNavigationController.delegate = self;
+        self.window.rootViewController = self.layeredNavigationController;
+    }
+    
+    //드랍박스 어카운트
+    //Dropbox App Folder : 'ClarityApp'
+    DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"mew6arv9f06qgva" secret:@"umw2fac5kt92i3z"];
+    [DBAccountManager setSharedManager:accountManager];
+    if ([accountManager linkedAccount])
+    {
+        [[NoteDataManager sharedNoteDataManager] setSyncEnabled:YES];
+    }
+    
+    [self styleUI];                                 //유저 인터페이스
+    
     return YES;
 }
 
+
+#pragma mark 드랍박스 연결
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    DBAccount *account = [[DBAccountManager sharedManager] handleOpenURL:url];
+    if (account) {
+        return YES;
+    }
+    return NO;
+}
+
+
+#pragma mark - 유저 인터페이스
+
+- (void)styleUI
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent]; //상태 바 속성
+    self.window.backgroundColor = kWINDOW_BACKGROUND_COLOR;                             //윈도 배경 색상
+    self.window.tintColor = [UIColor whiteColor];                                       //윈도 틴트 색상
+    [[UINavigationBar appearance] setBarTintColor:kWINDOW_BACKGROUND_COLOR];            //냅바 색상
+    [[UINavigationBar appearance] setTintColor:kWHITE_COLOR];                           //냅바 버튼 색상
+    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:kWHITE_COLOR, NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-Medium" size:18.0]};
+}
+
+
+#pragma mark - 기기 방향 지원
+
+- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window  // iOS 6 autorotation fix
+{
+    return UIInterfaceOrientationMaskAll;
+}
+
+
+#pragma mark - Application's Documents directory
+
+- (NSURL *)applicationDocumentsDirectory
+{
+    NSLog(@"applicationDocumentsDirectory: %@\n", [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+
+#pragma mark - FRLayeredNavigationController Delegate
+
+- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
+                 willMoveController:(UIViewController*)controller
+{
+    
+}
+
+
+- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
+               movingViewController:(UIViewController*)controller
+{
+    
+}
+
+
+- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
+                  didMoveController:(UIViewController*)controller
+{
+    
+}
+
+
+#pragma mark - Application's State
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    // Saves changes in the application's managed object context before the application terminates.
-    [self saveContext];
-}
-
-- (void)saveContext
-{
-    NSError *error = nil;
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    if (managedObjectContext != nil) {
-        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-             // Replace this implementation with code to handle the error appropriately.
-             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        } 
-    }
-}
-
-#pragma mark - Core Data stack
-
-// Returns the managed object context for the application.
-// If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
-- (NSManagedObjectContext *)managedObjectContext
-{
-    if (_managedObjectContext != nil) {
-        return _managedObjectContext;
-    }
     
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
-    if (coordinator != nil) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] init];
-        [_managedObjectContext setPersistentStoreCoordinator:coordinator];
-    }
-    return _managedObjectContext;
 }
 
-// Returns the managed object model for the application.
-// If the model doesn't already exist, it is created from the application's model.
-- (NSManagedObjectModel *)managedObjectModel
-{
-    if (_managedObjectModel != nil) {
-        return _managedObjectModel;
-    }
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Clarity" withExtension:@"momd"];
-    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-    return _managedObjectModel;
-}
 
-// Returns the persistent store coordinator for the application.
-// If the coordinator doesn't already exist, it is created and the application's store added to it.
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
-{
-    if (_persistentStoreCoordinator != nil) {
-        return _persistentStoreCoordinator;
-    }
-    
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Clarity.sqlite"];
-    
-    NSError *error = nil;
-    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-        /*
-         Replace this implementation with code to handle the error appropriately.
-         
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-         
-         Typical reasons for an error here include:
-         * The persistent store is not accessible;
-         * The schema for the persistent store is incompatible with current managed object model.
-         Check the error message to determine what the actual problem was.
-         
-         
-         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
-         
-         If you encounter schema incompatibility errors during development, you can reduce their frequency by:
-         * Simply deleting the existing store:
-         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
-         
-         * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
-         @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES}
-         
-         Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
-         
-         */
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }    
-    
-    return _persistentStoreCoordinator;
-}
+#pragma mark 로고 뷰 (사용 안 함)
 
-#pragma mark - Application's Documents directory
-
-// Returns the URL to the application's Documents directory.
-- (NSURL *)applicationDocumentsDirectory
+- (void)addLogoImageView
 {
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    //100 by 100
+    UIImage *logo = [UIImage imageNamed:@"penColor64"];
+    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:logo];
+    CGFloat windowWidth = CGRectGetWidth(self.window.bounds);
+    CGFloat windowHeight = CGRectGetHeight(self.window.bounds);
+    CGFloat imageViewWidth = CGRectGetWidth(logoImageView.bounds);
+    CGFloat imageViewHeight = CGRectGetHeight(logoImageView.bounds);
+    logoImageView.frame = CGRectMake((windowWidth - imageViewWidth) / 2, (windowHeight - imageViewHeight) / 2, imageViewWidth, imageViewHeight);
+    
+    UIView *aView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, windowWidth, windowHeight)];
+    [aView addSubview:logoImageView];
+    
+    [self.window addSubview:aView];
+    [self.window setAutoresizesSubviews:YES];
+    [aView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 }
 
 @end

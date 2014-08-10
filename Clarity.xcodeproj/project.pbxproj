@@ -14,7 +14,6 @@
 		C122903B19973A2B00460667 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C122903919973A2B00460667 /* InfoPlist.strings */; };
 		C122903D19973A2B00460667 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C122903C19973A2B00460667 /* main.m */; };
 		C122904119973A2B00460667 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C122904019973A2B00460667 /* AppDelegate.m */; };
-		C122904419973A2B00460667 /* Clarity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C122904219973A2B00460667 /* Clarity.xcdatamodeld */; };
 		C122904619973A2B00460667 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C122904519973A2B00460667 /* Images.xcassets */; };
 		C122904D19973A2B00460667 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122904C19973A2B00460667 /* XCTest.framework */; };
 		C122904E19973A2B00460667 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122902E19973A2B00460667 /* Foundation.framework */; };
@@ -22,6 +21,61 @@
 		C122905019973A2B00460667 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122903419973A2B00460667 /* CoreData.framework */; };
 		C122905819973A2B00460667 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C122905619973A2B00460667 /* InfoPlist.strings */; };
 		C122905A19973A2B00460667 /* ClarityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C122905919973A2B00460667 /* ClarityTests.m */; };
+		C122908A19973A6400460667 /* DoActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = C122906619973A6400460667 /* DoActionSheet.m */; };
+		C122908B19973A6400460667 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = C122906819973A6400460667 /* .gitignore */; };
+		C122908C19973A6400460667 /* LICENSE_UIImage-ResizeMagick in Resources */ = {isa = PBXBuildFile; fileRef = C122906919973A6400460667 /* LICENSE_UIImage-ResizeMagick */; };
+		C122908D19973A6400460667 /* README_UIImage-ResizeMagick.md in Resources */ = {isa = PBXBuildFile; fileRef = C122906A19973A6400460667 /* README_UIImage-ResizeMagick.md */; };
+		C122908E19973A6400460667 /* UIImage+ResizeMagick.m in Sources */ = {isa = PBXBuildFile; fileRef = C122906C19973A6400460667 /* UIImage+ResizeMagick.m */; };
+		C122908F19973A6400460667 /* UIImage-ResizeMagick.podspec in Resources */ = {isa = PBXBuildFile; fileRef = C122906D19973A6400460667 /* UIImage-ResizeMagick.podspec */; };
+		C122909019973A6400460667 /* SVWebViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = C122906F19973A6400460667 /* SVWebViewController.strings */; };
+		C122909119973A6400460667 /* SVModalWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C122907819973A6400460667 /* SVModalWebViewController.m */; };
+		C122909219973A6400460667 /* SVWebViewController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C122907919973A6400460667 /* SVWebViewController.bundle */; };
+		C122909319973A6400460667 /* SVWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C122907B19973A6400460667 /* SVWebViewController.m */; };
+		C122909419973A6400460667 /* SVWebViewControllerActivityChrome.m in Sources */ = {isa = PBXBuildFile; fileRef = C122907F19973A6400460667 /* SVWebViewControllerActivityChrome.m */; };
+		C122909519973A6400460667 /* SVWebViewControllerActivitySafari.m in Sources */ = {isa = PBXBuildFile; fileRef = C122908219973A6400460667 /* SVWebViewControllerActivitySafari.m */; };
+		C122909619973A6400460667 /* SVWebViewControllerActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = C122908419973A6400460667 /* SVWebViewControllerActivity.m */; };
+		C122909719973A6400460667 /* YRDropdownView.m in Sources */ = {isa = PBXBuildFile; fileRef = C122908919973A6400460667 /* YRDropdownView.m */; };
+		C12290A319973A7200460667 /* NSUserDefaults+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C122909A19973A7100460667 /* NSUserDefaults+Extension.m */; };
+		C12290A419973A7200460667 /* UIButtonPressAndHold.m in Sources */ = {isa = PBXBuildFile; fileRef = C122909C19973A7100460667 /* UIButtonPressAndHold.m */; };
+		C12290A519973A7200460667 /* UIColor+CustomColors.m in Sources */ = {isa = PBXBuildFile; fileRef = C122909E19973A7100460667 /* UIColor+CustomColors.m */; };
+		C12290A619973A7200460667 /* UIImage+ChangeColor.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290A019973A7100460667 /* UIImage+ChangeColor.m */; };
+		C12290A719973A7200460667 /* UIImage+MakeThumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290A219973A7200460667 /* UIImage+MakeThumbnail.m */; };
+		C12290CD19973A7E00460667 /* ClarityConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290AA19973A7E00460667 /* ClarityConstants.m */; };
+		C12290CE19973A7E00460667 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290AD19973A7E00460667 /* AboutViewController.m */; };
+		C12290CF19973A7E00460667 /* DropboxAddEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290AF19973A7E00460667 /* DropboxAddEditViewController.m */; };
+		C12290D019973A7E00460667 /* DropboxNoteListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290B119973A7E00460667 /* DropboxNoteListViewController.m */; };
+		C12290D119973A7E00460667 /* DropboxSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290B319973A7E00460667 /* DropboxSettingsTableViewController.m */; };
+		C12290D219973A7E00460667 /* DropboxStarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290B519973A7E00460667 /* DropboxStarViewController.m */; };
+		C12290D319973A7E00460667 /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290B719973A7E00460667 /* LeftViewController.m */; };
+		C12290D419973A7E00460667 /* LocalAddEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290B919973A7E00460667 /* LocalAddEditViewController.m */; };
+		C12290D519973A7E00460667 /* LocalNoteListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290BB19973A7E00460667 /* LocalNoteListViewController.m */; };
+		C12290D619973A7E00460667 /* LocalStarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290BD19973A7E00460667 /* LocalStarViewController.m */; };
+		C12290D719973A7E00460667 /* MarkdownGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290BF19973A7E00460667 /* MarkdownGuideViewController.m */; };
+		C12290D819973A7E00460667 /* MarkdownWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290C119973A7E00460667 /* MarkdownWebViewController.m */; };
+		C12290D919973A7E00460667 /* NoteTitlePopinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290C319973A7E00460667 /* NoteTitlePopinViewController.m */; };
+		C12290DA19973A7E00460667 /* NoteTitlePopinViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C12290C419973A7E00460667 /* NoteTitlePopinViewController.xib */; };
+		C12290DB19973A7E00460667 /* OpenSourceLicencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290C619973A7E00460667 /* OpenSourceLicencesViewController.m */; };
+		C12290DC19973A7E00460667 /* SupportTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290C819973A7E00460667 /* SupportTableViewController.m */; };
+		C12290DD19973A7E00460667 /* WelcomePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290CA19973A7E00460667 /* WelcomePageViewController.m */; };
+		C12290DE19973A7E00460667 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290CC19973A7E00460667 /* WelcomeViewController.m */; };
+		C12290E319973B6000460667 /* AboutClarity.html in Resources */ = {isa = PBXBuildFile; fileRef = C12290E019973B6000460667 /* AboutClarity.html */; };
+		C12290E419973B6000460667 /* ClarityiPad_OpenSourceLicences.html in Resources */ = {isa = PBXBuildFile; fileRef = C12290E119973B6000460667 /* ClarityiPad_OpenSourceLicences.html */; };
+		C12290E519973B6000460667 /* ClarityMarkdownSyntaxGuide.html in Resources */ = {isa = PBXBuildFile; fileRef = C12290E219973B6000460667 /* ClarityMarkdownSyntaxGuide.html */; };
+		C12290E819973B6C00460667 /* jMarkdown.css in Resources */ = {isa = PBXBuildFile; fileRef = C12290E719973B6C00460667 /* jMarkdown.css */; };
+		C12290EC19973BA100460667 /* WelcomePage.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290EB19973BA100460667 /* WelcomePage.m */; };
+		C12290F819973BAA00460667 /* BackgroundLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290EF19973BAA00460667 /* BackgroundLayer.m */; };
+		C12290F919973BAA00460667 /* ICTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290F119973BAA00460667 /* ICTextView.m */; };
+		C12290FA19973BAA00460667 /* LeftTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290F319973BAA00460667 /* LeftTableViewCell.m */; };
+		C12290FB19973BAA00460667 /* LeftTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C12290F419973BAA00460667 /* LeftTableViewCell.xib */; };
+		C12290FC19973BAA00460667 /* NoteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290F619973BAA00460667 /* NoteTableViewCell.m */; };
+		C12290FD19973BAA00460667 /* NoteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C12290F719973BAA00460667 /* NoteTableViewCell.xib */; };
+		C122910619973BE100460667 /* DropboxNote.m in Sources */ = {isa = PBXBuildFile; fileRef = C122910019973BE100460667 /* DropboxNote.m */; };
+		C122910719973BE100460667 /* LocalNote.m in Sources */ = {isa = PBXBuildFile; fileRef = C122910219973BE100460667 /* LocalNote.m */; };
+		C122910819973BE100460667 /* NoteDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C122910419973BE100460667 /* NoteDataManager.m */; };
+		C122910C19973CE100460667 /* Clarity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C122910A19973CE100460667 /* Clarity.xcdatamodeld */; };
+		C122910E19973D0600460667 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C122910D19973D0600460667 /* Main.storyboard */; };
+		C122911219973FDF00460667 /* libMMMarkdown-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C122911019973FDF00460667 /* libMMMarkdown-iOS.a */; };
+		C331FC139151431BB224E126 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6E8D91E9C764F1DBB2C6C0E /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +89,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		62EF1565489047DBA75023BE /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		C122902B19973A2B00460667 /* Clarity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clarity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C122902E19973A2B00460667 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C122903019973A2B00460667 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -44,15 +99,116 @@
 		C122903A19973A2B00460667 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C122903C19973A2B00460667 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C122903E19973A2B00460667 /* Clarity-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Clarity-Prefix.pch"; sourceTree = "<group>"; };
-		C122903F19973A2B00460667 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		C122904019973A2B00460667 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		C122904319973A2B00460667 /* Clarity.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Clarity.xcdatamodel; sourceTree = "<group>"; };
-		C122904519973A2B00460667 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		C122903F19973A2B00460667 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../AppDelegate.h; sourceTree = "<group>"; };
+		C122904019973A2B00460667 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ../AppDelegate.m; sourceTree = "<group>"; };
+		C122904519973A2B00460667 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ../Images.xcassets; sourceTree = "<group>"; };
 		C122904B19973A2B00460667 /* ClarityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClarityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C122904C19973A2B00460667 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		C122905519973A2B00460667 /* ClarityTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ClarityTests-Info.plist"; sourceTree = "<group>"; };
 		C122905719973A2B00460667 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C122905919973A2B00460667 /* ClarityTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ClarityTests.m; sourceTree = "<group>"; };
+		C122906519973A6400460667 /* DoActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoActionSheet.h; sourceTree = "<group>"; };
+		C122906619973A6400460667 /* DoActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoActionSheet.m; sourceTree = "<group>"; };
+		C122906819973A6400460667 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		C122906919973A6400460667 /* LICENSE_UIImage-ResizeMagick */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LICENSE_UIImage-ResizeMagick"; sourceTree = "<group>"; };
+		C122906A19973A6400460667 /* README_UIImage-ResizeMagick.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "README_UIImage-ResizeMagick.md"; sourceTree = "<group>"; };
+		C122906B19973A6400460667 /* UIImage+ResizeMagick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ResizeMagick.h"; sourceTree = "<group>"; };
+		C122906C19973A6400460667 /* UIImage+ResizeMagick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ResizeMagick.m"; sourceTree = "<group>"; };
+		C122906D19973A6400460667 /* UIImage-ResizeMagick.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "UIImage-ResizeMagick.podspec"; sourceTree = "<group>"; };
+		C122907019973A6400460667 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/SVWebViewController.strings; sourceTree = "<group>"; };
+		C122907119973A6400460667 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/SVWebViewController.strings; sourceTree = "<group>"; };
+		C122907219973A6400460667 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SVWebViewController.strings; sourceTree = "<group>"; };
+		C122907319973A6400460667 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/SVWebViewController.strings"; sourceTree = "<group>"; };
+		C122907419973A6400460667 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/SVWebViewController.strings; sourceTree = "<group>"; };
+		C122907519973A6400460667 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SVWebViewController.strings; sourceTree = "<group>"; };
+		C122907619973A6400460667 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/SVWebViewController.strings; sourceTree = "<group>"; };
+		C122907719973A6400460667 /* SVModalWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVModalWebViewController.h; sourceTree = "<group>"; };
+		C122907819973A6400460667 /* SVModalWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVModalWebViewController.m; sourceTree = "<group>"; };
+		C122907919973A6400460667 /* SVWebViewController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVWebViewController.bundle; sourceTree = "<group>"; };
+		C122907A19973A6400460667 /* SVWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVWebViewController.h; sourceTree = "<group>"; };
+		C122907B19973A6400460667 /* SVWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVWebViewController.m; sourceTree = "<group>"; };
+		C122907E19973A6400460667 /* SVWebViewControllerActivityChrome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVWebViewControllerActivityChrome.h; sourceTree = "<group>"; };
+		C122907F19973A6400460667 /* SVWebViewControllerActivityChrome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVWebViewControllerActivityChrome.m; sourceTree = "<group>"; };
+		C122908119973A6400460667 /* SVWebViewControllerActivitySafari.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVWebViewControllerActivitySafari.h; sourceTree = "<group>"; };
+		C122908219973A6400460667 /* SVWebViewControllerActivitySafari.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVWebViewControllerActivitySafari.m; sourceTree = "<group>"; };
+		C122908319973A6400460667 /* SVWebViewControllerActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVWebViewControllerActivity.h; sourceTree = "<group>"; };
+		C122908419973A6400460667 /* SVWebViewControllerActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVWebViewControllerActivity.m; sourceTree = "<group>"; };
+		C122908519973A6400460667 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SVWebViewController.strings"; sourceTree = "<group>"; };
+		C122908619973A6400460667 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/SVWebViewController.strings"; sourceTree = "<group>"; };
+		C122908819973A6400460667 /* YRDropdownView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YRDropdownView.h; sourceTree = "<group>"; };
+		C122908919973A6400460667 /* YRDropdownView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YRDropdownView.m; sourceTree = "<group>"; };
+		C122909919973A7100460667 /* NSUserDefaults+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+Extension.h"; sourceTree = "<group>"; };
+		C122909A19973A7100460667 /* NSUserDefaults+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+Extension.m"; sourceTree = "<group>"; };
+		C122909B19973A7100460667 /* UIButtonPressAndHold.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIButtonPressAndHold.h; sourceTree = "<group>"; };
+		C122909C19973A7100460667 /* UIButtonPressAndHold.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIButtonPressAndHold.m; sourceTree = "<group>"; };
+		C122909D19973A7100460667 /* UIColor+CustomColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CustomColors.h"; sourceTree = "<group>"; };
+		C122909E19973A7100460667 /* UIColor+CustomColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CustomColors.m"; sourceTree = "<group>"; };
+		C122909F19973A7100460667 /* UIImage+ChangeColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ChangeColor.h"; sourceTree = "<group>"; };
+		C12290A019973A7100460667 /* UIImage+ChangeColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ChangeColor.m"; sourceTree = "<group>"; };
+		C12290A119973A7100460667 /* UIImage+MakeThumbnail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MakeThumbnail.h"; sourceTree = "<group>"; };
+		C12290A219973A7200460667 /* UIImage+MakeThumbnail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MakeThumbnail.m"; sourceTree = "<group>"; };
+		C12290A919973A7E00460667 /* ClarityConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClarityConstants.h; sourceTree = "<group>"; };
+		C12290AA19973A7E00460667 /* ClarityConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClarityConstants.m; sourceTree = "<group>"; };
+		C12290AC19973A7E00460667 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		C12290AD19973A7E00460667 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
+		C12290AE19973A7E00460667 /* DropboxAddEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxAddEditViewController.h; sourceTree = "<group>"; };
+		C12290AF19973A7E00460667 /* DropboxAddEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxAddEditViewController.m; sourceTree = "<group>"; };
+		C12290B019973A7E00460667 /* DropboxNoteListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxNoteListViewController.h; sourceTree = "<group>"; };
+		C12290B119973A7E00460667 /* DropboxNoteListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxNoteListViewController.m; sourceTree = "<group>"; };
+		C12290B219973A7E00460667 /* DropboxSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxSettingsTableViewController.h; sourceTree = "<group>"; };
+		C12290B319973A7E00460667 /* DropboxSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxSettingsTableViewController.m; sourceTree = "<group>"; };
+		C12290B419973A7E00460667 /* DropboxStarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxStarViewController.h; sourceTree = "<group>"; };
+		C12290B519973A7E00460667 /* DropboxStarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxStarViewController.m; sourceTree = "<group>"; };
+		C12290B619973A7E00460667 /* LeftViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftViewController.h; sourceTree = "<group>"; };
+		C12290B719973A7E00460667 /* LeftViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftViewController.m; sourceTree = "<group>"; };
+		C12290B819973A7E00460667 /* LocalAddEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalAddEditViewController.h; sourceTree = "<group>"; };
+		C12290B919973A7E00460667 /* LocalAddEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalAddEditViewController.m; sourceTree = "<group>"; };
+		C12290BA19973A7E00460667 /* LocalNoteListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNoteListViewController.h; sourceTree = "<group>"; };
+		C12290BB19973A7E00460667 /* LocalNoteListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalNoteListViewController.m; sourceTree = "<group>"; };
+		C12290BC19973A7E00460667 /* LocalStarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalStarViewController.h; sourceTree = "<group>"; };
+		C12290BD19973A7E00460667 /* LocalStarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalStarViewController.m; sourceTree = "<group>"; };
+		C12290BE19973A7E00460667 /* MarkdownGuideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkdownGuideViewController.h; sourceTree = "<group>"; };
+		C12290BF19973A7E00460667 /* MarkdownGuideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkdownGuideViewController.m; sourceTree = "<group>"; };
+		C12290C019973A7E00460667 /* MarkdownWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkdownWebViewController.h; sourceTree = "<group>"; };
+		C12290C119973A7E00460667 /* MarkdownWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkdownWebViewController.m; sourceTree = "<group>"; };
+		C12290C219973A7E00460667 /* NoteTitlePopinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteTitlePopinViewController.h; sourceTree = "<group>"; };
+		C12290C319973A7E00460667 /* NoteTitlePopinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteTitlePopinViewController.m; sourceTree = "<group>"; };
+		C12290C419973A7E00460667 /* NoteTitlePopinViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteTitlePopinViewController.xib; sourceTree = "<group>"; };
+		C12290C519973A7E00460667 /* OpenSourceLicencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenSourceLicencesViewController.h; sourceTree = "<group>"; };
+		C12290C619973A7E00460667 /* OpenSourceLicencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenSourceLicencesViewController.m; sourceTree = "<group>"; };
+		C12290C719973A7E00460667 /* SupportTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupportTableViewController.h; sourceTree = "<group>"; };
+		C12290C819973A7E00460667 /* SupportTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SupportTableViewController.m; sourceTree = "<group>"; };
+		C12290C919973A7E00460667 /* WelcomePageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomePageViewController.h; sourceTree = "<group>"; };
+		C12290CA19973A7E00460667 /* WelcomePageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomePageViewController.m; sourceTree = "<group>"; };
+		C12290CB19973A7E00460667 /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
+		C12290CC19973A7E00460667 /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
+		C12290E019973B6000460667 /* AboutClarity.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AboutClarity.html; sourceTree = "<group>"; };
+		C12290E119973B6000460667 /* ClarityiPad_OpenSourceLicences.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ClarityiPad_OpenSourceLicences.html; sourceTree = "<group>"; };
+		C12290E219973B6000460667 /* ClarityMarkdownSyntaxGuide.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ClarityMarkdownSyntaxGuide.html; sourceTree = "<group>"; };
+		C12290E719973B6C00460667 /* jMarkdown.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = jMarkdown.css; sourceTree = "<group>"; };
+		C12290EA19973BA100460667 /* WelcomePage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomePage.h; sourceTree = "<group>"; };
+		C12290EB19973BA100460667 /* WelcomePage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomePage.m; sourceTree = "<group>"; };
+		C12290EE19973BAA00460667 /* BackgroundLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundLayer.h; sourceTree = "<group>"; };
+		C12290EF19973BAA00460667 /* BackgroundLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundLayer.m; sourceTree = "<group>"; };
+		C12290F019973BAA00460667 /* ICTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICTextView.h; sourceTree = "<group>"; };
+		C12290F119973BAA00460667 /* ICTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICTextView.m; sourceTree = "<group>"; };
+		C12290F219973BAA00460667 /* LeftTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftTableViewCell.h; sourceTree = "<group>"; };
+		C12290F319973BAA00460667 /* LeftTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftTableViewCell.m; sourceTree = "<group>"; };
+		C12290F419973BAA00460667 /* LeftTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftTableViewCell.xib; sourceTree = "<group>"; };
+		C12290F519973BAA00460667 /* NoteTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteTableViewCell.h; sourceTree = "<group>"; };
+		C12290F619973BAA00460667 /* NoteTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteTableViewCell.m; sourceTree = "<group>"; };
+		C12290F719973BAA00460667 /* NoteTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteTableViewCell.xib; sourceTree = "<group>"; };
+		C12290FF19973BE100460667 /* DropboxNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxNote.h; sourceTree = "<group>"; };
+		C122910019973BE100460667 /* DropboxNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxNote.m; sourceTree = "<group>"; };
+		C122910119973BE100460667 /* LocalNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNote.h; sourceTree = "<group>"; };
+		C122910219973BE100460667 /* LocalNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalNote.m; sourceTree = "<group>"; };
+		C122910319973BE100460667 /* NoteDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteDataManager.h; sourceTree = "<group>"; };
+		C122910419973BE100460667 /* NoteDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteDataManager.m; sourceTree = "<group>"; };
+		C122910B19973CE100460667 /* ClarityHD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ClarityHD.xcdatamodel; sourceTree = "<group>"; };
+		C122910D19973D0600460667 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		C122911019973FDF00460667 /* libMMMarkdown-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libMMMarkdown-iOS.a"; sourceTree = "<group>"; };
+		C122911119973FDF00460667 /* MMMarkdown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMMarkdown.h; sourceTree = "<group>"; };
+		D6E8D91E9C764F1DBB2C6C0E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,10 +216,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C122911219973FDF00460667 /* libMMMarkdown-iOS.a in Frameworks */,
 				C122903119973A2B00460667 /* CoreGraphics.framework in Frameworks */,
 				C122903519973A2B00460667 /* CoreData.framework in Frameworks */,
 				C122903319973A2B00460667 /* UIKit.framework in Frameworks */,
 				C122902F19973A2B00460667 /* Foundation.framework in Frameworks */,
+				C331FC139151431BB224E126 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +246,7 @@
 				C122905319973A2B00460667 /* ClarityTests */,
 				C122902D19973A2B00460667 /* Frameworks */,
 				C122902C19973A2B00460667 /* Products */,
+				62EF1565489047DBA75023BE /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,11 +262,13 @@
 		C122902D19973A2B00460667 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C122910F19973FDF00460667 /* MMMarkdown */,
 				C122902E19973A2B00460667 /* Foundation.framework */,
 				C122903019973A2B00460667 /* CoreGraphics.framework */,
 				C122903219973A2B00460667 /* UIKit.framework */,
 				C122903419973A2B00460667 /* CoreData.framework */,
 				C122904C19973A2B00460667 /* XCTest.framework */,
+				D6E8D91E9C764F1DBB2C6C0E /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -115,10 +276,16 @@
 		C122903619973A2B00460667 /* Clarity */ = {
 			isa = PBXGroup;
 			children = (
-				C122903F19973A2B00460667 /* AppDelegate.h */,
-				C122904019973A2B00460667 /* AppDelegate.m */,
-				C122904519973A2B00460667 /* Images.xcassets */,
-				C122904219973A2B00460667 /* Clarity.xcdatamodeld */,
+				C122906319973A6400460667 /* 3rdParties */,
+				C12290DF19973B6000460667 /* HTML */,
+				C12290E619973B6C00460667 /* MarkdownData */,
+				C122909819973A7100460667 /* Categories */,
+				C12290E919973BA100460667 /* Objects */,
+				C12290ED19973BAA00460667 /* Views */,
+				C12290AB19973A7E00460667 /* Controllers */,
+				C122910519973BE100460667 /* UI */,
+				C12290FE19973BE100460667 /* Models */,
+				C12290A819973A7E00460667 /* Constants */,
 				C122903719973A2B00460667 /* Supporting Files */,
 			);
 			path = Clarity;
@@ -153,6 +320,243 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		C122906319973A6400460667 /* 3rdParties */ = {
+			isa = PBXGroup;
+			children = (
+				C122906419973A6400460667 /* DoActionSheet */,
+				C122906E19973A6400460667 /* SVWebViewController */,
+				C122908719973A6400460667 /* YRDropdownView */,
+			);
+			path = 3rdParties;
+			sourceTree = "<group>";
+		};
+		C122906419973A6400460667 /* DoActionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				C122906519973A6400460667 /* DoActionSheet.h */,
+				C122906619973A6400460667 /* DoActionSheet.m */,
+				C122906719973A6400460667 /* UIImage-ResizeMagick */,
+			);
+			path = DoActionSheet;
+			sourceTree = "<group>";
+		};
+		C122906719973A6400460667 /* UIImage-ResizeMagick */ = {
+			isa = PBXGroup;
+			children = (
+				C122906819973A6400460667 /* .gitignore */,
+				C122906919973A6400460667 /* LICENSE_UIImage-ResizeMagick */,
+				C122906A19973A6400460667 /* README_UIImage-ResizeMagick.md */,
+				C122906B19973A6400460667 /* UIImage+ResizeMagick.h */,
+				C122906C19973A6400460667 /* UIImage+ResizeMagick.m */,
+				C122906D19973A6400460667 /* UIImage-ResizeMagick.podspec */,
+			);
+			path = "UIImage-ResizeMagick";
+			sourceTree = "<group>";
+		};
+		C122906E19973A6400460667 /* SVWebViewController */ = {
+			isa = PBXGroup;
+			children = (
+				C122906F19973A6400460667 /* SVWebViewController.strings */,
+				C122907719973A6400460667 /* SVModalWebViewController.h */,
+				C122907819973A6400460667 /* SVModalWebViewController.m */,
+				C122907919973A6400460667 /* SVWebViewController.bundle */,
+				C122907A19973A6400460667 /* SVWebViewController.h */,
+				C122907B19973A6400460667 /* SVWebViewController.m */,
+				C122907C19973A6400460667 /* UIActivities */,
+			);
+			path = SVWebViewController;
+			sourceTree = "<group>";
+		};
+		C122907C19973A6400460667 /* UIActivities */ = {
+			isa = PBXGroup;
+			children = (
+				C122907D19973A6400460667 /* Chrome */,
+				C122908019973A6400460667 /* Safari */,
+				C122908319973A6400460667 /* SVWebViewControllerActivity.h */,
+				C122908419973A6400460667 /* SVWebViewControllerActivity.m */,
+			);
+			path = UIActivities;
+			sourceTree = "<group>";
+		};
+		C122907D19973A6400460667 /* Chrome */ = {
+			isa = PBXGroup;
+			children = (
+				C122907E19973A6400460667 /* SVWebViewControllerActivityChrome.h */,
+				C122907F19973A6400460667 /* SVWebViewControllerActivityChrome.m */,
+			);
+			path = Chrome;
+			sourceTree = "<group>";
+		};
+		C122908019973A6400460667 /* Safari */ = {
+			isa = PBXGroup;
+			children = (
+				C122908119973A6400460667 /* SVWebViewControllerActivitySafari.h */,
+				C122908219973A6400460667 /* SVWebViewControllerActivitySafari.m */,
+			);
+			path = Safari;
+			sourceTree = "<group>";
+		};
+		C122908719973A6400460667 /* YRDropdownView */ = {
+			isa = PBXGroup;
+			children = (
+				C122908819973A6400460667 /* YRDropdownView.h */,
+				C122908919973A6400460667 /* YRDropdownView.m */,
+			);
+			path = YRDropdownView;
+			sourceTree = "<group>";
+		};
+		C122909819973A7100460667 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				C122909919973A7100460667 /* NSUserDefaults+Extension.h */,
+				C122909A19973A7100460667 /* NSUserDefaults+Extension.m */,
+				C122909B19973A7100460667 /* UIButtonPressAndHold.h */,
+				C122909C19973A7100460667 /* UIButtonPressAndHold.m */,
+				C122909D19973A7100460667 /* UIColor+CustomColors.h */,
+				C122909E19973A7100460667 /* UIColor+CustomColors.m */,
+				C122909F19973A7100460667 /* UIImage+ChangeColor.h */,
+				C12290A019973A7100460667 /* UIImage+ChangeColor.m */,
+				C12290A119973A7100460667 /* UIImage+MakeThumbnail.h */,
+				C12290A219973A7200460667 /* UIImage+MakeThumbnail.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		C12290A819973A7E00460667 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				C12290A919973A7E00460667 /* ClarityConstants.h */,
+				C12290AA19973A7E00460667 /* ClarityConstants.m */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		C12290AB19973A7E00460667 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				C122903F19973A2B00460667 /* AppDelegate.h */,
+				C122904019973A2B00460667 /* AppDelegate.m */,
+				C12290AC19973A7E00460667 /* AboutViewController.h */,
+				C12290AD19973A7E00460667 /* AboutViewController.m */,
+				C12290AE19973A7E00460667 /* DropboxAddEditViewController.h */,
+				C12290AF19973A7E00460667 /* DropboxAddEditViewController.m */,
+				C12290B019973A7E00460667 /* DropboxNoteListViewController.h */,
+				C12290B119973A7E00460667 /* DropboxNoteListViewController.m */,
+				C12290B219973A7E00460667 /* DropboxSettingsTableViewController.h */,
+				C12290B319973A7E00460667 /* DropboxSettingsTableViewController.m */,
+				C12290B419973A7E00460667 /* DropboxStarViewController.h */,
+				C12290B519973A7E00460667 /* DropboxStarViewController.m */,
+				C12290B619973A7E00460667 /* LeftViewController.h */,
+				C12290B719973A7E00460667 /* LeftViewController.m */,
+				C12290B819973A7E00460667 /* LocalAddEditViewController.h */,
+				C12290B919973A7E00460667 /* LocalAddEditViewController.m */,
+				C12290BA19973A7E00460667 /* LocalNoteListViewController.h */,
+				C12290BB19973A7E00460667 /* LocalNoteListViewController.m */,
+				C12290BC19973A7E00460667 /* LocalStarViewController.h */,
+				C12290BD19973A7E00460667 /* LocalStarViewController.m */,
+				C12290BE19973A7E00460667 /* MarkdownGuideViewController.h */,
+				C12290BF19973A7E00460667 /* MarkdownGuideViewController.m */,
+				C12290C019973A7E00460667 /* MarkdownWebViewController.h */,
+				C12290C119973A7E00460667 /* MarkdownWebViewController.m */,
+				C12290C219973A7E00460667 /* NoteTitlePopinViewController.h */,
+				C12290C319973A7E00460667 /* NoteTitlePopinViewController.m */,
+				C12290C419973A7E00460667 /* NoteTitlePopinViewController.xib */,
+				C12290C519973A7E00460667 /* OpenSourceLicencesViewController.h */,
+				C12290C619973A7E00460667 /* OpenSourceLicencesViewController.m */,
+				C12290C719973A7E00460667 /* SupportTableViewController.h */,
+				C12290C819973A7E00460667 /* SupportTableViewController.m */,
+				C12290C919973A7E00460667 /* WelcomePageViewController.h */,
+				C12290CA19973A7E00460667 /* WelcomePageViewController.m */,
+				C12290CB19973A7E00460667 /* WelcomeViewController.h */,
+				C12290CC19973A7E00460667 /* WelcomeViewController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		C12290DF19973B6000460667 /* HTML */ = {
+			isa = PBXGroup;
+			children = (
+				C12290E019973B6000460667 /* AboutClarity.html */,
+				C12290E119973B6000460667 /* ClarityiPad_OpenSourceLicences.html */,
+				C12290E219973B6000460667 /* ClarityMarkdownSyntaxGuide.html */,
+			);
+			path = HTML;
+			sourceTree = "<group>";
+		};
+		C12290E619973B6C00460667 /* MarkdownData */ = {
+			isa = PBXGroup;
+			children = (
+				C12290E719973B6C00460667 /* jMarkdown.css */,
+			);
+			path = MarkdownData;
+			sourceTree = "<group>";
+		};
+		C12290E919973BA100460667 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				C12290EA19973BA100460667 /* WelcomePage.h */,
+				C12290EB19973BA100460667 /* WelcomePage.m */,
+			);
+			path = Objects;
+			sourceTree = "<group>";
+		};
+		C12290ED19973BAA00460667 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C12290EE19973BAA00460667 /* BackgroundLayer.h */,
+				C12290EF19973BAA00460667 /* BackgroundLayer.m */,
+				C12290F019973BAA00460667 /* ICTextView.h */,
+				C12290F119973BAA00460667 /* ICTextView.m */,
+				C12290F219973BAA00460667 /* LeftTableViewCell.h */,
+				C12290F319973BAA00460667 /* LeftTableViewCell.m */,
+				C12290F419973BAA00460667 /* LeftTableViewCell.xib */,
+				C12290F519973BAA00460667 /* NoteTableViewCell.h */,
+				C12290F619973BAA00460667 /* NoteTableViewCell.m */,
+				C12290F719973BAA00460667 /* NoteTableViewCell.xib */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C12290FE19973BE100460667 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C122910A19973CE100460667 /* Clarity.xcdatamodeld */,
+				C12290FF19973BE100460667 /* DropboxNote.h */,
+				C122910019973BE100460667 /* DropboxNote.m */,
+				C122910119973BE100460667 /* LocalNote.h */,
+				C122910219973BE100460667 /* LocalNote.m */,
+				C122910319973BE100460667 /* NoteDataManager.h */,
+				C122910419973BE100460667 /* NoteDataManager.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C122910519973BE100460667 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				C122910D19973D0600460667 /* Main.storyboard */,
+				C122910919973C7A00460667 /* Images */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		C122910919973C7A00460667 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				C122904519973A2B00460667 /* Images.xcassets */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		C122910F19973FDF00460667 /* MMMarkdown */ = {
+			isa = PBXGroup;
+			children = (
+				C122911019973FDF00460667 /* libMMMarkdown-iOS.a */,
+				C122911119973FDF00460667 /* MMMarkdown.h */,
+			);
+			path = MMMarkdown;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -160,9 +564,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C122905D19973A2B00460667 /* Build configuration list for PBXNativeTarget "Clarity" */;
 			buildPhases = (
+				B7C25287F0C442A69F772C87 /* Check Pods Manifest.lock */,
 				C122902719973A2B00460667 /* Sources */,
 				C122902819973A2B00460667 /* Frameworks */,
 				C122902919973A2B00460667 /* Resources */,
+				A38B34C1F1854BE9B8821CD9 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -211,6 +617,14 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				da,
+				de,
+				"es-ES",
+				es,
+				fr,
+				ja,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = C122902219973A2B00460667;
 			productRefGroup = C122902C19973A2B00460667 /* Products */;
@@ -228,7 +642,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C122909219973A6400460667 /* SVWebViewController.bundle in Resources */,
+				C12290E819973B6C00460667 /* jMarkdown.css in Resources */,
+				C122908D19973A6400460667 /* README_UIImage-ResizeMagick.md in Resources */,
+				C12290FD19973BAA00460667 /* NoteTableViewCell.xib in Resources */,
+				C12290E519973B6000460667 /* ClarityMarkdownSyntaxGuide.html in Resources */,
+				C12290FB19973BAA00460667 /* LeftTableViewCell.xib in Resources */,
+				C122909019973A6400460667 /* SVWebViewController.strings in Resources */,
+				C12290E419973B6000460667 /* ClarityiPad_OpenSourceLicences.html in Resources */,
 				C122903B19973A2B00460667 /* InfoPlist.strings in Resources */,
+				C12290DA19973A7E00460667 /* NoteTitlePopinViewController.xib in Resources */,
+				C12290E319973B6000460667 /* AboutClarity.html in Resources */,
+				C122910E19973D0600460667 /* Main.storyboard in Resources */,
+				C122908F19973A6400460667 /* UIImage-ResizeMagick.podspec in Resources */,
+				C122908B19973A6400460667 /* .gitignore in Resources */,
+				C122908C19973A6400460667 /* LICENSE_UIImage-ResizeMagick in Resources */,
 				C122904619973A2B00460667 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,14 +671,85 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A38B34C1F1854BE9B8821CD9 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B7C25287F0C442A69F772C87 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C122902719973A2B00460667 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C122904419973A2B00460667 /* Clarity.xcdatamodeld in Sources */,
+				C12290FA19973BAA00460667 /* LeftTableViewCell.m in Sources */,
+				C12290D419973A7E00460667 /* LocalAddEditViewController.m in Sources */,
+				C12290CE19973A7E00460667 /* AboutViewController.m in Sources */,
+				C12290D619973A7E00460667 /* LocalStarViewController.m in Sources */,
+				C12290D919973A7E00460667 /* NoteTitlePopinViewController.m in Sources */,
+				C12290D019973A7E00460667 /* DropboxNoteListViewController.m in Sources */,
+				C12290A719973A7200460667 /* UIImage+MakeThumbnail.m in Sources */,
+				C12290A419973A7200460667 /* UIButtonPressAndHold.m in Sources */,
+				C12290F919973BAA00460667 /* ICTextView.m in Sources */,
+				C12290FC19973BAA00460667 /* NoteTableViewCell.m in Sources */,
+				C122908A19973A6400460667 /* DoActionSheet.m in Sources */,
+				C12290F819973BAA00460667 /* BackgroundLayer.m in Sources */,
+				C122908E19973A6400460667 /* UIImage+ResizeMagick.m in Sources */,
+				C122909719973A6400460667 /* YRDropdownView.m in Sources */,
+				C122910719973BE100460667 /* LocalNote.m in Sources */,
+				C12290DB19973A7E00460667 /* OpenSourceLicencesViewController.m in Sources */,
 				C122904119973A2B00460667 /* AppDelegate.m in Sources */,
+				C12290EC19973BA100460667 /* WelcomePage.m in Sources */,
+				C12290D219973A7E00460667 /* DropboxStarViewController.m in Sources */,
+				C12290A519973A7200460667 /* UIColor+CustomColors.m in Sources */,
+				C12290D319973A7E00460667 /* LeftViewController.m in Sources */,
+				C12290DC19973A7E00460667 /* SupportTableViewController.m in Sources */,
+				C12290DE19973A7E00460667 /* WelcomeViewController.m in Sources */,
+				C122909119973A6400460667 /* SVModalWebViewController.m in Sources */,
+				C12290D519973A7E00460667 /* LocalNoteListViewController.m in Sources */,
+				C12290CD19973A7E00460667 /* ClarityConstants.m in Sources */,
+				C12290D119973A7E00460667 /* DropboxSettingsTableViewController.m in Sources */,
+				C12290D819973A7E00460667 /* MarkdownWebViewController.m in Sources */,
+				C12290CF19973A7E00460667 /* DropboxAddEditViewController.m in Sources */,
+				C122909619973A6400460667 /* SVWebViewControllerActivity.m in Sources */,
+				C12290D719973A7E00460667 /* MarkdownGuideViewController.m in Sources */,
 				C122903D19973A2B00460667 /* main.m in Sources */,
+				C122910819973BE100460667 /* NoteDataManager.m in Sources */,
+				C122909319973A6400460667 /* SVWebViewController.m in Sources */,
+				C122910C19973CE100460667 /* Clarity.xcdatamodeld in Sources */,
+				C12290A319973A7200460667 /* NSUserDefaults+Extension.m in Sources */,
+				C122909419973A6400460667 /* SVWebViewControllerActivityChrome.m in Sources */,
+				C122910619973BE100460667 /* DropboxNote.m in Sources */,
+				C12290A619973A7200460667 /* UIImage+ChangeColor.m in Sources */,
+				C12290DD19973A7E00460667 /* WelcomePageViewController.m in Sources */,
+				C122909519973A6400460667 /* SVWebViewControllerActivitySafari.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,6 +788,22 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
+		C122906F19973A6400460667 /* SVWebViewController.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C122907019973A6400460667 /* da */,
+				C122907119973A6400460667 /* de */,
+				C122907219973A6400460667 /* en */,
+				C122907319973A6400460667 /* es-ES */,
+				C122907419973A6400460667 /* es */,
+				C122907519973A6400460667 /* fr */,
+				C122907619973A6400460667 /* ja */,
+				C122908519973A6400460667 /* zh-Hans */,
+				C122908619973A6400460667 /* zh-Hant */,
+			);
+			name = SVWebViewController.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -325,8 +840,9 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -357,19 +873,30 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};
 		C122905E19973A2B00460667 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 62EF1565489047DBA75023BE /* Pods.xcconfig */;
 			buildSettings = {
+				ARCHS = (
+					armv7,
+					armv7s,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Clarity/Clarity-Prefix.pch";
 				INFOPLIST_FILE = "Clarity/Clarity-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MMMarkdown",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -377,12 +904,21 @@
 		};
 		C122905F19973A2B00460667 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 62EF1565489047DBA75023BE /* Pods.xcconfig */;
 			buildSettings = {
+				ARCHS = (
+					armv7,
+					armv7s,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Clarity/Clarity-Prefix.pch";
 				INFOPLIST_FILE = "Clarity/Clarity-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MMMarkdown",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -447,6 +983,7 @@
 				C122905F19973A2B00460667 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C122906019973A2B00460667 /* Build configuration list for PBXNativeTarget "ClarityTests" */ = {
 			isa = XCConfigurationList;
@@ -455,16 +992,17 @@
 				C122906219973A2B00460667 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		C122904219973A2B00460667 /* Clarity.xcdatamodeld */ = {
+		C122910A19973CE100460667 /* Clarity.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				C122904319973A2B00460667 /* Clarity.xcdatamodel */,
+				C122910B19973CE100460667 /* ClarityHD.xcdatamodel */,
 			);
-			currentVersion = C122904319973A2B00460667 /* Clarity.xcdatamodel */;
+			currentVersion = C122910B19973CE100460667 /* ClarityHD.xcdatamodel */;
 			path = Clarity.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
