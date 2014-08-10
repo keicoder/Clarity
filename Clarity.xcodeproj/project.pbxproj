@@ -1,0 +1,475 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C122902F19973A2B00460667 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122902E19973A2B00460667 /* Foundation.framework */; };
+		C122903119973A2B00460667 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122903019973A2B00460667 /* CoreGraphics.framework */; };
+		C122903319973A2B00460667 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122903219973A2B00460667 /* UIKit.framework */; };
+		C122903519973A2B00460667 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122903419973A2B00460667 /* CoreData.framework */; };
+		C122903B19973A2B00460667 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C122903919973A2B00460667 /* InfoPlist.strings */; };
+		C122903D19973A2B00460667 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C122903C19973A2B00460667 /* main.m */; };
+		C122904119973A2B00460667 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C122904019973A2B00460667 /* AppDelegate.m */; };
+		C122904419973A2B00460667 /* Clarity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C122904219973A2B00460667 /* Clarity.xcdatamodeld */; };
+		C122904619973A2B00460667 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C122904519973A2B00460667 /* Images.xcassets */; };
+		C122904D19973A2B00460667 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122904C19973A2B00460667 /* XCTest.framework */; };
+		C122904E19973A2B00460667 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122902E19973A2B00460667 /* Foundation.framework */; };
+		C122904F19973A2B00460667 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122903219973A2B00460667 /* UIKit.framework */; };
+		C122905019973A2B00460667 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122903419973A2B00460667 /* CoreData.framework */; };
+		C122905819973A2B00460667 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C122905619973A2B00460667 /* InfoPlist.strings */; };
+		C122905A19973A2B00460667 /* ClarityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C122905919973A2B00460667 /* ClarityTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C122905119973A2B00460667 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C122902319973A2B00460667 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C122902A19973A2B00460667;
+			remoteInfo = Clarity;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C122902B19973A2B00460667 /* Clarity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clarity.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C122902E19973A2B00460667 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C122903019973A2B00460667 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C122903219973A2B00460667 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C122903419973A2B00460667 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		C122903819973A2B00460667 /* Clarity-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Clarity-Info.plist"; sourceTree = "<group>"; };
+		C122903A19973A2B00460667 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C122903C19973A2B00460667 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C122903E19973A2B00460667 /* Clarity-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Clarity-Prefix.pch"; sourceTree = "<group>"; };
+		C122903F19973A2B00460667 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C122904019973A2B00460667 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C122904319973A2B00460667 /* Clarity.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Clarity.xcdatamodel; sourceTree = "<group>"; };
+		C122904519973A2B00460667 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		C122904B19973A2B00460667 /* ClarityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClarityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C122904C19973A2B00460667 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		C122905519973A2B00460667 /* ClarityTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ClarityTests-Info.plist"; sourceTree = "<group>"; };
+		C122905719973A2B00460667 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C122905919973A2B00460667 /* ClarityTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ClarityTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C122902819973A2B00460667 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C122903119973A2B00460667 /* CoreGraphics.framework in Frameworks */,
+				C122903519973A2B00460667 /* CoreData.framework in Frameworks */,
+				C122903319973A2B00460667 /* UIKit.framework in Frameworks */,
+				C122902F19973A2B00460667 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C122904819973A2B00460667 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C122904D19973A2B00460667 /* XCTest.framework in Frameworks */,
+				C122905019973A2B00460667 /* CoreData.framework in Frameworks */,
+				C122904F19973A2B00460667 /* UIKit.framework in Frameworks */,
+				C122904E19973A2B00460667 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C122902219973A2B00460667 = {
+			isa = PBXGroup;
+			children = (
+				C122903619973A2B00460667 /* Clarity */,
+				C122905319973A2B00460667 /* ClarityTests */,
+				C122902D19973A2B00460667 /* Frameworks */,
+				C122902C19973A2B00460667 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C122902C19973A2B00460667 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C122902B19973A2B00460667 /* Clarity.app */,
+				C122904B19973A2B00460667 /* ClarityTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C122902D19973A2B00460667 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C122902E19973A2B00460667 /* Foundation.framework */,
+				C122903019973A2B00460667 /* CoreGraphics.framework */,
+				C122903219973A2B00460667 /* UIKit.framework */,
+				C122903419973A2B00460667 /* CoreData.framework */,
+				C122904C19973A2B00460667 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C122903619973A2B00460667 /* Clarity */ = {
+			isa = PBXGroup;
+			children = (
+				C122903F19973A2B00460667 /* AppDelegate.h */,
+				C122904019973A2B00460667 /* AppDelegate.m */,
+				C122904519973A2B00460667 /* Images.xcassets */,
+				C122904219973A2B00460667 /* Clarity.xcdatamodeld */,
+				C122903719973A2B00460667 /* Supporting Files */,
+			);
+			path = Clarity;
+			sourceTree = "<group>";
+		};
+		C122903719973A2B00460667 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C122903819973A2B00460667 /* Clarity-Info.plist */,
+				C122903919973A2B00460667 /* InfoPlist.strings */,
+				C122903C19973A2B00460667 /* main.m */,
+				C122903E19973A2B00460667 /* Clarity-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C122905319973A2B00460667 /* ClarityTests */ = {
+			isa = PBXGroup;
+			children = (
+				C122905919973A2B00460667 /* ClarityTests.m */,
+				C122905419973A2B00460667 /* Supporting Files */,
+			);
+			path = ClarityTests;
+			sourceTree = "<group>";
+		};
+		C122905419973A2B00460667 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C122905519973A2B00460667 /* ClarityTests-Info.plist */,
+				C122905619973A2B00460667 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C122902A19973A2B00460667 /* Clarity */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C122905D19973A2B00460667 /* Build configuration list for PBXNativeTarget "Clarity" */;
+			buildPhases = (
+				C122902719973A2B00460667 /* Sources */,
+				C122902819973A2B00460667 /* Frameworks */,
+				C122902919973A2B00460667 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Clarity;
+			productName = Clarity;
+			productReference = C122902B19973A2B00460667 /* Clarity.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C122904A19973A2B00460667 /* ClarityTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C122906019973A2B00460667 /* Build configuration list for PBXNativeTarget "ClarityTests" */;
+			buildPhases = (
+				C122904719973A2B00460667 /* Sources */,
+				C122904819973A2B00460667 /* Frameworks */,
+				C122904919973A2B00460667 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C122905219973A2B00460667 /* PBXTargetDependency */,
+			);
+			name = ClarityTests;
+			productName = ClarityTests;
+			productReference = C122904B19973A2B00460667 /* ClarityTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C122902319973A2B00460667 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = lovejunsoft;
+				TargetAttributes = {
+					C122904A19973A2B00460667 = {
+						TestTargetID = C122902A19973A2B00460667;
+					};
+				};
+			};
+			buildConfigurationList = C122902619973A2B00460667 /* Build configuration list for PBXProject "Clarity" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C122902219973A2B00460667;
+			productRefGroup = C122902C19973A2B00460667 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C122902A19973A2B00460667 /* Clarity */,
+				C122904A19973A2B00460667 /* ClarityTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C122902919973A2B00460667 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C122903B19973A2B00460667 /* InfoPlist.strings in Resources */,
+				C122904619973A2B00460667 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C122904919973A2B00460667 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C122905819973A2B00460667 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C122902719973A2B00460667 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C122904419973A2B00460667 /* Clarity.xcdatamodeld in Sources */,
+				C122904119973A2B00460667 /* AppDelegate.m in Sources */,
+				C122903D19973A2B00460667 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C122904719973A2B00460667 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C122905A19973A2B00460667 /* ClarityTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C122905219973A2B00460667 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C122902A19973A2B00460667 /* Clarity */;
+			targetProxy = C122905119973A2B00460667 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C122903919973A2B00460667 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C122903A19973A2B00460667 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C122905619973A2B00460667 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C122905719973A2B00460667 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C122905B19973A2B00460667 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C122905C19973A2B00460667 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C122905E19973A2B00460667 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Clarity/Clarity-Prefix.pch";
+				INFOPLIST_FILE = "Clarity/Clarity-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C122905F19973A2B00460667 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Clarity/Clarity-Prefix.pch";
+				INFOPLIST_FILE = "Clarity/Clarity-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C122906119973A2B00460667 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Clarity.app/Clarity";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Clarity/Clarity-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "ClarityTests/ClarityTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		C122906219973A2B00460667 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Clarity.app/Clarity";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Clarity/Clarity-Prefix.pch";
+				INFOPLIST_FILE = "ClarityTests/ClarityTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C122902619973A2B00460667 /* Build configuration list for PBXProject "Clarity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C122905B19973A2B00460667 /* Debug */,
+				C122905C19973A2B00460667 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C122905D19973A2B00460667 /* Build configuration list for PBXNativeTarget "Clarity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C122905E19973A2B00460667 /* Debug */,
+				C122905F19973A2B00460667 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		C122906019973A2B00460667 /* Build configuration list for PBXNativeTarget "ClarityTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C122906119973A2B00460667 /* Debug */,
+				C122906219973A2B00460667 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		C122904219973A2B00460667 /* Clarity.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C122904319973A2B00460667 /* Clarity.xcdatamodel */,
+			);
+			currentVersion = C122904319973A2B00460667 /* Clarity.xcdatamodel */;
+			path = Clarity.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = C122902319973A2B00460667 /* Project object */;
+}
