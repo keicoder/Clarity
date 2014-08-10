@@ -1,0 +1,1 @@
+../../ParcelKit/ParcelKit/NSManagedObject+ParcelKit.h

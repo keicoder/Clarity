@@ -1,0 +1,2 @@
+PODS_PARCELKIT_FRAMEWORK_SEARCH_PATHS = "${PODS_ROOT}/Dropbox-Sync-API-SDK/dropbox-ios-sync-sdk-3.0.2"
+PODS_PARCELKIT_OTHER_LDFLAGS = -framework CoreData -framework Dropbox

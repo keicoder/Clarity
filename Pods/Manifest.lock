@@ -1,0 +1,22 @@
+PODS:
+  - Dropbox-Sync-API-SDK (3.0.2)
+  - FRLayeredNavigationController (0.4.4)
+  - MaryPopin (1.4.1)
+  - ParcelKit (2.0.1):
+    - Dropbox-Sync-API-SDK (~> 3.0.2)
+  - Quayboard (0.1.2)
+
+DEPENDENCIES:
+  - FRLayeredNavigationController
+  - MaryPopin
+  - ParcelKit
+  - Quayboard
+
+SPEC CHECKSUMS:
+  Dropbox-Sync-API-SDK: e672f9c163d3feb5929c97890b6945a6c5fae5f1
+  FRLayeredNavigationController: b4c5f240c8f37b06c5db536fef16fdb5d47ab6be
+  MaryPopin: f460c3040dbd2a18f730538f03c7dd1714fa0931
+  ParcelKit: 6941191fc9849a8c859f217edf8ba0be9d0cdfda
+  Quayboard: 682b698614564a4c5d2eb46fc3233a9a60cff780
+
+COCOAPODS: 0.33.1
