@@ -59,6 +59,16 @@
 
 - (void)styleUI
 {
+//    #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+//    
+//    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0"))
+//    {
+//        UIView *view=[[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.window.bounds), 20)];
+//        view.backgroundColor=kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR;
+//        view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+//        [self.window.rootViewController.view addSubview:view];
+//    }
+    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent]; //상태 바 속성
     self.window.backgroundColor = kWINDOW_BACKGROUND_COLOR;                             //윈도 배경 색상
     self.window.tintColor = [UIColor whiteColor];                                       //윈도 틴트 색상

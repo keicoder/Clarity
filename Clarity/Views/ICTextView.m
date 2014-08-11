@@ -76,7 +76,7 @@ static BOOL _highlightingSupported;
     self.layer.cornerRadius = 0.0;
     self.autocapitalizationType = UITextAutocapitalizationTypeSentences;
     self.autocorrectionType = UITextAutocorrectionTypeYes;
-    self.scrollsToTop = YES;
+//    self.scrollsToTop = YES;
     
     self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING;
     

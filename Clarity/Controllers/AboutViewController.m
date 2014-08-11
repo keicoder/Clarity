@@ -50,7 +50,7 @@
 {
     [super viewDidLoad];
     self.title = @"About";
-    self.automaticallyAdjustsScrollViewInsets = NO;
+//    self.automaticallyAdjustsScrollViewInsets = NO;
     [self assignWebViewAttribute];                              //웹뷰 속성
     [self loadLocalFileIntoAWebView];                           //로컬 파일 웹뷰로 가져오기
     [self addTapGestureRecognizer];                             //탭 제스처
@@ -88,7 +88,7 @@
 {
     self.webView.delegate = self;                                           //UIWebView 델리게이트
     _didTapped = NO;                                                        //탭 제스처 상태 초기화
-    self.webView.scrollView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);   //웹뷰 인셋
+    self.webView.scrollView.contentInset = UIEdgeInsetsMake(kMARKDOWNWEBVIEW_SCROLLVIEW_CONTENTINSET, 0, 0, 0);   //웹뷰 인셋
 }
 
 

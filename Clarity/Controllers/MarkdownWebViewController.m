@@ -72,7 +72,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.automaticallyAdjustsScrollViewInsets = NO;
+//    self.automaticallyAdjustsScrollViewInsets = NO;
     [self assignAttributeToMarkdownWebView];                    //마크다운 웹뷰 속성
     [self makeMarkdownString];                                  //마크다운 스트링
     [self addTapGestureRecognizer];                             //탭 제스처
@@ -115,7 +115,7 @@
     self.markdownWebView.delegate = self;                       //UIWebView 델리게이트
     self.markdownWebView.scrollView.delegate = self;            //UIScrollVieW 델리게이트
     self.markdownWebView.scrollView.scrollEnabled = YES;
-    self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);  //마크다운 웹뷰 인셋
+    self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(kMARKDOWNWEBVIEW_SCROLLVIEW_CONTENTINSET, 0, 0, 0);  //마크다운 웹뷰 인셋
 }
 
 #pragma mark 마크다운 스트링

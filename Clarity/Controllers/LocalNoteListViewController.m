@@ -726,7 +726,7 @@
 - (void)addNavigationBarButtonItem
 {
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixed.width = 20.0f;
+    barButtonItemFixed.width = 22.0f;
     UIBarButtonItem *barButtonItemNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     barButtonItemNarrow.width = 5.0f;
     UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
@@ -755,16 +755,16 @@
     self.infoButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
     [self.infoButton addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
     self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-    self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 2);
+    self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
     [infoButtonView addSubview:self.infoButton];
     UIBarButtonItem* barButtonItemInfo = [[UIBarButtonItem alloc]initWithCustomView:infoButtonView];
     
-    self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemInfo, barButtonItemFixed, barButtonItemFixed];
+    self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemInfo];
     
-    //    UIBarButtonItem *barButtonItemBlank = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(noAction:)];
-    //    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewNote:)];
-    //    self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithTitle:@"Starred" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemStarredPressed:)];
-    //    [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
+//    UIBarButtonItem *barButtonItemBlank = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(noAction:)];
+//    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewNote:)];
+//    self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithTitle:@"Starred" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemStarredPressed:)];
+//    [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
 }
 
 

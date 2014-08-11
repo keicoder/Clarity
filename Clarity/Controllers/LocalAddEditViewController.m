@@ -68,7 +68,7 @@
     [self addNoteTitleLabel];                           //노트 타이틀 레이블
     [self registerKeyboardNotifications];               //키보드 노티피케이션
     [self addInputAccessoryView];                       //인풋 액세서리 뷰
-    [self addNavigationBarButtonItems];                 //내비게이션 바 버튼
+    [self addBarButtonItems];                           //바 버튼
     [self assignNoteData];                              //노트 데이터
     [self.noteTextView assignTextViewAttribute];        //노트 텍스트 뷰 속성
     [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
@@ -90,7 +90,12 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-//    [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
 }
 
 
@@ -202,7 +207,6 @@
         self.barButtonItemStarred.title = @"UnStarred";
         [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kWHITE_COLOR} forState:UIControlStateNormal];
     }
-    //    NSLog (@"_originalNote: %@\n", _originalNote);
 }
 
 
@@ -221,18 +225,20 @@
 
 - (void)addNoteTitleLabel
 {
-    CGFloat noteTitleLabelHeight = 50;
+    CGFloat noteTitleLabelHeight = 44;
     
-    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -50, CGRectGetWidth(self.view.frame), noteTitleLabelHeight)];
+    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -44, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight)];
     self.noteTitleLabelBackgroundView.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     [self.noteTextView addSubview:self.noteTitleLabelBackgroundView];
     [self.noteTitleLabelBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     
-    self.noteTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(kTEXTVIEW_PADDING, 0, CGRectGetWidth(self.noteTitleLabelBackgroundView.frame) - (kTEXTVIEW_PADDING * 2), CGRectGetHeight(self.noteTitleLabelBackgroundView.frame))];
+    int labelPadding = 10;
+    self.noteTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelPadding, 0, CGRectGetWidth(self.view.bounds) - (labelPadding * 2), CGRectGetHeight(self.noteTitleLabelBackgroundView.bounds))];
     self.noteTitleLabel.font = kTEXTVIEW_LABEL_FONT;
     self.noteTitleLabel.textColor = kTEXTVIEW_LABEL_TEXT_COLOR;
     self.noteTitleLabel.backgroundColor = kCLEAR_COLOR;
     self.noteTitleLabel.textAlignment = NSTextAlignmentCenter;
+    self.noteTitleLabel.lineBreakMode = NSLineBreakByCharWrapping; //NSLineBreakByWordWrapping;
     [self.noteTitleLabelBackgroundView addSubview:self.noteTitleLabel];
     [self.noteTitleLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
 }
@@ -742,7 +748,6 @@
 - (void)textViewDidChange:(UITextView *)textView
 {
     [self.noteTextView textViewDidChange:self.noteTextView];
-//    [self.textViewAccessory reloadInputViews];
 }
 
 
@@ -756,9 +761,9 @@
 }
 
 
-#pragma mark - 내비게이션 바 버튼
+#pragma mark - 바 버튼
 
-- (void)addNavigationBarButtonItems
+- (void)addBarButtonItems
 {
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     barButtonItemFixed.width = 20.0f;
@@ -825,11 +830,18 @@
     buttonSave.frame = CGRectMake(0 ,0, 22, 22);
     UIBarButtonItem *barButtonItemSave = [[UIBarButtonItem alloc] initWithCustomView:buttonSave];
     
-    
-    self.navigationController.navigationBar.topItem.title = @"";
     self.navigationItem.hidesBackButton=YES;
-    //    self.navigationItem.leftBarButtonItems = @[barButtonItemCancel];
-    self.navigationItem.rightBarButtonItems = @[barButtonItemSave, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemFixed, barButtonItemAdd, barButtonItemFixed, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible, barButtonItemCancel];
+    
+    NSArray *navigationBarItems = @[barButtonItemSave, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemFixed, barButtonItemAdd, barButtonItemFixed, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible, barButtonItemCancel];
+    
+    self.navigationItem.rightBarButtonItems = navigationBarItems;
+    
+//    NSArray *toolbarItems = @[barButtonItemCancel, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible, barButtonItemFixed, barButtonItemAdd, barButtonItemFixed, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemSave];
+//
+//    self.toolbar.items = toolbarItems;
+//    self.toolbar.translucent = NO;
+//    self.toolbar.barTintColor = kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR;
+//    [self.view addSubview:self.toolbar];
 }
 
 

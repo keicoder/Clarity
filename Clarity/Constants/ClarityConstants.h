@@ -21,6 +21,9 @@ extern NSString * const kIS_FIRST_TIME;
 #define kJASIDEPANEL_LEFTGAP_PERCENTAGE                     0.7
 
 
+#pragma mark - MarkdownWebView
+#define kMARKDOWNWEBVIEW_SCROLLVIEW_CONTENTINSET            20.0
+
 #pragma mark - FRLayeredNavigationController
 #define kFRLAYERED_NAVIGATION_ITEM_WIDTH_LEFT               240
 #define kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE             320
@@ -111,9 +114,9 @@ extern NSString * const kIS_FIRST_TIME;
 #pragma mark - 텍스트 뷰
 
 #define kTEXTVIEW_LINE_IMAGEVIEW_ALPHA                      0.3
-#define kINSET_TOP                                        130.0     // 텍스트 뷰 인셋 top
+#define kINSET_TOP                                        120.0     // 텍스트 뷰 인셋 top
 #define kINSET_LEFT                                         0.0     // 텍스트 뷰 인셋 left
-#define kINSET_BOTTOM                                      88.0     // 텍스트 뷰 인셋 bottom
+#define kINSET_BOTTOM                                      44.0     // 텍스트 뷰 인셋 bottom
 #define kINSET_RIGHT                                        0.0     // 텍스트 뷰 인셋 right
 #define kTEXTVIEW_PADDING                                  20.0     // 텍스트 뷰 padding
 #define kMOVE_TEXT_POSITION_DURATION                       0.40     // 캐럿 이동 시간

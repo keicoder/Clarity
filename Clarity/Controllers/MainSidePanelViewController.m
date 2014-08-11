@@ -21,10 +21,11 @@
 
 - (void)awakeFromNib
 {
-//    if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
     [self setLeftPanel:[self.storyboard instantiateViewControllerWithIdentifier:@"LeftViewNavigationController"]];
     [self chooseWhichViewLocatedInCenterView];  //어떤 뷰가 초기 뷰인지 확인
 //    [self setRecognizesPanGesture:NO];
+    
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 
