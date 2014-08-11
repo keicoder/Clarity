@@ -810,9 +810,9 @@
 {
     if (self.isNewNote) {
         [self deleteNote:self.currentNote];
-        [self.layeredNavigationController popViewControllerAnimated:YES];
+        [self.navigationController dismissViewControllerAnimated:YES completion:^{ }];  //Modal
     } else {
-        [self.layeredNavigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

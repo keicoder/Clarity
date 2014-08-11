@@ -7,17 +7,16 @@
 //
 
 #import "AppDelegate.h"
-#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 #import "NoteDataManager.h"
 #import "LeftViewController.h"
 
 
-@interface AppDelegate () <FRLayeredNavigationControllerDelegate>
+@interface AppDelegate ()
 
 @property (nonatomic, strong) UIStoryboard *storyboard;
-@property (nonatomic, strong) FRLayeredNavigationController *layeredNavigationController;
 
 @end
+
 
 @implementation AppDelegate
 
@@ -27,26 +26,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [self applicationDocumentsDirectory];
-    [NSManagedObjectModel mergedModelFromBundles:nil];
-    
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-    {
-        //FRLayeredNavigationController
-        self.storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-        LeftViewController *leftViewController = (LeftViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LeftViewController"];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:leftViewController];
-        
-        self.layeredNavigationController = [(FRLayeredNavigationController *)[FRLayeredNavigationController alloc] initWithRootViewController:navigationController configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_LEFT;  //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0; //60;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = NO;
-        }];
-        
-        self.layeredNavigationController.delegate = self;
-        self.window.rootViewController = self.layeredNavigationController;
-    }
+//    [NSManagedObjectModel mergedModelFromBundles:nil];
     
     //드랍박스 어카운트
     //Dropbox App Folder : 'ClarityApp'
@@ -102,29 +82,6 @@
 {
     NSLog(@"applicationDocumentsDirectory: %@\n", [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-}
-
-
-#pragma mark - FRLayeredNavigationController Delegate
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-                 willMoveController:(UIViewController*)controller
-{
-    
-}
-
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-               movingViewController:(UIViewController*)controller
-{
-    
-}
-
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-                  didMoveController:(UIViewController*)controller
-{
-    
 }
 
 

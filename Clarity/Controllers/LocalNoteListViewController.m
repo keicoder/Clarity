@@ -532,16 +532,7 @@
     [self setTitleString];                                  //데이트 Formatter > 타이틀 스트링
     controller.currentNote.noteTitle = _titleString;
     
-    if ([self isKindOfClass:[LocalNoteListViewController class]])
-    {
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            //layeredNavigationItem.width = 400;                          //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
-    }
+    [self presentViewController:navigationController animated:YES completion:^ { }]; //Modal
 }
 
 

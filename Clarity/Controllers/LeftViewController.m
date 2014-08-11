@@ -12,7 +12,8 @@
 
 #import "LeftViewController.h"
 #import "LeftTableViewCell.h"                                   //커스텀 셀
-#import "FRLayeredNavigationController/FRLayeredNavigation.h"
+#import "UIViewController+JASidePanel.h"
+#import "MainSidePanelViewController.h"
 #import "DropboxNoteListViewController.h"
 #import "LocalNoteListViewController.h"
 #import "SupportTableViewController.h"                          //Support 테이블 뷰 컨틀롤러
@@ -24,7 +25,7 @@
 #import <MessageUI/MessageUI.h>                                 //이메일/메시지 공유
 
 
-@interface LeftViewController () <UITableViewDataSource, UITableViewDelegate, FRLayeredNavigationControllerDelegate, MFMailComposeViewControllerDelegate>
+@interface LeftViewController () <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UIImageView *logoImageView;
@@ -53,11 +54,8 @@
 {
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.title = @"Clarity";
-    self.layeredNavigationController.delegate = self;
     [self configureViewAndTableView];                   //테이블 뷰 속성
     [self makeCellDataArray];                           //테이블 데이터
-    [self chooseWhichViewLocatedInCenterView];          //어떤 뷰가 초기 뷰인지 확인
     self.versionLabel.text = @"2014 lovejunsoft";
 
 }
@@ -230,99 +228,44 @@
 {
     if (indexPath.section == 0 && indexPath.row == 0)
     {
-        LocalNoteListViewController *dropboxNoteListViewController = (LocalNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LocalNoteListViewController"];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:dropboxNoteListViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.width = 320;                          //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
+        self.sidePanelController.centerPanel = [self.storyboard instantiateViewControllerWithIdentifier:@"LocalNoteListViewNavigationController"];
     }
     else if(indexPath.section == 0 && indexPath.row == 1)
     {
-        DropboxNoteListViewController *dropboxNoteListViewController = (DropboxNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewController"];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:dropboxNoteListViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.width = 320;                          //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
+        self.sidePanelController.centerPanel = [self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewNavigationController"];
     }
     else if(indexPath.section == 1 && indexPath.row == 0)
     {
         DropboxSettingsTableViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"DropboxSettingsTableViewController"];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.width = 320;                          //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
+        self.sidePanelController.centerPanel = navigationController;
     }
     else if(indexPath.section == 2 && indexPath.row == 0)
     {
         MarkdownGuideViewController *markdownGuideViewController = (MarkdownGuideViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MarkdownGuideViewController"];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:markdownGuideViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            //            layeredNavigationItem.width = 320;                          //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
+        self.sidePanelController.centerPanel = navigationController;
     }
     else if(indexPath.section == 3 && indexPath.row == 0)
     {
         SupportTableViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"SupportTableViewController"];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        self.sidePanelController.centerPanel = navigationController;
         
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.width = 320;                          //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
     }
     else if(indexPath.section == 3 && indexPath.row == 1)
     {
         NSString *URL = @"http://lovejunsoft.com";
-        
         self.svWebViewController = [[SVWebViewController alloc] initWithAddress:URL];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.svWebViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-//            layeredNavigationItem.width = 320;                          //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
+        self.sidePanelController.centerPanel = navigationController;
     }
     else if(indexPath.section == 3 && indexPath.row == 2)
     {
         NSString *url = @"https://twitter.com/lovejunsoft";   //https://twitter.com/lovejunsoft, http://lovejunsoft.com/swift-note-for-iphone/
-        
         self.svWebViewController = [[SVWebViewController alloc] initWithAddress:url];
-        //        self.svWebViewController.title = @"Twitter";
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.svWebViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            //        layeredNavigationItem.width = 400;                          //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
+        self.sidePanelController.centerPanel = navigationController;
     }
     else if(indexPath.section == 3 && indexPath.row == 3)
     {
@@ -373,81 +316,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 29;
-}
-
-
-#pragma mark 유저 디폴트 > savedView 확인
-
-- (void)chooseWhichViewLocatedInCenterView
-{
-    BOOL isDropboxView = [[NSUserDefaults standardUserDefaults] boolForKey:kCURRENT_VIEW_IS_DROPBOX];
-    BOOL isLocalView = [[NSUserDefaults standardUserDefaults] boolForKey:kCURRENT_VIEW_IS_LOCAL];
-    
-    if (isLocalView == YES && isDropboxView == NO)
-    {
-        LocalNoteListViewController *localNoteListViewController = (LocalNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LocalNoteListViewController"];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:localNoteListViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE; //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
-    }
-    else if (isLocalView == NO && isDropboxView == YES)
-    {
-        DropboxNoteListViewController *dropboxNoteListViewController = (DropboxNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewController"];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:dropboxNoteListViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE; //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
-    }
-    else if (isLocalView == NO && isDropboxView == NO)
-    {
-        DropboxNoteListViewController *dropboxNoteListViewController = (DropboxNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewController"];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:dropboxNoteListViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE; //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
-    }
-    else if (isLocalView == YES && isDropboxView == YES)
-    {
-        DropboxNoteListViewController *dropboxNoteListViewController = (DropboxNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewController"];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:dropboxNoteListViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE; //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
-    }
-    else
-    {
-        DropboxNoteListViewController *dropboxNoteListViewController = (DropboxNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewController"];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:dropboxNoteListViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE; //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
-    }
 }
 
 

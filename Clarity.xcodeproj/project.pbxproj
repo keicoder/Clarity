@@ -75,6 +75,11 @@
 		C122910C19973CE100460667 /* Clarity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C122910A19973CE100460667 /* Clarity.xcdatamodeld */; };
 		C122910E19973D0600460667 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C122910D19973D0600460667 /* Main.storyboard */; };
 		C122911219973FDF00460667 /* libMMMarkdown-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C122911019973FDF00460667 /* libMMMarkdown-iOS.a */; };
+		C1ABF0C519985B7A00E622CA /* MainSidePanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */; };
+		C1ABF0CD19985CF400E622CA /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C819985CF400E622CA /* JASidePanelController.m */; };
+		C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0CA19985CF400E622CA /* LogViewController.m */; };
+		C1ABF0CF19985CF400E622CA /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0CC19985CF400E622CA /* UIViewController+JASidePanel.m */; };
+		C1ABF0D719985E9F00E622CA /* PaperButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0D619985E9F00E622CA /* PaperButton.m */; };
 		C331FC139151431BB224E126 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6E8D91E9C764F1DBB2C6C0E /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -173,7 +178,7 @@
 		C12290C119973A7E00460667 /* MarkdownWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkdownWebViewController.m; sourceTree = "<group>"; };
 		C12290C219973A7E00460667 /* NoteTitlePopinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteTitlePopinViewController.h; sourceTree = "<group>"; };
 		C12290C319973A7E00460667 /* NoteTitlePopinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteTitlePopinViewController.m; sourceTree = "<group>"; };
-		C12290C419973A7E00460667 /* NoteTitlePopinViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteTitlePopinViewController.xib; sourceTree = "<group>"; };
+		C12290C419973A7E00460667 /* NoteTitlePopinViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NoteTitlePopinViewController.xib; path = ../Controllers/NoteTitlePopinViewController.xib; sourceTree = "<group>"; };
 		C12290C519973A7E00460667 /* OpenSourceLicencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenSourceLicencesViewController.h; sourceTree = "<group>"; };
 		C12290C619973A7E00460667 /* OpenSourceLicencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenSourceLicencesViewController.m; sourceTree = "<group>"; };
 		C12290C719973A7E00460667 /* SupportTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupportTableViewController.h; sourceTree = "<group>"; };
@@ -194,10 +199,10 @@
 		C12290F119973BAA00460667 /* ICTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICTextView.m; sourceTree = "<group>"; };
 		C12290F219973BAA00460667 /* LeftTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftTableViewCell.h; sourceTree = "<group>"; };
 		C12290F319973BAA00460667 /* LeftTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftTableViewCell.m; sourceTree = "<group>"; };
-		C12290F419973BAA00460667 /* LeftTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftTableViewCell.xib; sourceTree = "<group>"; };
+		C12290F419973BAA00460667 /* LeftTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftTableViewCell.xib; path = ../Views/LeftTableViewCell.xib; sourceTree = "<group>"; };
 		C12290F519973BAA00460667 /* NoteTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteTableViewCell.h; sourceTree = "<group>"; };
 		C12290F619973BAA00460667 /* NoteTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteTableViewCell.m; sourceTree = "<group>"; };
-		C12290F719973BAA00460667 /* NoteTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteTableViewCell.xib; sourceTree = "<group>"; };
+		C12290F719973BAA00460667 /* NoteTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NoteTableViewCell.xib; path = ../Views/NoteTableViewCell.xib; sourceTree = "<group>"; };
 		C12290FF19973BE100460667 /* DropboxNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxNote.h; sourceTree = "<group>"; };
 		C122910019973BE100460667 /* DropboxNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxNote.m; sourceTree = "<group>"; };
 		C122910119973BE100460667 /* LocalNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNote.h; sourceTree = "<group>"; };
@@ -208,6 +213,16 @@
 		C122910D19973D0600460667 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		C122911019973FDF00460667 /* libMMMarkdown-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libMMMarkdown-iOS.a"; sourceTree = "<group>"; };
 		C122911119973FDF00460667 /* MMMarkdown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMMarkdown.h; sourceTree = "<group>"; };
+		C1ABF0C319985B7A00E622CA /* MainSidePanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainSidePanelViewController.h; sourceTree = "<group>"; };
+		C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainSidePanelViewController.m; sourceTree = "<group>"; };
+		C1ABF0C719985CF400E622CA /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
+		C1ABF0C819985CF400E622CA /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JASidePanelController.m; sourceTree = "<group>"; };
+		C1ABF0C919985CF400E622CA /* LogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogViewController.h; sourceTree = "<group>"; };
+		C1ABF0CA19985CF400E622CA /* LogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogViewController.m; sourceTree = "<group>"; };
+		C1ABF0CB19985CF400E622CA /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
+		C1ABF0CC19985CF400E622CA /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
+		C1ABF0D519985E9F00E622CA /* PaperButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaperButton.h; sourceTree = "<group>"; };
+		C1ABF0D619985E9F00E622CA /* PaperButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaperButton.m; sourceTree = "<group>"; };
 		D6E8D91E9C764F1DBB2C6C0E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -323,6 +338,8 @@
 		C122906319973A6400460667 /* 3rdParties */ = {
 			isa = PBXGroup;
 			children = (
+				C1ABF0D419985E9F00E622CA /* POPPaperButton */,
+				C1ABF0C619985CF400E622CA /* JASidePanels */,
 				C122906419973A6400460667 /* DoActionSheet */,
 				C122906E19973A6400460667 /* SVWebViewController */,
 				C122908719973A6400460667 /* YRDropdownView */,
@@ -436,6 +453,10 @@
 			children = (
 				C122903F19973A2B00460667 /* AppDelegate.h */,
 				C122904019973A2B00460667 /* AppDelegate.m */,
+				C1ABF0C319985B7A00E622CA /* MainSidePanelViewController.h */,
+				C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */,
+				C12290B619973A7E00460667 /* LeftViewController.h */,
+				C12290B719973A7E00460667 /* LeftViewController.m */,
 				C12290AC19973A7E00460667 /* AboutViewController.h */,
 				C12290AD19973A7E00460667 /* AboutViewController.m */,
 				C12290AE19973A7E00460667 /* DropboxAddEditViewController.h */,
@@ -446,8 +467,6 @@
 				C12290B319973A7E00460667 /* DropboxSettingsTableViewController.m */,
 				C12290B419973A7E00460667 /* DropboxStarViewController.h */,
 				C12290B519973A7E00460667 /* DropboxStarViewController.m */,
-				C12290B619973A7E00460667 /* LeftViewController.h */,
-				C12290B719973A7E00460667 /* LeftViewController.m */,
 				C12290B819973A7E00460667 /* LocalAddEditViewController.h */,
 				C12290B919973A7E00460667 /* LocalAddEditViewController.m */,
 				C12290BA19973A7E00460667 /* LocalNoteListViewController.h */,
@@ -460,7 +479,6 @@
 				C12290C119973A7E00460667 /* MarkdownWebViewController.m */,
 				C12290C219973A7E00460667 /* NoteTitlePopinViewController.h */,
 				C12290C319973A7E00460667 /* NoteTitlePopinViewController.m */,
-				C12290C419973A7E00460667 /* NoteTitlePopinViewController.xib */,
 				C12290C519973A7E00460667 /* OpenSourceLicencesViewController.h */,
 				C12290C619973A7E00460667 /* OpenSourceLicencesViewController.m */,
 				C12290C719973A7E00460667 /* SupportTableViewController.h */,
@@ -509,10 +527,8 @@
 				C12290F119973BAA00460667 /* ICTextView.m */,
 				C12290F219973BAA00460667 /* LeftTableViewCell.h */,
 				C12290F319973BAA00460667 /* LeftTableViewCell.m */,
-				C12290F419973BAA00460667 /* LeftTableViewCell.xib */,
 				C12290F519973BAA00460667 /* NoteTableViewCell.h */,
 				C12290F619973BAA00460667 /* NoteTableViewCell.m */,
-				C12290F719973BAA00460667 /* NoteTableViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -535,6 +551,9 @@
 			isa = PBXGroup;
 			children = (
 				C122910D19973D0600460667 /* Main.storyboard */,
+				C12290F419973BAA00460667 /* LeftTableViewCell.xib */,
+				C12290F719973BAA00460667 /* NoteTableViewCell.xib */,
+				C12290C419973A7E00460667 /* NoteTitlePopinViewController.xib */,
 				C122910919973C7A00460667 /* Images */,
 			);
 			path = UI;
@@ -555,6 +574,28 @@
 				C122911119973FDF00460667 /* MMMarkdown.h */,
 			);
 			path = MMMarkdown;
+			sourceTree = "<group>";
+		};
+		C1ABF0C619985CF400E622CA /* JASidePanels */ = {
+			isa = PBXGroup;
+			children = (
+				C1ABF0C719985CF400E622CA /* JASidePanelController.h */,
+				C1ABF0C819985CF400E622CA /* JASidePanelController.m */,
+				C1ABF0C919985CF400E622CA /* LogViewController.h */,
+				C1ABF0CA19985CF400E622CA /* LogViewController.m */,
+				C1ABF0CB19985CF400E622CA /* UIViewController+JASidePanel.h */,
+				C1ABF0CC19985CF400E622CA /* UIViewController+JASidePanel.m */,
+			);
+			path = JASidePanels;
+			sourceTree = "<group>";
+		};
+		C1ABF0D419985E9F00E622CA /* POPPaperButton */ = {
+			isa = PBXGroup;
+			children = (
+				C1ABF0D519985E9F00E622CA /* PaperButton.h */,
+				C1ABF0D619985E9F00E622CA /* PaperButton.m */,
+			);
+			path = POPPaperButton;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -709,11 +750,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1ABF0CF19985CF400E622CA /* UIViewController+JASidePanel.m in Sources */,
 				C12290FA19973BAA00460667 /* LeftTableViewCell.m in Sources */,
 				C12290D419973A7E00460667 /* LocalAddEditViewController.m in Sources */,
 				C12290CE19973A7E00460667 /* AboutViewController.m in Sources */,
 				C12290D619973A7E00460667 /* LocalStarViewController.m in Sources */,
 				C12290D919973A7E00460667 /* NoteTitlePopinViewController.m in Sources */,
+				C1ABF0C519985B7A00E622CA /* MainSidePanelViewController.m in Sources */,
 				C12290D019973A7E00460667 /* DropboxNoteListViewController.m in Sources */,
 				C12290A719973A7200460667 /* UIImage+MakeThumbnail.m in Sources */,
 				C12290A419973A7200460667 /* UIButtonPressAndHold.m in Sources */,
@@ -723,6 +766,7 @@
 				C12290F819973BAA00460667 /* BackgroundLayer.m in Sources */,
 				C122908E19973A6400460667 /* UIImage+ResizeMagick.m in Sources */,
 				C122909719973A6400460667 /* YRDropdownView.m in Sources */,
+				C1ABF0CD19985CF400E622CA /* JASidePanelController.m in Sources */,
 				C122910719973BE100460667 /* LocalNote.m in Sources */,
 				C12290DB19973A7E00460667 /* OpenSourceLicencesViewController.m in Sources */,
 				C122904119973A2B00460667 /* AppDelegate.m in Sources */,
@@ -742,6 +786,7 @@
 				C12290D719973A7E00460667 /* MarkdownGuideViewController.m in Sources */,
 				C122903D19973A2B00460667 /* main.m in Sources */,
 				C122910819973BE100460667 /* NoteDataManager.m in Sources */,
+				C1ABF0D719985E9F00E622CA /* PaperButton.m in Sources */,
 				C122909319973A6400460667 /* SVWebViewController.m in Sources */,
 				C122910C19973CE100460667 /* Clarity.xcdatamodeld in Sources */,
 				C12290A319973A7200460667 /* NSUserDefaults+Extension.m in Sources */,
@@ -750,6 +795,7 @@
 				C12290A619973A7200460667 /* UIImage+ChangeColor.m in Sources */,
 				C12290DD19973A7E00460667 /* WelcomePageViewController.m in Sources */,
 				C122909519973A6400460667 /* SVWebViewControllerActivitySafari.m in Sources */,
+				C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

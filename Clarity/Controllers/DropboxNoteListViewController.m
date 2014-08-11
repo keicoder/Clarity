@@ -444,15 +444,7 @@
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-    
-    [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-        //layeredNavigationItem.width = 400;                          //레이어가 노출 될 거리
-        layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-        layeredNavigationItem.hasChrome = NO;
-        layeredNavigationItem.hasBorder = NO;
-        layeredNavigationItem.displayShadow = YES;
-    }];
+    [self.navigationController pushViewController:controller animated:YES]; //Push
 }
 
 
@@ -532,16 +524,7 @@
     [self setTitleString];                                  //데이트 Formatter > 타이틀 스트링
     controller.currentNote.noteTitle = _titleString;
     
-    if ([self isKindOfClass:[DropboxNoteListViewController class]])
-    {
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            //layeredNavigationItem.width = 400;                          //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
-    }
+    [self presentViewController:navigationController animated:YES completion:^ { }]; //Modal
 }
 
 
@@ -780,10 +763,10 @@
     self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithTitle:@"Starred" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemStarredPressed:)];
     [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
     
-    self.navigationItem.leftBarButtonItems = @[self.editButtonItem, barButtonItemFixed, self.barButtonItemStarred];
+    self.navigationItem.leftBarButtonItems = @[self.barButtonItemStarred];
     [self.editButtonItem setTitleTextAttributes:@{NSForegroundColorAttributeName:kNAVIGATIONBAR_BUTTON_ITEM_LIGHTYELLOW_COLOR} forState:UIControlStateNormal];
     
-    self.navigationItem.rightBarButtonItem = barButtonItemAdd;
+    self.navigationItem.rightBarButtonItems = @[barButtonItemAdd];
 }
 
 
@@ -956,12 +939,49 @@
     
     [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
         //            layeredNavigationItem.width = 320;                          //레이어가 노출 될 거리
-        layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
+        layeredNavigationItem.nextItemDistance = 0;                             //레이어가 가려질 거리;
         layeredNavigationItem.hasChrome = NO;
         layeredNavigationItem.hasBorder = NO;
         layeredNavigationItem.displayShadow = YES;
     }];
 }
+
+
+#pragma mark 유저 디폴트 > show guide
+
+- (void)registerShowGuideToYes
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:YES forKey:kSHOW_GUIDE];
+    [standardUserDefaults synchronize];
+}
+
+
+- (void)registerShowGuideToNo
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:NO forKey:kSHOW_GUIDE];
+    [standardUserDefaults synchronize];
+}
+
+
+- (void)checkWhetherShowGuide
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kSHOW_GUIDE"] == NO)
+    { }
+    else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kSHOW_GUIDE"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self showGuide];
+    }
+}
+
+
+- (void)showGuide
+{
+    
+}
+
 
 
 @end

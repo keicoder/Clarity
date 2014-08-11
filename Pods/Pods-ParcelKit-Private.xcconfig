@@ -1,6 +1,6 @@
 #include "Pods-ParcelKit.xcconfig"
 FRAMEWORK_SEARCH_PATHS = ${PODS_PARCELKIT_FRAMEWORK_SEARCH_PATHS}
 GCC_PREPROCESSOR_DEFINITIONS = COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/ParcelKit" "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/Dropbox-Sync-API-SDK" "${PODS_ROOT}/Headers/FRLayeredNavigationController" "${PODS_ROOT}/Headers/MaryPopin" "${PODS_ROOT}/Headers/ParcelKit" "${PODS_ROOT}/Headers/Quayboard"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/ParcelKit" "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/Dropbox-Sync-API-SDK" "${PODS_ROOT}/Headers/FRLayeredNavigationController" "${PODS_ROOT}/Headers/MaryPopin" "${PODS_ROOT}/Headers/ParcelKit" "${PODS_ROOT}/Headers/Quayboard" "${PODS_ROOT}/Headers/pop"
 OTHER_LDFLAGS = -ObjC ${PODS_PARCELKIT_OTHER_LDFLAGS}
 PODS_ROOT = ${SRCROOT}

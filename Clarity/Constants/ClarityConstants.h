@@ -17,6 +17,10 @@ extern NSString * const kIS_FIRST_TIME;
 //kLOGBOOL(success);, Prints out 'success: NO' to the console
 
 
+#pragma mark - JASidePanelController
+#define kJASIDEPANEL_LEFTGAP_PERCENTAGE                     0.72
+
+
 #pragma mark - FRLayeredNavigationController
 #define kFRLAYERED_NAVIGATION_ITEM_WIDTH_LEFT               240
 #define kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE             320
@@ -30,6 +34,8 @@ extern NSString * const kIS_FIRST_TIME;
 #define kSELECTED_DROPBOX_NOTE_INDEXPATH                    @"selectedDropboxNoteIndexPath"
 #define kCURRENT_VIEW_IS_LOCAL                              @"currentViewIsLocal"
 
+#define kSHOW_GUIDE                                         @"showGuide"
+
 
 #pragma mark - 뷰
 #define kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR         [UIColor colorWithRed:0.333 green:0.333 blue:0.333 alpha:1]
@@ -37,6 +43,8 @@ extern NSString * const kIS_FIRST_TIME;
 #define kTOOLBAR_LEFT_VIEW_BACKGROUND_COLOR                 kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR
 #define kBUTTON_IMAGEVIEW_WIDTH_STAR                        28.0
 #define kBUTTON_IMAGEVIEW_HEIGHT_STAR                       28.0
+#define kNAVIGATIONBAR_ICONIMAGE_COLOR                      kWHITE_COLOR
+#define kNAVIGATIONBAR_ICONIMAGE_COLOR_PRESSED              [UIColor colorWithRed:0.282 green:0.82 blue:0.529 alpha:1]
 
 
 #pragma mark - 컬러
@@ -110,7 +118,7 @@ extern NSString * const kIS_FIRST_TIME;
 #define kTEXTVIEW_PADDING                                  20.0     // 텍스트 뷰 padding
 #define kMOVE_TEXT_POSITION_DURATION                       0.40     // 캐럿 이동 시간
 //폰트
-#define kTEXTVIEW_FONT                                      [UIFont fontWithName:@"AvenirNext-Regular" size:18.f]
+#define kTEXTVIEW_FONT                                      [UIFont fontWithName:@"AvenirNext-Regular" size:20.f]
 #define kTEXTVIEW_LABEL_FONT                                [UIFont fontWithName:@"Avenir-Black" size:22.f]
 //배경 컬러 > 데이 모드
 #define kTEXTVIEW_BACKGROUND_COLOR                          [UIColor colorWithRed:0.953 green:0.957 blue:0.941 alpha:1]
