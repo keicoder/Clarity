@@ -25,7 +25,6 @@
 
 @interface DropboxNoteListViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, weak) IBOutlet UIToolbar *toolBar;                            //툴바
 @property (nonatomic, weak) IBOutlet UITableView *tableView;                        //테이블 뷰
 @property (nonatomic, weak) IBOutlet UISearchBar *searchBar;                        //서치바
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
@@ -34,6 +33,7 @@
 @property (nonatomic, strong) DropboxNote *selectedNote;                            //AddEdit View로 넘겨 줄 노트
 @property (nonatomic, strong) NSDateFormatter *formatter;                           //데이트 Formatter
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemStarred;                //바 버튼 아이템
+@property (nonatomic, strong) UIButton *buttonStar;                                 //바 버튼 아이템
 @property (nonatomic, strong) UIButton *infoButton;                                 //인포 버튼
 
 @end
@@ -623,7 +623,7 @@
         case NSFetchedResultsChangeMove:
             break;
     }
-    [self performUpdateInfoButton];                                                  //업데이트 인포 레이블
+    [self performUpdateInfoButton];                                                  //업데이트 인포
 }
 
 
@@ -655,7 +655,7 @@
                              withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
     }
-    [self performUpdateInfoButton];                                                  //업데이트 인포 레이블
+    [self performUpdateInfoButton];                                                  //업데이트 인포
 }
 
 
@@ -729,11 +729,21 @@
     barButtonItemFixed.width = 20.0f;
     UIBarButtonItem *barButtonItemNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     barButtonItemNarrow.width = 5.0f;
+    UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewNote:)];
+    UIImage *star = [UIImage imageNamed:@"star-256"];
+    self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
+    [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
+    self.buttonStar.frame = CGRectMake(0 ,0, 26, 26);
+    self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
     
-    self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithTitle:@"Starred" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemStarredPressed:)];
-    [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
+    UIImage *add = [UIImage imageNamed:@"plus-256"];
+    UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonAdd addTarget:self action:@selector(addNewNote:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
+    buttonAdd.frame = CGRectMake(0 ,0, 20, 20);
+    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
     
     UIView* infoButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 80, 40)];
     self.infoButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -744,14 +754,18 @@
     self.infoButton.autoresizesSubviews = YES;
     self.infoButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
     [self.infoButton addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 2);
     [infoButtonView addSubview:self.infoButton];
     UIBarButtonItem* barButtonItemInfo = [[UIBarButtonItem alloc]initWithCustomView:infoButtonView];
     
+    UIBarButtonItem *barButtonItemBlank = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(noAction:)];
     
-    self.navigationItem.leftBarButtonItems = @[barButtonItemNarrow, self.barButtonItemStarred];
-    self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, barButtonItemInfo];
+    self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemBlank, barButtonItemFlexible, barButtonItemBlank, barButtonItemFlexible, barButtonItemBlank, barButtonItemFlexible, barButtonItemInfo, barButtonItemNarrow];
+    
+//    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewNote:)];
+//    self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithTitle:@"Starred" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemStarredPressed:)];
+//    [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
 }
 
 
@@ -964,7 +978,6 @@
 {
     
 }
-
 
 
 @end
