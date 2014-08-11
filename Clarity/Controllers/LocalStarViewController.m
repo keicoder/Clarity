@@ -44,6 +44,7 @@
 {
     [super viewDidLoad];
     [self configureViewAndTableView];
+    [self addNavigationBarButtonItem];                                              //내비게이션 바 버튼
     [self hideSearchBar];                                                           //서치바 감춤
     [self saveCurrentView];                                                         //현재 뷰 > 유저 디폴트 저장
 }
