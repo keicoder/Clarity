@@ -28,8 +28,6 @@
 @interface LeftViewController () <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
-@property (nonatomic, weak) IBOutlet UIImageView *logoImageView;
-@property (nonatomic, weak) IBOutlet UILabel *versionLabel;
 @property (nonatomic, strong) NSArray *firstSectionArray;
 @property (nonatomic, strong) NSArray *secondSectionArray;
 @property (nonatomic, strong) NSArray *thirdSectionArray;
@@ -53,11 +51,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    self.automaticallyAdjustsScrollViewInsets = NO;
     [self configureViewAndTableView];                   //테이블 뷰 속성
     [self makeCellDataArray];                           //테이블 데이터
-    self.versionLabel.text = @"2014 lovejunsoft";
-
+    [self addtitleLabel];                               //타이틀 레이블
 }
 
 
@@ -81,7 +77,7 @@
     
     self.containerArray = @[self.firstSectionArray, self.secondSectionArray, self.thirdSectionArray, self.fourthSectionArray];
     
-    //이미지 > 색상 변경
+    //이미지
     UIImage *mobile = [UIImage imageNameForChangingColor:@"mobile" color:kMENU_ICONIMAGE_COLOR];
     UIImage *dropbox = [UIImage imageNameForChangingColor:@"dropbox" color:kMENU_ICONIMAGE_COLOR];
     self.firstSectionImageArray = @[mobile, dropbox]; //[NSArray arrayWithObjects:mobile, dropbox, nil];
@@ -106,7 +102,6 @@
 
 - (void)configureViewAndTableView
 {
-//    self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR;          //뷰
     self.tableView.backgroundColor = kCLEAR_COLOR;                                    //테이블 뷰 배경 색상
     self.tableView.separatorColor = [UIColor colorWithRed:0.333 green:0.333 blue:0.333 alpha:0.1]; //구분선 색상
@@ -319,17 +314,24 @@
 }
 
 
-#pragma mark - 로고 뷰
+#pragma mark - 타이틀 레이블
 
-- (void)addMenuLogoImageView
+- (void)addtitleLabel
 {
-    //100 by 100
-    float logoImageViewLeftGapPercentage = 0.3;
-    CGFloat leftViewWidth = CGRectGetWidth(self.view.bounds) * logoImageViewLeftGapPercentage;
-    CGFloat imageViewWidth = CGRectGetWidth(self.logoImageView.bounds);
-    CGFloat imageViewHeight = CGRectGetHeight(self.logoImageView.bounds);
-    CGFloat imageOriginY = 82;
-    self.logoImageView.frame = CGRectMake((leftViewWidth - imageViewWidth) / 2, imageOriginY, imageViewWidth, imageViewHeight);
+    UIView *customTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+    titleLabel.frame = CGRectMake(-((((CGRectGetWidth(self.view.bounds)*kJASIDEPANEL_LEFTGAP_PERCENTAGE)-CGRectGetWidth(titleLabel.bounds))/2)-14), -2, 100, 44);
+    [titleLabel setTextColor:[UIColor colorWithWhite:1.000 alpha:0.550]];
+    [titleLabel setFont:[UIFont fontWithName:@"AvenirNextCondensed-Regular" size:20]];
+    [titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [titleLabel setNumberOfLines:1];
+    [titleLabel setAdjustsFontSizeToFitWidth:NO];
+    [titleLabel setBackgroundColor:[UIColor clearColor]];
+    [titleLabel setText:@"Clarity"];
+    
+    [customTitleView addSubview:titleLabel];
+    self.navigationItem.titleView = customTitleView;
 }
 
 

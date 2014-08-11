@@ -18,7 +18,7 @@ extern NSString * const kIS_FIRST_TIME;
 
 
 #pragma mark - JASidePanelController
-#define kJASIDEPANEL_LEFTGAP_PERCENTAGE                     0.68
+#define kJASIDEPANEL_LEFTGAP_PERCENTAGE                     0.7
 
 
 #pragma mark - FRLayeredNavigationController
