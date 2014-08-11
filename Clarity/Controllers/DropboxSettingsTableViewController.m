@@ -20,15 +20,30 @@
 @implementation DropboxSettingsTableViewController
 
 
-#pragma mark - 뷰 life cycle
+#pragma mark -
+#pragma mark 뷰 life cycle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self configureViewAndTableView];                                                       //뷰 및 테이블 뷰 속성
+    self.syncSwitch.on = [[DBAccountManager sharedManager] linkedAccount] != nil;
+    [self saveCurrentView];                                                                 //현재 뷰 > 유저 디폴트 저장
+}
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.title = @"Link";
-    self.syncSwitch.on = [[DBAccountManager sharedManager] linkedAccount] != nil;
-    [self saveCurrentView];                                                                 //현재 뷰 > 유저 디폴트 저장
-    kLOGBOOL(self.syncSwitch.on);
+}
+
+
+#pragma mark 뷰 및 테이블 뷰 속성
+
+- (void)configureViewAndTableView
+{
+    self.title = @"Sync";
+    self.tableView.separatorColor = [UIColor colorWithWhite:0.333 alpha:0.300];
 }
 
 
@@ -39,8 +54,6 @@
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
     [standardUserDefaults synchronize];
-    
-    NSLog(@"viewDidLoad > currentViewIsDropbox > saved value: %d\n", [[NSUserDefaults standardUserDefaults] boolForKey:kCURRENT_VIEW_IS_DROPBOX]);
 }
 
 
