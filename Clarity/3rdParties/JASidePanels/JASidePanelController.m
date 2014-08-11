@@ -140,7 +140,7 @@ static char ja_kvoContext;
     self.leftGapPercentage = kJASIDEPANEL_LEFTGAP_PERCENTAGE;
     self.rightGapPercentage = 0.2f;
     self.minimumMovePercentage = 0.15f;
-    self.maximumAnimationDuration = 0.2f;
+    self.maximumAnimationDuration = 0.15f;
     self.bounceDuration = 0.1f;
     self.bouncePercentage = 0.095f;
     self.panningLimitedToTopViewController = YES;
@@ -371,7 +371,7 @@ static char ja_kvoContext;
         // update the state immediately to prevent user interaction on the side panels while animating
         JASidePanelState previousState = self.state;
         self.state = JASidePanelCenterVisible;
-        [UIView animateWithDuration:0.2f animations:^{
+        [UIView animateWithDuration:0.15f animations:^{
             if (self.bounceOnCenterPanelChange) {
                 // first move the centerPanel offscreen
                 CGFloat x = (previousState == JASidePanelLeftVisible) ? self.view.bounds.size.width : -self.view.bounds.size.width;
