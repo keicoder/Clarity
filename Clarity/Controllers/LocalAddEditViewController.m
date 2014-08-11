@@ -1076,12 +1076,22 @@
          {
              case 0:
              {
+                 self.htmlString = nil;
+                 if ([self.noteTextView.text length] == 0) {
+                     self.noteTextView.text = @"> No Contents";
+                 } else {
+                 }
                  [self createHTMLString];                                                            //HTML 스트링
                  [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];         //메일 컴포즈 컨트롤러
              }
                  break;
              case 1:
              {
+                 self.htmlString = nil;
+                 if ([self.noteTextView.text length] == 0) {
+                     self.noteTextView.text = @"> No Contents";
+                 } else {
+                 }
                  [self createHTMLString];
                  UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                  pasteboard.string = self.htmlString;                                                //Pasteboard Copy
@@ -1090,25 +1100,45 @@
              case 2:
              {
                  self.htmlString = nil;
+                 if ([self.noteTextView.text length] == 0) {
+                     self.noteTextView.text = @"No Contents";
+                 } else {
+                 }
                  [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];  //메일 컴포즈 컨트롤러
              }
                  break;
              case 3:
              {
+                 self.htmlString = nil;
+                 if ([self.noteTextView.text length] == 0) {
+                     self.noteTextView.text = @"> No Contents";
+                 } else {
+                 }
                  UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                  pasteboard.string = self.noteTextView.text;                                         //Pasteboard Copy
              }
                  break;
              case 4:
              {
+                 self.htmlString = nil;
+                 if ([self.noteTextView.text length] == 0) {
+                     self.noteTextView.text = @"> No Contents";
+                 } else {
+                 }
                  NSArray *itemsToShare = @[self.noteTextView.text];
                  UIActivityViewController *activityViewController;
                  activityViewController = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
-                 [self presentViewController:activityViewController animated:YES completion:^{ }];
+                 [self presentViewController:activityViewController animated:YES completion:^{
+                 }];
              }
                  break;
              case 5:
              {
+                 self.htmlString = nil;
+                 if ([self.noteTextView.text length] == 0) {
+                     self.noteTextView.text = @"> No Contents";
+                 } else {
+                 }
                  [self createHTMLString];                                                            //HTML 스트링
                  NSString *noteStringForPrint = self.htmlString;
                  [self printNoteAsHTML:noteStringForPrint];                                          //프린트
@@ -1128,14 +1158,14 @@
 {
     //이메일 공유 : email 공유를 위해선 MessageUI 프레임워크가 필요함
     if (![MFMailComposeViewController canSendMail]) {
-//        NSLog(@"Can't send email");
+        //        NSLog(@"Can't send email");
         return;
     }
     
     MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
     [mailViewController setSubject:title];
     
-    if (self.htmlString.length > 0) {
+    if (self.htmlString) {
         [mailViewController setMessageBody:body isHTML:YES];
     } else {
         [mailViewController setMessageBody:body isHTML:NO];
@@ -1144,8 +1174,8 @@
     mailViewController.mailComposeDelegate = self;
     
     [self presentViewController:mailViewController animated:YES completion:^ {
-         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-     }];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }];
 }
 
 
@@ -1253,11 +1283,6 @@
 
 - (NSString *)noteString
 {
-    if ([self.noteTextView.text length] == 0) {
-        self.noteTextView.text = @"";
-    }
-    else if ([self.noteTextView.text length] > 0) {
-    }
     return self.noteTextView.text;
 }
 
