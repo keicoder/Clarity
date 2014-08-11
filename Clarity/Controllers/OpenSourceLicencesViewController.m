@@ -49,7 +49,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Open Source Licences";
+    self.title = @"Open Sources";
 //    self.automaticallyAdjustsScrollViewInsets = NO;
     [self assignWebViewAttribute];                              //웹뷰 속성
     [self loadLocalFileIntoAWebView];                           //로컬 파일 웹뷰로 가져오기

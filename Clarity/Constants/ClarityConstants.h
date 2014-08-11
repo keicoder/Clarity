@@ -18,7 +18,7 @@ extern NSString * const kIS_FIRST_TIME;
 
 
 #pragma mark - JASidePanelController
-#define kJASIDEPANEL_LEFTGAP_PERCENTAGE                     0.72
+#define kJASIDEPANEL_LEFTGAP_PERCENTAGE                     0.68
 
 
 #pragma mark - FRLayeredNavigationController
@@ -92,8 +92,8 @@ extern NSString * const kIS_FIRST_TIME;
 #define kTABLE_VIEW_CELL_DATELABEL_TEXTCOLOR_SATURDAY       kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SATURDAY
 #define kTABLE_VIEW_CELL_DATELABEL_TEXTCOLOR_SUNDAY         kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SUNDAY
 
-#pragma mark - 인포 레이블
-#define kINFOLABEL_TEXTCOLOR                                [UIColor colorWithWhite:0.600 alpha:1.000];
+#pragma mark - 인포 버튼
+#define kINFOBUTTON_TEXTCOLOR                               [UIColor colorWithWhite:0.706 alpha:1.000];
 
 #pragma mark - 윈도우, 상태바 및 내비게이션바
 #define kNAVIGATIONBAR_DROPBOX_LIST_VIEW_BAR_TINT_COLOR     [UIColor colorWithRed:0.333 green:0.333 blue:0.333 alpha:1]
@@ -111,7 +111,7 @@ extern NSString * const kIS_FIRST_TIME;
 #pragma mark - 텍스트 뷰
 
 #define kTEXTVIEW_LINE_IMAGEVIEW_ALPHA                      0.3
-#define kINSET_TOP                                        150.0     // 텍스트 뷰 인셋 top
+#define kINSET_TOP                                        130.0     // 텍스트 뷰 인셋 top
 #define kINSET_LEFT                                         0.0     // 텍스트 뷰 인셋 left
 #define kINSET_BOTTOM                                      88.0     // 텍스트 뷰 인셋 bottom
 #define kINSET_RIGHT                                        0.0     // 텍스트 뷰 인셋 right

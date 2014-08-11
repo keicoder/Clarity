@@ -7,7 +7,6 @@
 //
 
 #import "LocalAddEditViewController.h"
-#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 #import "ICTextView.h"                                                  //커스텀 텍스트 뷰
 #import "MarkdownWebViewController.h"                                   //MM 마크다운 뷰
 #import "NoteDataManager.h"                                             //노트 데이터 매니저
@@ -23,7 +22,7 @@
 #import "UIButtonPressAndHold.h"
 
 
-@interface LocalAddEditViewController () <JSMQuayboardBarDelegate, UITextViewDelegate, UINavigationControllerDelegate, FRLayeredNavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, UIPopoverControllerDelegate>
+@interface LocalAddEditViewController () <JSMQuayboardBarDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, UIPopoverControllerDelegate>
 
 //@property (strong, nonatomic) UIPopoverController *dropboxNoteListPopoverController;
 //@property (nonatomic, strong) UIPopoverController *menuPopoverController;
@@ -63,7 +62,6 @@
     [super viewDidLoad];
     self.title = @"";
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.layeredNavigationController.delegate = self;
     [self addNoteTextView];                             //노트 텍스트 뷰
     [self addNoteTitleLabel];                           //노트 타이틀 레이블
     [self registerKeyboardNotifications];               //키보드 노티피케이션
@@ -89,6 +87,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+//    [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
 }
 
 
@@ -680,29 +679,6 @@
 }
 
 
-#pragma mark - FRLayeredNavigationControllerDelegate
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-                 willMoveController:(UIViewController*)controller
-{
-    
-}
-
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-               movingViewController:(UIViewController*)controller
-{
-    [self.noteTextView resignFirstResponder];
-}
-
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-                  didMoveController:(UIViewController*)controller
-{
-    //    [self.layeredNavigationItem initialViewPosition];
-}
-
-
 #pragma mark - Keyboard handle
 
 - (void)registerKeyboardNotifications
@@ -933,7 +909,7 @@
             //NSLog(@"Error saving context: %@", error);
         }
     }];
-    [self.layeredNavigationController popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

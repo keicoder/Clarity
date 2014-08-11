@@ -9,7 +9,6 @@
 #import "WelcomeViewController.h"
 #import "WelcomePage.h"
 #import "BackgroundLayer.h"                                     //그라디언트 효과
-#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 
 
 @interface WelcomeViewController ()
@@ -74,7 +73,7 @@
 {
 //    [self showStatusBar];
 //    [self showNavigationBar];
-    [self.layeredNavigationController popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

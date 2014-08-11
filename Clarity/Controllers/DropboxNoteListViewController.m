@@ -12,7 +12,6 @@
 
 
 #import "DropboxNoteListViewController.h"
-#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 #import "AppDelegate.h"                                     //앱델리게이트 참조
 #import "NoteDataManager.h"                                 //노트 데이터 매니저
 #import "DropboxNote.h"                                     //노트 데이터 모델
@@ -24,7 +23,7 @@
 #import "WelcomePageViewController.h"                       //Welcome 뷰 > 앱 처음 실행인지 체크 > Welcome 뷰 보여줌
 
 
-@interface DropboxNoteListViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, FRLayeredNavigationControllerDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UIAlertViewDelegate>
+@interface DropboxNoteListViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UIToolbar *toolBar;                            //툴바
 @property (nonatomic, weak) IBOutlet UITableView *tableView;                        //테이블 뷰
@@ -35,7 +34,7 @@
 @property (nonatomic, strong) DropboxNote *selectedNote;                            //AddEdit View로 넘겨 줄 노트
 @property (nonatomic, strong) NSDateFormatter *formatter;                           //데이트 Formatter
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemStarred;                //바 버튼 아이템
-@property (nonatomic, strong) UILabel* infoLabel;                                   //인포 레이블
+@property (nonatomic, strong) UIButton *infoButton;                                 //인포 버튼
 
 @end
 
@@ -52,7 +51,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.layeredNavigationController.delegate = self;
     [self configureViewAndTableView];
     [self addNavigationBarButtonItem];                                              //내비게이션 바 버튼
     [self hideSearchBar];                                                           //서치바 감춤
@@ -69,8 +67,7 @@
     [self executePerformFetch];                                                     //패치 코어데이터 아이템
     [self initializeSearchResultNotes];                                             //서치 results 초기화
     [self.tableView reloadData];                                                    //테이블 뷰 업데이트
-    [self addInfoLabel];                                                            //인포 레이블
-    [self performUpdateInfoLabel];                                                  //업데이트 인포 레이블
+    [self performUpdateInfoButton];                                                 //업데이트 인포
     [self saveCurrentView];                                                         //현재 뷰 > 유저 디폴트 저장
 }
 
@@ -114,15 +111,7 @@
         dropboxController.isNewNote = NO;
         dropboxController.currentNote = self.selectedNote;
         
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:dropboxController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            //layeredNavigationItem.width = 400;                          //레이어가 노출 될 거리
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
+        [self.navigationController pushViewController:dropboxController animated:YES]; //Push
     }
 }
 
@@ -134,8 +123,6 @@
     [self cancelCurrentView];                   //현재 뷰 > 유저 디폴트 캔슬
     [self deActivateSearchDisplayController];   //서치 디스플레이 컨트롤러 비활성화 (애드에딧 뷰에서 나올때 서치 디스플레이 컨트롤러를 거치지 않고 테이블뷰로 바로 돌아옴)
     _fetchedResultsController = nil;
-    [self.infoLabel removeFromSuperview];
-    self.infoLabel = nil;
 }
 
 
@@ -301,7 +288,7 @@
 
 - (void)configureImages:(DropboxNote *)note cell:(NoteTableViewCell *)cell
 {
-    UIImage *starredImage = [UIImage imageNameForChangingColor:@"star-512" color:kGOLD_COLOR];
+    UIImage *starredImage = [UIImage imageNameForChangingColor:@"star-256-white" color:kGOLD_COLOR];
     BOOL hasNoteStarCurrentState = [note.hasNoteStar boolValue];    //불리언 값, kLOGBOOL(hasNoteStarCurrentState);
     
     if (hasNoteStarCurrentState) {
@@ -381,7 +368,7 @@
             [self deleteCoreDataNoteObject:indexPath];  //코어 데이터 노트
         }
     }
-    [self performUpdateInfoLabel];                                                  //업데이트 인포 레이블
+    [self performUpdateInfoButton];                                                  //업데이트 인포
 }
 
 
@@ -524,7 +511,7 @@
     [self setTitleString];                                  //데이트 Formatter > 타이틀 스트링
     controller.currentNote.noteTitle = _titleString;
     
-    [self presentViewController:navigationController animated:YES completion:^ { }]; //Modal
+    [self presentViewController:navigationController animated:YES completion:^{ }];
 }
 
 
@@ -636,7 +623,7 @@
         case NSFetchedResultsChangeMove:
             break;
     }
-    [self performUpdateInfoLabel];                                                  //업데이트 인포 레이블
+    [self performUpdateInfoButton];                                                  //업데이트 인포 레이블
 }
 
 
@@ -668,7 +655,7 @@
                              withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
     }
-    [self performUpdateInfoLabel];                                                  //업데이트 인포 레이블
+    [self performUpdateInfoButton];                                                  //업데이트 인포 레이블
 }
 
 
@@ -708,45 +695,28 @@
 }
 
 
-#pragma mark - 인포 레이블
+#pragma mark 업데이트 인포 버튼
 
-- (void)addInfoLabel
+- (void)performUpdateInfoButton
 {
-    if (self.infoLabel == nil)
-    {
-        CGRect frame = CGRectMake(220, 11, 80, 22);
-        self.infoLabel = [[UILabel alloc]initWithFrame:frame];
-        self.infoLabel.textAlignment =  NSTextAlignmentLeft;
-        self.infoLabel.textColor = kINFOLABEL_TEXTCOLOR;
-        self.infoLabel.backgroundColor = [UIColor clearColor];
-        self.infoLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:(12.0)];
-        [self.navigationController.navigationBar addSubview:self.infoLabel];
-    }
+    [self performSelector:@selector(updateInfoButton) withObject:self.infoButton afterDelay:0.5];
 }
 
 
-#pragma mark 업데이트 인포 레이블
-
-- (void)performUpdateInfoLabel
-{
-    [self performSelector:@selector(updateInfoLabel) withObject:_infoLabel afterDelay:0.5];
-}
-
-
-- (void)updateInfoLabel
+- (void)updateInfoButton
 {
     _totalNotes = (int)[[_fetchedResultsController fetchedObjects] count];        //노트 갯수
     
     if (_totalNotes == 0) {
-        [self.infoLabel setText:@""];
+        [self.infoButton setTitle:@"" forState:UIControlStateNormal];
     }
     else if (_totalNotes == 1)
     {
-        [self.infoLabel setText:@"1 note"];
+        [self.infoButton setTitle:@"1 note" forState:UIControlStateNormal];
     }
     else if (_totalNotes > 1)
     {
-        [self.infoLabel setText:[NSString stringWithFormat:@"%d notes", _totalNotes]];
+        [self.infoButton setTitle:[NSString stringWithFormat:@"%d notes", _totalNotes] forState:UIControlStateNormal];
     }
 }
 
@@ -756,21 +726,42 @@
 - (void)addNavigationBarButtonItem
 {
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixed.width = 10.0f;
+    barButtonItemFixed.width = 20.0f;
+    UIBarButtonItem *barButtonItemNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    barButtonItemNarrow.width = 5.0f;
     
     UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewNote:)];
     
     self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithTitle:@"Starred" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemStarredPressed:)];
     [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
     
-    self.navigationItem.leftBarButtonItems = @[self.barButtonItemStarred];
-    [self.editButtonItem setTitleTextAttributes:@{NSForegroundColorAttributeName:kNAVIGATIONBAR_BUTTON_ITEM_LIGHTYELLOW_COLOR} forState:UIControlStateNormal];
+    UIView* infoButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 80, 40)];
+    self.infoButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.infoButton.backgroundColor = [UIColor clearColor];
+    self.infoButton.frame = infoButtonView.frame;
+    [self.infoButton setTitle:@"" forState:UIControlStateNormal];
+    self.infoButton.tintColor = kINFOBUTTON_TEXTCOLOR;
+    self.infoButton.autoresizesSubviews = YES;
+    self.infoButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
+    [self.infoButton addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 2);
+    [infoButtonView addSubview:self.infoButton];
+    UIBarButtonItem* barButtonItemInfo = [[UIBarButtonItem alloc]initWithCustomView:infoButtonView];
     
-    self.navigationItem.rightBarButtonItems = @[barButtonItemAdd];
+    
+    self.navigationItem.leftBarButtonItems = @[barButtonItemNarrow, self.barButtonItemStarred];
+    self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, barButtonItemInfo];
 }
 
 
 #pragma mark 버튼 액션 메소드
+
+- (void)noAction:(id)sender
+{
+    
+}
+
 
 - (void)buttonSearchPressed:(id)sender
 {
@@ -934,16 +925,8 @@
 
 - (void)showWelcomeView
 {
-    WelcomePageViewController *welcomePageViewController = (WelcomePageViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:welcomePageViewController];
-    
-    [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-        //            layeredNavigationItem.width = 320;                          //레이어가 노출 될 거리
-        layeredNavigationItem.nextItemDistance = 0;                             //레이어가 가려질 거리;
-        layeredNavigationItem.hasChrome = NO;
-        layeredNavigationItem.hasBorder = NO;
-        layeredNavigationItem.displayShadow = YES;
-    }];
+    WelcomePageViewController *controller = (WelcomePageViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 

@@ -7,7 +7,6 @@
 //
 
 #import "DropboxAddEditViewController.h"
-#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 #import "ICTextView.h"                                                  //커스텀 텍스트 뷰
 #import "MarkdownWebViewController.h"                                   //MM 마크다운 뷰
 #import "NoteDataManager.h"                                             //노트 데이터 매니저
@@ -23,7 +22,7 @@
 #import "UIButtonPressAndHold.h"
 
 
-@interface DropboxAddEditViewController () <JSMQuayboardBarDelegate, UITextViewDelegate, UINavigationControllerDelegate, FRLayeredNavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, UIPopoverControllerDelegate>
+@interface DropboxAddEditViewController () <JSMQuayboardBarDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, UIPopoverControllerDelegate>
 
 //@property (strong, nonatomic) UIPopoverController *dropboxNoteListPopoverController;
 //@property (nonatomic, strong) UIPopoverController *menuPopoverController;
@@ -65,7 +64,6 @@
     [super viewDidLoad];
     self.title = @"";
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.layeredNavigationController.delegate = self;
     [self addNoteTextView];                             //노트 텍스트 뷰
     [self addNoteTitleLabel];                           //노트 타이틀 레이블
     [self registerKeyboardNotifications];               //키보드 노티피케이션
@@ -92,6 +90,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+//    [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
 }
 
 
@@ -224,7 +223,7 @@
 {
     CGFloat noteTitleLabelHeight = 50;
     
-    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -70, CGRectGetWidth(self.view.frame), noteTitleLabelHeight)];
+    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -50, CGRectGetWidth(self.view.frame), noteTitleLabelHeight)];
     self.noteTitleLabelBackgroundView.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     [self.noteTextView addSubview:self.noteTitleLabelBackgroundView];
     [self.noteTitleLabelBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
@@ -684,29 +683,6 @@
 }
 
 
-#pragma mark - FRLayeredNavigationControllerDelegate
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-                 willMoveController:(UIViewController*)controller
-{
-    
-}
-
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-               movingViewController:(UIViewController*)controller
-{
-    [self.noteTextView resignFirstResponder];
-}
-
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-                  didMoveController:(UIViewController*)controller
-{
-//    [self.layeredNavigationItem initialViewPosition];
-}
-
-
 #pragma mark - Keyboard handle
 
 - (void)registerKeyboardNotifications
@@ -785,15 +761,16 @@
 - (void)addNavigationBarButtonItems
 {
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixed.width = 14.0f;
-    UIBarButtonItem *barButtonItemFixedWide = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixedWide.width = 30.0f;
+    barButtonItemFixed.width = 20.0f;
     UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
 //    UIImage *cancel = [UIImage imageNameForChangingColor:@"previous-250" color:kNAVIGATIONBAR_ICONIMAGE_COLOR];
 //    UIImage *cancelSelected = [UIImage imageNamed:@"previous-250"];
 //    [buttoncancel setBackgroundImage:cancelSelected forState:UIControlStateSelected];
+    
+    
     UIImage *cancel = [UIImage imageNamed:@"previous-250"];
+//    UIImage *cancel = [UIImage imageNamed:@""];
     UIButton *buttoncancel = [UIButton buttonWithType:UIButtonTypeCustom];
     [buttoncancel addTarget:self action:@selector(barButtonItemCancelPressed:)forControlEvents:UIControlEventTouchUpInside];
     [buttoncancel setBackgroundImage:cancel forState:UIControlStateNormal];
@@ -809,7 +786,7 @@
     UIBarButtonItem *barButtonItemFullScreen = [[UIBarButtonItem alloc] initWithCustomView:buttonFullScreen];
     
     
-    UIImage *star = [UIImage imageNamed:@""];
+    UIImage *star = [UIImage imageNamed:@"star-256-white"];
     self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
     [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
@@ -821,7 +798,7 @@
     UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
     [buttonAdd addTarget:self action:@selector(barButtonItemAddPressed:)forControlEvents:UIControlEventTouchUpInside];
     [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
-    buttonAdd.frame = CGRectMake(0 ,0, 22, 22);
+    buttonAdd.frame = CGRectMake(0 ,0, 26, 26);
     UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
     
     
@@ -849,8 +826,10 @@
     UIBarButtonItem *barButtonItemSave = [[UIBarButtonItem alloc] initWithCustomView:buttonSave];
     
     
-    self.navigationItem.leftBarButtonItems = @[barButtonItemCancel, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible, self.barButtonItemStarred];
-    self.navigationItem.rightBarButtonItems = @[barButtonItemSave, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemAdd];
+    self.navigationController.navigationBar.topItem.title = @"";
+    self.navigationItem.hidesBackButton=YES;
+//    self.navigationItem.leftBarButtonItems = @[barButtonItemCancel];
+    self.navigationItem.rightBarButtonItems = @[barButtonItemSave, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemFixed, barButtonItemAdd, barButtonItemFixed, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible, barButtonItemCancel];
 }
 
 
@@ -878,7 +857,7 @@
         }];
     } else {
         [self.navigationController popViewControllerAnimated:YES];
-        [self performSelector:@selector(postAddNewDropboxNoteNotification) withObject:self afterDelay:0.0];
+        [self performSelector:@selector(postAddNewDropboxNoteNotification) withObject:self afterDelay:0.1];
     }
 }
 

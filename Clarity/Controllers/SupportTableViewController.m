@@ -14,7 +14,6 @@
 #import "AboutViewController.h"                                 //About 뷰
 #import "WelcomePageViewController.h"                           //Welcome 뷰
 #import "OpenSourceLicencesViewController.h"                    //오픈소스 라이센스
-#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 #import "UIImage+ChangeColor.h"                                 //이미지 컬러 변경
 #import "SVWebViewController.h"                                 //SV 웹뷰
 
@@ -66,38 +65,17 @@
     if (indexPath.section == 1 && indexPath.row == 0)
     {
         AboutViewController *aboutViewController = (AboutViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"AboutViewController"];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:aboutViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
+        [self.navigationController pushViewController:aboutViewController animated:YES];
     }
     else if(indexPath.section == 1 && indexPath.row == 1)
     {
         WelcomePageViewController *welcomePageViewController = (WelcomePageViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:welcomePageViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
+        [self.navigationController pushViewController:welcomePageViewController animated:YES];
     }
     else if(indexPath.section == 2 && indexPath.row == 0)
     {
         OpenSourceLicencesViewController *openSourceLicencesViewController = (OpenSourceLicencesViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"OpenSourceLicencesViewController"];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:openSourceLicencesViewController];
-        
-        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-            layeredNavigationItem.hasChrome = NO;
-            layeredNavigationItem.hasBorder = NO;
-            layeredNavigationItem.displayShadow = YES;
-        }];
+        [self.navigationController pushViewController:openSourceLicencesViewController animated:YES];
     }
 }
 

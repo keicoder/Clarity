@@ -53,7 +53,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.automaticallyAdjustsScrollViewInsets = NO;
+//    self.automaticallyAdjustsScrollViewInsets = NO;
     [self configureViewAndTableView];                   //테이블 뷰 속성
     [self makeCellDataArray];                           //테이블 데이터
     self.versionLabel.text = @"2014 lovejunsoft";
@@ -348,14 +348,10 @@
     mailViewController.mailComposeDelegate = self;
     
     [mailViewController setToRecipients:@[@"lovejun.soft@gmail.com"]];              //Set params
-    [mailViewController setSubject:NSLocalizedString(@"ClarityHD iOS Feedback", @"ClarityHD iOS Feedback")];
-    [mailViewController setMessageBody:NSLocalizedString(@"\n\n\n\n----\nClarityHD iOS\n", @"\n\n\n\n----\nClarityHD iOS\n") isHTML:NO];
+    [mailViewController setSubject:NSLocalizedString(@"Clarity iOS Feedback", @"Clarity iOS Feedback")];
+    [mailViewController setMessageBody:NSLocalizedString(@"\n\n\n\n----\nClarity iOS\n", @"\n\n\n\n----\nClarity iOS\n") isHTML:NO];
     
     [self presentViewController:mailViewController animated:YES completion:^{
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent]; //상태 바 속성
-        [[UINavigationBar appearance] setBarTintColor:kWINDOW_BACKGROUND_COLOR];            //냅바 색상
-        [[UINavigationBar appearance] setTintColor:kWHITE_COLOR];                           //냅바 버튼 색상
-        [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:kWHITE_COLOR, NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-Medium" size:18.0]};
     }];
 }
 
@@ -379,7 +375,9 @@
 			NSLog(@"mail composer failed");
 			break;
 	}
-    [controller dismissViewControllerAnimated:YES completion:nil];
+    [controller dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 

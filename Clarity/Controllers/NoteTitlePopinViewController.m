@@ -80,7 +80,7 @@
         self.titleTextField.text = self.currentDropboxNote.noteTitle;
     }
     
-    [self.titleTextField performSelector:@selector(selectAll:) withObject:self.titleTextField afterDelay:0.f];
+//    [self.titleTextField performSelector:@selector(selectAll:) withObject:self.titleTextField afterDelay:0.f];
 }
 
 

@@ -12,7 +12,6 @@
 
 
 #import "DropboxStarViewController.h"
-#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 #import "AppDelegate.h"                                     //AppDelegate 참조
 #import "NoteDataManager.h"                                 //노트 데이터 매니저
 #import "DropboxNote.h"                                     //노트 데이터 모델
@@ -21,7 +20,7 @@
 #import "UIImage+ChangeColor.h"                             //이미지 컬러 변경
 
 
-@interface DropboxStarViewController () <UITableViewDataSource, UITableViewDelegate, FRLayeredNavigationControllerDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate>
+@interface DropboxStarViewController () <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;                        //테이블 뷰
 @property (nonatomic, weak) IBOutlet UISearchBar *searchBar;                        //서치바
@@ -29,7 +28,7 @@
 @property (nonatomic, strong) UIBarButtonItem *buttonDone;                          //우측 Done 버튼
 @property (nonatomic, strong) NSMutableArray *searchResultNotes;                    //서치바 검색결과를 담을 뮤터블 배열
 @property (nonatomic, strong) DropboxNote *selectedNote;                            //AddEdit View로 넘겨 줄 노트
-@property (nonatomic, strong) UILabel* infoLabel;                                   //인포 레이블
+@property (nonatomic, strong) UIButton *infoButton;                                 //인포 버튼
 
 @end
 
@@ -44,8 +43,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.layeredNavigationController.delegate = self;
     [self configureViewAndTableView];
+    [self addNavigationBarButtonItem];                                              //내비게이션 바 버튼
     [self hideSearchBar];                                                           //서치바 감춤
     [self saveCurrentView];                                                         //현재 뷰 > 유저 디폴트 저장
 }
@@ -59,8 +58,7 @@
     [self executePerformFetch];                                                     //패치 코어데이터 아이템
     [self initializeSearchResultNotes];                                             //서치 results 초기화
     [self.tableView reloadData];                                                    //테이블 뷰 업데이트
-    [self addInfoLabel];                                                            //인포 레이블
-    [self performUpdateInfoLabel];                                                  //업데이트 인포 레이블
+    [self performUpdateInfoButton];                                                 //업데이트 인포
 }
 
 
@@ -69,8 +67,6 @@
     [super viewWillDisappear:YES];
     [self deActivateSearchDisplayController];   //서치 디스플레이 컨트롤러 비활성화 (애드에딧 뷰에서 나올때 서치 디스플레이 컨트롤러를 거치지 않고 테이블뷰로 바로 돌아옴)
     _fetchedResultsController = nil;
-    [self.infoLabel removeFromSuperview];
-    self.infoLabel = nil;
 }
 
 
@@ -225,7 +221,7 @@
 
 - (void)configureImages:(DropboxNote *)note cell:(NoteTableViewCell *)cell
 {
-    UIImage *starredImage = [UIImage imageNameForChangingColor:@"star-512" color:kGOLD_COLOR];
+    UIImage *starredImage = [UIImage imageNameForChangingColor:@"star-256-white" color:kGOLD_COLOR];
     BOOL hasNoteStarCurrentState = [note.hasNoteStar boolValue];    //불리언 값, kLOGBOOL(hasNoteStarCurrentState);
     
     if (hasNoteStarCurrentState) {
@@ -306,7 +302,7 @@
             [self deleteCoreDataNoteObject:indexPath];  //코어 데이터 노트
         }
     }
-    [self performUpdateInfoLabel];                                                  //업데이트 인포 레이블
+    [self performUpdateInfoButton];                                                 //업데이트 인포
 }
 
 
@@ -369,15 +365,7 @@
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-    
-    [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-        //layeredNavigationItem.width = 400;                          //레이어가 노출 될 거리
-        layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
-        layeredNavigationItem.hasChrome = NO;
-        layeredNavigationItem.hasBorder = NO;
-        layeredNavigationItem.displayShadow = YES;
-    }];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 
@@ -396,7 +384,7 @@
         [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO]]];
         _fetchedResultsController = [[NSFetchedResultsController alloc] 
                                      initWithFetchRequest:fetchRequest 
-                                     managedObjectContext:[NoteDataManager sharedNoteDataManager].managedObjectContext 
+                                     managedObjectContext:[NoteDataManager sharedNoteDataManager].managedObjectContext
                                      sectionNameKeyPath:@"sectionName" cacheName:nil];
         [fetchRequest setFetchBatchSize:20];
         _fetchedResultsController.delegate = self;
@@ -446,7 +434,7 @@
         case NSFetchedResultsChangeMove:
             break;
     }
-    [self performUpdateInfoLabel];                                                  //업데이트 인포 레이블
+    [self performUpdateInfoButton];                                                 //업데이트 인포
 }
 
 
@@ -468,7 +456,6 @@
         case NSFetchedResultsChangeUpdate:
             [tableView reloadData];                 //테이블 뷰 업데이트
             [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
-            //[self performSelector:@selector(updateInfoLabel) withObject:_infoLabel afterDelay:0.5]; //인포 레이블 업데이트
             break;
             
         case NSFetchedResultsChangeMove:
@@ -478,7 +465,7 @@
                              withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
     }
-    [self performUpdateInfoLabel];                                                  //업데이트 인포 레이블
+    [self performUpdateInfoButton];                                                 //업데이트 인포
 }
 
 
@@ -595,45 +582,62 @@
 }
 
 
-#pragma mark - 인포 레이블
+#pragma mark - 내비게이션 바 버튼 및 메소드
 
-- (void)addInfoLabel
+- (void)addNavigationBarButtonItem
 {
-    if (self.infoLabel == nil)
-    {
-        CGRect frame = CGRectMake(220, 11, 80, 22);
-        self.infoLabel = [[UILabel alloc]initWithFrame:frame];
-        self.infoLabel.textAlignment =  NSTextAlignmentRight;
-        self.infoLabel.textColor = kINFOLABEL_TEXTCOLOR;
-        self.infoLabel.backgroundColor = [UIColor clearColor];
-        self.infoLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:(12.0)];
-        [self.navigationController.navigationBar addSubview:self.infoLabel];
-    }
+    UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    barButtonItemFixed.width = 20.0f;
+    
+    
+    UIView* infoButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 80, 40)];
+    self.infoButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.infoButton.backgroundColor = [UIColor clearColor];
+    self.infoButton.frame = infoButtonView.frame;
+    [self.infoButton setTitle:@"" forState:UIControlStateNormal];
+    self.infoButton.tintColor = kINFOBUTTON_TEXTCOLOR;
+    self.infoButton.autoresizesSubviews = YES;
+    self.infoButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
+    [self.infoButton addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 2);
+    [infoButtonView addSubview:self.infoButton];
+    UIBarButtonItem* barButtonItemInfo = [[UIBarButtonItem alloc]initWithCustomView:infoButtonView];
+    
+    self.navigationItem.rightBarButtonItems = @[barButtonItemInfo];
 }
 
 
-#pragma mark 업데이트 인포 레이블
+#pragma mark 버튼 액션 메소드
 
-- (void)performUpdateInfoLabel
+- (void)noAction:(id)sender
 {
-    [self performSelector:@selector(updateInfoLabel) withObject:_infoLabel afterDelay:0.5];
+    
 }
 
 
-- (void)updateInfoLabel
+#pragma mark 업데이트 인포 버튼
+
+- (void)performUpdateInfoButton
+{
+    [self performSelector:@selector(updateInfoButton) withObject:self.infoButton afterDelay:0.5];
+}
+
+
+- (void)updateInfoButton
 {
     _totalNotes = (int)[[_fetchedResultsController fetchedObjects] count];        //노트 갯수
     
     if (_totalNotes == 0) {
-        [self.infoLabel setText:@""];
+        [self.infoButton setTitle:@"" forState:UIControlStateNormal];
     }
     else if (_totalNotes == 1)
     {
-        [self.infoLabel setText:@"1 note"];
+        [self.infoButton setTitle:@"1 note" forState:UIControlStateNormal];
     }
     else if (_totalNotes > 1)
     {
-        [self.infoLabel setText:[NSString stringWithFormat:@"%d notes", _totalNotes]];
+        [self.infoButton setTitle:[NSString stringWithFormat:@"%d notes", _totalNotes] forState:UIControlStateNormal];
     }
 }
 
