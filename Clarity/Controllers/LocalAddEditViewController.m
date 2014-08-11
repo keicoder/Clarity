@@ -34,7 +34,9 @@
 @property (nonatomic, strong) JSMQuayboardBar *textViewAccessory;           //인풋 액세서리
 @property (nonatomic, strong) NSMutableString *htmlString;                  //HTML 스트링
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemStarred;        //바 버튼 아이템
+@property (nonatomic, strong) UIButton *buttonStar;                         //바 버튼 아이템
 @property (nonatomic, strong) UIButton *buttonForFullscreen;                //툴바 뷰 Up 버튼
+@property (nonatomic, strong) UIImage *starImage;                           //스타 이미지
 
 @end
 
@@ -70,10 +72,11 @@
     [self assignNoteData];                              //노트 데이터
     [self.noteTextView assignTextViewAttribute];        //노트 텍스트 뷰 속성
     [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
+    [self updateStarImage];                             //스타 이미지 업데이트
     [self addTapGestureRecognizer];                     //탭 제스처
     [self addObserverForNoteTitleChanged];              //노트 타이틀 변경 Notification 옵저버 등록
     [self addButtonForFullscreen];                      //Full Screen 버튼
-    //    [self showNoteDataToLogConsole];                    //노트 데이터 로그 콘솔에 보여주기
+//    [self showNoteDataToLogConsole];                    //노트 데이터 로그 콘솔에 보여주기
 }
 
 
@@ -97,6 +100,7 @@
     self.noteTextView = nil;
     self.noteTitleLabel = nil;
     self.noteTitleLabelBackgroundView = nil;
+    self.starImage = nil;
     self.htmlString = nil;
 }
 
@@ -219,7 +223,7 @@
 {
     CGFloat noteTitleLabelHeight = 50;
     
-    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -70, CGRectGetWidth(self.view.frame), noteTitleLabelHeight)];
+    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -50, CGRectGetWidth(self.view.frame), noteTitleLabelHeight)];
     self.noteTitleLabelBackgroundView.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     [self.noteTextView addSubview:self.noteTitleLabelBackgroundView];
     [self.noteTitleLabelBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
@@ -757,26 +761,75 @@
 - (void)addNavigationBarButtonItems
 {
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixed.width = 22.0f;
+    barButtonItemFixed.width = 20.0f;
+    UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    UIBarButtonItem *barButtonItemCancel = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemCancelPressed:)];
-    [barButtonItemCancel setTitleTextAttributes:@{NSForegroundColorAttributeName:kNAVIGATIONBAR_BUTTON_ITEM_LIGHTYELLOW_COLOR} forState:UIControlStateNormal];
+    //    UIImage *cancel = [UIImage imageNameForChangingColor:@"previous-250" color:kNAVIGATIONBAR_ICONIMAGE_COLOR];
+    //    UIImage *cancelSelected = [UIImage imageNamed:@"previous-250"];
+    //    [buttoncancel setBackgroundImage:cancelSelected forState:UIControlStateSelected];
     
-    UIBarButtonItem *barButtonItemFullScreen = [[UIBarButtonItem alloc] initWithTitle:@"Full Screen" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemFullScreenPressed:)];
     
-    UIBarButtonItem *barButtonItemSave = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemSavePressed:)];
-    [barButtonItemSave setTitleTextAttributes:@{NSForegroundColorAttributeName:kNAVIGATIONBAR_BUTTON_ITEM_LIGHTYELLOW_COLOR} forState:UIControlStateNormal];
+    UIImage *cancel = [UIImage imageNamed:@"previous-250"];
+    //    UIImage *cancel = [UIImage imageNamed:@""];
+    UIButton *buttoncancel = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttoncancel addTarget:self action:@selector(barButtonItemCancelPressed:)forControlEvents:UIControlEventTouchUpInside];
+    [buttoncancel setBackgroundImage:cancel forState:UIControlStateNormal];
+    buttoncancel.frame = CGRectMake(0 ,0, 24, 24);
+    UIBarButtonItem *barButtonItemCancel = [[UIBarButtonItem alloc] initWithCustomView:buttoncancel];
     
-    UIBarButtonItem *barButtonItemMarkdown = [[UIBarButtonItem alloc] initWithTitle:@"Preview" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemMarkdownPressed:)];
     
-    UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithTitle:@"Share" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemSharePressed:)];
+    UIImage *fullScreen = [UIImage imageNamed:@"expand-256"];
+    UIButton *buttonFullScreen = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonFullScreen addTarget:self action:@selector(barButtonItemFullScreenPressed:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonFullScreen setBackgroundImage:fullScreen forState:UIControlStateNormal];
+    buttonFullScreen.frame = CGRectMake(0 ,0, 18, 18);
+    UIBarButtonItem *barButtonItemFullScreen = [[UIBarButtonItem alloc] initWithCustomView:buttonFullScreen];
     
-    self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithTitle:@"UnStarred" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemStarredPressed:)];
     
-    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(barButtonItemAddPressed:)];
+    UIImage *star = [UIImage imageNamed:@"star-256-white"];
+    self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
+    [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
+    self.buttonStar.frame = CGRectMake(0 ,0, 26, 26);
+    self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
     
-    self.navigationItem.leftBarButtonItems = @[barButtonItemCancel, barButtonItemFixed, barButtonItemFullScreen, barButtonItemFixed, self.barButtonItemStarred];
-    self.navigationItem.rightBarButtonItems = @[barButtonItemSave, barButtonItemFixed, barButtonItemShare, barButtonItemFixed, barButtonItemMarkdown, barButtonItemFixed, barButtonItemAdd];
+    
+    UIImage *add = [UIImage imageNamed:@"plus-256"];
+    UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonAdd addTarget:self action:@selector(barButtonItemAddPressed:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
+    buttonAdd.frame = CGRectMake(0 ,0, 26, 26);
+    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
+    
+    
+    UIImage *markdown = [UIImage imageNamed:@"md-256"];
+    UIButton *buttonMarkdown = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonMarkdown addTarget:self action:@selector(barButtonItemMarkdownPressed:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonMarkdown setBackgroundImage:markdown forState:UIControlStateNormal];
+    buttonMarkdown.frame = CGRectMake(0 ,0, 22, 22);
+    UIBarButtonItem *barButtonItemMarkdown = [[UIBarButtonItem alloc] initWithCustomView:buttonMarkdown];
+    
+    
+    UIImage *share = [UIImage imageNamed:@"action83"];
+    UIButton *buttonShare = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonShare addTarget:self action:@selector(barButtonItemSharePressed:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonShare setBackgroundImage:share forState:UIControlStateNormal];
+    buttonShare.frame = CGRectMake(0 ,0, 28, 24);
+    UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithCustomView:buttonShare];
+    
+    
+    UIImage *save = [UIImage imageNamed:@"save-64"];
+    UIButton *buttonSave = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonSave addTarget:self action:@selector(barButtonItemSavePressed:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonSave setBackgroundImage:save forState:UIControlStateNormal];
+    buttonSave.frame = CGRectMake(0 ,0, 22, 22);
+    UIBarButtonItem *barButtonItemSave = [[UIBarButtonItem alloc] initWithCustomView:buttonSave];
+    
+    
+    self.navigationController.navigationBar.topItem.title = @"";
+    self.navigationItem.hidesBackButton=YES;
+    //    self.navigationItem.leftBarButtonItems = @[barButtonItemCancel];
+    self.navigationItem.rightBarButtonItems = @[barButtonItemSave, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemFixed, barButtonItemAdd, barButtonItemFixed, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible, barButtonItemCancel];
 }
 
 
@@ -786,7 +839,7 @@
 {
     if (self.isNewNote) {
         [self deleteNote:self.currentNote];
-        [self.navigationController dismissViewControllerAnimated:YES completion:^{ }];  //Modal
+        [self.navigationController dismissViewControllerAnimated:YES completion:^{ }];
     } else {
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -797,11 +850,21 @@
 
 - (void)barButtonItemAddPressed:(id)sender
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName: @"AddNewLocalNoteNotification" object:nil userInfo:nil];
-    
-    if (self.noteTextView.text.length == 0) {
+    if (self.isNewNote) {
         [self deleteNote:self.currentNote];
+        [self.navigationController dismissViewControllerAnimated:YES completion:^{
+            [self performSelector:@selector(postAddNewDropboxNoteNotification) withObject:self afterDelay:0.0];
+        }];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+        [self performSelector:@selector(postAddNewDropboxNoteNotification) withObject:self afterDelay:0.1];
     }
+}
+
+
+- (void)postAddNewDropboxNoteNotification
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"AddNewLocalNoteNotification" object:nil userInfo:nil];
 }
 
 
@@ -881,6 +944,7 @@
     
     if (self.isNewNote) {
         [self saveMethodInvoked];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
     else {
         if ([_originalNote isEqualToString:concatenateString]) {
@@ -889,6 +953,7 @@
         else {
             [self saveMethodInvoked];
         }
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
@@ -909,7 +974,6 @@
             //NSLog(@"Error saving context: %@", error);
         }
     }];
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -964,19 +1028,21 @@
 }
 
 
-#pragma mark 툴바 뷰 스타 이미지 업데이트
+#pragma mark 스타 이미지 업데이트
 
 - (void)updateStarImage
 {
     if ([self.currentNote.hasNoteStar boolValue] == YES)
     {
-        self.barButtonItemStarred.title = @"Starred";
-        [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
+        self.starImage = nil;
+        UIImage *image = [UIImage imageNamed:@"star-256"];
+        [self.buttonStar setBackgroundImage:image forState:UIControlStateNormal];
     }
     else
     {
-        self.barButtonItemStarred.title = @"UnStarred";
-        [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kWHITE_COLOR} forState:UIControlStateNormal];
+        self.starImage = nil;
+        UIImage *image = [UIImage imageNamed:@"star-256-white"];
+        [self.buttonStar setBackgroundImage:image forState:UIControlStateNormal];
     }
 }
 
