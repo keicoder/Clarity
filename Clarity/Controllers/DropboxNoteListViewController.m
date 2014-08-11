@@ -759,10 +759,9 @@
     [infoButtonView addSubview:self.infoButton];
     UIBarButtonItem* barButtonItemInfo = [[UIBarButtonItem alloc]initWithCustomView:infoButtonView];
     
-    UIBarButtonItem *barButtonItemBlank = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(noAction:)];
-    
-    self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemBlank, barButtonItemFlexible, barButtonItemBlank, barButtonItemFlexible, barButtonItemBlank, barButtonItemFlexible, barButtonItemInfo, barButtonItemNarrow];
-    
+    self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemInfo, barButtonItemFixed, barButtonItemFixed];
+ 
+//    UIBarButtonItem *barButtonItemBlank = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(noAction:)];
 //    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewNote:)];
 //    self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithTitle:@"Starred" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemStarredPressed:)];
 //    [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
