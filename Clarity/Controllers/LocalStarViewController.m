@@ -29,6 +29,7 @@
 @property (nonatomic, strong) NSMutableArray *searchResultNotes;                    //서치바 검색결과를 담을 뮤터블 배열
 @property (nonatomic, strong) LocalNote *selectedNote;                              //AddEdit View로 넘겨 줄 노트
 @property (nonatomic, strong) UIButton *infoButton;                                 //인포 버튼
+@property (nonatomic, weak) IBOutlet UILabel *helpLabel;                            //헬프 레이블
 
 @end
 
@@ -59,6 +60,7 @@
     [self initializeSearchResultNotes];                                             //서치 results 초기화
     [self.tableView reloadData];                                                    //테이블 뷰 업데이트
     [self performUpdateInfoButton];                                                 //업데이트 인포
+    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
 }
 
 
@@ -303,6 +305,7 @@
         }
     }
     [self performUpdateInfoButton];                                                 //업데이트 인포
+    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
 }
 
 
@@ -435,6 +438,7 @@
             break;
     }
     [self performUpdateInfoButton];                                                 //업데이트 인포
+    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
 }
 
 
@@ -466,6 +470,7 @@
             break;
     }
     [self performUpdateInfoButton];                                                 //업데이트 인포
+    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
 }
 
 
@@ -638,6 +643,27 @@
     else if (_totalNotes > 1)
     {
         [self.infoButton setTitle:[NSString stringWithFormat:@"%d notes", _totalNotes] forState:UIControlStateNormal];
+    }
+}
+
+
+#pragma mark - 헬프 레이블
+
+- (void)performCheckNoNote
+{
+    [self performSelector:@selector(checkNoNote) withObject:self.infoButton afterDelay:0.0];
+}
+
+
+- (void)checkNoNote
+{
+    if ([[_fetchedResultsController fetchedObjects] count] == 0)
+    {
+        self.helpLabel.alpha = 1.0;
+    }
+    else
+    {
+        self.helpLabel.alpha = 0.0;
     }
 }
 
