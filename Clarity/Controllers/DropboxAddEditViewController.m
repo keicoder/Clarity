@@ -1346,7 +1346,7 @@
 }
 
 
-#pragma mark - 헬프 메시지 보여줄건지 판단
+#pragma mark - 헬프 메시지
 
 - (void)checkToshowHelpMessage
 {
@@ -1355,7 +1355,7 @@
     else {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kDIDSHOW_NOTEVIEW_HELP];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        self.noteTextView.text = @"# Quick guide\n\n* To edit title, tap the date label.\n\n* To preview markdown, tap MD button.\n\n* To remove keyboard, tap '▼'key.\n\n> **Thank you** for purchasing Clarity.  \n**Enjoy Writing!**";
+        self.noteTextView.text = @"# Quick Guide\n\n* To edit title, tap the date label.\n\n* To preview markdown, tap MD button.\n\n* To remove keyboard, tap '▼'key.\n\n> **Thank you** for purchasing Clarity.  \n**Enjoy Writing!**";
         [self barButtonItemMarkdownPressed:self];
     }
 }

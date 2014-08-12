@@ -152,7 +152,7 @@ to add new note.</string>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <searchBar key="tableHeaderView" contentMode="redraw" id="GrJ-Az-vI3">
-                                    <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <textInputTraits key="textInputTraits"/>
                                     <connections>
@@ -608,7 +608,7 @@ to add new note.</string>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search Starred" id="l6K-2T-YBY">
-                                    <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <textInputTraits key="textInputTraits"/>
                                     <connections>
@@ -782,24 +782,6 @@ to go back.</string>
             <point key="canvasLocation" x="-4665" y="-9934"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="Jm3-0R-5ju">
-            <objects>
-                <navigationController storyboardIdentifier="DropboxStarViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="TQQ-e2-ji8" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="is6-xT-qUM">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="qGq-we-DBw" kind="relationship" relationship="rootViewController" id="ctz-uz-hiN"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KF8-cW-jn1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-3908" y="-9934"/>
-        </scene>
-        <!--Navigation Controller-->
         <scene sceneID="Kba-dN-2ep">
             <objects>
                 <navigationController storyboardIdentifier="LocalAddEditViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="QGm-Tx-gcG" sceneMemberID="viewController">
@@ -816,24 +798,6 @@ to go back.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Oo-dN-pe5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-4668" y="-9246"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="qtW-fv-Elf">
-            <objects>
-                <navigationController storyboardIdentifier="LocalStarViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="JRq-ak-V9l" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="XKJ-aI-itK">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="DXh-is-DXj" kind="relationship" relationship="rootViewController" id="RMy-oQ-ccQ"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="tTM-rc-isv" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-3908" y="-9246"/>
         </scene>
     </scenes>
     <resources>
