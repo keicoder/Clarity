@@ -35,6 +35,7 @@
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemStarred;                //바 버튼 아이템
 @property (nonatomic, strong) UIButton *buttonStar;                                 //바 버튼 아이템
 @property (nonatomic, strong) UIButton *infoButton;                                 //인포 버튼
+@property (nonatomic, weak) IBOutlet UILabel *helpLabel;                            //헬프 레이블
 
 @end
 
@@ -68,6 +69,7 @@
     [self initializeSearchResultNotes];                                             //서치 results 초기화
     [self.tableView reloadData];                                                    //테이블 뷰 업데이트
     [self performUpdateInfoButton];                                                 //업데이트 인포
+    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
     [self saveCurrentView];                                                         //현재 뷰 > 유저 디폴트 저장
 }
 
@@ -368,7 +370,8 @@
             [self deleteCoreDataNoteObject:indexPath];  //코어 데이터 노트
         }
     }
-    [self performUpdateInfoButton];                                                  //업데이트 인포
+    [self performUpdateInfoButton];                                                 //업데이트 인포
+    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
 }
 
 
@@ -588,7 +591,8 @@
 {
     NSError *error = nil;
     
-    if (![[self fetchedResultsController] performFetch:&error]) {
+    if (![[self fetchedResultsController] performFetch:&error])
+    {
         NSLog (@"executePerformFetch > error occurred");
         //abort();
     } else {
@@ -623,7 +627,8 @@
         case NSFetchedResultsChangeMove:
             break;
     }
-    [self performUpdateInfoButton];                                                  //업데이트 인포
+    [self performUpdateInfoButton];                                                 //업데이트 인포
+    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
 }
 
 
@@ -655,7 +660,8 @@
                              withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
     }
-    [self performUpdateInfoButton];                                                  //업데이트 인포
+    [self performUpdateInfoButton];                                                 //업데이트 인포
+    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
 }
 
 
@@ -976,6 +982,27 @@
 - (void)showGuide
 {
     
+}
+
+
+#pragma mark - 헬프 레이블
+
+- (void)performCheckNoNote
+{
+    [self performSelector:@selector(checkNoNote) withObject:self.infoButton afterDelay:0.0];
+}
+
+
+- (void)checkNoNote
+{
+    if ([[_fetchedResultsController fetchedObjects] count] == 0)
+    {
+        self.helpLabel.alpha = 1.0;
+    }
+    else
+    {
+        self.helpLabel.alpha = 0.0;
+    }
 }
 
 

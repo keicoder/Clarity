@@ -29,11 +29,25 @@
                                     <outlet property="delegate" destination="Y6h-MF-LhI" id="9Dc-ga-jlt"/>
                                 </connections>
                             </tableView>
+                            <label appearanceType="aqua" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cSk-ft-3HU">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <string key="text">Swipe to right
+to reveal menu.
+
+Tap +
+to add new note.</string>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="26"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="oo9-I1-6PX"/>
                     <connections>
+                        <outlet property="helpLabel" destination="cSk-ft-3HU" id="fo9-bw-B5p"/>
                         <outlet property="searchBar" destination="zsd-GI-PZu" id="Mop-1n-EXc"/>
                         <outlet property="searchDisplayController" destination="7FP-5e-RdQ" id="wih-xG-LIh"/>
                         <outlet property="tableView" destination="cwD-25-dnJ" id="ZKD-8G-4HI"/>
@@ -516,11 +530,25 @@ Please tap the button above to link a Dropbox account.</string>
                                     <outlet property="delegate" destination="cwG-ZO-JM1" id="ptU-6q-n56"/>
                                 </connections>
                             </tableView>
+                            <label appearanceType="aqua" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="B0n-n1-xb1">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <string key="text">Swipe to right
+to reveal menu.
+
+Tap +
+to add new note.</string>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="26"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="VEM-rk-Lfp"/>
                     <connections>
+                        <outlet property="helpLabel" destination="B0n-n1-xb1" id="H8G-Jj-y1f"/>
                         <outlet property="searchBar" destination="WkA-4C-8hK" id="cwc-dq-DA3"/>
                         <outlet property="searchDisplayController" destination="6fG-xC-l37" id="Ilq-39-Gb1"/>
                         <outlet property="tableView" destination="ljP-Il-QgP" id="KHs-QD-Qxn"/>
