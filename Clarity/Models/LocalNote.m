@@ -60,7 +60,7 @@
     [fetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"position" ascending:NO]]];
     LocalNote *note = [[[NoteDataManager sharedNoteDataManager].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
     
-    NSLog (@"LocalNote > highestPosition: %lu\n", (unsigned long)[note.position unsignedIntegerValue]);
+//    NSLog (@"LocalNote > highestPosition: %lu\n", (unsigned long)[note.position unsignedIntegerValue]);
     
     return [note.position unsignedIntegerValue];
 }
@@ -89,7 +89,7 @@
 {
     //노트 데이트 생성 > 섹션 헤더
     self.date = [[NSDate date] timeIntervalSince1970];
-    NSLog (@"self.date from timeIntervalSince1970: %f\n", self.date);
+//    NSLog (@"self.date from timeIntervalSince1970: %f\n", self.date);
     
     //날짜 문자로 변환 > 셀 레이블
     NSDate *current = [NSDate date];

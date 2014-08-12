@@ -545,7 +545,7 @@
     NSString *blank = @" ";
     NSString *colon = @":";
     _titleString = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@", stringdaysOfTheWeek, blank, stringDay, blank, stringHour, colon, stringMinute, colon, stringSeconds];
-    NSLog (@"_titleString: %@\n", _titleString);
+//    NSLog (@"_titleString: %@\n", _titleString);
     
     return _titleString;
 }

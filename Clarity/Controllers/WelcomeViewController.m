@@ -77,6 +77,18 @@
 }
 
 
+#pragma mark - 노트 가이드를 보여준 적이 없다면 보여줄 것
+
+- (void)checkWhetherShowWelcomeView
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == YES)  // app already launched
+    { }
+    else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kDIDSHOW_NOTEVIEW_HELP];
+    }
+}
+
+
 #pragma mark - 모달 뷰인지 확인
 
 - (BOOL)isModal

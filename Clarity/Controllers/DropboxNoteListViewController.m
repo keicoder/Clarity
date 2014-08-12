@@ -140,15 +140,6 @@
 }
 
 
-#pragma mark - override UIViewController's setEditing method (내비게이션 바 edit 버튼 메소드)
-
--(void) setEditing:(BOOL)editing animated:(BOOL)animated
-{
-    [super setEditing:editing animated:animated];
-    [self.tableView setEditing:editing animated:animated];
-}
-
-
 #pragma mark - 검색결과를 담을 뮤터블 배열 초기화
 
 - (void)initializeSearchResultNotes
@@ -545,7 +536,7 @@
     NSString *blank = @" ";
     NSString *colon = @":";
     _titleString = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@", stringdaysOfTheWeek, blank, stringDay, blank, stringHour, colon, stringMinute, colon, stringSeconds];
-    NSLog (@"_titleString: %@\n", _titleString);
+//    NSLog (@"_titleString: %@\n", _titleString);
     
     return _titleString;
 }

@@ -145,48 +145,6 @@
 }
 
 
-#pragma mark 노트 데이터 로그 콘솔에 보여주기
-
-- (void)showNoteDataToLogConsole
-{
-    kLOGBOOL(self.isNewNote);
-    kLOGBOOL(self.isSearchResultNote);
-    
-    kLOGBOOL(self.currentNote.isDropboxNote);
-    kLOGBOOL(self.currentNote.isLocalNote);
-    kLOGBOOL(self.currentNote.isiCloudNote);
-    kLOGBOOL(self.currentNote.hasImage);
-    kLOGBOOL(self.currentNote.hasNoteStar);
-    kLOGBOOL(self.currentNote.hasNoteAnnotate);
-    
-    NSLog (@"NSTimeInterval > date: %f\n", self.currentNote.date);
-    
-    NSLog (@"NSData > imageData: %@\n", self.currentNote.imageData);
-    NSLog (@"NSDate > imageCreatedDate: %@\n", self.currentNote.imageCreatedDate);
-    NSLog (@"NSDate > noteCreatedDate: %@\n", self.currentNote.noteCreatedDate);
-    NSLog (@"NSDate > noteModifiedDate: %@\n", self.currentNote.noteModifiedDate);
-    
-    NSLog (@"NSNumber > imageUniqueId: %@\n", self.currentNote.imageUniqueId);
-    NSLog (@"NSNumber > position: %@\n", self.currentNote.position);
-    
-    NSLog (@"NSString > sectionName: %@\n", self.currentNote.sectionName);
-    NSLog (@"NSString > dateString: %@\n", self.currentNote.dateString);
-    NSLog (@"NSString > dayString: %@\n", self.currentNote.dayString);
-    NSLog (@"NSString > imageName: %@\n", self.currentNote.imageName);
-    NSLog (@"NSString > location: %@\n", self.currentNote.location);
-    NSLog (@"NSString > monthString: %@\n", self.currentNote.monthString);
-    NSLog (@"NSString > noteAll: %@\n", self.currentNote.noteAll);
-    NSLog (@"NSString > noteAnnotate: %@\n", self.currentNote.noteAnnotate);
-    NSLog (@"NSString > noteBody: %@\n", self.currentNote.noteBody);
-    NSLog (@"NSString > noteSection: %@\n", self.currentNote.noteSection);
-    NSLog (@"NSString > noteTitle: %@\n", self.currentNote.noteTitle);
-    NSLog (@"NSString > syncID: %@\n", self.currentNote.syncID);
-    NSLog (@"NSString > yearString: %@\n", self.currentNote.yearString);
-    
-    NSLog (@"id > image: %@\n", self.currentNote.image);
-}
-
-
 #pragma mark - 노트 데이터, 텍스트 뷰, 레이블 타이틀 뷰
 
 #pragma mark 노트 데이터 지정
@@ -1351,6 +1309,8 @@
 }
 
 
+#pragma mark - 노티피케이션
+
 #pragma mark 노트 타이틀 변경 노티피케이션 수신 후 후속작업
 
 - (void)didReceiveMessageNoteTitleChanged:(NSNotification *) notification
@@ -1413,6 +1373,48 @@
 - (void)showStatusBar
 {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+}
+
+
+#pragma mark 노트 데이터 로그 콘솔에 보여주기
+
+- (void)showNoteDataToLogConsole
+{
+    kLOGBOOL(self.isNewNote);
+    kLOGBOOL(self.isSearchResultNote);
+    
+    kLOGBOOL(self.currentNote.isDropboxNote);
+    kLOGBOOL(self.currentNote.isLocalNote);
+    kLOGBOOL(self.currentNote.isiCloudNote);
+    kLOGBOOL(self.currentNote.hasImage);
+    kLOGBOOL(self.currentNote.hasNoteStar);
+    kLOGBOOL(self.currentNote.hasNoteAnnotate);
+    
+    NSLog (@"NSTimeInterval > date: %f\n", self.currentNote.date);
+    
+    NSLog (@"NSData > imageData: %@\n", self.currentNote.imageData);
+    NSLog (@"NSDate > imageCreatedDate: %@\n", self.currentNote.imageCreatedDate);
+    NSLog (@"NSDate > noteCreatedDate: %@\n", self.currentNote.noteCreatedDate);
+    NSLog (@"NSDate > noteModifiedDate: %@\n", self.currentNote.noteModifiedDate);
+    
+    NSLog (@"NSNumber > imageUniqueId: %@\n", self.currentNote.imageUniqueId);
+    NSLog (@"NSNumber > position: %@\n", self.currentNote.position);
+    
+    NSLog (@"NSString > sectionName: %@\n", self.currentNote.sectionName);
+    NSLog (@"NSString > dateString: %@\n", self.currentNote.dateString);
+    NSLog (@"NSString > dayString: %@\n", self.currentNote.dayString);
+    NSLog (@"NSString > imageName: %@\n", self.currentNote.imageName);
+    NSLog (@"NSString > location: %@\n", self.currentNote.location);
+    NSLog (@"NSString > monthString: %@\n", self.currentNote.monthString);
+    NSLog (@"NSString > noteAll: %@\n", self.currentNote.noteAll);
+    NSLog (@"NSString > noteAnnotate: %@\n", self.currentNote.noteAnnotate);
+    NSLog (@"NSString > noteBody: %@\n", self.currentNote.noteBody);
+    NSLog (@"NSString > noteSection: %@\n", self.currentNote.noteSection);
+    NSLog (@"NSString > noteTitle: %@\n", self.currentNote.noteTitle);
+    NSLog (@"NSString > syncID: %@\n", self.currentNote.syncID);
+    NSLog (@"NSString > yearString: %@\n", self.currentNote.yearString);
+    
+    NSLog (@"id > image: %@\n", self.currentNote.image);
 }
 
 

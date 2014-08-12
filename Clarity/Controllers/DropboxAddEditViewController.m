@@ -71,11 +71,13 @@
     [self addBarButtonItems];                           //바 버튼
     [self assignNoteData];                              //노트 데이터
     [self.noteTextView assignTextViewAttribute];        //노트 텍스트 뷰 속성
-    [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
     [self updateStarImage];                             //스타 이미지 업데이트
     [self addTapGestureRecognizer];                     //탭 제스처
     [self addObserverForNoteTitleChanged];              //노트 타이틀 변경 Notification 옵저버 등록
+    [self addObserverForWillHideKeyboard];              //마크다운 웹뷰에서 나올 때 키보드 감춤
     [self addButtonForFullscreen];                      //Full Screen 버튼
+    [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
+    [self checkToshowHelpMessage];                      //헬프 message 보여줄건지 판단
 //    [self showNoteDataToLogConsole];                    //노트 데이터 로그 콘솔에 보여주기
 }
 
@@ -115,9 +117,11 @@
 
 - (void)checkNewNote
 {
-    if ((self.isNewNote)) {
+    if (self.isNewNote)
+    {
         [self.noteTextView becomeFirstResponder];
-    } else {
+    }
+    else {
         [self.noteTextView resignFirstResponder];
     }
 }
@@ -135,6 +139,18 @@
 }
 
 
+#pragma mark 노트 타이틀 변경 Notification 옵저버 등록
+
+- (void)addObserverForWillHideKeyboard
+{
+    //노트 타이틀 변경 Notification 옵저버 등록
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(hideKeyboard)
+                                                 name:@"WillHideKeyboardNotification"
+                                               object:nil];
+}
+
+
 #pragma mark 유저 디폴트 > 현재 뷰 저장
 
 - (void)saveCurrentView
@@ -142,48 +158,6 @@
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
     [standardUserDefaults synchronize];
-}
-
-
-#pragma mark 노트 데이터 로그 콘솔에 보여주기
-
-- (void)showNoteDataToLogConsole
-{
-    kLOGBOOL(self.isNewNote);
-    kLOGBOOL(self.isSearchResultNote);
-    
-    kLOGBOOL(self.currentNote.isDropboxNote);
-    kLOGBOOL(self.currentNote.isLocalNote);
-    kLOGBOOL(self.currentNote.isiCloudNote);
-    kLOGBOOL(self.currentNote.hasImage);
-    kLOGBOOL(self.currentNote.hasNoteStar);
-    kLOGBOOL(self.currentNote.hasNoteAnnotate);
-    
-    NSLog (@"NSTimeInterval > date: %f\n", self.currentNote.date);
-    
-    NSLog (@"NSData > imageData: %@\n", self.currentNote.imageData);
-    NSLog (@"NSDate > imageCreatedDate: %@\n", self.currentNote.imageCreatedDate);
-    NSLog (@"NSDate > noteCreatedDate: %@\n", self.currentNote.noteCreatedDate);
-    NSLog (@"NSDate > noteModifiedDate: %@\n", self.currentNote.noteModifiedDate);
-    
-    NSLog (@"NSNumber > imageUniqueId: %@\n", self.currentNote.imageUniqueId);
-    NSLog (@"NSNumber > position: %@\n", self.currentNote.position);
-    
-    NSLog (@"NSString > sectionName: %@\n", self.currentNote.sectionName);
-    NSLog (@"NSString > dateString: %@\n", self.currentNote.dateString);
-    NSLog (@"NSString > dayString: %@\n", self.currentNote.dayString);
-    NSLog (@"NSString > imageName: %@\n", self.currentNote.imageName);
-    NSLog (@"NSString > location: %@\n", self.currentNote.location);
-    NSLog (@"NSString > monthString: %@\n", self.currentNote.monthString);
-    NSLog (@"NSString > noteAll: %@\n", self.currentNote.noteAll);
-    NSLog (@"NSString > noteAnnotate: %@\n", self.currentNote.noteAnnotate);
-    NSLog (@"NSString > noteBody: %@\n", self.currentNote.noteBody);
-    NSLog (@"NSString > noteSection: %@\n", self.currentNote.noteSection);
-    NSLog (@"NSString > noteTitle: %@\n", self.currentNote.noteTitle);
-    NSLog (@"NSString > syncID: %@\n", self.currentNote.syncID);
-    NSLog (@"NSString > yearString: %@\n", self.currentNote.yearString);
-    
-    NSLog (@"id > image: %@\n", self.currentNote.image);
 }
 
 
@@ -1351,6 +1325,8 @@
 }
 
 
+#pragma mark - 노티피케이션
+
 #pragma mark 노트 타이틀 변경 노티피케이션 수신 후 후속작업
 
 - (void)didReceiveMessageNoteTitleChanged:(NSNotification *) notification
@@ -1370,7 +1346,28 @@
 }
 
 
-#pragma mark Style ViewController (모달 뷰 UI)
+#pragma mark - 헬프 메시지 보여줄건지 판단
+
+- (void)checkToshowHelpMessage
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == YES) {
+    }
+    else {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kDIDSHOW_NOTEVIEW_HELP];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        self.noteTextView.text = @"# Quick guide\n\n* To edit title, tap the date label.\n\n* To preview markdown, tap MD button.\n\n* To remove keyboard, tap '▼'key.\n\n> **Thank you** for purchasing Clarity.  \n**Enjoy Writing!**";
+        [self barButtonItemMarkdownPressed:self];
+    }
+}
+
+
+- (void)hideKeyboard
+{
+    [self.noteTextView resignFirstResponder];
+}
+
+
+#pragma mark - Style ViewController (모달 뷰 UI)
 
 - (void)styleViewController
 {
@@ -1413,6 +1410,48 @@
 - (void)showStatusBar
 {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+}
+
+
+#pragma mark 노트 데이터 로그 콘솔에 보여주기
+
+- (void)showNoteDataToLogConsole
+{
+    kLOGBOOL(self.isNewNote);
+    kLOGBOOL(self.isSearchResultNote);
+    
+    kLOGBOOL(self.currentNote.isDropboxNote);
+    kLOGBOOL(self.currentNote.isLocalNote);
+    kLOGBOOL(self.currentNote.isiCloudNote);
+    kLOGBOOL(self.currentNote.hasImage);
+    kLOGBOOL(self.currentNote.hasNoteStar);
+    kLOGBOOL(self.currentNote.hasNoteAnnotate);
+    
+    NSLog (@"NSTimeInterval > date: %f\n", self.currentNote.date);
+    
+    NSLog (@"NSData > imageData: %@\n", self.currentNote.imageData);
+    NSLog (@"NSDate > imageCreatedDate: %@\n", self.currentNote.imageCreatedDate);
+    NSLog (@"NSDate > noteCreatedDate: %@\n", self.currentNote.noteCreatedDate);
+    NSLog (@"NSDate > noteModifiedDate: %@\n", self.currentNote.noteModifiedDate);
+    
+    NSLog (@"NSNumber > imageUniqueId: %@\n", self.currentNote.imageUniqueId);
+    NSLog (@"NSNumber > position: %@\n", self.currentNote.position);
+    
+    NSLog (@"NSString > sectionName: %@\n", self.currentNote.sectionName);
+    NSLog (@"NSString > dateString: %@\n", self.currentNote.dateString);
+    NSLog (@"NSString > dayString: %@\n", self.currentNote.dayString);
+    NSLog (@"NSString > imageName: %@\n", self.currentNote.imageName);
+    NSLog (@"NSString > location: %@\n", self.currentNote.location);
+    NSLog (@"NSString > monthString: %@\n", self.currentNote.monthString);
+    NSLog (@"NSString > noteAll: %@\n", self.currentNote.noteAll);
+    NSLog (@"NSString > noteAnnotate: %@\n", self.currentNote.noteAnnotate);
+    NSLog (@"NSString > noteBody: %@\n", self.currentNote.noteBody);
+    NSLog (@"NSString > noteSection: %@\n", self.currentNote.noteSection);
+    NSLog (@"NSString > noteTitle: %@\n", self.currentNote.noteTitle);
+    NSLog (@"NSString > syncID: %@\n", self.currentNote.syncID);
+    NSLog (@"NSString > yearString: %@\n", self.currentNote.yearString);
+    
+    NSLog (@"id > image: %@\n", self.currentNote.image);
 }
 
 

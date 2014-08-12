@@ -88,6 +88,12 @@
 }
 
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"WillHideKeyboardNotification" object:nil userInfo:nil];
+}
+
+
 #pragma mark - UIWebView Delegate (마크다운 웹 뷰 Finish Load)
 
 - (void)webViewDidFinishLoad:(UIWebView *)aWebView
