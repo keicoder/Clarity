@@ -280,7 +280,7 @@
 	[self.textViewAccessory addKey:asteriskKey];
     
     JSMQuayboardButton *selectKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-	selectKey.title = @"{}";
+	selectKey.title = @"{ }";
 	[selectKey addTarget:self action:@selector(selectWordButonPressed:) forControlEvents:UIControlEventTouchUpInside];
 	[self.textViewAccessory addKey:selectKey];
     

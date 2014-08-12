@@ -309,20 +309,20 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="9N7-Gp-V5m" userLabel="welcomeImageView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="20" width="320" height="508"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fic-bq-j9b">
-                                <rect key="frame" x="25" y="494" width="270" height="36"/>
+                                <rect key="frame" x="25" y="504" width="270" height="26"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="32"/>
+                                <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="22"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="HBH-Te-wGA">
-                                <rect key="frame" x="20" y="504" width="100" height="50"/>
+                                <rect key="frame" x="0.0" y="518" width="74" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="24"/>
+                                <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="16"/>
                                 <state key="normal" title="Dismiss">
                                     <color key="titleColor" red="0.62476658819999997" green="0.79542309050000004" blue="0.72709721329999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -331,8 +331,8 @@
                                     <action selector="buttonDismissPressed:" destination="8OA-Th-urI" eventType="touchUpInside" id="V22-GU-aGf"/>
                                 </connections>
                             </button>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="nb7-af-dEj">
-                                <rect key="frame" x="324" y="537" width="0.0" height="0.0"/>
+                            <pageControl appearanceType="aqua" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="6H1-re-5Ao">
+                                <rect key="frame" x="141" y="540" width="39" height="37"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                             </pageControl>
                         </subviews>
@@ -340,7 +340,7 @@
                     </view>
                     <connections>
                         <outlet property="buttonDismiss" destination="HBH-Te-wGA" id="cVZ-AQ-jts"/>
-                        <outlet property="pageControl" destination="nb7-af-dEj" id="yrv-1s-6E7"/>
+                        <outlet property="pageControl" destination="6H1-re-5Ao" id="mjN-zd-F9m"/>
                         <outlet property="textLabel" destination="fic-bq-j9b" id="RLE-cU-j9C"/>
                         <outlet property="welcomeImageView" destination="9N7-Gp-V5m" id="Lyy-aX-ASk"/>
                     </connections>
