@@ -71,11 +71,13 @@
     [self addBarButtonItems];                           //바 버튼
     [self assignNoteData];                              //노트 데이터
     [self.noteTextView assignTextViewAttribute];        //노트 텍스트 뷰 속성
-    [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
     [self updateStarImage];                             //스타 이미지 업데이트
     [self addTapGestureRecognizer];                     //탭 제스처
     [self addObserverForNoteTitleChanged];              //노트 타이틀 변경 Notification 옵저버 등록
+    [self addObserverForHelpMessageMarkdownWebViewPopped]; //Help Message 마크다운 웹뷰에서 나올 때 Notification
     [self addButtonForFullscreen];                      //Full Screen 버튼
+    [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
+    [self checkToShowHelpMessage];                      //헬프 message 보여줄건지 판단
 //    [self showNoteDataToLogConsole];                    //노트 데이터 로그 콘솔에 보여주기
 }
 
@@ -115,33 +117,13 @@
 
 - (void)checkNewNote
 {
-    if ((self.isNewNote)) {
+    if (self.isNewNote)
+    {
         [self.noteTextView becomeFirstResponder];
-    } else {
+    }
+    else {
         [self.noteTextView resignFirstResponder];
     }
-}
-
-
-#pragma mark 노트 타이틀 변경 Notification 옵저버 등록
-
-- (void)addObserverForNoteTitleChanged
-{
-    //노트 타이틀 변경 Notification 옵저버 등록
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didReceiveMessageNoteTitleChanged:)
-                                                 name:@"DidChangeLocalNoteTitleNotification"
-                                               object:nil];
-}
-
-
-#pragma mark 유저 디폴트 > 현재 뷰 저장
-
-- (void)saveCurrentView
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_LOCAL];                          //현재 뷰
-    [standardUserDefaults synchronize];
 }
 
 
@@ -809,9 +791,9 @@
 {
     if (self.isNewNote) {
         [self deleteNote:self.currentNote];
-        [self.navigationController dismissViewControllerAnimated:YES completion:^{ }];
+        [self performSelector:@selector(dismissView) withObject:self afterDelay:0.1];
     } else {
-        [self.navigationController popViewControllerAnimated:YES];
+        [self performSelector:@selector(popView) withObject:self afterDelay:0.1];
     }
 }
 
@@ -823,16 +805,16 @@
     if (self.isNewNote) {
         [self deleteNote:self.currentNote];
         [self.navigationController dismissViewControllerAnimated:YES completion:^{
-            [self performSelector:@selector(postAddNewDropboxNoteNotification) withObject:self afterDelay:0.0];
+            [self performSelector:@selector(postAddNewLocalNoteNotification) withObject:self afterDelay:0.0];
         }];
     } else {
         [self.navigationController popViewControllerAnimated:YES];
-        [self performSelector:@selector(postAddNewDropboxNoteNotification) withObject:self afterDelay:0.1];
+        [self performSelector:@selector(postAddNewLocalNoteNotification) withObject:self afterDelay:0.1];
     }
 }
 
 
-- (void)postAddNewDropboxNoteNotification
+- (void)postAddNewLocalNoteNotification
 {
     [[NSNotificationCenter defaultCenter] postNotificationName: @"AddNewLocalNoteNotification" object:nil userInfo:nil];
 }
@@ -914,7 +896,7 @@
     
     if (self.isNewNote) {
         [self saveMethodInvoked];
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [self performSelector:@selector(dismissView) withObject:self afterDelay:0.1];
     }
     else {
         if ([_originalNote isEqualToString:concatenateString]) {
@@ -922,8 +904,8 @@
         }
         else {
             [self saveMethodInvoked];
+            [self performSelector:@selector(popView) withObject:self afterDelay:0.1];
         }
-        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
@@ -1330,23 +1312,74 @@
 }
 
 
-#pragma mark Style ViewController (모달 뷰 UI)
+#pragma mark 헬프 메시지
 
-- (void)styleViewController
+- (void)checkToShowHelpMessage
 {
-    //BEFORE calling to [[...ViewController alloc] init];
-    [[UINavigationBar appearance] setBarTintColor:kWINDOW_BACKGROUND_COLOR];            //냅바 색상
-    [[UINavigationBar appearance] setTintColor:kWHITE_COLOR];                           //냅바 버튼 색상
-    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:kWHITE_COLOR, NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]};
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == YES) {
+    }
+    else {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kDIDSHOW_NOTEVIEW_HELP];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        self.noteTextView.text = @"\n## Quick Guide\n\n#### Edit\n* To edit title, tap the date.\n* To remove keyboard, tap ▼ key.\n\n#### Preview\n* To preview markdown, tap MD button.\n* Tap anywhere to enter full screen mode\n\n> Thank you for purchasing Clarity.";
+        [self barButtonItemMarkdownPressed:self];
+    }
 }
 
 
-- (void)styleDarkViewController
+#pragma mark 헬프 메시지 노티피케이션 수신 후 후속작업
+
+- (void)helpMessageMarkdownWebViewPopped
 {
-    //BEFORE calling to [[...ViewController alloc] init];
-    [[UINavigationBar appearance] setBarTintColor:kWINDOW_BACKGROUND_COLOR];            //냅바 색상
-    [[UINavigationBar appearance] setTintColor:kGOLD_COLOR];                           //냅바 버튼 색상
-    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:kGOLD_COLOR, NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]};
+    [self.noteTextView resignFirstResponder];
+}
+
+
+#pragma mark - 내비게이션 뷰 해제
+
+- (void)dismissView
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+- (void)popView
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+#pragma mark 노트 타이틀 변경 Notification 옵저버 등록
+
+- (void)addObserverForNoteTitleChanged
+{
+    //노트 타이틀 변경 Notification 옵저버 등록
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveMessageNoteTitleChanged:)
+                                                 name:@"DidChangeLocalNoteTitleNotification"
+                                               object:nil];
+}
+
+
+#pragma mark HelpMessageMarkdownWebViewPopped Notification 옵저버 등록
+
+- (void)addObserverForHelpMessageMarkdownWebViewPopped
+{
+    //노트 타이틀 변경 Notification 옵저버 등록
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(helpMessageMarkdownWebViewPopped)
+                                                 name:@"HelpMessageMarkdownWebViewPopped"
+                                               object:nil];
+}
+
+
+#pragma mark 유저 디폴트 > 현재 뷰 저장
+
+- (void)saveCurrentView
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_LOCAL];                         //현재 뷰
+    [standardUserDefaults synchronize];
 }
 
 
@@ -1376,7 +1409,27 @@
 }
 
 
-#pragma mark 노트 데이터 로그 콘솔에 보여주기
+#pragma mark - Style ViewController (모달 뷰 UI)
+
+- (void)styleViewController
+{
+    //BEFORE calling to [[...ViewController alloc] init];
+    [[UINavigationBar appearance] setBarTintColor:kWINDOW_BACKGROUND_COLOR];            //냅바 색상
+    [[UINavigationBar appearance] setTintColor:kWHITE_COLOR];                           //냅바 버튼 색상
+    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:kWHITE_COLOR, NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]};
+}
+
+
+- (void)styleDarkViewController
+{
+    //BEFORE calling to [[...ViewController alloc] init];
+    [[UINavigationBar appearance] setBarTintColor:kWINDOW_BACKGROUND_COLOR];            //냅바 색상
+    [[UINavigationBar appearance] setTintColor:kGOLD_COLOR];                           //냅바 버튼 색상
+    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:kGOLD_COLOR, NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]};
+}
+
+
+#pragma mark - 노트 데이터 로그 콘솔에 보여주기
 
 - (void)showNoteDataToLogConsole
 {

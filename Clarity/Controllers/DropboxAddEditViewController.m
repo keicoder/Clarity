@@ -127,40 +127,6 @@
 }
 
 
-#pragma mark 노트 타이틀 변경 Notification 옵저버 등록
-
-- (void)addObserverForNoteTitleChanged
-{
-    //노트 타이틀 변경 Notification 옵저버 등록
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didReceiveMessageNoteTitleChanged:)
-                                                 name:@"DidChangeDropboxNoteTitleNotification"
-                                               object:nil];
-}
-
-
-#pragma mark HelpMessageMarkdownWebViewPopped Notification 옵저버 등록
-
-- (void)addObserverForHelpMessageMarkdownWebViewPopped
-{
-    //노트 타이틀 변경 Notification 옵저버 등록
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(helpMessageMarkdownWebViewPopped)
-                                                 name:@"HelpMessageMarkdownWebViewPopped"
-                                               object:nil];
-}
-
-
-#pragma mark 유저 디폴트 > 현재 뷰 저장
-
-- (void)saveCurrentView
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
-    [standardUserDefaults synchronize];
-}
-
-
 #pragma mark - 노트 데이터, 텍스트 뷰, 레이블 타이틀 뷰
 
 #pragma mark 노트 데이터 지정
@@ -1357,7 +1323,6 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         self.noteTextView.text = @"\n## Quick Guide\n\n#### Edit\n* To edit title, tap the date.\n* To remove keyboard, tap ▼ key.\n\n#### Preview\n* To preview markdown, tap MD button.\n* Tap anywhere to enter full screen mode\n\n> Thank you for purchasing Clarity.";
         [self barButtonItemMarkdownPressed:self];
-        [self performSelector:@selector(saveMethodInvoked) withObject:self afterDelay:0.1];
     }
 }
 
@@ -1381,6 +1346,40 @@
 - (void)popView
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+#pragma mark 노트 타이틀 변경 Notification 옵저버 등록
+
+- (void)addObserverForNoteTitleChanged
+{
+    //노트 타이틀 변경 Notification 옵저버 등록
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveMessageNoteTitleChanged:)
+                                                 name:@"DidChangeDropboxNoteTitleNotification"
+                                               object:nil];
+}
+
+
+#pragma mark HelpMessageMarkdownWebViewPopped Notification 옵저버 등록
+
+- (void)addObserverForHelpMessageMarkdownWebViewPopped
+{
+    //노트 타이틀 변경 Notification 옵저버 등록
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(helpMessageMarkdownWebViewPopped)
+                                                 name:@"HelpMessageMarkdownWebViewPopped"
+                                               object:nil];
+}
+
+
+#pragma mark 유저 디폴트 > 현재 뷰 저장
+
+- (void)saveCurrentView
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
+    [standardUserDefaults synchronize];
 }
 
 
