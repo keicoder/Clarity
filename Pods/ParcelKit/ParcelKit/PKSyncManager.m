@@ -104,6 +104,7 @@ NSString * const PKSyncManagerDatastoreIncomingChangesKey = @"changes";
 {
     NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
     NSAttributeDescription *attributeDescription = [[entity attributesByName] objectForKey:self.syncAttributeName];
+    NSLog (@"attributeDescription: %@\n", attributeDescription);
     NSAssert([attributeDescription attributeType] == NSStringAttributeType, @"Entity “%@” must contain a string attribute named “%@”", entityName, self.syncAttributeName);
     [self.tablesKeyedByEntityName setObject:tableID forKey:entityName];
 }
