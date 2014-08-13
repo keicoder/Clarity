@@ -139,13 +139,13 @@
             return 0;
             break;
         case 1:
-            return 24;
+            return 29;
             break;
         case 2:
-            return 24;
+            return 29;
             break;
         default:
-            return 24;
+            return 29;
             break;
     }
 }
