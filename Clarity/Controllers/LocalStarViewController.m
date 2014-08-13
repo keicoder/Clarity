@@ -354,8 +354,6 @@
 //                                                        initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 //        [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
         
-//        [self saveIndexPath:indexPath]; //유저 디폴트 > 현재 인덱스패스 저장
-        
         self.selectedNote = (LocalNote *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
         //위 코드와 결과 동일
 //        self.selectedNote = (LocalNote *)[self.fetchedResultsController objectAtIndexPath:indexPath];
