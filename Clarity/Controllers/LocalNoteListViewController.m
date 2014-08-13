@@ -140,15 +140,6 @@
 }
 
 
-#pragma mark - override UIViewController's setEditing method (내비게이션 바 edit 버튼 메소드)
-
--(void) setEditing:(BOOL)editing animated:(BOOL)animated
-{
-    [super setEditing:editing animated:animated];
-    [self.tableView setEditing:editing animated:animated];
-}
-
-
 #pragma mark - 검색결과를 담을 뮤터블 배열 초기화
 
 - (void)initializeSearchResultNotes
@@ -946,42 +937,6 @@
 {
     WelcomePageViewController *controller = (WelcomePageViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
     [self.navigationController pushViewController:controller animated:YES];
-}
-
-
-#pragma mark 유저 디폴트 > show guide
-
-- (void)registerShowGuideToYes
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kSHOW_GUIDE];
-    [standardUserDefaults synchronize];
-}
-
-
-- (void)registerShowGuideToNo
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:NO forKey:kSHOW_GUIDE];
-    [standardUserDefaults synchronize];
-}
-
-
-- (void)checkWhetherShowGuide
-{
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kSHOW_GUIDE"] == NO)
-    { }
-    else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kSHOW_GUIDE"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [self showGuide];
-    }
-}
-
-
-- (void)showGuide
-{
-    
 }
 
 

@@ -940,42 +940,6 @@
 }
 
 
-#pragma mark 유저 디폴트 > show guide
-
-- (void)registerShowGuideToYes
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kSHOW_GUIDE];
-    [standardUserDefaults synchronize];
-}
-
-
-- (void)registerShowGuideToNo
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:NO forKey:kSHOW_GUIDE];
-    [standardUserDefaults synchronize];
-}
-
-
-- (void)checkWhetherShowGuide
-{
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kSHOW_GUIDE"] == NO)
-    { }
-    else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kSHOW_GUIDE"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [self showGuide];
-    }
-}
-
-
-- (void)showGuide
-{
-    
-}
-
-
 #pragma mark - 헬프 레이블
 
 - (void)performCheckNoNote
