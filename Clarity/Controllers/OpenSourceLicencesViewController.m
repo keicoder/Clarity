@@ -50,7 +50,7 @@
 {
     [super viewDidLoad];
     self.title = @"Open Sources";
-//    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.automaticallyAdjustsScrollViewInsets = kAUTOMATICALLY_ADJUSTS_SCROLLVIEW_INSETS;
     [self assignWebViewAttribute];                              //웹뷰 속성
     [self loadLocalFileIntoAWebView];                           //로컬 파일 웹뷰로 가져오기
     [self addTapGestureRecognizer];                             //탭 제스처

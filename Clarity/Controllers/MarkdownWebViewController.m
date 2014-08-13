@@ -72,7 +72,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.automaticallyAdjustsScrollViewInsets = kAUTOMATICALLY_ADJUSTS_SCROLLVIEW_INSETS;
     [self assignAttributeToMarkdownWebView];                    //마크다운 웹뷰 속성
     [self makeMarkdownString];                                  //마크다운 스트링
     [self addTapGestureRecognizer];                             //탭 제스처
@@ -90,7 +90,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName: @"WillHideKeyboardNotification" object:nil userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"HelpMessageMarkdownWebViewPopped" object:nil userInfo:nil];
 }
 
 

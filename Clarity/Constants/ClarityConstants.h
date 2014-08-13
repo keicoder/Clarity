@@ -22,7 +22,8 @@ extern NSString * const kIS_FIRST_TIME;
 
 
 #pragma mark - MarkdownWebView
-#define kMARKDOWNWEBVIEW_SCROLLVIEW_CONTENTINSET            20.0
+#define kAUTOMATICALLY_ADJUSTS_SCROLLVIEW_INSETS            NO
+#define kMARKDOWNWEBVIEW_SCROLLVIEW_CONTENTINSET            60.0
 
 #pragma mark - FRLayeredNavigationController
 #define kFRLAYERED_NAVIGATION_ITEM_WIDTH_LEFT               240

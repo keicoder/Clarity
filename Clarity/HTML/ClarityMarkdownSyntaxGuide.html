@@ -138,9 +138,7 @@ td { vertical-align: top;
     p, h2, h3 { orphans: 3; widows: 3; }
     h2, h3 { page-break-after: avoid; }
 } </style>
-
 </head> <h2>Markdown Syntax</h2>
-
 <p>Clarity <strong>automatically detect link, address, phone
     number, date, time</strong></p>
 lovejunsoft.com<br />
@@ -148,18 +146,14 @@ lovejunsoft.com<br />
 lovejun.soft@gmail.com<br />
 Tomorrow 11:00 am<br />
 <br />
-<blockquote>
-    <h4>Phrase Emphasis</h4>
-</blockquote>
+    <h3>Phrase Emphasis</h3>
 *Italic*<br />
 **Bold**<br />
 <h5><p><em>Output:</em> <br /></h5>
 <p><em>Italic</em> <br />
 <strong>Bold</strong></p>
 <br />
-<blockquote>
-    <h4>Blockquotes</h4>
-</blockquote>
+    <h3>Blockquotes</h3>
 > Email-style angle brackets are used for blockquotes<br />
 >> nested<br />
 > ##### Headers in blockquotes<br />
@@ -171,7 +165,7 @@ Tomorrow 11:00 am<br />
 </blockquote>
 <blockquote>
     <blockquote>
-        <p>nested</p>
+        <p>nested blockquotes</p>
     </blockquote>
 </blockquote>
 <blockquote>
@@ -182,24 +176,7 @@ Tomorrow 11:00 am<br />
     </ul>
 </blockquote>
 <br />
-<blockquote>
-    <h4>Horizontal Rules</h4>
-</blockquote>
-<p>Three or more dashes(---) or asterisks(***)</p>
----<br />
-<h5><p><em>Output:</em> <br /></h5>
-<hr />
-<blockquote>
-    <h4>Manual Line Breaks</h4>
-</blockquote>
-<p>End a line with two or more spaces</p>
-<h5><p><em>Output:</em> <br /></h5>
-<p>Roses are red, <br />
-Violets are blue.</p>
-<br />
-<blockquote>
-    <h4>Unordered lists</h4>
-</blockquote>
+    <h3>Unordered lists</h3>
 * Ham<br />
 * Egg<br />
 <h5><p><em>Output:</em> <br /></h5>
@@ -208,9 +185,7 @@ Violets are blue.</p>
     <li>Egg</li>
 </ul>
 <br />
-<blockquote>
-    <h4>Ordered lists</h4>
-</blockquote>
+    <h3>Ordered lists</h3>
 1. Beer<br />
 2. Wine<br />
 <h5><p><em>Output:</em> <br /></h5>
@@ -218,7 +193,6 @@ Violets are blue.</p>
     <li>Beer</li>
     <li>Wine</li>
 </ol>
-<br />
 <blockquote>
     <h4>You can nest them</h4>
 </blockquote>
@@ -249,17 +223,13 @@ Violets are blue.</p>
     </li> 
 </ul>
 <br />
-<blockquote>
-    <h4>Images</h4>
-</blockquote>
+<h3>Images</h3>
 ![Nature](http://goo.gl/HrMqI9)<br />
 <h5><p><em>Output:</em> <br /></h5>
 <p><img src="http://goo.gl/HrMqI9"
 alt="Nature" /></p>
 <br />
-<blockquote>
-    <h4>Header</h4> 
-</blockquote>
+    <h3>Header</h3>
 Header 1<br />
 ===<br />
 Header 2<br />
@@ -278,3 +248,16 @@ Header 2<br />
 <p><em>...</em></p> 
 <h6>Header 6</h6>
 <br />
+<h3>Manual Line Breaks</h3>
+<p>End a line with two or more spaces</p>
+<h5><p><em>Output:</em> <br /></h5>
+<p>Roses are red, <br />
+Violets are blue.</p>
+<br />
+<h3>Horizontal Rules</h3>
+<p>Three or more dashes(---) or asterisks(***)</p>
+---<br />
+***<br />
+<h5><p><em>Output:</em> <br /></h5>
+<hr />
+<hr />
