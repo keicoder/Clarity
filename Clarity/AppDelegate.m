@@ -40,7 +40,7 @@
     [self styleUI];                                 //유저 인터페이스
     
     //Tmp
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kDIDSHOW_NOTEVIEW_HELP];
+    //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kDIDSHOW_NOTEVIEW_HELP];
     
     return YES;
 }

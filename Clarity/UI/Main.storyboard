@@ -137,7 +137,7 @@ to add new note.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iMz-c0-HSh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3146" y="-9565"/>
+            <point key="canvasLocation" x="-3522" y="-9565"/>
         </scene>
         <!--Dropbox Star View Controller-->
         <scene sceneID="Knc-q3-KKM">
@@ -198,7 +198,7 @@ to go back.</string>
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="-3526" y="-9934"/>
+            <point key="canvasLocation" x="-3902" y="-9934"/>
         </scene>
         <!--Support Table View Controller - Support-->
         <scene sceneID="Sk7-jB-lQg">
@@ -637,6 +637,7 @@ to go back.</string>
                     </view>
                     <navigationItem key="navigationItem" id="yEc-U8-gx4"/>
                     <connections>
+                        <outlet property="helpLabel" destination="4m9-6B-v0b" id="yGE-nH-0VY"/>
                         <outlet property="searchBar" destination="l6K-2T-YBY" id="43G-3R-kRQ"/>
                         <outlet property="searchDisplayController" destination="OIA-GX-9LK" id="vpX-2Z-At5"/>
                         <outlet property="tableView" destination="iRn-KE-vdg" id="FkJ-CV-QJL"/>
@@ -653,7 +654,7 @@ to go back.</string>
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="-3526" y="-9246"/>
+            <point key="canvasLocation" x="-3902" y="-9246"/>
         </scene>
         <!--Welcome Page View Controller-->
         <scene sceneID="zLA-kq-Rch">
