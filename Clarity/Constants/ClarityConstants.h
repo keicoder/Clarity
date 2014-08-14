@@ -41,6 +41,7 @@ extern NSString * const kIS_FIRST_TIME;
 #define kSHOW_GUIDE                                         @"showGuide"
 #define kDIDSHOW_NOTEVIEW_HELP                              @"didShowNoteViewHelp"
 
+
 #pragma mark - 뷰
 #define kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR         [UIColor colorWithRed:0.333 green:0.333 blue:0.333 alpha:1]
 #define kTOOLBAR_LOCAL_LIST_VIEW_BACKGROUND_COLOR           kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR

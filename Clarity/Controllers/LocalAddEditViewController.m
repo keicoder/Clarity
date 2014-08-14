@@ -7,6 +7,7 @@
 //
 
 #import "LocalAddEditViewController.h"
+//#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 #import "ICTextView.h"                                                  //커스텀 텍스트 뷰
 #import "MarkdownWebViewController.h"                                   //MM 마크다운 뷰
 #import "NoteDataManager.h"                                             //노트 데이터 매니저
@@ -180,7 +181,7 @@
     self.noteTitleLabel.textColor = kTEXTVIEW_LABEL_TEXT_COLOR;
     self.noteTitleLabel.backgroundColor = kCLEAR_COLOR;
     self.noteTitleLabel.textAlignment = NSTextAlignmentCenter;
-    self.noteTitleLabel.lineBreakMode = NSLineBreakByCharWrapping; //NSLineBreakByWordWrapping;
+    self.noteTitleLabel.lineBreakMode = NSLineBreakByTruncatingTail; //NSLineBreakByCharWrapping
     [self.noteTitleLabelBackgroundView addSubview:self.noteTitleLabel];
     [self.noteTitleLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
 }
@@ -240,7 +241,6 @@
     //	hyphenKey.title = @"-";
     //	[hyphenKey addTarget:self action:@selector(hyphenButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     //	[self.textViewAccessory addKey:hyphenKey];
-    
     
     //    JSMQuayboardButton *equalKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
     //	equalKey.title = @"=";
@@ -564,7 +564,8 @@
 }
 
 
-//커서 포지션
+#pragma mark cursorPosition
+
 - (CGPoint)cursorPosition;
 {
     CGPoint cursorPosition = [self.noteTextView caretRectForPosition:self.noteTextView.selectedTextRange.start].origin;
@@ -629,6 +630,29 @@
 {
     [[self.noteTextView undoManager] redo];
 }
+
+
+#pragma mark - FRLayeredNavigationControllerDelegate
+//
+//- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
+//                 willMoveController:(UIViewController*)controller
+//{
+//
+//}
+//
+//
+//- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
+//               movingViewController:(UIViewController*)controller
+//{
+//    [self.noteTextView resignFirstResponder];
+//}
+//
+//
+//- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
+//                  didMoveController:(UIViewController*)controller
+//{
+//
+//}
 
 
 #pragma mark - Keyboard handle
@@ -711,9 +735,9 @@
     barButtonItemFixed.width = 20.0f;
     UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    //    UIImage *cancel = [UIImage imageNameForChangingColor:@"previous-250" color:kNAVIGATIONBAR_ICONIMAGE_COLOR];
-    //    UIImage *cancelSelected = [UIImage imageNamed:@"previous-250"];
-    //    [buttoncancel setBackgroundImage:cancelSelected forState:UIControlStateSelected];
+//    UIImage *cancel = [UIImage imageNameForChangingColor:@"previous-250" color:kNAVIGATIONBAR_ICONIMAGE_COLOR];
+//    UIImage *cancelSelected = [UIImage imageNamed:@"previous-250"];
+//    [buttoncancel setBackgroundImage:cancelSelected forState:UIControlStateSelected];
     
     
     UIImage *cancel = [UIImage imageNamed:@"previous-250"];
@@ -915,19 +939,20 @@
 - (void)saveMethodInvoked
 {
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-//    NSManagedObjectContext *mainManagedObjectContext = [managedObjectContext parentContext];
+    NSManagedObjectContext *mainManagedObjectContext = [managedObjectContext parentContext];
     
     [self updateNoteDataWithCurrentState];                         //업데이트 노트 데이터
     [self.currentNote saveNote:self.currentNote];                  //노트 저장
     
-    [managedObjectContext performBlock:^{
-        NSError *error = nil;
-        if ([managedObjectContext save:&error]) {
-            //[mainManagedObjectContext save:&error];
-        } else {
-            //NSLog(@"Error saving context: %@", error);
-        }
-    }];
+    [managedObjectContext performBlock:^
+     {
+         NSError *error = nil;
+         if ([managedObjectContext save:&error]) {
+             [mainManagedObjectContext save:&error];
+         } else {
+             //NSLog(@"Error saving context: %@", error);
+         }
+     }];
 }
 
 
