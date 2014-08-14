@@ -12,6 +12,7 @@
 
 
 #import "LocalStarViewController.h"
+//#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 #import "AppDelegate.h"                                     //AppDelegate 참조
 #import "NoteDataManager.h"                                 //노트 데이터 매니저
 #import "LocalNote.h"                                       //노트 데이터 모델
@@ -44,6 +45,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    self.layeredNavigationController.delegate = self;
     [self configureViewAndTableView];
     [self addNavigationBarButtonItem];                                              //내비게이션 바 버튼
     [self hideSearchBar];                                                           //서치바 감춤

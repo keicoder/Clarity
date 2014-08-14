@@ -25,6 +25,7 @@ extern NSString * const kIS_FIRST_TIME;
 #define kAUTOMATICALLY_ADJUSTS_SCROLLVIEW_INSETS            NO
 #define kMARKDOWNWEBVIEW_SCROLLVIEW_CONTENTINSET            60.0
 
+
 #pragma mark - FRLayeredNavigationController
 #define kFRLAYERED_NAVIGATION_ITEM_WIDTH_LEFT               240
 #define kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE             320
