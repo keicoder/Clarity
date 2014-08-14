@@ -42,7 +42,7 @@
 
 - (void)configureViewAndTableView
 {
-    self.title = @"Sync";
+    self.title = @"Link";
     self.tableView.separatorColor = [UIColor colorWithWhite:0.333 alpha:0.300];
 }
 

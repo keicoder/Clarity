@@ -137,16 +137,18 @@
     self.noteTextView.text = self.currentNote.noteBody;         //본문
     _didSelectStar = [self.currentNote.hasNoteStar boolValue];  //스타 불리언 값
     _originalNote = self.currentNote.noteAll;                   //저장 시 비교하기위한 원본 노트
-    if (_didSelectStar == YES)
-    {
-        self.barButtonItemStarred.title = @"Starred";
-        [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
-    }
-    else
-    {
-        self.barButtonItemStarred.title = @"UnStarred";
-        [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kWHITE_COLOR} forState:UIControlStateNormal];
-    }
+    
+    //스타 이미지로 대체
+//    if (_didSelectStar == YES)
+//    {
+//        self.barButtonItemStarred.title = @"Starred";
+//        [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
+//    }
+//    else
+//    {
+//        self.barButtonItemStarred.title = @"UnStarred";
+//        [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kWHITE_COLOR} forState:UIControlStateNormal];
+//    }
 }
 
 
