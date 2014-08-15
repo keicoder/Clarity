@@ -191,76 +191,86 @@
 
 - (void)addInputAccessoryView
 {
-    //Create the Quayboard bar
-	self.textViewAccessory = [[JSMQuayboardBar alloc] initWithFrame:CGRectZero];
-	self.textViewAccessory.delegate = self;
-	self.noteTextView.inputAccessoryView = self.textViewAccessory;
+    BOOL checkVer = ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedSame || [[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedDescending);
+    kLOGBOOL(checkVer);
+    NSLog(@"[[UIDevice currentDevice] systemVersion] : %@", [[UIDevice currentDevice] systemVersion]);
+    if (checkVer == YES)
+    {
+        
+    }
+    else
+    {
+        //Create the Quayboard bar
+        self.textViewAccessory = [[JSMQuayboardBar alloc] initWithFrame:CGRectZero];
+        self.textViewAccessory.delegate = self;
+        self.noteTextView.inputAccessoryView = self.textViewAccessory;
+        
+        //Create the Quayboard keys
+        JSMQuayboardButton *previousCharacterKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+        previousCharacterKey.title = @"◀︎";
+        [previousCharacterKey addTarget:self action:@selector(previousCharacterButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.textViewAccessory addKey:previousCharacterKey];
+        
+        JSMQuayboardButton *tabKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+        tabKey.title = @"⍈";
+        [tabKey addTarget:self action:@selector(tabButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.textViewAccessory addKey:tabKey];
+        
+        JSMQuayboardButton *hashKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+        hashKey.title = @"#";
+        [hashKey addTarget:self action:@selector(hashButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.textViewAccessory addKey:hashKey];
+        
+        JSMQuayboardButton *hideKeyboardKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+        hideKeyboardKey.title = @"▼";
+        [hideKeyboardKey addTarget:self action:@selector(hideKeyboardButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.textViewAccessory addKey:hideKeyboardKey];
+        
+        JSMQuayboardButton *asteriskKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+        asteriskKey.title = @"✳︎";
+        [asteriskKey addTarget:self action:@selector(asteriskButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.textViewAccessory addKey:asteriskKey];
+        
+        JSMQuayboardButton *selectKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+        selectKey.title = @"{ }";
+        [selectKey addTarget:self action:@selector(selectWordButonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.textViewAccessory addKey:selectKey];
+        
+        JSMQuayboardButton *nextCharacterKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+        nextCharacterKey.title = @"▶︎";
+        [nextCharacterKey addTarget:self action:@selector(nextCharacterButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.textViewAccessory addKey:nextCharacterKey];
     
-	//Create the Quayboard keys
-    JSMQuayboardButton *previousCharacterKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-	previousCharacterKey.title = @"◀︎";
-	[previousCharacterKey addTarget:self action:@selector(previousCharacterButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-	[self.textViewAccessory addKey:previousCharacterKey];
-    
-    JSMQuayboardButton *tabKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-	tabKey.title = @"⍈";
-	[tabKey addTarget:self action:@selector(tabButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-	[self.textViewAccessory addKey:tabKey];
-    
-    JSMQuayboardButton *hashKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-	hashKey.title = @"#";
-	[hashKey addTarget:self action:@selector(hashButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-	[self.textViewAccessory addKey:hashKey];
-    
-    JSMQuayboardButton *hideKeyboardKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-	hideKeyboardKey.title = @"▼";
-	[hideKeyboardKey addTarget:self action:@selector(hideKeyboardButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-	[self.textViewAccessory addKey:hideKeyboardKey];
-    
-    JSMQuayboardButton *asteriskKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-	asteriskKey.title = @"✳︎";
-	[asteriskKey addTarget:self action:@selector(asteriskButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-	[self.textViewAccessory addKey:asteriskKey];
-    
-    JSMQuayboardButton *selectKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-	selectKey.title = @"{ }";
-	[selectKey addTarget:self action:@selector(selectWordButonPressed:) forControlEvents:UIControlEventTouchUpInside];
-	[self.textViewAccessory addKey:selectKey];
-    
-    JSMQuayboardButton *nextCharacterKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-	nextCharacterKey.title = @"▶︎";
-	[nextCharacterKey addTarget:self action:@selector(nextCharacterButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-	[self.textViewAccessory addKey:nextCharacterKey];
-    
-    //    JSMQuayboardButton *angleBracketKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-    //	angleBracketKey.title = @">";
-    //	[angleBracketKey addTarget:self action:@selector(angleBracketButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    //	[self.textViewAccessory addKey:angleBracketKey];
-    
-    //    JSMQuayboardButton *hyphenKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-    //	hyphenKey.title = @"-";
-    //	[hyphenKey addTarget:self action:@selector(hyphenButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    //	[self.textViewAccessory addKey:hyphenKey];
-    
-    //    JSMQuayboardButton *equalKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-    //	equalKey.title = @"=";
-    //	[equalKey addTarget:self action:@selector(equalButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    //	[self.textViewAccessory addKey:equalKey];
-    
-    //    JSMQuayboardButton *exclamationMarkKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-    //	exclamationMarkKey.title = @"!";
-    //	[exclamationMarkKey addTarget:self action:@selector(exclamationMarkButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    //	[self.textViewAccessory addKey:exclamationMarkKey];
-    
-    //    JSMQuayboardButton *linkKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-    //	linkKey.title = @"♾";
-    //	[linkKey addTarget:self action:@selector(linkButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    //    [self.textViewAccessory addKey:linkKey];
-    
-    //    JSMQuayboardButton *imageKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
-    //	imageKey.title = @"🂠";
-    //	[tabKey addTarget:self action:@selector(imageButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    //	[self.textViewAccessory addKey:imageKey];
+//    JSMQuayboardButton *angleBracketKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+//	angleBracketKey.title = @">";
+//	[angleBracketKey addTarget:self action:@selector(angleBracketButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+//	[self.textViewAccessory addKey:angleBracketKey];
+
+//    JSMQuayboardButton *hyphenKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+//	hyphenKey.title = @"-";
+//	[hyphenKey addTarget:self action:@selector(hyphenButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+//	[self.textViewAccessory addKey:hyphenKey];
+
+//    JSMQuayboardButton *equalKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+//	equalKey.title = @"=";
+//	[equalKey addTarget:self action:@selector(equalButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+//	[self.textViewAccessory addKey:equalKey];
+
+//    JSMQuayboardButton *exclamationMarkKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+//	exclamationMarkKey.title = @"!";
+//	[exclamationMarkKey addTarget:self action:@selector(exclamationMarkButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+//	[self.textViewAccessory addKey:exclamationMarkKey];
+
+//    JSMQuayboardButton *linkKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+//	linkKey.title = @"♾";
+//	[linkKey addTarget:self action:@selector(linkButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.textViewAccessory addKey:linkKey];
+
+//    JSMQuayboardButton *imageKey = [[JSMQuayboardButton alloc] initWithFrame:CGRectZero];
+//	imageKey.title = @"🂠";
+//	[tabKey addTarget:self action:@selector(imageButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+//	[self.textViewAccessory addKey:imageKey];
+    }
 }
 
 
@@ -939,7 +949,7 @@
 - (void)saveMethodInvoked
 {
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    NSManagedObjectContext *mainManagedObjectContext = [managedObjectContext parentContext];
+//    NSManagedObjectContext *mainManagedObjectContext = [managedObjectContext parentContext];
     
     [self updateNoteDataWithCurrentState];                         //업데이트 노트 데이터
     [self.currentNote saveNote:self.currentNote];                  //노트 저장
@@ -948,7 +958,7 @@
      {
          NSError *error = nil;
          if ([managedObjectContext save:&error]) {
-             [mainManagedObjectContext save:&error];
+//             [mainManagedObjectContext save:&error];
          } else {
              //NSLog(@"Error saving context: %@", error);
          }

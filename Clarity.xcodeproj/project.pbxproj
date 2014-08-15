@@ -537,12 +537,12 @@
 			isa = PBXGroup;
 			children = (
 				C122910A19973CE100460667 /* Clarity.xcdatamodeld */,
+				C122910319973BE100460667 /* NoteDataManager.h */,
+				C122910419973BE100460667 /* NoteDataManager.m */,
 				C12290FF19973BE100460667 /* DropboxNote.h */,
 				C122910019973BE100460667 /* DropboxNote.m */,
 				C122910119973BE100460667 /* LocalNote.h */,
 				C122910219973BE100460667 /* LocalNote.m */,
-				C122910319973BE100460667 /* NoteDataManager.h */,
-				C122910419973BE100460667 /* NoteDataManager.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -644,7 +644,7 @@
 		C122902319973A2B00460667 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = lovejunsoft;
 				TargetAttributes = {
 					C122904A19973A2B00460667 = {
@@ -890,7 +890,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PROVISIONING_PROFILE = "84498e10-11d1-4007-89ea-89d99b9ca5cc";
 				SDKROOT = iphoneos;
@@ -929,7 +929,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PROVISIONING_PROFILE = "84498e10-11d1-4007-89ea-89d99b9ca5cc";
 				SDKROOT = iphoneos;
@@ -942,10 +942,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 62EF1565489047DBA75023BE /* Pods.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					armv7,
-					armv7s,
-				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Jaehyun Park (9DHQ6GLLC9)";
@@ -966,10 +962,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 62EF1565489047DBA75023BE /* Pods.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					armv7,
-					armv7s,
-				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Jaehyun Park (9DHQ6GLLC9)";
@@ -1057,7 +1049,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PROVISIONING_PROFILE = "84498e10-11d1-4007-89ea-89d99b9ca5cc";
 				SDKROOT = iphoneos;
@@ -1070,10 +1062,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 62EF1565489047DBA75023BE /* Pods.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					armv7,
-					armv7s,
-				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Jaehyun Park (9DHQ6GLLC9)";

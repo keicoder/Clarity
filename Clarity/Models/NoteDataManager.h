@@ -15,6 +15,8 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
+@property (strong, nonatomic) PKSyncManager *syncManager;
+
 + (instancetype)sharedNoteDataManager;
 
 - (void)setSyncEnabled:(BOOL)enabled;

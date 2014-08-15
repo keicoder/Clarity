@@ -10,12 +10,6 @@
 #import "NoteDataManager.h"
 #import <ParcelKit/ParcelKit.h>
 
-@interface NoteDataManager ()
-
-@property (strong, nonatomic) PKSyncManager *syncManager;
-
-@end
-
 
 @implementation NoteDataManager
 
@@ -50,7 +44,7 @@
 {
     //if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
     
-    if (_managedObjectModel)
+    if (_managedObjectModel != nil)
     {
         return _managedObjectModel;
     }
@@ -70,7 +64,7 @@
 {
     //if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
     
-    if (_persistentStoreCoordinator)
+    if (_persistentStoreCoordinator != nil)
     {
         return _persistentStoreCoordinator;
     }
@@ -91,11 +85,11 @@
         NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @(YES),
                                    NSInferMappingModelAutomaticallyOption : @(YES)};
         
-        if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+        if ([_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                                                        configuration:nil
                                                                  URL:storeURL
                                                              options:options
-                                                               error:&error])
+                                                               error:&error] == NO)
         {
             [self showDropboxCoreDataError];
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -117,11 +111,11 @@
         NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @YES,
                                    NSInferMappingModelAutomaticallyOption : @YES};
         
-        if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+        if ([_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                                                        configuration:nil
                                                                  URL:storeURL
                                                              options:options
-                                                               error:&error])
+                                                               error:&error] == NO)
         {
             [self showLocalCoreDataError];
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -140,14 +134,14 @@
 {
     //if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
     
-    if (_managedObjectContext)
+    if (_managedObjectContext != nil)
     {
         return _managedObjectContext;
     }
     
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     
-    if (coordinator)
+    if (coordinator != nil)
     {
         _managedObjectContext = [[NSManagedObjectContext alloc]
                                  initWithConcurrencyType:NSMainQueueConcurrencyType];
@@ -169,7 +163,7 @@
     DBAccountManager *accountManager = [DBAccountManager sharedManager];
     
     if (enabled) {
-        if (!self.syncManager)
+        if (self.syncManager == NO)
         {
             DBAccount *account = [accountManager linkedAccount];
             
@@ -179,9 +173,9 @@
                 
                 __weak typeof(self) weakSelf = self;
                 [accountManager addObserver:self block:^(DBAccount *account) {
-                    typeof(self) strongSelf = weakSelf; if (!strongSelf) return;
+                    typeof(self) strongSelf = weakSelf; if (strongSelf == NO) return;
                     
-                    if (![account isLinked])
+                    if ([account isLinked] == NO)
                     {
                         [strongSelf setSyncEnabled:NO];
                         NSLog(@"Unlinked account: %@", account.description);
@@ -200,14 +194,14 @@
                     //NSLog (@"PKSyncManager: %@\n", self.syncManager.description);
                     
                     NSError *error = nil;
-                    if (![self addMissingSyncAttributeValueToCoreDataObjects:&error])
+                    if ([self addMissingSyncAttributeValueToCoreDataObjects:&error] == NO)
                     {
                         NSLog(@"Error adding missing sync attribute value to Core Data objects: %@", error);
                     }
                     else if ([[datastore getTables:nil] count] == 0)
                     {
                         //드랍박스 테이블 가져오기
-                        if (![self updateDropboxFromCoreData:&error])
+                        if ([self updateDropboxFromCoreData:&error] == NO)
                         {
                             NSLog(@"Error updating Dropbox from Core Data: %@", error);
                         }
@@ -263,7 +257,7 @@
             {
                 NSLog (@"managedObject: %@\n", managedObject.description);
                 
-                if (![managedObject valueForKey:syncAttributeName])
+                if ([managedObject valueForKey:syncAttributeName] == NO)
                 {
                     [managedObject setValue:[PKSyncManager syncID] forKey:syncAttributeName];
                     
