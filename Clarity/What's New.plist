@@ -18,7 +18,7 @@
 			<key>detail</key>
 			<string>Now you can delete note in editing view.</string>
 			<key>icon</key>
-			<string>trash_black</string>
+			<string>trash</string>
 		</dict>
 	</array>
 </dict>

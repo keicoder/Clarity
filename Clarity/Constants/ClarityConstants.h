@@ -125,7 +125,7 @@ extern NSString * const kIS_FIRST_TIME;
 #pragma mark - 텍스트 뷰
 
 #define kTEXTVIEW_LINE_IMAGEVIEW_ALPHA                      0.3
-#define kINSET_TOP                                         70.0     //120.0     // 텍스트 뷰 인셋 top
+#define kINSET_TOP                                         78.0     //120.0     // 텍스트 뷰 인셋 top
 #define kINSET_LEFT                                         0.0     // 텍스트 뷰 인셋 left
 #define kINSET_BOTTOM                                      44.0     // 텍스트 뷰 인셋 bottom
 #define kINSET_RIGHT                                        0.0     // 텍스트 뷰 인셋 right

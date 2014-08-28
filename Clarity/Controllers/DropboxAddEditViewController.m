@@ -772,35 +772,25 @@
 - (void)addBarButtonItems
 {
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixed.width = 30.0f;
-    UIBarButtonItem *barButtonItemFixedNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixedNarrow.width = 12.0f;
-//    UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
+    barButtonItemFixed.width = 44.0f;
+
     
     UIImage *fullScreen = [UIImage imageNamed:@"expand-256"];
+    [fullScreen resizedImageByHeight:20];
     UIButton *buttonFullScreen = [UIButton buttonWithType:UIButtonTypeCustom];
     [buttonFullScreen addTarget:self action:@selector(barButtonItemFullScreenPressed:)forControlEvents:UIControlEventTouchUpInside];
     [buttonFullScreen setBackgroundImage:fullScreen forState:UIControlStateNormal];
-    buttonFullScreen.frame = CGRectMake(0 ,0, 18, 18);
+    buttonFullScreen.frame = CGRectMake(0 ,0, 17, 18);
     UIBarButtonItem *barButtonItemFullScreen = [[UIBarButtonItem alloc] initWithCustomView:buttonFullScreen];
     
     
-    UIImage *star = [UIImage imageNameForChangingColor:@"starWhite" color:kWHITE_COLOR];
-    [star resizedImageByHeight:20];
+    UIImage *star = [UIImage imageNameForChangingColor:@"star-256-white" color:kWHITE_COLOR];
+    [star resizedImageByHeight:27];
     self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
     [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
-    self.buttonStar.frame = CGRectMake(0 ,0, 20, 20);
+    self.buttonStar.frame = CGRectMake(0 ,0, 27, 27);
     self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
-    
-    
-    UIImage *add = [UIImage imageNamed:@"plus-256"];
-    UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttonAdd addTarget:self action:@selector(barButtonItemAddPressed:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
-    buttonAdd.frame = CGRectMake(0 ,0, 26, 26);
-    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
     
     
     UIButton *buttonMarkdown = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -815,56 +805,17 @@
     
     
     UIImage *share = [UIImage imageNameForChangingColor:@"upload" color:kWHITE_COLOR];
-    [share resizedImageByHeight:20];
+    [share resizedImageByHeight:21];
     UIButton *buttonShare = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttonShare addTarget:self action:@selector(showShareSheetFromBarButtonItem:withEvent:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonShare addTarget:self action:@selector(barButtonItemSharePressed:)forControlEvents:UIControlEventTouchUpInside];
     [buttonShare setBackgroundImage:share forState:UIControlStateNormal];
-    buttonShare.frame = CGRectMake(0 ,0, 15, 21);
+    buttonShare.frame = CGRectMake(0 ,0, 16, 21);
     UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithCustomView:buttonShare];
     
     
-//    UIImage *delete = [UIImage imageNameForChangingColor:@"trash" color:kWHITE_COLOR];
-//    [delete resizedImageByHeight:20];
-//    UIButton *buttonDelete = [UIButton buttonWithType:UIButtonTypeCustom];
-//    buttonDelete.frame = CGRectMake(0 ,0, 19, 19);
-//    [buttonDelete addTarget:self action:@selector(showDeleteSheetFromBarButtonItem:withEvent:)forControlEvents:UIControlEventTouchUpInside];
-//    [buttonDelete setBackgroundImage:delete forState:UIControlStateNormal];
-//    UIBarButtonItem *barButtonItemDelete = [[UIBarButtonItem alloc] initWithCustomView:buttonDelete];
-    
-//    UIImage *blankNarrow = [UIImage imageNamed:@""];
-//    UIButton *buttonBlankNarrow = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [buttonBlankNarrow addTarget:self action:@selector(noAction:)forControlEvents:UIControlEventTouchUpInside];
-//    [buttonBlankNarrow setBackgroundImage:blankNarrow forState:UIControlStateNormal];
-//    buttonBlankNarrow.frame = CGRectMake(0 ,0, 2, 2);
-//    UIBarButtonItem *barButtonItemBlankNarrow = [[UIBarButtonItem alloc] initWithCustomView:buttonBlankNarrow];
-    
-//    UIImage *blankNormal = [UIImage imageNamed:@""];
-//    UIButton *buttonBlankNormal = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [buttonBlankNormal addTarget:self action:@selector(noAction:)forControlEvents:UIControlEventTouchUpInside];
-//    [buttonBlankNormal setBackgroundImage:blankNormal forState:UIControlStateNormal];
-//    //buttonBlankNarrow.frame = CGRectMake(0 ,0, 44, 44);
-//    UIBarButtonItem *barButtonItemBlankNormal = [[UIBarButtonItem alloc] initWithCustomView:buttonBlankNormal];
-    
-    
-    NSArray *navigationBarItems = @[barButtonItemAdd, barButtonItemFixed, barButtonItemFullScreen, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFixed, barButtonItemShare, barButtonItemFixed, barButtonItemMarkdown];
+    NSArray *navigationBarItems = @[barButtonItemFullScreen, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFixed, barButtonItemShare, barButtonItemFixed, barButtonItemMarkdown];
     
     self.navigationItem.rightBarButtonItems = navigationBarItems;
-    
-//    UIImageView *deleteImageView = [[UIImageView alloc] initWithImage:delete];
-//    [deleteImageView setFrame:CGRectMake(0, 0, 44, 44)];
-//    deleteImageView.userInteractionEnabled = YES;
-//    deleteImageView.contentMode = UIViewContentModeCenter;
-//    if (deleteImageView.bounds.size.width > (delete.size.width && deleteImageView.bounds.size.height) > delete.size.height) {
-//        deleteImageView.contentMode = UIViewContentModeScaleAspectFit;
-//    }
-
-//    UIImage *markdown = [UIImage imageNameForChangingColor:@"markdown" color:kWHITE_COLOR];
-//    [markdown resizedImageByWidth:20];
-//    UIButton *buttonMarkdown = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [buttonMarkdown addTarget:self action:@selector(barButtonItemMarkdownPressed:)forControlEvents:UIControlEventTouchUpInside];
-//    [buttonMarkdown setBackgroundImage:markdown forState:UIControlStateNormal];
-//    buttonMarkdown.frame = CGRectMake(0 ,0, 18, 20);
-//    UIBarButtonItem *barButtonItemMarkdown = [[UIBarButtonItem alloc] initWithCustomView:buttonMarkdown];
 }
 
 
@@ -954,18 +905,6 @@
     [self showStatusBar];
     [self showNavigationBar];
     [self hideButtonForFullscreenWithAnimation];
-}
-
-
-#pragma mark 노트 삭제
-
-- (void)deleteNote:(id)sender
-{
-    NSManagedObject *managedObject = self.currentNote;
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    //NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
-    [managedObjectContext deleteObject:managedObject];
-    [managedObjectContext save:nil];
 }
 
 
@@ -1085,15 +1024,15 @@
     if ([self.currentNote.hasNoteStar boolValue] == YES)
     {
         self.starImage = nil;
-        UIImage *star = [UIImage imageNameForChangingColor:@"starWhiteFilled" color:kGOLD_COLOR];
-        [star resizedImageByHeight:20];
+        UIImage *star = [UIImage imageNameForChangingColor:@"star-256" color:kGOLD_COLOR];
+        [star resizedImageByHeight:26];
         [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
     }
     else
     {
         self.starImage = nil;
-        UIImage *star = [UIImage imageNameForChangingColor:@"starWhiteFilled" color:kWHITE_COLOR];
-        [star resizedImageByHeight:20];
+        UIImage *star = [UIImage imageNameForChangingColor:@"star-256-white" color:kWHITE_COLOR];
+        [star resizedImageByHeight:26];
         [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
     }
 }
@@ -1142,6 +1081,14 @@
 - (NSString *)noteString
 {
     return self.noteTextView.text;
+}
+
+
+#pragma mark 바 바튼 아이템 Share Pressed
+
+- (void)barButtonItemSharePressed:(id)sender
+{
+    [self displayDoActionSheet:sender];
 }
 
 
@@ -1403,237 +1350,6 @@
 - (void)popView
 {
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-
-#pragma mark - JG 액션 시트
-
-#pragma mark 노트 공유
-
-- (void)showShareSheetFromBarButtonItem:(UIBarButtonItem *)barButtonItem withEvent:(UIEvent *)event {
-    UIView *view = [event.allTouches.anyObject view];
-    
-    //    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as HTML", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"More actions as Plain Text...", @"Print Note", @"Create PDF"] buttonStyle:JGActionSheetButtonStyleBlue];
-    
-    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as HTML", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"More actions as Plain Text...", @"Print Note"] buttonStyle:JGActionSheetButtonStyleBlue];
-    
-    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:0];
-    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:1];
-    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:2];
-    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:3];
-    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:4];
-    [section setButtonStyle:JGActionSheetButtonStyleBlue forButtonAtIndex:5];
-    //    [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:6];
-    
-    NSArray *sections = (iPad ? @[section] : @[section, [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"Cancel"] buttonStyle:JGActionSheetButtonStyleGreen]]);
-    
-    JGActionSheet *sheet = [[JGActionSheet alloc] initWithSections:sections];
-    
-    sheet.delegate = self;
-    
-    [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath) {
-        
-        if (indexPath.section == 0) {
-            switch (indexPath.row) {
-                case 0:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
-                    } else {
-                    }
-                    [self createHTMLString];                                                            //HTML 스트링
-                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];         //메일 컴포즈 컨트롤러
-                }
-                    break;
-                case 1:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
-                    } else {
-                    }
-                    [self createHTMLString];
-                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                    pasteboard.string = self.htmlString;                                                //Pasteboard Copy
-                }
-                    break;
-                case 2:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"No Contents";
-                    } else {
-                    }
-                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];  //메일 컴포즈 컨트롤러
-                }
-                    break;
-                case 3:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
-                    } else {
-                    }
-                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                    pasteboard.string = self.noteTextView.text;                                         //Pasteboard Copy
-                }
-                    break;
-                case 4:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
-                    } else {
-                    }
-                    NSArray *itemsToShare = @[self.noteTextView.text];
-                    UIActivityViewController *activityViewController;
-                    activityViewController = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
-                    [self presentViewController:activityViewController animated:YES completion:^{
-                    }];
-                }
-                    break;
-                case 5:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
-                    } else {
-                    }
-                    [self createHTMLString];
-                    [self printNoteAsHTML:self.htmlString];
-                }
-                    break;
-                case 6:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
-                    } else {
-                    }
-                    [self createHTMLString];
-                    [self createPDFDocument:self.htmlString];
-                }
-                    break;
-                default:
-                    break;
-            }
-        }
-        [sheet dismissAnimated:YES];
-    }];
-    
-    if (iPad) {
-        [sheet setOutsidePressBlock:^(JGActionSheet *sheet) {
-            [sheet dismissAnimated:YES];
-        }];
-        
-        CGPoint point = (CGPoint){CGRectGetMidX(view.bounds), CGRectGetMaxY(view.bounds)};
-        
-        point = [self.navigationController.view convertPoint:point fromView:view];
-        
-        _currentAnchoredActionSheet = sheet;
-        _anchorView = view;
-        _anchorLeft = NO;
-        
-        [sheet showFromPoint:point inView:self.navigationController.view arrowDirection:JGActionSheetArrowDirectionTop animated:YES];
-    }
-    else {
-        [sheet showInView:self.navigationController.view animated:YES];
-    }
-}
-
-
-#pragma mark 노트 삭제
-
-- (void)showDeleteSheetFromBarButtonItem:(UIBarButtonItem *)barButtonItem withEvent:(UIEvent *)event {
-    UIView *view = [event.allTouches.anyObject view];
-    
-    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Delete Note", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
-    
-    [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:0];
-    
-    NSArray *sections = (iPad ? @[section] : @[section, [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"Cancel"] buttonStyle:JGActionSheetButtonStyleCancel]]);
-    
-    JGActionSheet *sheet = [[JGActionSheet alloc] initWithSections:sections];
-    
-    sheet.delegate = self;
-    
-    [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath) {
-        
-        if (indexPath.section == 0) {
-            switch (indexPath.row) {
-                case 0:
-                {
-                    [self.managedObjectContext deleteObject:self.currentNote];
-                    [self saveMethodInvoked];
-                    [self.navigationController popViewControllerAnimated:YES];
-                }
-                    break;
-                case 1:
-                    break;
-                default:
-                    break;
-            }
-        }
-        [sheet dismissAnimated:YES];
-    }];
-    
-    if (iPad) {
-        [sheet setOutsidePressBlock:^(JGActionSheet *sheet) {
-            [sheet dismissAnimated:YES];
-        }];
-        
-        CGPoint point = (CGPoint){CGRectGetMidX(view.bounds), CGRectGetMaxY(view.bounds)};
-        
-        point = [self.navigationController.view convertPoint:point fromView:view];
-        
-        _currentAnchoredActionSheet = sheet;
-        _anchorView = view;
-        _anchorLeft = NO;
-        
-        [sheet showFromPoint:point inView:self.navigationController.view arrowDirection:JGActionSheetArrowDirectionTop animated:YES];
-    }
-    else {
-        [sheet showInView:self.navigationController.view animated:YES];
-    }
-}
-
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    if (!iOS7) {
-        //Use this on iOS < 7 to prevent the UINavigationBar from overlapping your action sheet!
-        [self.navigationController.view.superview bringSubviewToFront:self.navigationController.view];
-    }
-    
-    if (_currentAnchoredActionSheet) {
-        UIView *view = _anchorView;
-        
-        CGPoint point = (_anchorLeft ? (CGPoint){-5.0f, CGRectGetMidY(view.bounds)} : (CGPoint){CGRectGetMidX(view.bounds), CGRectGetMaxY(view.bounds)});
-        
-        point = [self.navigationController.view convertPoint:point fromView:view];
-        
-        [_currentAnchoredActionSheet moveToPoint:point arrowDirection:(_anchorLeft ? JGActionSheetArrowDirectionRight : JGActionSheetArrowDirectionTop) animated:NO];
-    }
-}
-
-
-#pragma mark JGActionSheet Delegate
-
-- (void)actionSheetWillPresent:(JGActionSheet *)actionSheet {
-    //    NSLog(@"Action sheet %p will present", actionSheet);
-}
-
-- (void)actionSheetDidPresent:(JGActionSheet *)actionSheet {
-    //    NSLog(@"Action sheet %p did present", actionSheet);
-}
-
-- (void)actionSheetWillDismiss:(JGActionSheet *)actionSheet {
-    //    NSLog(@"Action sheet %p will dismiss", actionSheet);
-    _currentAnchoredActionSheet = nil;
-}
-
-- (void)actionSheetDidDismiss:(JGActionSheet *)actionSheet {
-    //    NSLog(@"Action sheet %p did dismiss", actionSheet);
 }
 
 
