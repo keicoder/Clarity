@@ -21,14 +21,13 @@
 #import "NoteTitlePopinViewController.h"                                //팝인 뷰 > 노트 타이틀 뷰
 #import "Quayboard.h"                                                   //인풋 액세서리 뷰 > Cool
 #import "UIButtonPressAndHold.h"
-#import "JGActionSheet.h"
 #import "NSUserDefaults+Extension.h"
 #import "NDHTMLtoPDF.h"
 #import "BNHtmlPdfKit.h"
 #import "UIImage+ResizeMagick.h"                                        //이미지 리사이즈
 
 
-@interface DropboxAddEditViewController () <JSMQuayboardBarDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, JGActionSheetDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, SMTEFillDelegate>
+@interface DropboxAddEditViewController () <JSMQuayboardBarDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, SMTEFillDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext; //컨텍스트
 @property (nonatomic, strong) ICTextView *noteTextView;                     //노트 텍스트 뷰
@@ -49,11 +48,6 @@
 {
     BOOL _didSelectStar;                                                    //별표 상태 저장
     NSString *_originalNote;                                                //저장 시 비교하기위한 원본 노트
-    
-    JGActionSheet *_currentAnchoredActionSheet;
-    UIView *_anchorView;
-    BOOL _anchorLeft;
-    
     BNHtmlPdfKit *_htmlPdfKit;
 }
 

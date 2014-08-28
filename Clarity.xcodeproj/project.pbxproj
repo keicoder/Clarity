@@ -86,7 +86,6 @@
 		C125D34A19AEDA1D00D9E892 /* SAMGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = C125D34019AEDA1D00D9E892 /* SAMGradientView.m */; };
 		C125D34B19AEDA1D00D9E892 /* WhatsNewLICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = C125D34119AEDA1D00D9E892 /* WhatsNewLICENSE.md */; };
 		C125D34D19AEDA4800D9E892 /* What's New.plist in Resources */ = {isa = PBXBuildFile; fileRef = C125D34C19AEDA4800D9E892 /* What's New.plist */; };
-		C125D35519AEFD5C00D9E892 /* JGActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = C125D35419AEFD5C00D9E892 /* JGActionSheet.m */; };
 		C1ABF0C519985B7A00E622CA /* MainSidePanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */; };
 		C1ABF0CD19985CF400E622CA /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C819985CF400E622CA /* JASidePanelController.m */; };
 		C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0CA19985CF400E622CA /* LogViewController.m */; };
@@ -248,8 +247,6 @@
 		C125D34019AEDA1D00D9E892 /* SAMGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMGradientView.m; sourceTree = "<group>"; };
 		C125D34119AEDA1D00D9E892 /* WhatsNewLICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WhatsNewLICENSE.md; sourceTree = "<group>"; };
 		C125D34C19AEDA4800D9E892 /* What's New.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "What's New.plist"; sourceTree = "<group>"; };
-		C125D35319AEFD5C00D9E892 /* JGActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGActionSheet.h; sourceTree = "<group>"; };
-		C125D35419AEFD5C00D9E892 /* JGActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGActionSheet.m; sourceTree = "<group>"; };
 		C1ABF0C319985B7A00E622CA /* MainSidePanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainSidePanelViewController.h; sourceTree = "<group>"; };
 		C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainSidePanelViewController.m; sourceTree = "<group>"; };
 		C1ABF0C719985CF400E622CA /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
@@ -388,7 +385,6 @@
 			children = (
 				C1E74E7319AEFE2A00AA3399 /* NDHTMLtoPDF */,
 				C1E74E6F19AEFE1500AA3399 /* BNHtmlPdfKit */,
-				C125D35219AEFD5C00D9E892 /* JGActionSheet */,
 				C125D32B19AEDA1D00D9E892 /* WhatsNew */,
 				C1ABF0D419985E9F00E622CA /* POPPaperButton */,
 				C1ABF0C619985CF400E622CA /* JASidePanels */,
@@ -676,15 +672,6 @@
 			path = SAMGradientView;
 			sourceTree = "<group>";
 		};
-		C125D35219AEFD5C00D9E892 /* JGActionSheet */ = {
-			isa = PBXGroup;
-			children = (
-				C125D35319AEFD5C00D9E892 /* JGActionSheet.h */,
-				C125D35419AEFD5C00D9E892 /* JGActionSheet.m */,
-			);
-			path = JGActionSheet;
-			sourceTree = "<group>";
-		};
 		C1ABF0C619985CF400E622CA /* JASidePanels */ = {
 			isa = PBXGroup;
 			children = (
@@ -909,7 +896,6 @@
 				C122904119973A2B00460667 /* AppDelegate.m in Sources */,
 				C12290EC19973BA100460667 /* WelcomePage.m in Sources */,
 				C12290D219973A7E00460667 /* DropboxStarViewController.m in Sources */,
-				C125D35519AEFD5C00D9E892 /* JGActionSheet.m in Sources */,
 				C12290A519973A7200460667 /* UIColor+CustomColors.m in Sources */,
 				C12290D319973A7E00460667 /* LeftViewController.m in Sources */,
 				C12290DC19973A7E00460667 /* SupportTableViewController.m in Sources */,
