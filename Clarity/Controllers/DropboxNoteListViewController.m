@@ -22,6 +22,8 @@
 #import "UIImage+ChangeColor.h"                             //이미지 컬러 변경
 #import "NSUserDefaults+Extension.h"                        //셀 선택시 인덱스패스 유저 디폴트에 저장
 #import "WelcomePageViewController.h"                       //Welcome 뷰 > 앱 처음 실행인지 체크 > Welcome 뷰 보여줌
+#import "MTZWhatsNew.h"
+#import "MTZWhatsNewGridViewController.h"
 
 
 @interface DropboxNoteListViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UIAlertViewDelegate>
@@ -53,18 +55,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Dropbox";
     [self configureViewAndTableView];
-    [self addNavigationBarButtonItem];                                              //내비게이션 바 버튼
+    [self addBarButtonItem];                                                        //바 버튼
     [self hideSearchBar];                                                           //서치바 감춤
     [self checkWhetherShowWelcomeView];                                             //앱 처음 실행인지 체크 > Welcome 뷰 보여줌
     [self addObserverForNewNote];                                                   //애드,에딧 뷰에서 뉴 노트 생성 버튼 누를 때 필요한 옵저버
+    [self addObserverForWelcomeViewControllerDismissed];                            //웰컴 뷰 해제
 }
 
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.title = @"Dropbox";
     [self showStatusBar];
     [self showNavigationBar];
     [self executePerformFetch];                                                     //패치 코어데이터 아이템
@@ -82,41 +85,43 @@
 {
     [super viewDidAppear:animated];
     
-    DBAccountManager *accountManager = [DBAccountManager sharedManager];
-    DBAccount *account = [accountManager linkedAccount];
+//    DBAccountManager *accountManager = [DBAccountManager sharedManager];
+//    DBAccount *account = [accountManager linkedAccount];
+//    
+//    self.navigationController.delegate = self;
+//    
+//    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_DROPBOX_NOTE_INDEX];
+////    NSLog (@"selectedDropboxNoteIndex: %d, fetchedObjects count: %d", index, [[_fetchedResultsController fetchedObjects] count]);
+//    
+//    if (index < 0 || index >= [[_fetchedResultsController fetchedObjects] count] || !account)
+//    {
+//        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_DROPBOX_NOTE_INDEX];  //해당 노트로 이동 방지
+//    }
+//    else if (index >= 0 && index < [[_fetchedResultsController fetchedObjects] count] && account)
+//    {
+//        //스토리보드 방식
+//        DropboxAddEditViewController *dropboxController = [self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
+//        
+//        NSIndexPath *indexPath = [[NSUserDefaults standardUserDefaults] indexPathForKey:kSELECTED_DROPBOX_NOTE_INDEXPATH];
+//        
+//        //NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
+//        NSManagedObjectContext *managedObjectContext = [[NSManagedObjectContext alloc]
+//                                                        initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+//        [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
+//        
+//        self.selectedNote = (DropboxNote *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
+//        //위 코드와 결과 동일
+//        //self.selectedNote = (DropboxNote *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+//        [dropboxController note:self.selectedNote inManagedObjectContext:managedObjectContext];
+//        
+//        dropboxController.isSearchResultNote = NO;
+//        dropboxController.isNewNote = NO;
+//        dropboxController.currentNote = self.selectedNote;
+//        
+//        [self.navigationController pushViewController:dropboxController animated:YES]; //Push
+//    }
     
-    self.navigationController.delegate = self;
-    
-    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_DROPBOX_NOTE_INDEX];
-//    NSLog (@"selectedDropboxNoteIndex: %d, fetchedObjects count: %d", index, [[_fetchedResultsController fetchedObjects] count]);
-    
-    if (index < 0 || index >= [[_fetchedResultsController fetchedObjects] count] || !account)
-    {
-        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_DROPBOX_NOTE_INDEX];  //해당 노트로 이동 방지
-    }
-    else if (index >= 0 && index < [[_fetchedResultsController fetchedObjects] count] && account)
-    {
-        //스토리보드 방식
-        DropboxAddEditViewController *dropboxController = [self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
-        
-        NSIndexPath *indexPath = [[NSUserDefaults standardUserDefaults] indexPathForKey:kSELECTED_DROPBOX_NOTE_INDEXPATH];
-        
-        //NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
-        NSManagedObjectContext *managedObjectContext = [[NSManagedObjectContext alloc]
-                                                        initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
-        
-        self.selectedNote = (DropboxNote *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
-        //위 코드와 결과 동일
-        //self.selectedNote = (DropboxNote *)[self.fetchedResultsController objectAtIndexPath:indexPath];
-        [dropboxController note:self.selectedNote inManagedObjectContext:managedObjectContext];
-        
-        dropboxController.isSearchResultNote = NO;
-        dropboxController.isNewNote = NO;
-        dropboxController.currentNote = self.selectedNote;
-        
-        [self.navigationController pushViewController:dropboxController animated:YES]; //Push
-    }
+    [self checkToShowWhatsNewView];
 }
 
 
@@ -127,18 +132,7 @@
     [self cancelCurrentView];                   //현재 뷰 > 유저 디폴트 캔슬
     [self deActivateSearchDisplayController];   //서치 디스플레이 컨트롤러 비활성화 (애드에딧 뷰에서 나올때 서치 디스플레이 컨트롤러를 거치지 않고 테이블뷰로 바로 돌아옴)
     _fetchedResultsController = nil;
-}
-
-
-#pragma mark 뉴 노트 생성 Notification 옵저버 등록
-
-- (void)addObserverForNewNote
-{
-    //뉴 노트 생성 Notification 옵저버 등록
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(addNewNote:)
-                                                 name:@"AddNewDropboxNoteNotification"
-                                               object:nil];
+    self.title = @"";
 }
 
 
@@ -166,9 +160,9 @@
 - (void)configureViewAndTableView
 {
 //    self.title = @"Dropbox";
-    self.view.backgroundColor = kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR;          //뷰
-    self.tableView.backgroundColor = kCLEAR_COLOR;                                    //테이블 뷰 배경 색상
-    self.tableView.separatorColor = [UIColor colorWithRed:0.333 green:0.333 blue:0.333 alpha:0.1]; //구분선 색상
+    self.view.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;//kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR;          //뷰
+    self.tableView.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;                                    //테이블 뷰 배경 색상
+    self.tableView.separatorColor = kTEXTVIEW_BACKGROUND_COLOR; //[UIColor colorWithRed:0.333 green:0.333 blue:0.333 alpha:0.1]; //구분선 색상
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
 }
@@ -390,7 +384,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //스토리보드 방식
     DropboxAddEditViewController *controller = (DropboxAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
     
     if (tableView == self.searchDisplayController.searchResultsTableView)
@@ -416,8 +409,8 @@
         [self saveIndexPath:indexPath]; //유저 디폴트 > 현재 인덱스패스 저장
         
         self.selectedNote = (DropboxNote *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
-        //위 코드와 결과 동일
-//        self.selectedNote = (DropboxNote *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+        
+//        self.selectedNote = (DropboxNote *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.isSearchResultNote = NO;
@@ -431,6 +424,7 @@
 }
 
 
+#pragma mark - 유저 디폴트
 #pragma mark 유저 디폴트 > 현재 인덱스패스 저장
 
 - (void)saveIndexPath:(NSIndexPath *)indexPath
@@ -451,7 +445,6 @@
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
     [standardUserDefaults synchronize];
-//    NSLog(@"viewDidLoad > currentViewIsDropbox > saved value: %d\n", [[NSUserDefaults standardUserDefaults] boolForKey:kCURRENT_VIEW_IS_DROPBOX]);
 }
 
 
@@ -460,11 +453,10 @@
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_DROPBOX];                          //현재 뷰
     [standardUserDefaults synchronize];
-//    NSLog(@"viewWillDisappear > currentViewIsDropbox > saved value: %d\n", [[NSUserDefaults standardUserDefaults] boolForKey:kCURRENT_VIEW_IS_DROPBOX]);
 }
 
 
-#pragma mark 내비게이션 컨트롤러 델리게이트
+#pragma mark - 내비게이션 컨트롤러 델리게이트
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
@@ -497,7 +489,7 @@
 - (void)presentNote:(DropboxNote *)aNote inManagedObjectContext:(NSManagedObjectContext *)aManagedObjectContext
 {
     DropboxAddEditViewController *controller = (DropboxAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     
     [controller note:aNote inManagedObjectContext:aManagedObjectContext];
     controller.isNewNote = YES;
@@ -507,7 +499,8 @@
     [self setTitleString];                                  //데이트 Formatter > 타이틀 스트링
     controller.currentNote.noteTitle = _titleString;
     
-    [self presentViewController:navigationController animated:YES completion:^{ }];
+//    [self presentViewController:navigationController animated:YES completion:^{ }];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 
@@ -642,7 +635,6 @@
             
         case NSFetchedResultsChangeUpdate:
             [tableView reloadData];                 //테이블 뷰 업데이트
-            //[self reloadTableViewWithAnimation];  //업데이트 테이블 뷰 with 애니메이션
             [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
             break;
             
@@ -664,65 +656,9 @@
 }
 
 
-#pragma mark - 테이블 푸터 뷰
+#pragma mark - 바 버튼 및 메소드
 
-- (void)addFooterViewToTableView
-{
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), CGRectGetHeight(self.tableView.frame))];
-    [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    //[view setBackgroundColor:[UIColor colorWithWhite:0.92 alpha:1]];
-    [view setBackgroundColor:kCLEAR_COLOR];
-    UIImage *image = [UIImage imageNamed:@"swiftNoteWideLogo102by38"];
-    //UIImage *imageThumb = [image makeThumbnailOfSize:CGSizeMake(image.size.width, image.size.height)];
-    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:image];
-    //[logoImageView setCenter:view.center];
-    [logoImageView setFrame:({
-        CGRect frame = logoImageView.frame;
-        frame.origin.x = 70; //(self.tableView.frame.size.width - frame.size.width) / 2;
-        frame.origin.y = 20;
-        CGRectIntegral(frame);
-    })];
-    
-    [logoImageView setAlpha:1.0];
-    
-    [view addSubview:logoImageView];
-    
-    self.tableView.tableFooterView = view;
-    
-    //[self.tableView setBackgroundColor:view.backgroundColor];
-    self.tableView.contentInset = self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, - CGRectGetHeight(view.bounds), 0);
-}
-
-
-#pragma mark 업데이트 인포 버튼
-
-- (void)performUpdateInfoButton
-{
-    [self performSelector:@selector(updateInfoButton) withObject:self.infoButton afterDelay:0.5];
-}
-
-
-- (void)updateInfoButton
-{
-    _totalNotes = (int)[[_fetchedResultsController fetchedObjects] count];        //노트 갯수
-    
-    if (_totalNotes == 0) {
-        [self.infoButton setTitle:@"" forState:UIControlStateNormal];
-    }
-    else if (_totalNotes == 1)
-    {
-        [self.infoButton setTitle:@"1 note" forState:UIControlStateNormal];
-    }
-    else if (_totalNotes > 1)
-    {
-        [self.infoButton setTitle:[NSString stringWithFormat:@"%d notes", _totalNotes] forState:UIControlStateNormal];
-    }
-}
-
-
-#pragma mark - 내비게이션 바 버튼 및 메소드
-
-- (void)addNavigationBarButtonItem
+- (void)addBarButtonItem
 {
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     barButtonItemFixed.width = 22.0f;
@@ -790,7 +726,33 @@
 }
 
 
-#pragma mark 내비게이션 및 상태 바 컨트롤
+#pragma mark 업데이트 인포 버튼
+
+- (void)performUpdateInfoButton
+{
+    [self performSelector:@selector(updateInfoButton) withObject:self.infoButton afterDelay:0.5];
+}
+
+
+- (void)updateInfoButton
+{
+    _totalNotes = (int)[[_fetchedResultsController fetchedObjects] count];        //노트 갯수
+    
+    if (_totalNotes == 0) {
+        [self.infoButton setTitle:@"" forState:UIControlStateNormal];
+    }
+    else if (_totalNotes == 1)
+    {
+        [self.infoButton setTitle:@"1 note" forState:UIControlStateNormal];
+    }
+    else if (_totalNotes > 1)
+    {
+        [self.infoButton setTitle:[NSString stringWithFormat:@"%d notes", _totalNotes] forState:UIControlStateNormal];
+    }
+}
+
+
+#pragma mark - 내비게이션 및 상태 바 컨트롤
 
 - (void)showNavigationBar
 {
@@ -813,14 +775,6 @@
 - (void)hideStatusBar
 {
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-}
-
-
-#pragma mark - 디바이스 방향 지원
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return YES;
 }
 
 
@@ -904,11 +858,100 @@
 }
 
 
+#pragma mark - 헬프 레이블
+
+- (void)performCheckNoNote
+{
+    [self performSelector:@selector(checkNoNote) withObject:self.infoButton afterDelay:0.0];
+}
+
+
+- (void)checkNoNote
+{
+    if ([[_fetchedResultsController fetchedObjects] count] == 0)
+    {
+        self.helpLabel.alpha = 1.0;
+        self.helpLabel.textColor = [UIColor lightGrayColor];
+        self.tableView.separatorColor = kCLEAR_COLOR;
+    }
+    else
+    {
+        self.helpLabel.alpha = 0.0;
+        self.helpLabel.textColor = [UIColor clearColor];
+        self.tableView.separatorColor = kCLEAR_COLOR; //kTEXTVIEW_BACKGROUND_COLOR;
+    }
+}
+
+
+#pragma mark - Notification
+
+#pragma mark 뉴 노트 생성 Notification 옵저버 등록
+
+- (void)addObserverForNewNote
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(addNewNote:)
+                                                 name:@"AddNewNoteNotification"
+                                               object:nil];
+}
+
+
+#pragma mark WelcomeViewControllerDismissed Notification 옵저버 등록
+
+- (void)addObserverForWelcomeViewControllerDismissed
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveWelcomeViewControllerDismissedNotification:)
+                                                 name:@"WelcomeViewControllerDismissedNotification"
+                                               object:nil];
+}
+
+
+#pragma mark WelcomeViewControllerDismissed 노티피케이션 수신 후 후속작업
+
+- (void)didReceiveWelcomeViewControllerDismissedNotification:(NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:@"WelcomeViewControllerDismissedNotification"])
+    {
+        NSLog(@"WelcomeViewControllerDismissed Notification Received");
+        
+        NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
+        NSLog (@"versionString: %@\n", versionString);
+        
+        NSString *lastVersionString = [[NSUserDefaults standardUserDefaults] stringForKey:@"currentVersion"];
+        NSLog (@"lastVersionString: %@\n", lastVersionString);
+        
+        if ([versionString isEqualToString:lastVersionString]) {
+            
+        }
+        else {
+            [self performSelector:@selector(showWhatsNewView) withObject:nil afterDelay:1.0];
+            [[NSUserDefaults standardUserDefaults] setObject:versionString forKey:@"currentVersion"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+}
+
+
+#pragma mark 옵저버 해제
+
+- (void)deregisterForNotifications
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    
+    [center removeObserver:self name:@"CurrentDropboxNoteObjectIDKeyNotification" object:nil];
+    [center removeObserver:self name:@"WelcomeViewControllerDismissedNotification" object:nil];
+    [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
+    
+    [center removeObserver:self];
+}
+
+
 #pragma mark - Dealloc
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];     //Remove 옵저버
+    [self deregisterForNotifications];                              //Remove 옵저버
     _fetchedResultsController = nil;                                //fetchedResultsController
     self.searchResultNotes = nil;                                   //검색결과를 담을 뮤터블 배열
     NSLog(@"dealloc %@", self);
@@ -920,6 +963,14 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+
+#pragma mark - 디바이스 방향 지원
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return UIInterfaceOrientationIsPortrait(interfaceOrientation);
 }
 
 
@@ -944,24 +995,80 @@
 }
 
 
-#pragma mark - 헬프 레이블
+#pragma mark - checkToShowWhatsNewView
 
-- (void)performCheckNoNote
+- (void)checkToShowWhatsNewView
 {
-    [self performSelector:@selector(checkNoNote) withObject:self.infoButton afterDelay:0.0];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES)  // app already launched
+    {
+        NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
+        NSLog (@"versionString: %@\n", versionString);
+        
+        NSString *lastVersionString = [[NSUserDefaults standardUserDefaults] stringForKey:@"currentVersion"];
+        NSLog (@"lastVersionString: %@\n", lastVersionString);
+        
+        if ([versionString isEqualToString:lastVersionString]) {
+            
+        }
+        else {
+            [self performSelector:@selector(showWhatsNewView) withObject:nil afterDelay:0.3];
+            [[NSUserDefaults standardUserDefaults] setObject:versionString forKey:@"currentVersion"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+    else {
+        
+    }
 }
 
 
-- (void)checkNoNote
+#pragma mark Show What's New View
+
+- (void)showWhatsNewView
 {
-    if ([[_fetchedResultsController fetchedObjects] count] == 0)
-    {
-        self.helpLabel.alpha = 1.0;
-    }
-    else
-    {
-        self.helpLabel.alpha = 0.0;
-    }
+    if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
+    [MTZWhatsNew handleWhatsNew:^(NSDictionary *whatsNew)
+     {
+         MTZWhatsNewGridViewController *vc = [[MTZWhatsNewGridViewController alloc] initWithFeatures:whatsNew];
+         
+         vc.backgroundGradientTopColor = kWHITE_COLOR; //[UIColor colorWithHue:0.77 saturation:0.77 brightness:0.76 alpha:1];
+         vc.backgroundGradientBottomColor = kWHITE_COLOR; //[UIColor colorWithHue:0.78 saturation:0.6 brightness:0.95 alpha:1];
+         
+         [self.navigationController presentViewController:vc animated:YES completion:nil];
+         
+         vc.dismissButtonTitle = @"Dismiss";
+         
+     } sinceVersion:@"1.0"];
+}
+
+
+#pragma mark - 테이블 푸터 뷰
+
+- (void)addFooterViewToTableView
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), CGRectGetHeight(self.tableView.frame))];
+    [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    //[view setBackgroundColor:[UIColor colorWithWhite:0.92 alpha:1]];
+    [view setBackgroundColor:kCLEAR_COLOR];
+    UIImage *image = [UIImage imageNamed:@"swiftNoteWideLogo102by38"];
+    //UIImage *imageThumb = [image makeThumbnailOfSize:CGSizeMake(image.size.width, image.size.height)];
+    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:image];
+    //[logoImageView setCenter:view.center];
+    [logoImageView setFrame:({
+        CGRect frame = logoImageView.frame;
+        frame.origin.x = 70; //(self.tableView.frame.size.width - frame.size.width) / 2;
+        frame.origin.y = 20;
+        CGRectIntegral(frame);
+    })];
+    
+    [logoImageView setAlpha:1.0];
+    
+    [view addSubview:logoImageView];
+    
+    self.tableView.tableFooterView = view;
+    
+    //[self.tableView setBackgroundColor:view.backgroundColor];
+    self.tableView.contentInset = self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, - CGRectGetHeight(view.bounds), 0);
 }
 
 

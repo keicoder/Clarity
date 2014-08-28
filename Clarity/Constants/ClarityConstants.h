@@ -8,11 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+#ifndef kCFCoreFoundationVersionNumber_iOS_7_0
+#define kCFCoreFoundationVersionNumber_iOS_7_0 838.00
+#endif
+
+#define iOS7 (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber_iOS_7_0)
+#define iPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
 extern BOOL const kHasLaunchedOnce;
 extern NSString * const kIS_FIRST_TIME;
 
 
-#define debug 0
+#define debug 1
 #define kLOGBOOL(BOOL) NSLog(@"%s: %@",#BOOL, BOOL ? @"YES" : @"NO" )   //사용법: BOOL success = NO;,
 //kLOGBOOL(success);, Prints out 'success: NO' to the console
 
@@ -58,6 +65,7 @@ extern NSString * const kIS_FIRST_TIME;
 #define kWHITE_COLOR                                        [UIColor whiteColor]
 #define kBLACK_COLOR                                        [UIColor blackColor]
 #define kGOLD_COLOR                                         [UIColor colorWithRed:0.847 green:0.702 blue:0.329 alpha:1]
+#define kTOOLBAR_TEXT_COLOR                                 [UIColor colorWithRed:0.325 green:0.740 blue:0.857 alpha:1.000]
 
 
 #pragma mark - 테이블 뷰
@@ -117,7 +125,7 @@ extern NSString * const kIS_FIRST_TIME;
 #pragma mark - 텍스트 뷰
 
 #define kTEXTVIEW_LINE_IMAGEVIEW_ALPHA                      0.3
-#define kINSET_TOP                                        120.0     // 텍스트 뷰 인셋 top
+#define kINSET_TOP                                         70.0     //120.0     // 텍스트 뷰 인셋 top
 #define kINSET_LEFT                                         0.0     // 텍스트 뷰 인셋 left
 #define kINSET_BOTTOM                                      44.0     // 텍스트 뷰 인셋 bottom
 #define kINSET_RIGHT                                        0.0     // 텍스트 뷰 인셋 right

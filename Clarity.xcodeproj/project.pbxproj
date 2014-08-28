@@ -75,11 +75,27 @@
 		C122910C19973CE100460667 /* Clarity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C122910A19973CE100460667 /* Clarity.xcdatamodeld */; };
 		C122910E19973D0600460667 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C122910D19973D0600460667 /* Main.storyboard */; };
 		C122911219973FDF00460667 /* libMMMarkdown-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C122911019973FDF00460667 /* libMMMarkdown-iOS.a */; };
+		C125D34219AEDA1D00D9E892 /* WhatsNew.strings in Resources */ = {isa = PBXBuildFile; fileRef = C125D32C19AEDA1D00D9E892 /* WhatsNew.strings */; };
+		C125D34319AEDA1D00D9E892 /* MTZWhatsNew.m in Sources */ = {isa = PBXBuildFile; fileRef = C125D33019AEDA1D00D9E892 /* MTZWhatsNew.m */; };
+		C125D34419AEDA1D00D9E892 /* MTZCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C125D33319AEDA1D00D9E892 /* MTZCollectionView.m */; };
+		C125D34519AEDA1D00D9E892 /* MTZWhatsNewFeatureCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C125D33519AEDA1D00D9E892 /* MTZWhatsNewFeatureCollectionViewCell.m */; };
+		C125D34619AEDA1D00D9E892 /* MTZWhatsNewGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C125D33719AEDA1D00D9E892 /* MTZWhatsNewGridViewController.m */; };
+		C125D34719AEDA1D00D9E892 /* MTZWhatsNewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C125D33919AEDA1D00D9E892 /* MTZWhatsNewViewController.m */; };
+		C125D34819AEDA1D00D9E892 /* NSLayoutConstraint+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = C125D33C19AEDA1D00D9E892 /* NSLayoutConstraint+Common.m */; };
+		C125D34919AEDA1D00D9E892 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = C125D33E19AEDA1D00D9E892 /* LICENSE.txt */; };
+		C125D34A19AEDA1D00D9E892 /* SAMGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = C125D34019AEDA1D00D9E892 /* SAMGradientView.m */; };
+		C125D34B19AEDA1D00D9E892 /* WhatsNewLICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = C125D34119AEDA1D00D9E892 /* WhatsNewLICENSE.md */; };
+		C125D34D19AEDA4800D9E892 /* What's New.plist in Resources */ = {isa = PBXBuildFile; fileRef = C125D34C19AEDA4800D9E892 /* What's New.plist */; };
+		C125D35519AEFD5C00D9E892 /* JGActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = C125D35419AEFD5C00D9E892 /* JGActionSheet.m */; };
 		C1ABF0C519985B7A00E622CA /* MainSidePanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */; };
 		C1ABF0CD19985CF400E622CA /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C819985CF400E622CA /* JASidePanelController.m */; };
 		C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0CA19985CF400E622CA /* LogViewController.m */; };
 		C1ABF0CF19985CF400E622CA /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0CC19985CF400E622CA /* UIViewController+JASidePanel.m */; };
 		C1ABF0D719985E9F00E622CA /* PaperButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0D619985E9F00E622CA /* PaperButton.m */; };
+		C1E74E7219AEFE1500AA3399 /* BNHtmlPdfKit.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E74E7119AEFE1500AA3399 /* BNHtmlPdfKit.m */; };
+		C1E74E7619AEFE2A00AA3399 /* NDHTMLtoPDF.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E74E7519AEFE2A00AA3399 /* NDHTMLtoPDF.m */; };
+		C1E74E7819AEFEBE00AA3399 /* TextExpander.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E74E7719AEFEBE00AA3399 /* TextExpander.framework */; };
+		C1E74E7A19AEFED500AA3399 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E74E7919AEFED500AA3399 /* AudioToolbox.framework */; };
 		C331FC139151431BB224E126 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6E8D91E9C764F1DBB2C6C0E /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -213,6 +229,27 @@
 		C122910D19973D0600460667 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		C122911019973FDF00460667 /* libMMMarkdown-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libMMMarkdown-iOS.a"; sourceTree = "<group>"; };
 		C122911119973FDF00460667 /* MMMarkdown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMMarkdown.h; sourceTree = "<group>"; };
+		C125D32D19AEDA1D00D9E892 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/WhatsNew.strings; sourceTree = "<group>"; };
+		C125D32E19AEDA1D00D9E892 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/WhatsNew.strings; sourceTree = "<group>"; };
+		C125D32F19AEDA1D00D9E892 /* MTZWhatsNew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTZWhatsNew.h; sourceTree = "<group>"; };
+		C125D33019AEDA1D00D9E892 /* MTZWhatsNew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTZWhatsNew.m; sourceTree = "<group>"; };
+		C125D33219AEDA1D00D9E892 /* MTZCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTZCollectionView.h; sourceTree = "<group>"; };
+		C125D33319AEDA1D00D9E892 /* MTZCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTZCollectionView.m; sourceTree = "<group>"; };
+		C125D33419AEDA1D00D9E892 /* MTZWhatsNewFeatureCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTZWhatsNewFeatureCollectionViewCell.h; sourceTree = "<group>"; };
+		C125D33519AEDA1D00D9E892 /* MTZWhatsNewFeatureCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTZWhatsNewFeatureCollectionViewCell.m; sourceTree = "<group>"; };
+		C125D33619AEDA1D00D9E892 /* MTZWhatsNewGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTZWhatsNewGridViewController.h; sourceTree = "<group>"; };
+		C125D33719AEDA1D00D9E892 /* MTZWhatsNewGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTZWhatsNewGridViewController.m; sourceTree = "<group>"; };
+		C125D33819AEDA1D00D9E892 /* MTZWhatsNewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTZWhatsNewViewController.h; sourceTree = "<group>"; };
+		C125D33919AEDA1D00D9E892 /* MTZWhatsNewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTZWhatsNewViewController.m; sourceTree = "<group>"; };
+		C125D33B19AEDA1D00D9E892 /* NSLayoutConstraint+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSLayoutConstraint+Common.h"; sourceTree = "<group>"; };
+		C125D33C19AEDA1D00D9E892 /* NSLayoutConstraint+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+Common.m"; sourceTree = "<group>"; };
+		C125D33E19AEDA1D00D9E892 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		C125D33F19AEDA1D00D9E892 /* SAMGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SAMGradientView.h; sourceTree = "<group>"; };
+		C125D34019AEDA1D00D9E892 /* SAMGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMGradientView.m; sourceTree = "<group>"; };
+		C125D34119AEDA1D00D9E892 /* WhatsNewLICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WhatsNewLICENSE.md; sourceTree = "<group>"; };
+		C125D34C19AEDA4800D9E892 /* What's New.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "What's New.plist"; sourceTree = "<group>"; };
+		C125D35319AEFD5C00D9E892 /* JGActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGActionSheet.h; sourceTree = "<group>"; };
+		C125D35419AEFD5C00D9E892 /* JGActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGActionSheet.m; sourceTree = "<group>"; };
 		C1ABF0C319985B7A00E622CA /* MainSidePanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainSidePanelViewController.h; sourceTree = "<group>"; };
 		C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainSidePanelViewController.m; sourceTree = "<group>"; };
 		C1ABF0C719985CF400E622CA /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
@@ -223,6 +260,12 @@
 		C1ABF0CC19985CF400E622CA /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
 		C1ABF0D519985E9F00E622CA /* PaperButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaperButton.h; sourceTree = "<group>"; };
 		C1ABF0D619985E9F00E622CA /* PaperButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaperButton.m; sourceTree = "<group>"; };
+		C1E74E7019AEFE1500AA3399 /* BNHtmlPdfKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNHtmlPdfKit.h; sourceTree = "<group>"; };
+		C1E74E7119AEFE1500AA3399 /* BNHtmlPdfKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNHtmlPdfKit.m; sourceTree = "<group>"; };
+		C1E74E7419AEFE2A00AA3399 /* NDHTMLtoPDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDHTMLtoPDF.h; sourceTree = "<group>"; };
+		C1E74E7519AEFE2A00AA3399 /* NDHTMLtoPDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDHTMLtoPDF.m; sourceTree = "<group>"; };
+		C1E74E7719AEFEBE00AA3399 /* TextExpander.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TextExpander.framework; sourceTree = "<group>"; };
+		C1E74E7919AEFED500AA3399 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D6E8D91E9C764F1DBB2C6C0E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -231,6 +274,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1E74E7A19AEFED500AA3399 /* AudioToolbox.framework in Frameworks */,
+				C1E74E7819AEFEBE00AA3399 /* TextExpander.framework in Frameworks */,
 				C122911219973FDF00460667 /* libMMMarkdown-iOS.a in Frameworks */,
 				C122903119973A2B00460667 /* CoreGraphics.framework in Frameworks */,
 				C122903519973A2B00460667 /* CoreData.framework in Frameworks */,
@@ -277,6 +322,8 @@
 		C122902D19973A2B00460667 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1E74E7919AEFED500AA3399 /* AudioToolbox.framework */,
+				C1E74E7719AEFEBE00AA3399 /* TextExpander.framework */,
 				C122910F19973FDF00460667 /* MMMarkdown */,
 				C122902E19973A2B00460667 /* Foundation.framework */,
 				C122903019973A2B00460667 /* CoreGraphics.framework */,
@@ -309,6 +356,7 @@
 		C122903719973A2B00460667 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C125D34C19AEDA4800D9E892 /* What's New.plist */,
 				C122903819973A2B00460667 /* Clarity-Info.plist */,
 				C122903919973A2B00460667 /* InfoPlist.strings */,
 				C122903C19973A2B00460667 /* main.m */,
@@ -338,6 +386,10 @@
 		C122906319973A6400460667 /* 3rdParties */ = {
 			isa = PBXGroup;
 			children = (
+				C1E74E7319AEFE2A00AA3399 /* NDHTMLtoPDF */,
+				C1E74E6F19AEFE1500AA3399 /* BNHtmlPdfKit */,
+				C125D35219AEFD5C00D9E892 /* JGActionSheet */,
+				C125D32B19AEDA1D00D9E892 /* WhatsNew */,
 				C1ABF0D419985E9F00E622CA /* POPPaperButton */,
 				C1ABF0C619985CF400E622CA /* JASidePanels */,
 				C122906419973A6400460667 /* DoActionSheet */,
@@ -576,6 +628,63 @@
 			path = MMMarkdown;
 			sourceTree = "<group>";
 		};
+		C125D32B19AEDA1D00D9E892 /* WhatsNew */ = {
+			isa = PBXGroup;
+			children = (
+				C125D32C19AEDA1D00D9E892 /* WhatsNew.strings */,
+				C125D32F19AEDA1D00D9E892 /* MTZWhatsNew.h */,
+				C125D33019AEDA1D00D9E892 /* MTZWhatsNew.m */,
+				C125D33119AEDA1D00D9E892 /* MTZWhatsNewViewController */,
+				C125D34119AEDA1D00D9E892 /* WhatsNewLICENSE.md */,
+			);
+			path = WhatsNew;
+			sourceTree = "<group>";
+		};
+		C125D33119AEDA1D00D9E892 /* MTZWhatsNewViewController */ = {
+			isa = PBXGroup;
+			children = (
+				C125D33219AEDA1D00D9E892 /* MTZCollectionView.h */,
+				C125D33319AEDA1D00D9E892 /* MTZCollectionView.m */,
+				C125D33419AEDA1D00D9E892 /* MTZWhatsNewFeatureCollectionViewCell.h */,
+				C125D33519AEDA1D00D9E892 /* MTZWhatsNewFeatureCollectionViewCell.m */,
+				C125D33619AEDA1D00D9E892 /* MTZWhatsNewGridViewController.h */,
+				C125D33719AEDA1D00D9E892 /* MTZWhatsNewGridViewController.m */,
+				C125D33819AEDA1D00D9E892 /* MTZWhatsNewViewController.h */,
+				C125D33919AEDA1D00D9E892 /* MTZWhatsNewViewController.m */,
+				C125D33A19AEDA1D00D9E892 /* NSLayoutConstraint+Common */,
+				C125D33D19AEDA1D00D9E892 /* SAMGradientView */,
+			);
+			path = MTZWhatsNewViewController;
+			sourceTree = "<group>";
+		};
+		C125D33A19AEDA1D00D9E892 /* NSLayoutConstraint+Common */ = {
+			isa = PBXGroup;
+			children = (
+				C125D33B19AEDA1D00D9E892 /* NSLayoutConstraint+Common.h */,
+				C125D33C19AEDA1D00D9E892 /* NSLayoutConstraint+Common.m */,
+			);
+			path = "NSLayoutConstraint+Common";
+			sourceTree = "<group>";
+		};
+		C125D33D19AEDA1D00D9E892 /* SAMGradientView */ = {
+			isa = PBXGroup;
+			children = (
+				C125D33E19AEDA1D00D9E892 /* LICENSE.txt */,
+				C125D33F19AEDA1D00D9E892 /* SAMGradientView.h */,
+				C125D34019AEDA1D00D9E892 /* SAMGradientView.m */,
+			);
+			path = SAMGradientView;
+			sourceTree = "<group>";
+		};
+		C125D35219AEFD5C00D9E892 /* JGActionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				C125D35319AEFD5C00D9E892 /* JGActionSheet.h */,
+				C125D35419AEFD5C00D9E892 /* JGActionSheet.m */,
+			);
+			path = JGActionSheet;
+			sourceTree = "<group>";
+		};
 		C1ABF0C619985CF400E622CA /* JASidePanels */ = {
 			isa = PBXGroup;
 			children = (
@@ -596,6 +705,24 @@
 				C1ABF0D619985E9F00E622CA /* PaperButton.m */,
 			);
 			path = POPPaperButton;
+			sourceTree = "<group>";
+		};
+		C1E74E6F19AEFE1500AA3399 /* BNHtmlPdfKit */ = {
+			isa = PBXGroup;
+			children = (
+				C1E74E7019AEFE1500AA3399 /* BNHtmlPdfKit.h */,
+				C1E74E7119AEFE1500AA3399 /* BNHtmlPdfKit.m */,
+			);
+			path = BNHtmlPdfKit;
+			sourceTree = "<group>";
+		};
+		C1E74E7319AEFE2A00AA3399 /* NDHTMLtoPDF */ = {
+			isa = PBXGroup;
+			children = (
+				C1E74E7419AEFE2A00AA3399 /* NDHTMLtoPDF.h */,
+				C1E74E7519AEFE2A00AA3399 /* NDHTMLtoPDF.m */,
+			);
+			path = NDHTMLtoPDF;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -647,6 +774,9 @@
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = lovejunsoft;
 				TargetAttributes = {
+					C122902A19973A2B00460667 = {
+						DevelopmentTeam = 9DHQ6GLLC9;
+					};
 					C122904A19973A2B00460667 = {
 						TestTargetID = C122902A19973A2B00460667;
 					};
@@ -688,16 +818,20 @@
 				C122908D19973A6400460667 /* README_UIImage-ResizeMagick.md in Resources */,
 				C12290FD19973BAA00460667 /* NoteTableViewCell.xib in Resources */,
 				C12290E519973B6000460667 /* ClarityMarkdownSyntaxGuide.html in Resources */,
+				C125D34219AEDA1D00D9E892 /* WhatsNew.strings in Resources */,
 				C12290FB19973BAA00460667 /* LeftTableViewCell.xib in Resources */,
 				C122909019973A6400460667 /* SVWebViewController.strings in Resources */,
 				C12290E419973B6000460667 /* ClarityiPad_OpenSourceLicences.html in Resources */,
 				C122903B19973A2B00460667 /* InfoPlist.strings in Resources */,
+				C125D34D19AEDA4800D9E892 /* What's New.plist in Resources */,
 				C12290DA19973A7E00460667 /* NoteTitlePopinViewController.xib in Resources */,
 				C12290E319973B6000460667 /* AboutClarity.html in Resources */,
+				C125D34919AEDA1D00D9E892 /* LICENSE.txt in Resources */,
 				C122910E19973D0600460667 /* Main.storyboard in Resources */,
 				C122908F19973A6400460667 /* UIImage-ResizeMagick.podspec in Resources */,
 				C122908B19973A6400460667 /* .gitignore in Resources */,
 				C122908C19973A6400460667 /* LICENSE_UIImage-ResizeMagick in Resources */,
+				C125D34B19AEDA1D00D9E892 /* WhatsNewLICENSE.md in Resources */,
 				C122904619973A2B00460667 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -762,20 +896,26 @@
 				C12290A419973A7200460667 /* UIButtonPressAndHold.m in Sources */,
 				C12290F919973BAA00460667 /* ICTextView.m in Sources */,
 				C12290FC19973BAA00460667 /* NoteTableViewCell.m in Sources */,
+				C1E74E7619AEFE2A00AA3399 /* NDHTMLtoPDF.m in Sources */,
 				C122908A19973A6400460667 /* DoActionSheet.m in Sources */,
 				C12290F819973BAA00460667 /* BackgroundLayer.m in Sources */,
 				C122908E19973A6400460667 /* UIImage+ResizeMagick.m in Sources */,
+				C125D34619AEDA1D00D9E892 /* MTZWhatsNewGridViewController.m in Sources */,
 				C122909719973A6400460667 /* YRDropdownView.m in Sources */,
+				C125D34419AEDA1D00D9E892 /* MTZCollectionView.m in Sources */,
 				C1ABF0CD19985CF400E622CA /* JASidePanelController.m in Sources */,
 				C122910719973BE100460667 /* LocalNote.m in Sources */,
 				C12290DB19973A7E00460667 /* OpenSourceLicencesViewController.m in Sources */,
 				C122904119973A2B00460667 /* AppDelegate.m in Sources */,
 				C12290EC19973BA100460667 /* WelcomePage.m in Sources */,
 				C12290D219973A7E00460667 /* DropboxStarViewController.m in Sources */,
+				C125D35519AEFD5C00D9E892 /* JGActionSheet.m in Sources */,
 				C12290A519973A7200460667 /* UIColor+CustomColors.m in Sources */,
 				C12290D319973A7E00460667 /* LeftViewController.m in Sources */,
 				C12290DC19973A7E00460667 /* SupportTableViewController.m in Sources */,
+				C125D34319AEDA1D00D9E892 /* MTZWhatsNew.m in Sources */,
 				C12290DE19973A7E00460667 /* WelcomeViewController.m in Sources */,
+				C125D34A19AEDA1D00D9E892 /* SAMGradientView.m in Sources */,
 				C122909119973A6400460667 /* SVModalWebViewController.m in Sources */,
 				C12290D519973A7E00460667 /* LocalNoteListViewController.m in Sources */,
 				C12290CD19973A7E00460667 /* ClarityConstants.m in Sources */,
@@ -784,9 +924,12 @@
 				C12290CF19973A7E00460667 /* DropboxAddEditViewController.m in Sources */,
 				C122909619973A6400460667 /* SVWebViewControllerActivity.m in Sources */,
 				C12290D719973A7E00460667 /* MarkdownGuideViewController.m in Sources */,
+				C125D34519AEDA1D00D9E892 /* MTZWhatsNewFeatureCollectionViewCell.m in Sources */,
+				C125D34819AEDA1D00D9E892 /* NSLayoutConstraint+Common.m in Sources */,
 				C122903D19973A2B00460667 /* main.m in Sources */,
 				C122910819973BE100460667 /* NoteDataManager.m in Sources */,
 				C1ABF0D719985E9F00E622CA /* PaperButton.m in Sources */,
+				C1E74E7219AEFE1500AA3399 /* BNHtmlPdfKit.m in Sources */,
 				C122909319973A6400460667 /* SVWebViewController.m in Sources */,
 				C122910C19973CE100460667 /* Clarity.xcdatamodeld in Sources */,
 				C12290A319973A7200460667 /* NSUserDefaults+Extension.m in Sources */,
@@ -794,6 +937,7 @@
 				C122910619973BE100460667 /* DropboxNote.m in Sources */,
 				C12290A619973A7200460667 /* UIImage+ChangeColor.m in Sources */,
 				C12290DD19973A7E00460667 /* WelcomePageViewController.m in Sources */,
+				C125D34719AEDA1D00D9E892 /* MTZWhatsNewViewController.m in Sources */,
 				C122909519973A6400460667 /* SVWebViewControllerActivitySafari.m in Sources */,
 				C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */,
 			);
@@ -848,6 +992,15 @@
 				C122908619973A6400460667 /* zh-Hant */,
 			);
 			name = SVWebViewController.strings;
+			sourceTree = "<group>";
+		};
+		C125D32C19AEDA1D00D9E892 /* WhatsNew.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C125D32D19AEDA1D00D9E892 /* en */,
+				C125D32E19AEDA1D00D9E892 /* fr */,
+			);
+			name = WhatsNew.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -944,7 +1097,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jaehyun Park (9DHQ6GLLC9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Clarity/Clarity-Prefix.pch";
 				INFOPLIST_FILE = "Clarity/Clarity-Info.plist";
@@ -964,7 +1121,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jaehyun Park (9DHQ6GLLC9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Clarity/Clarity-Prefix.pch";
 				INFOPLIST_FILE = "Clarity/Clarity-Info.plist";
@@ -1064,7 +1225,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jaehyun Park (9DHQ6GLLC9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Clarity/Clarity-Prefix.pch";
 				INFOPLIST_FILE = "Clarity/Clarity-Info.plist";

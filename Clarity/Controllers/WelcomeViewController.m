@@ -71,21 +71,12 @@
 
 - (IBAction)buttonDismissPressed:(id)sender
 {
-//    [self showStatusBar];
-//    [self showNavigationBar];
+    [self showStatusBar];
+    [self showNavigationBar];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"WelcomeViewControllerDismissedNotification" object:nil userInfo:nil];
+    
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-
-#pragma mark - 노트 가이드를 보여준 적이 없다면 보여줄 것
-
-- (void)checkWhetherShowWelcomeView
-{
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == YES)  // app already launched
-    { }
-    else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kDIDSHOW_NOTEVIEW_HELP];
-    }
 }
 
 

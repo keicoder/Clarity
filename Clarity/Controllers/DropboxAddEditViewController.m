@@ -21,14 +21,16 @@
 #import "NoteTitlePopinViewController.h"                                //팝인 뷰 > 노트 타이틀 뷰
 #import "Quayboard.h"                                                   //인풋 액세서리 뷰 > Cool
 #import "UIButtonPressAndHold.h"
+#import "JGActionSheet.h"
+#import "NSUserDefaults+Extension.h"
+#import "NDHTMLtoPDF.h"
+#import "BNHtmlPdfKit.h"
+#import "UIImage+ResizeMagick.h"                                        //이미지 리사이즈
 
 
-@interface DropboxAddEditViewController () <JSMQuayboardBarDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, UIPopoverControllerDelegate>
+@interface DropboxAddEditViewController () <JSMQuayboardBarDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, JGActionSheetDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, SMTEFillDelegate>
 
-//@property (strong, nonatomic) UIPopoverController *dropboxNoteListPopoverController;
-//@property (nonatomic, strong) UIPopoverController *menuPopoverController;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext; //컨텍스트
-
 @property (nonatomic, strong) ICTextView *noteTextView;                     //노트 텍스트 뷰
 @property (nonatomic, strong) UILabel *noteTitleLabel;                      //노트 타이틀 레이블
 @property (nonatomic, strong) UIView *noteTitleLabelBackgroundView;         //노트 타이틀 레이블 백그라운드 뷰
@@ -38,6 +40,7 @@
 @property (nonatomic, strong) UIButton *buttonStar;                         //바 버튼 아이템
 @property (nonatomic, strong) UIButton *buttonForFullscreen;                //툴바 뷰 Up 버튼
 @property (nonatomic, strong) UIImage *starImage;                           //스타 이미지
+@property (nonatomic, strong) NDHTMLtoPDF *pdfCreator;                      //PDF
 
 @end
 
@@ -46,6 +49,12 @@
 {
     BOOL _didSelectStar;                                                    //별표 상태 저장
     NSString *_originalNote;                                                //저장 시 비교하기위한 원본 노트
+    
+    JGActionSheet *_currentAnchoredActionSheet;
+    UIView *_anchorView;
+    BOOL _anchorLeft;
+    
+    BNHtmlPdfKit *_htmlPdfKit;
 }
 
 
@@ -64,6 +73,7 @@
 {
     [super viewDidLoad];
     self.title = @"";
+    self.navigationItem.backBarButtonItem.title = @"";
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self addNoteTextView];                             //노트 텍스트 뷰
     [self addNoteTitleLabel];                           //노트 타이틀 레이블
@@ -74,11 +84,12 @@
     [self.noteTextView assignTextViewAttribute];        //노트 텍스트 뷰 속성
     [self updateStarImage];                             //스타 이미지 업데이트
     [self addTapGestureRecognizer];                     //탭 제스처
-    [self addObserverForNoteTitleChanged];              //노트 타이틀 변경 Notification 옵저버 등록
+    [self addObserverForNoteTitleChanged];              //노트 타이틀 변경 Notification 옵저버
     [self addObserverForHelpMessageMarkdownWebViewPopped]; //Help Message 마크다운 웹뷰에서 나올 때 Notification
+    [self addObserverForApplicationWillResignActive];   //ApplicationWillResignActive Notification 옵저버
     [self addButtonForFullscreen];                      //Full Screen 버튼
     [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
-    [self checkToShowHelpMessage];                      //헬프 message 보여줄건지 판단
+    [self addTextExpanderObjectAndSetDelegate];
 //    [self showNoteDataToLogConsole];                    //노트 데이터 로그 콘솔에 보여주기
 }
 
@@ -93,15 +104,17 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    PKSyncManager *manager = [[NoteDataManager sharedNoteDataManager] syncManager];
-    [manager syncDatastore];    //manual sync
-    NSLog(@"[manager syncDatastore] > manual sync invoked");
+    [self checkToShowHelpMessage];                      //헬프 message 보여줄건지 판단
+//    PKSyncManager *manager = [[NoteDataManager sharedNoteDataManager] syncManager];
+//    [manager syncDatastore];    //manual sync
+//    NSLog(@"[manager syncDatastore] > manual sync invoked");
 }
 
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self autoSaveAndRegisterStarListViewWillShowNotification];
 }
 
 
@@ -116,6 +129,63 @@
 }
 
 
+#pragma mark - 텍스트 익스펜더
+
+- (void)addTextExpanderObjectAndSetDelegate
+{
+    self.textExpander = [[SMTEDelegateController alloc] init];
+    [self.noteTextView setDelegate:self.textExpander];
+    [self.textExpander setNextDelegate:self];
+    
+    BOOL allowFormatting = ([NSParagraphStyle class] !=nil);
+    if (allowFormatting) {
+        [self.noteTextView setAllowsEditingTextAttributes:YES];
+    }
+    
+    // properties for fill-in snippets
+	self.textExpander.fillCompletionScheme = @"ClarityHD.ClarityHD";	// (we have to declare and handle this)
+	//self.textExpander.fillForAppName = @"ClarityHD";
+	self.textExpander.fillDelegate = self;
+}
+
+
+#pragma mark 텍스트 익스펜더 Delegate
+// These three methods implement the SMTEFillDelegate protocol to support fill-ins
+
+- (NSString*)identifierForTextArea: (id)uiTextObject
+{
+	NSString *result = nil;
+	if (self.noteTextView == uiTextObject)
+		result =  @"textExpander delegate > identifierForTextArea > self.noteTextView";
+	
+	return result;
+}
+
+
+- (BOOL)prepareForFillSwitch: (NSString*)textIdentifier
+{
+    // At this point the app should save state since TextExpander touch is about
+	// to activate.
+	// It especially needs to save the contents of the textview/textfield!
+	return YES;
+}
+
+
+- (id)makeIdentifiedTextObjectFirstResponder: (NSString*)textIdentifier fillWasCanceled: (BOOL)userCanceledFill cursorPosition: (NSInteger*)ioInsertionPointLocation;
+{
+	if ([@"myTextView" isEqualToString: textIdentifier])
+    {
+		[self.noteTextView becomeFirstResponder];
+		UITextPosition *theLoc = [self.noteTextView positionFromPosition: self.noteTextView.beginningOfDocument
+                                                                  offset: *ioInsertionPointLocation];
+		if (theLoc != nil)
+			self.noteTextView.selectedTextRange = [self.noteTextView textRangeFromPosition: theLoc toPosition: theLoc];
+		return self.noteTextView;
+	}
+	return nil;
+}
+
+
 #pragma mark - 노트 텍스트 뷰
 #pragma mark 노트 체크 > 키보드 Up
 
@@ -124,6 +194,7 @@
     if (self.isNewNote)
     {
         [self.noteTextView becomeFirstResponder];
+        [self.currentNote saveDropboxNote:self.currentNote inManagedObjectContext:self.managedObjectContext];
     }
     else {
         [self.noteTextView resignFirstResponder];
@@ -141,18 +212,6 @@
     self.noteTextView.text = self.currentNote.noteBody;         //본문
     _didSelectStar = [self.currentNote.hasNoteStar boolValue];  //스타 불리언 값
     _originalNote = self.currentNote.noteAll;                   //저장 시 비교하기위한 원본 노트
-    
-    //스타 이미지로 대체
-//    if (_didSelectStar == YES)
-//    {
-//        self.barButtonItemStarred.title = @"Starred";
-//        [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
-//    }
-//    else
-//    {
-//        self.barButtonItemStarred.title = @"UnStarred";
-//        [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kWHITE_COLOR} forState:UIControlStateNormal];
-//    }
 }
 
 
@@ -173,7 +232,7 @@
 {
     CGFloat noteTitleLabelHeight = 44;
     
-    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -44, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight)];
+    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -48, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight)]; //-44
     self.noteTitleLabelBackgroundView.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     [self.noteTextView addSubview:self.noteTitleLabelBackgroundView];
     [self.noteTitleLabelBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
@@ -194,15 +253,6 @@
 
 - (void)addInputAccessoryView
 {
-    BOOL checkVer = ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedSame || [[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedDescending);
-    kLOGBOOL(checkVer);
-    NSLog(@"[[UIDevice currentDevice] systemVersion] : %@", [[UIDevice currentDevice] systemVersion]);
-    if (checkVer == YES)
-    {
-        
-    }
-    else
-    {
         //Create the Quayboard bar
         self.textViewAccessory = [[JSMQuayboardBar alloc] initWithFrame:CGRectZero];
         self.textViewAccessory.delegate = self;
@@ -273,7 +323,6 @@
 //	imageKey.title = @"🂠";
 //	[tabKey addTarget:self action:@selector(imageButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 //	[self.textViewAccessory addKey:imageKey];
-    }
 }
 
 
@@ -645,34 +694,10 @@
 }
 
 
-#pragma mark - FRLayeredNavigationControllerDelegate
-//
-//- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-//                 willMoveController:(UIViewController*)controller
-//{
-//    
-//}
-//
-//
-//- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-//               movingViewController:(UIViewController*)controller
-//{
-//    [self.noteTextView resignFirstResponder];
-//}
-//
-//
-//- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-//                  didMoveController:(UIViewController*)controller
-//{
-//    
-//}
-
-
 #pragma mark - Keyboard handle
 
 - (void)registerKeyboardNotifications
 {
-    //키보드 팝업 옵저버 (키보드 팝업 시 텍스트 뷰 인셋 조절)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification object:self.view.window];
     
@@ -696,6 +721,7 @@
 - (void)keyboardDidShow:(NSNotification *)notification
 {
     [self.noteTextView keyboardDidShow:notification];
+//    NSLog(@"keyboardDidShow > \n%@", [notification userInfo]);
 }
 
 
@@ -736,6 +762,7 @@
     [self showStatusBar];                                    //상태바 Down
     [self showNavigationBar];                                //내비게이션바 Down
     [self hideButtonForFullscreenWithAnimation];             //Full Screen 버튼
+    [self autoSave];
     return YES;
 }
 
@@ -745,21 +772,10 @@
 - (void)addBarButtonItems
 {
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixed.width = 20.0f;
-    UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
-//    UIImage *cancel = [UIImage imageNameForChangingColor:@"previous-250" color:kNAVIGATIONBAR_ICONIMAGE_COLOR];
-//    UIImage *cancelSelected = [UIImage imageNamed:@"previous-250"];
-//    [buttoncancel setBackgroundImage:cancelSelected forState:UIControlStateSelected];
-    
-    
-    UIImage *cancel = [UIImage imageNamed:@"previous-250"];
-    //    UIImage *cancel = [UIImage imageNamed:@""];
-    UIButton *buttoncancel = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttoncancel addTarget:self action:@selector(barButtonItemCancelPressed:)forControlEvents:UIControlEventTouchUpInside];
-    [buttoncancel setBackgroundImage:cancel forState:UIControlStateNormal];
-    buttoncancel.frame = CGRectMake(0 ,0, 24, 24);
-    UIBarButtonItem *barButtonItemCancel = [[UIBarButtonItem alloc] initWithCustomView:buttoncancel];
+    barButtonItemFixed.width = 30.0f;
+    UIBarButtonItem *barButtonItemFixedNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    barButtonItemFixedNarrow.width = 12.0f;
+//    UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
     
     UIImage *fullScreen = [UIImage imageNamed:@"expand-256"];
@@ -770,11 +786,12 @@
     UIBarButtonItem *barButtonItemFullScreen = [[UIBarButtonItem alloc] initWithCustomView:buttonFullScreen];
     
     
-    UIImage *star = [UIImage imageNamed:@"star-256-white"];
+    UIImage *star = [UIImage imageNameForChangingColor:@"starWhite" color:kWHITE_COLOR];
+    [star resizedImageByHeight:20];
     self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
     [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
-    self.buttonStar.frame = CGRectMake(0 ,0, 26, 26);
+    self.buttonStar.frame = CGRectMake(0 ,0, 20, 20);
     self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
     
     
@@ -786,76 +803,90 @@
     UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
     
     
-    UIImage *markdown = [UIImage imageNamed:@"md-256"];
-    UIButton *buttonMarkdown = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttonMarkdown addTarget:self action:@selector(barButtonItemMarkdownPressed:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonMarkdown setBackgroundImage:markdown forState:UIControlStateNormal];
-    buttonMarkdown.frame = CGRectMake(0 ,0, 22, 22);
-    UIBarButtonItem *barButtonItemMarkdown = [[UIBarButtonItem alloc] initWithCustomView:buttonMarkdown];
+    UIButton *buttonMarkdown = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [buttonMarkdown setTitle:@"M" forState:UIControlStateNormal];
+    buttonMarkdown.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:24.0];
+    [buttonMarkdown setTitleColor:kTOOLBAR_TEXT_COLOR forState:UIControlStateNormal];
+    [buttonMarkdown setContentEdgeInsets:UIEdgeInsetsMake(3, 0, 0, 0)];
+    [buttonMarkdown sizeToFit];
+    [buttonMarkdown addTarget:self action:@selector(barButtonItemMarkdownPressed:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barButtonItemMarkdown = [[UIBarButtonItem alloc] initWithCustomView: buttonMarkdown];
+    [barButtonItemMarkdown setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
     
     
-    UIImage *share = [UIImage imageNamed:@"action83"];
+    UIImage *share = [UIImage imageNameForChangingColor:@"upload" color:kWHITE_COLOR];
+    [share resizedImageByHeight:20];
     UIButton *buttonShare = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttonShare addTarget:self action:@selector(barButtonItemSharePressed:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonShare addTarget:self action:@selector(showShareSheetFromBarButtonItem:withEvent:)forControlEvents:UIControlEventTouchUpInside];
     [buttonShare setBackgroundImage:share forState:UIControlStateNormal];
-    buttonShare.frame = CGRectMake(0 ,0, 28, 24);
+    buttonShare.frame = CGRectMake(0 ,0, 15, 21);
     UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithCustomView:buttonShare];
     
     
-    UIImage *save = [UIImage imageNamed:@"save-64"];
-    UIButton *buttonSave = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttonSave addTarget:self action:@selector(barButtonItemSavePressed:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonSave setBackgroundImage:save forState:UIControlStateNormal];
-    buttonSave.frame = CGRectMake(0 ,0, 22, 22);
-    UIBarButtonItem *barButtonItemSave = [[UIBarButtonItem alloc] initWithCustomView:buttonSave];
+//    UIImage *delete = [UIImage imageNameForChangingColor:@"trash" color:kWHITE_COLOR];
+//    [delete resizedImageByHeight:20];
+//    UIButton *buttonDelete = [UIButton buttonWithType:UIButtonTypeCustom];
+//    buttonDelete.frame = CGRectMake(0 ,0, 19, 19);
+//    [buttonDelete addTarget:self action:@selector(showDeleteSheetFromBarButtonItem:withEvent:)forControlEvents:UIControlEventTouchUpInside];
+//    [buttonDelete setBackgroundImage:delete forState:UIControlStateNormal];
+//    UIBarButtonItem *barButtonItemDelete = [[UIBarButtonItem alloc] initWithCustomView:buttonDelete];
     
-    self.navigationItem.hidesBackButton=YES;
+//    UIImage *blankNarrow = [UIImage imageNamed:@""];
+//    UIButton *buttonBlankNarrow = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [buttonBlankNarrow addTarget:self action:@selector(noAction:)forControlEvents:UIControlEventTouchUpInside];
+//    [buttonBlankNarrow setBackgroundImage:blankNarrow forState:UIControlStateNormal];
+//    buttonBlankNarrow.frame = CGRectMake(0 ,0, 2, 2);
+//    UIBarButtonItem *barButtonItemBlankNarrow = [[UIBarButtonItem alloc] initWithCustomView:buttonBlankNarrow];
     
-    NSArray *navigationBarItems = @[barButtonItemSave, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemFixed, barButtonItemAdd, barButtonItemFixed, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible, barButtonItemCancel];
+//    UIImage *blankNormal = [UIImage imageNamed:@""];
+//    UIButton *buttonBlankNormal = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [buttonBlankNormal addTarget:self action:@selector(noAction:)forControlEvents:UIControlEventTouchUpInside];
+//    [buttonBlankNormal setBackgroundImage:blankNormal forState:UIControlStateNormal];
+//    //buttonBlankNarrow.frame = CGRectMake(0 ,0, 44, 44);
+//    UIBarButtonItem *barButtonItemBlankNormal = [[UIBarButtonItem alloc] initWithCustomView:buttonBlankNormal];
+    
+    
+    NSArray *navigationBarItems = @[barButtonItemAdd, barButtonItemFixed, barButtonItemFullScreen, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFixed, barButtonItemShare, barButtonItemFixed, barButtonItemMarkdown];
     
     self.navigationItem.rightBarButtonItems = navigationBarItems;
     
-//    NSArray *toolbarItems = @[barButtonItemCancel, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible, barButtonItemFixed, barButtonItemAdd, barButtonItemFixed, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemSave];
-//
-//    self.toolbar.items = toolbarItems;
-//    self.toolbar.translucent = NO;
-//    self.toolbar.barTintColor = kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR;
-//    [self.view addSubview:self.toolbar];
+//    UIImageView *deleteImageView = [[UIImageView alloc] initWithImage:delete];
+//    [deleteImageView setFrame:CGRectMake(0, 0, 44, 44)];
+//    deleteImageView.userInteractionEnabled = YES;
+//    deleteImageView.contentMode = UIViewContentModeCenter;
+//    if (deleteImageView.bounds.size.width > (delete.size.width && deleteImageView.bounds.size.height) > delete.size.height) {
+//        deleteImageView.contentMode = UIViewContentModeScaleAspectFit;
+//    }
+
+//    UIImage *markdown = [UIImage imageNameForChangingColor:@"markdown" color:kWHITE_COLOR];
+//    [markdown resizedImageByWidth:20];
+//    UIButton *buttonMarkdown = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [buttonMarkdown addTarget:self action:@selector(barButtonItemMarkdownPressed:)forControlEvents:UIControlEventTouchUpInside];
+//    [buttonMarkdown setBackgroundImage:markdown forState:UIControlStateNormal];
+//    buttonMarkdown.frame = CGRectMake(0 ,0, 18, 20);
+//    UIBarButtonItem *barButtonItemMarkdown = [[UIBarButtonItem alloc] initWithCustomView:buttonMarkdown];
 }
 
 
 #pragma mark 버튼 액션 Method: 컨텍스트 저장, 뷰 pop 외
 
-- (void)barButtonItemCancelPressed:(id)sender
+- (void)noAction:(id)sender
 {
-    if (self.isNewNote) {
-        [self deleteNote:self.currentNote];
-        [self performSelector:@selector(dismissView) withObject:self afterDelay:0.1];
-    } else {
-        [self performSelector:@selector(popView) withObject:self afterDelay:0.1];
-    }
+    
 }
 
 
-#pragma mark 뉴 버튼 (뉴 노트 추가 Notification 통보)
+#pragma mark 뉴 노트 (노트 추가 Notification 통보)
 
 - (void)barButtonItemAddPressed:(id)sender
 {
-    if (self.isNewNote) {
-        [self deleteNote:self.currentNote];
-        [self.navigationController dismissViewControllerAnimated:YES completion:^{
-            [self performSelector:@selector(postAddNewDropboxNoteNotification) withObject:self afterDelay:0.0];
-        }];
-    } else {
-        [self.navigationController popViewControllerAnimated:YES];
-        [self performSelector:@selector(postAddNewDropboxNoteNotification) withObject:self afterDelay:0.0];
-    }
+    [self performSelector:@selector(postAddNewNoteNotification) withObject:self afterDelay:0.0];
 }
 
 
-- (void)postAddNewDropboxNoteNotification
+- (void)postAddNewNoteNotification
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName: @"AddNewDropboxNoteNotification" object:nil userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"AddNewNoteNotification" object:nil userInfo:nil];
 }
 
 
@@ -875,7 +906,7 @@
     UIImage *imageThumb = [image makeThumbnailOfSize:CGSizeMake(24, 24)];
     
     self.buttonForFullscreen = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.buttonForFullscreen.frame = CGRectMake(0, -44, 44, 44);
+    self.buttonForFullscreen.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, -44, 44, 44);
     [self.buttonForFullscreen setImage:imageThumb forState:UIControlStateNormal];
     self.buttonForFullscreen.tintColor = [UIColor colorWithRed:0.094 green:0.071 blue:0.188 alpha:1];
     [self.view addSubview:self.buttonForFullscreen];
@@ -888,7 +919,7 @@
 {
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         self.buttonForFullscreen.frame = CGRectMake(0, 0, 44, 44);
+                         self.buttonForFullscreen.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, 0, 44, 44);
                          self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.5, 1.5);
                          self.buttonForFullscreen.alpha = 0.5;}
                      completion:^(BOOL finished) {
@@ -906,7 +937,7 @@
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         self.buttonForFullscreen.frame = CGRectMake(0, -44, 44, 44);
+                         self.buttonForFullscreen.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, -44, 44, 44);
                          self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.5, 1.5);
                          self.buttonForFullscreen.alpha = 0.6;}
                      completion:^(BOOL finished) {
@@ -926,24 +957,39 @@
 }
 
 
-#pragma mark 세이브 노트
+#pragma mark 노트 삭제
 
-- (void)barButtonItemSavePressed:(id)sender
+- (void)deleteNote:(id)sender
 {
-    NSString *newline = @"\n\n";
-    NSString *concatenateString = [NSString stringWithFormat:@"%@%@%@%@%@", self.noteTitleLabel.text, newline, self.noteTextView.text, newline, _didSelectStar ? @"YES" : @"NO"];
-    
-    if (self.isNewNote) {
+    NSManagedObject *managedObject = self.currentNote;
+    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+    //NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
+    [managedObjectContext deleteObject:managedObject];
+    [managedObjectContext save:nil];
+}
+
+
+#pragma mark 노트 저장
+
+- (void)autoSave
+{
+    if (self.isNewNote == YES)
+    {
+        self.isNewNote = NO;
+        [self concatenateString];
         [self saveMethodInvoked];
-        [self performSelector:@selector(dismissView) withObject:self afterDelay:0.1];
     }
-    else {
+    else
+    {
+        NSString *newline = @"\n\n";
+        NSString *concatenateString = [NSString stringWithFormat:@"%@%@%@%@%@", self.noteTitleLabel.text, newline, self.noteTextView.text, newline, _didSelectStar ? @"YES" : @"NO"];
+        
         if ([_originalNote isEqualToString:concatenateString]) {
-            [self barButtonItemCancelPressed:sender];
-        }
-        else {
+            
+        } else
+        {
+            [self concatenateString];
             [self saveMethodInvoked];
-            [self performSelector:@selector(popView) withObject:self afterDelay:0.1];
         }
     }
 }
@@ -957,15 +1003,29 @@
     [self updateNoteDataWithCurrentState];                         //업데이트 노트 데이터
     [self.currentNote saveNote:self.currentNote];                  //노트 저장
     
-    [managedObjectContext performBlock:^
-    {
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setInteger:0 forKey:kSELECTED_DROPBOX_NOTE_INDEX];                    //해당 노트 최상단에 위치함
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [standardUserDefaults setIndexPath:indexPath forKey:kSELECTED_DROPBOX_NOTE_INDEXPATH];      //해당 노트 최상단에 위치함
+    [standardUserDefaults synchronize];
+    
+    [managedObjectContext performBlock:^{
         NSError *error = nil;
         if ([managedObjectContext save:&error]) {
             [mainManagedObjectContext save:&error];
+            NSLog (@"managedObjectContext saved");
         } else {
-            //NSLog(@"Error saving context: %@", error);
+            NSLog(@"Error saving context: %@", error);
         }
     }];
+}
+
+
+- (void)concatenateString
+{
+    NSString *newline = @"\n\n";
+    NSString *concatenateString = [NSString stringWithFormat:@"%@%@%@%@%@", self.noteTitleLabel.text, newline, self.noteTextView.text, newline, _didSelectStar ? @"YES" : @"NO"];
+    _originalNote = concatenateString;
 }
 
 
@@ -981,12 +1041,10 @@
     self.currentNote.isiCloudNote = [NSNumber numberWithBool:NO];
     self.currentNote.hasImage = [NSNumber numberWithBool:NO];
     self.currentNote.hasNoteAnnotate = [NSNumber numberWithBool:NO];
-    self.currentNote.location = @"";
     
     NSString *newline = @"\n\n";
     NSString *concatenateString = [NSString stringWithFormat:@"%@%@%@%@%@", self.noteTitleLabel.text, newline, self.noteTextView.text, newline, _didSelectStar ? @"YES" : @"NO"];
     self.currentNote.noteAll = concatenateString;
-//    NSLog (@"updateNoteDataWithCurrentState > concatenateString: %@\n", concatenateString);
 }
 
 
@@ -1027,21 +1085,103 @@
     if ([self.currentNote.hasNoteStar boolValue] == YES)
     {
         self.starImage = nil;
-        UIImage *image = [UIImage imageNamed:@"star-256"];
-        [self.buttonStar setBackgroundImage:image forState:UIControlStateNormal];
+        UIImage *star = [UIImage imageNameForChangingColor:@"starWhiteFilled" color:kGOLD_COLOR];
+        [star resizedImageByHeight:20];
+        [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
     }
     else
     {
         self.starImage = nil;
-        UIImage *image = [UIImage imageNamed:@"star-256-white"];
-        [self.buttonStar setBackgroundImage:image forState:UIControlStateNormal];
+        UIImage *star = [UIImage imageNameForChangingColor:@"starWhiteFilled" color:kWHITE_COLOR];
+        [star resizedImageByHeight:20];
+        [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
     }
 }
 
 
-- (void)barButtonItemSharePressed:(id)sender
+#pragma mark HTML 스트링 Parcing
+
+#pragma mark HTML 스트링
+
+- (NSString *)createHTMLString
 {
-    [self displayDoActionSheet:sender];
+    NSError *error;
+    self.htmlString = [[NSMutableString alloc] init];
+    [self.htmlString appendString:[NSString stringWithFormat:@"<html>"
+                                   " <head>"
+                                   " <meta charset='UTF-8'/>"
+                                   " <style> %@ </style>"
+                                   " </head> ", [self cssUTF8String]]];
+    [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:[self noteString] error:&error]];
+    //NSLog (@"HTML 스트링: %@\n", self.htmlString);
+    
+    return self.htmlString;
+}
+
+
+#pragma mark CSS 스트링
+
+- (NSString *)cssUTF8String
+{
+    NSError *error = nil;
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown" ofType:@"css"];
+    NSString *cssString = [NSString stringWithContentsOfFile:filePath
+                                                    encoding:NSUTF8StringEncoding
+                                                       error:&error];
+    if (error != nil)
+    {
+        NSLog(@"Error: %@", error);
+        return nil;
+    }
+    return cssString;
+}
+
+
+#pragma mark 노트 컨텐츠
+
+- (NSString *)noteString
+{
+    return self.noteTextView.text;
+}
+
+
+#pragma mark - 탭 제스처
+
+- (void)addTapGestureRecognizer
+{
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    tapGesture.delegate = self;
+    tapGesture.numberOfTapsRequired = 1;
+    [self.noteTitleLabelBackgroundView addGestureRecognizer:tapGesture];
+}
+
+
+#pragma mark 탭 제스처 > 팝인 노트 타이틀 필드
+
+- (void)handleTap:(UITapGestureRecognizer *)gesture
+{
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
+    //Create the popin view controller
+    NoteTitlePopinViewController *controller = [[NoteTitlePopinViewController alloc] initWithNibName:@"NoteTitlePopinViewController" bundle:nil];
+    
+    [self updateNoteDataWithCurrentState];                  //업데이트 노트 데이터
+    
+    //넘겨줄 노트 데이터
+    //    NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
+    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+    NSManagedObjectContext *mainManagedObjectContext = [managedObjectContext parentContext];
+    [controller dropboxNote:self.currentNote inManagedObjectContext:mainManagedObjectContext];
+    
+    //팝인 뷰 속성
+    [controller setPopinTransitionStyle:BKTPopinTransitionStyleSlide];  //BKTPopinTransitionStyleSlide, BKTPopinTransitionStyleCrossDissolve
+    [controller setPopinOptions:BKTPopinDefault];                               //BKTPopinDefault > Dismissable
+    [controller setPopinTransitionDirection:BKTPopinTransitionDirectionTop];    //Set popin transition direction
+    [controller setPopinAlignment:BKTPopinAlignementOptionUp];                  //Set popin alignment
+    [controller setPopinOptions:[controller popinOptions]|BKTPopinDefault];     //Add option for a blurry background > ex) BKTPopinBlurryDimmingView
+    
+    [self.navigationController presentPopinController:controller animated:YES completion:^{ }];
 }
 
 
@@ -1141,16 +1281,419 @@
 }
 
 
-#pragma mark Do Action Sheet 액션
+#pragma mark - 노티피케이션
 
-#pragma mark 이메일 공유
-#pragma mark 메일 컴포즈 컨트롤러
+#pragma mark 노트 타이틀 변경 Notification 옵저버 등록
+
+- (void)addObserverForNoteTitleChanged
+{
+    //노트 타이틀 변경 Notification 옵저버 등록
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveMessageNoteTitleChanged:)
+                                                 name:@"DidChangeDropboxNoteTitleNotification"
+                                               object:nil];
+}
+
+
+#pragma mark 노트 타이틀 변경 노티피케이션 수신 후 후속작업
+
+- (void)didReceiveMessageNoteTitleChanged:(NSNotification *) notification
+{
+    if ([[notification name] isEqualToString:@"DidChangeDropboxNoteTitleNotification"])
+    {
+        NSDictionary *userInfo = notification.userInfo;
+        DropboxNote *receivedNote = [userInfo objectForKey:@"changedDropboxNoteKey"];
+        self.currentNote = receivedNote;
+        if (self.currentNote.noteTitle.length > 0) {
+            self.noteTitleLabel.text = self.currentNote.noteTitle;
+        }
+        else {
+            self.noteTitleLabel.text = @"Untitled";
+        }
+    }
+}
+
+
+#pragma mark 헬프 메시지 Notification 옵저버 등록
+
+- (void)addObserverForHelpMessageMarkdownWebViewPopped
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(helpMessageMarkdownWebViewPopped:)
+                                                 name:@"HelpMessageMarkdownWebViewPopped"
+                                               object:nil];
+}
+
+
+#pragma mark 헬프 메시지 노티피케이션 수신 후 후속작업
+
+- (void)helpMessageMarkdownWebViewPopped:(NSNotification *) notification
+{
+    if ([[notification name] isEqualToString:@"HelpMessageMarkdownWebViewPopped"])
+    {
+        //    NSLog (@"helpMessageMarkdownWebViewPopped");
+        [self.noteTextView resignFirstResponder];
+    }
+}
+
+
+#pragma mark check to Show 헬프 메시지
+
+- (void)checkToShowHelpMessage
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == YES) {
+        
+    }
+    else if (self.isNewNote == YES && [[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == NO)
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kDIDSHOW_NOTEVIEW_HELP];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        self.noteTextView.text = @"\n# Quick Guide\n\n### Notice\n**This quick guide note will not show again**.\n\n### Edit\n* To edit title, tap the date.\n* To save note, swipe right.\n* To remove keyboard, tap ▼ key or swipe down.\n\n### Preview\n* To preview markdown, tap 'M' button.\n* In Preview mode, Tap anywhere to enter full screen\n\n### Navigation\n* Swipe right to reveal lists.\n\n> Thank you for purchasing Clarity.  \nEnjoy Writing!";
+        //        [self performSelector:@selector(barButtonItemMarkdownPressed:) withObject:nil afterDelay:0.0];
+    }
+    else {
+        
+    }
+}
+
+
+#pragma mark ApplicationWillResignActive Notification 옵저버 등록
+
+- (void)addObserverForApplicationWillResignActive
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveApplicationWillResignActive:)
+                                                 name:@"ApplicationWillResignActiveNotification"
+                                               object:nil];
+}
+
+
+#pragma mark ApplicationWillResignActive 노티피케이션 수신 후 후속작업
+
+- (void)didReceiveApplicationWillResignActive:(NSNotification *) notification
+{
+    if ([[notification name] isEqualToString:@"ApplicationWillResignActiveNotification"])
+    {
+        NSLog(@"ApplicationWillResignActive Notification Received");
+        [self autoSave];
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentNote forKey:@"currentDropboxNoteObjectIDKey"];
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"CurrentDropboxNoteObjectIDKeyNotification" object:nil userInfo:userInfo];
+    }
+}
+
+
+#pragma mark - 유저 디폴트 > 현재 뷰 저장
+
+- (void)saveCurrentView
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
+    [standardUserDefaults synchronize];
+}
+
+
+#pragma mark - 내비게이션 뷰 해제
+
+- (void)dismissView
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+- (void)popView
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+#pragma mark - JG 액션 시트
+
+#pragma mark 노트 공유
+
+- (void)showShareSheetFromBarButtonItem:(UIBarButtonItem *)barButtonItem withEvent:(UIEvent *)event {
+    UIView *view = [event.allTouches.anyObject view];
+    
+    //    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as HTML", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"More actions as Plain Text...", @"Print Note", @"Create PDF"] buttonStyle:JGActionSheetButtonStyleBlue];
+    
+    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as HTML", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"More actions as Plain Text...", @"Print Note"] buttonStyle:JGActionSheetButtonStyleBlue];
+    
+    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:0];
+    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:1];
+    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:2];
+    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:3];
+    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:4];
+    [section setButtonStyle:JGActionSheetButtonStyleBlue forButtonAtIndex:5];
+    //    [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:6];
+    
+    NSArray *sections = (iPad ? @[section] : @[section, [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"Cancel"] buttonStyle:JGActionSheetButtonStyleGreen]]);
+    
+    JGActionSheet *sheet = [[JGActionSheet alloc] initWithSections:sections];
+    
+    sheet.delegate = self;
+    
+    [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath) {
+        
+        if (indexPath.section == 0) {
+            switch (indexPath.row) {
+                case 0:
+                {
+                    self.htmlString = nil;
+                    if ([self.noteTextView.text length] == 0) {
+                        self.noteTextView.text = @"> No Contents";
+                    } else {
+                    }
+                    [self createHTMLString];                                                            //HTML 스트링
+                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];         //메일 컴포즈 컨트롤러
+                }
+                    break;
+                case 1:
+                {
+                    self.htmlString = nil;
+                    if ([self.noteTextView.text length] == 0) {
+                        self.noteTextView.text = @"> No Contents";
+                    } else {
+                    }
+                    [self createHTMLString];
+                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                    pasteboard.string = self.htmlString;                                                //Pasteboard Copy
+                }
+                    break;
+                case 2:
+                {
+                    self.htmlString = nil;
+                    if ([self.noteTextView.text length] == 0) {
+                        self.noteTextView.text = @"No Contents";
+                    } else {
+                    }
+                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];  //메일 컴포즈 컨트롤러
+                }
+                    break;
+                case 3:
+                {
+                    self.htmlString = nil;
+                    if ([self.noteTextView.text length] == 0) {
+                        self.noteTextView.text = @"> No Contents";
+                    } else {
+                    }
+                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                    pasteboard.string = self.noteTextView.text;                                         //Pasteboard Copy
+                }
+                    break;
+                case 4:
+                {
+                    self.htmlString = nil;
+                    if ([self.noteTextView.text length] == 0) {
+                        self.noteTextView.text = @"> No Contents";
+                    } else {
+                    }
+                    NSArray *itemsToShare = @[self.noteTextView.text];
+                    UIActivityViewController *activityViewController;
+                    activityViewController = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+                    [self presentViewController:activityViewController animated:YES completion:^{
+                    }];
+                }
+                    break;
+                case 5:
+                {
+                    self.htmlString = nil;
+                    if ([self.noteTextView.text length] == 0) {
+                        self.noteTextView.text = @"> No Contents";
+                    } else {
+                    }
+                    [self createHTMLString];
+                    [self printNoteAsHTML:self.htmlString];
+                }
+                    break;
+                case 6:
+                {
+                    self.htmlString = nil;
+                    if ([self.noteTextView.text length] == 0) {
+                        self.noteTextView.text = @"> No Contents";
+                    } else {
+                    }
+                    [self createHTMLString];
+                    [self createPDFDocument:self.htmlString];
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+        [sheet dismissAnimated:YES];
+    }];
+    
+    if (iPad) {
+        [sheet setOutsidePressBlock:^(JGActionSheet *sheet) {
+            [sheet dismissAnimated:YES];
+        }];
+        
+        CGPoint point = (CGPoint){CGRectGetMidX(view.bounds), CGRectGetMaxY(view.bounds)};
+        
+        point = [self.navigationController.view convertPoint:point fromView:view];
+        
+        _currentAnchoredActionSheet = sheet;
+        _anchorView = view;
+        _anchorLeft = NO;
+        
+        [sheet showFromPoint:point inView:self.navigationController.view arrowDirection:JGActionSheetArrowDirectionTop animated:YES];
+    }
+    else {
+        [sheet showInView:self.navigationController.view animated:YES];
+    }
+}
+
+
+#pragma mark 노트 삭제
+
+- (void)showDeleteSheetFromBarButtonItem:(UIBarButtonItem *)barButtonItem withEvent:(UIEvent *)event {
+    UIView *view = [event.allTouches.anyObject view];
+    
+    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Delete Note", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
+    
+    [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:0];
+    
+    NSArray *sections = (iPad ? @[section] : @[section, [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"Cancel"] buttonStyle:JGActionSheetButtonStyleCancel]]);
+    
+    JGActionSheet *sheet = [[JGActionSheet alloc] initWithSections:sections];
+    
+    sheet.delegate = self;
+    
+    [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath) {
+        
+        if (indexPath.section == 0) {
+            switch (indexPath.row) {
+                case 0:
+                {
+                    [self.managedObjectContext deleteObject:self.currentNote];
+                    [self saveMethodInvoked];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                    break;
+                case 1:
+                    break;
+                default:
+                    break;
+            }
+        }
+        [sheet dismissAnimated:YES];
+    }];
+    
+    if (iPad) {
+        [sheet setOutsidePressBlock:^(JGActionSheet *sheet) {
+            [sheet dismissAnimated:YES];
+        }];
+        
+        CGPoint point = (CGPoint){CGRectGetMidX(view.bounds), CGRectGetMaxY(view.bounds)};
+        
+        point = [self.navigationController.view convertPoint:point fromView:view];
+        
+        _currentAnchoredActionSheet = sheet;
+        _anchorView = view;
+        _anchorLeft = NO;
+        
+        [sheet showFromPoint:point inView:self.navigationController.view arrowDirection:JGActionSheetArrowDirectionTop animated:YES];
+    }
+    else {
+        [sheet showInView:self.navigationController.view animated:YES];
+    }
+}
+
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (!iOS7) {
+        //Use this on iOS < 7 to prevent the UINavigationBar from overlapping your action sheet!
+        [self.navigationController.view.superview bringSubviewToFront:self.navigationController.view];
+    }
+    
+    if (_currentAnchoredActionSheet) {
+        UIView *view = _anchorView;
+        
+        CGPoint point = (_anchorLeft ? (CGPoint){-5.0f, CGRectGetMidY(view.bounds)} : (CGPoint){CGRectGetMidX(view.bounds), CGRectGetMaxY(view.bounds)});
+        
+        point = [self.navigationController.view convertPoint:point fromView:view];
+        
+        [_currentAnchoredActionSheet moveToPoint:point arrowDirection:(_anchorLeft ? JGActionSheetArrowDirectionRight : JGActionSheetArrowDirectionTop) animated:NO];
+    }
+}
+
+
+#pragma mark JGActionSheet Delegate
+
+- (void)actionSheetWillPresent:(JGActionSheet *)actionSheet {
+    //    NSLog(@"Action sheet %p will present", actionSheet);
+}
+
+- (void)actionSheetDidPresent:(JGActionSheet *)actionSheet {
+    //    NSLog(@"Action sheet %p did present", actionSheet);
+}
+
+- (void)actionSheetWillDismiss:(JGActionSheet *)actionSheet {
+    //    NSLog(@"Action sheet %p will dismiss", actionSheet);
+    _currentAnchoredActionSheet = nil;
+}
+
+- (void)actionSheetDidDismiss:(JGActionSheet *)actionSheet {
+    //    NSLog(@"Action sheet %p did dismiss", actionSheet);
+}
+
+
+#pragma mark Action Sheet 액션
+
+#pragma mark PDF 생성
+
+- (void)createPDFDocument:(NSString *)htmlString
+{
+    //    self.pdfCreator.delegate = self;
+    //
+    NSString *path = [[[NSString stringWithFormat:@"~/Documents/%@.pdf", self.noteTitleLabel.text] stringByExpandingTildeInPath] stringByExpandingTildeInPath];
+    //    CGSize size = kPaperSizeA4;
+    //    UIEdgeInsets insets = UIEdgeInsetsMake(20, 20, 20, 20);
+    //
+    //    self.pdfCreator = [NDHTMLtoPDF createPDFWithHTML:htmlString pathForPDF:path pageSize:size margins:insets successBlock:^(NDHTMLtoPDF *htmlToPDF) {
+    //        NSString *result = [NSString stringWithFormat:@"HTMLtoPDF did succeed (%@ / %@)", htmlToPDF, htmlToPDF.PDFpath];
+    //        NSLog(@"%@",result);
+    //
+    //    } errorBlock:^(NDHTMLtoPDF *htmlToPDF) {
+    //        NSString *result = [NSString stringWithFormat:@"HTMLtoPDF did fail (%@)", htmlToPDF];
+    //        NSLog(@"%@",result);
+    //        [self showErrorMessageView];
+    //    }];
+    
+    
+    _htmlPdfKit = [[BNHtmlPdfKit alloc] init];
+    _htmlPdfKit.delegate = self;
+    _htmlPdfKit.pageSize = BNPageSizeA4;
+    [_htmlPdfKit saveHtmlAsPdf:htmlString toFile:path];
+}
+
+
+#pragma mark BNHtmlPdfKit Delegate
+
+- (void)htmlPdfKit:(BNHtmlPdfKit *)htmlPdfKit didSavePdfData:(NSData *)data
+{
+    
+}
+
+
+- (void)htmlPdfKit:(BNHtmlPdfKit *)htmlPdfKit didSavePdfFile:(NSString *)file
+{
+    NSLog(@"pdf file saved");
+}
+
+
+- (void)htmlPdfKit:(BNHtmlPdfKit *)htmlPdfKit didFailWithError:(NSError *)error
+{
+    NSLog(@"pdf error");
+}
+
+
+#pragma mark 이메일 공유 (메일 컴포즈 컨트롤러)
 
 - (void)sendEmailWithTitle:(NSString *)title andBody:(NSString *)body
 {
     //이메일 공유 : email 공유를 위해선 MessageUI 프레임워크가 필요함
     if (![MFMailComposeViewController canSendMail]) {
-//        NSLog(@"Can't send email");
+        //        NSLog(@"Can't send email");
         return;
     }
     
@@ -1178,16 +1721,16 @@
 	switch (result)
 	{
 		case MFMailComposeResultCancelled:
-//			NSLog(@"mail composer cancelled");
+            //			NSLog(@"mail composer cancelled");
 			break;
 		case MFMailComposeResultSaved:
-//			NSLog(@"mail composer saved");
+            //			NSLog(@"mail composer saved");
 			break;
 		case MFMailComposeResultSent:
-//			NSLog(@"mail composer sent");
+            //			NSLog(@"mail composer sent");
 			break;
 		case MFMailComposeResultFailed:
-//			NSLog(@"mail composer failed");
+            //			NSLog(@"mail composer failed");
 			break;
 	}
     [controller dismissViewControllerAnimated:YES completion:nil];
@@ -1215,9 +1758,9 @@
         
         [printController presentAnimated:YES completionHandler: ^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error){
             if (!completed && (error != nil)) {
-//                 NSLog(@"Error Printing: %@", error);
+                //                 NSLog(@"Error Printing: %@", error);
             } else {
-//                 NSLog(@"Printing Completed");
+                //                 NSLog(@"Printing Completed");
             }
         }];
     }
@@ -1230,196 +1773,6 @@
 {
     [self styleViewController];
     return self.navigationController;
-}
-
-
-#pragma mark - HTML 스트링 Parcing
-
-#pragma mark HTML 스트링
-
-- (NSString *)createHTMLString
-{
-    NSError *error;
-    self.htmlString = [[NSMutableString alloc] init];
-    [self.htmlString appendString:[NSString stringWithFormat:@"<html>"
-                                   " <head>"
-                                   " <meta charset='UTF-8'/>"
-                                   " <style> %@ </style>"
-                                   " </head> ", [self cssUTF8String]]];
-    [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:[self noteString] error:&error]];
-    //NSLog (@"HTML 스트링: %@\n", self.htmlString);
-    
-    return self.htmlString;
-}
-
-
-#pragma mark CSS 스트링
-
-- (NSString *)cssUTF8String
-{
-    NSError *error = nil;
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown" ofType:@"css"];
-    NSString *cssString = [NSString stringWithContentsOfFile:filePath
-                                                    encoding:NSUTF8StringEncoding
-                                                       error:&error];
-    if (error != nil)
-    {
-        NSLog(@"Error: %@", error);
-        return nil;
-    }
-    return cssString;
-}
-
-
-#pragma mark 노트 컨텐츠
-
-- (NSString *)noteString
-{
-    return self.noteTextView.text;
-}
-
-
-#pragma mark - 노트 삭제
-
-- (void)deleteNote:(id)sender
-{
-    NSManagedObject *managedObject = self.currentNote;
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    //NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
-    [managedObjectContext deleteObject:managedObject];
-    [managedObjectContext save:nil];
-}
-
-
-#pragma mark - 탭 제스처
-
-- (void)addTapGestureRecognizer
-{
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    tapGesture.delegate = self;
-    tapGesture.numberOfTapsRequired = 1;
-    [self.noteTitleLabelBackgroundView addGestureRecognizer:tapGesture];
-}
-
-
-#pragma mark 탭 제스처 > 팝인 노트 타이틀 필드
-
-- (void)handleTap:(UITapGestureRecognizer *)gesture
-{
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
-    //Create the popin view controller
-    NoteTitlePopinViewController *controller = [[NoteTitlePopinViewController alloc] initWithNibName:@"NoteTitlePopinViewController" bundle:nil];
-    
-    [self updateNoteDataWithCurrentState];                  //업데이트 노트 데이터
-    
-    //넘겨줄 노트 데이터
-//    NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    NSManagedObjectContext *mainManagedObjectContext = [managedObjectContext parentContext];
-    [controller dropboxNote:self.currentNote inManagedObjectContext:mainManagedObjectContext];
-    
-    //팝인 뷰 속성
-    [controller setPopinTransitionStyle:BKTPopinTransitionStyleSlide];  //BKTPopinTransitionStyleSlide, BKTPopinTransitionStyleCrossDissolve
-    [controller setPopinOptions:BKTPopinDefault];                               //BKTPopinDefault > Dismissable
-    [controller setPopinTransitionDirection:BKTPopinTransitionDirectionTop];    //Set popin transition direction
-    [controller setPopinAlignment:BKTPopinAlignementOptionUp];                  //Set popin alignment
-    [controller setPopinOptions:[controller popinOptions]|BKTPopinDefault];     //Add option for a blurry background > ex) BKTPopinBlurryDimmingView
-
-    [self.navigationController presentPopinController:controller animated:YES completion:^{ }];
-}
-
-
-#pragma mark - 노티피케이션
-
-#pragma mark 노트 타이틀 변경 노티피케이션 수신 후 후속작업
-
-- (void)didReceiveMessageNoteTitleChanged:(NSNotification *) notification
-{
-    if ([[notification name] isEqualToString:@"DidChangeDropboxNoteTitleNotification"])
-    {
-        NSDictionary *userInfo = notification.userInfo;
-        DropboxNote *receivedNote = [userInfo objectForKey:@"changedDropboxNoteKey"];
-        self.currentNote = receivedNote;
-        if (self.currentNote.noteTitle.length > 0) {
-            self.noteTitleLabel.text = self.currentNote.noteTitle;
-        }
-        else {
-            self.noteTitleLabel.text = @"Untitled";
-        }
-    }
-}
-
-
-#pragma mark 헬프 메시지
-
-- (void)checkToShowHelpMessage
-{
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == YES) {
-    }
-    else {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kDIDSHOW_NOTEVIEW_HELP];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        self.noteTextView.text = @"\n## Quick Guide\n\n#### Edit\n* To edit title, tap the date.\n* To remove keyboard, tap ▼ key.\n\n#### Preview\n* To preview markdown, tap MD button.\n* Tap anywhere to enter full screen mode\n\n> Thank you for purchasing Clarity.";
-        [self barButtonItemMarkdownPressed:self];
-    }
-}
-
-
-#pragma mark 헬프 메시지 노티피케이션 수신 후 후속작업
-
-- (void)helpMessageMarkdownWebViewPopped
-{
-    [self.noteTextView resignFirstResponder];
-}
-
-
-#pragma mark - 내비게이션 뷰 해제
-
-- (void)dismissView
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-
-- (void)popView
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-
-#pragma mark 노트 타이틀 변경 Notification 옵저버 등록
-
-- (void)addObserverForNoteTitleChanged
-{
-    //노트 타이틀 변경 Notification 옵저버 등록
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didReceiveMessageNoteTitleChanged:)
-                                                 name:@"DidChangeDropboxNoteTitleNotification"
-                                               object:nil];
-}
-
-
-#pragma mark HelpMessageMarkdownWebViewPopped Notification 옵저버 등록
-
-- (void)addObserverForHelpMessageMarkdownWebViewPopped
-{
-    //노트 타이틀 변경 Notification 옵저버 등록
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(helpMessageMarkdownWebViewPopped)
-                                                 name:@"HelpMessageMarkdownWebViewPopped"
-                                               object:nil];
-}
-
-
-#pragma mark 유저 디폴트 > 현재 뷰 저장
-
-- (void)saveCurrentView
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
-    [standardUserDefaults synchronize];
 }
 
 
@@ -1511,16 +1864,30 @@
 }
 
 
+#pragma mark - deregisterForNotifications
+
+- (void)deregisterForNotifications
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [center removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+    [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [center removeObserver:self name:UIKeyboardDidHideNotification object:nil];
+    
+    [center removeObserver:self name:@"DidChangeDropboxNoteTitleNotification" object:nil];
+    [center removeObserver:self name:@"HelpMessageMarkdownWebViewPopped" object:nil];
+    [center removeObserver:self name:@"ApplicationWillResignActiveNotification" object:nil];
+    [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
+    
+    [center removeObserver:self];
+}
+
+
 #pragma mark - Dealloc
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];     //Remove 옵저버
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"DidChangeLocalNoteTitleNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
+    [self deregisterForNotifications];
     NSLog(@"dealloc %@", self);
 }
 
@@ -1530,7 +1897,7 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    [self saveMethodInvoked];           //메모리 경고 시 코어 데이터 저장
+    [self autoSave];
 }
 
 
@@ -1546,6 +1913,33 @@
         _managedObjectContext = managedObjectContext;
     }
     return self;
+}
+
+
+#pragma mark - 뷰 사라질 때 오토 세이브 및 노티피케이션 발송
+
+- (void)autoSaveAndRegisterStarListViewWillShowNotification
+{
+    [self autoSave];
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"StarListViewWillShowNotification" object:nil userInfo:nil];
+}
+
+
+#pragma mark - iOS 버전 체크
+
+- (void)checkiOSVersionEightPointO
+{
+    BOOL checkVer = ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedSame || [[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] == NSOrderedDescending);
+    kLOGBOOL(checkVer);
+    NSLog(@"[[UIDevice currentDevice] systemVersion] : %@", [[UIDevice currentDevice] systemVersion]);
+    if (checkVer == YES)
+    {
+        
+    }
+    else
+    {
+        
+    }
 }
 
 

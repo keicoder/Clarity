@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>1.1</key>
+	<array>
+		<dict>
+			<key>title</key>
+			<string>Auto Save</string>
+			<key>detail</key>
+			<string>To save note, just swipe right.</string>
+			<key>icon</key>
+			<string>swipeRight</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>Delete</string>
+			<key>detail</key>
+			<string>Now you can delete note in editing view.</string>
+			<key>icon</key>
+			<string>trash_black</string>
+		</dict>
+	</array>
+</dict>
+</plist>
