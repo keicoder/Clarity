@@ -225,7 +225,7 @@
 {
     CGFloat noteTitleLabelHeight = 44;
     
-    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -48, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight)]; //-44
+    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -40, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight)]; //-44
     self.noteTitleLabelBackgroundView.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     [self.noteTextView addSubview:self.noteTitleLabelBackgroundView];
     [self.noteTitleLabelBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
