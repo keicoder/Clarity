@@ -79,49 +79,20 @@
 }
 
 
-#pragma mark 유저 디폴트에 저장된 값 불러와 해당 노트 보여줌
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-//    DBAccountManager *accountManager = [DBAccountManager sharedManager];
-//    DBAccount *account = [accountManager linkedAccount];
-//    
-//    self.navigationController.delegate = self;
-//    
-//    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_DROPBOX_NOTE_INDEX];
-////    NSLog (@"selectedDropboxNoteIndex: %d, fetchedObjects count: %d", index, [[_fetchedResultsController fetchedObjects] count]);
-//    
-//    if (index < 0 || index >= [[_fetchedResultsController fetchedObjects] count] || !account)
-//    {
-//        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_DROPBOX_NOTE_INDEX];  //해당 노트로 이동 방지
-//    }
-//    else if (index >= 0 && index < [[_fetchedResultsController fetchedObjects] count] && account)
-//    {
-//        //스토리보드 방식
-//        DropboxAddEditViewController *dropboxController = [self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
-//        
-//        NSIndexPath *indexPath = [[NSUserDefaults standardUserDefaults] indexPathForKey:kSELECTED_DROPBOX_NOTE_INDEXPATH];
-//        
-//        //NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
-//        NSManagedObjectContext *managedObjectContext = [[NSManagedObjectContext alloc]
-//                                                        initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-//        [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
-//        
-//        self.selectedNote = (DropboxNote *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
-//        //위 코드와 결과 동일
-//        //self.selectedNote = (DropboxNote *)[self.fetchedResultsController objectAtIndexPath:indexPath];
-//        [dropboxController note:self.selectedNote inManagedObjectContext:managedObjectContext];
-//        
-//        dropboxController.isSearchResultNote = NO;
-//        dropboxController.isNewNote = NO;
-//        dropboxController.currentNote = self.selectedNote;
-//        
-//        [self.navigationController pushViewController:dropboxController animated:YES]; //Push
-//    }
-    
     [self checkToShowWhatsNewView];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES)  // app already launched
+    {
+        NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
+        NSString *lastVersionString = [[NSUserDefaults standardUserDefaults] stringForKey:@"currentVersion"];
+        
+        if ([versionString isEqualToString:lastVersionString]) {
+            [self showLastUsedNote];    //마지막 노트로 돌아감
+        }
+    }
 }
 
 
@@ -159,7 +130,6 @@
 
 - (void)configureViewAndTableView
 {
-//    self.title = @"Dropbox";
     self.view.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;//kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR;          //뷰
     self.tableView.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;                                    //테이블 뷰 배경 색상
     self.tableView.separatorColor = kTEXTVIEW_BACKGROUND_COLOR; //[UIColor colorWithRed:0.333 green:0.333 blue:0.333 alpha:0.1]; //구분선 색상
@@ -938,8 +908,6 @@
 - (void)deregisterForNotifications
 {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    
-    [center removeObserver:self name:@"CurrentDropboxNoteObjectIDKeyNotification" object:nil];
     [center removeObserver:self name:@"WelcomeViewControllerDismissedNotification" object:nil];
     [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
     
@@ -1002,10 +970,10 @@
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES)  // app already launched
     {
         NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
-        NSLog (@"versionString: %@\n", versionString);
+        //NSLog (@"versionString: %@\n", versionString);
         
         NSString *lastVersionString = [[NSUserDefaults standardUserDefaults] stringForKey:@"currentVersion"];
-        NSLog (@"lastVersionString: %@\n", lastVersionString);
+        //NSLog (@"lastVersionString: %@\n", lastVersionString);
         
         if ([versionString isEqualToString:lastVersionString]) {
             
@@ -1026,7 +994,6 @@
 
 - (void)showWhatsNewView
 {
-    if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
     [MTZWhatsNew handleWhatsNew:^(NSDictionary *whatsNew)
      {
          MTZWhatsNewGridViewController *vc = [[MTZWhatsNewGridViewController alloc] initWithFeatures:whatsNew];
@@ -1069,6 +1036,47 @@
     
     //[self.tableView setBackgroundColor:view.backgroundColor];
     self.tableView.contentInset = self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, - CGRectGetHeight(view.bounds), 0);
+}
+
+
+#pragma mark - 유저 디폴트에 저장된 값 불러와 해당 노트 보여줌
+
+- (void)showLastUsedNote
+{
+    //DBAccountManager *accountManager = [DBAccountManager sharedManager];
+    //DBAccount *account = [accountManager linkedAccount];
+    
+    self.navigationController.delegate = self;
+    
+    NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_DROPBOX_NOTE_INDEX];
+    //NSLog (@"selectedDropboxNoteIndex: %d, fetchedObjects count: %d", index, [[_fetchedResultsController fetchedObjects] count]);
+    
+    if (index < 0 || index >= [[_fetchedResultsController fetchedObjects] count])
+    {
+        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_DROPBOX_NOTE_INDEX];  //해당 노트로 이동 방지
+    }
+    else if (index >= 0 && index < [[_fetchedResultsController fetchedObjects] count])
+    {
+        DropboxAddEditViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
+        
+        NSIndexPath *indexPath = [[NSUserDefaults standardUserDefaults] indexPathForKey:kSELECTED_DROPBOX_NOTE_INDEXPATH];
+        
+        //NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
+        NSManagedObjectContext *managedObjectContext = [[NSManagedObjectContext alloc]
+                                                        initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
+        
+        self.selectedNote = (DropboxNote *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
+        
+        //self.selectedNote = (DropboxNote *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
+        [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
+        
+        controller.isSearchResultNote = NO;
+        controller.isNewNote = NO;
+        controller.currentNote = self.selectedNote;
+        
+        [self.navigationController pushViewController:controller animated:YES]; //Push
+    }
 }
 
 

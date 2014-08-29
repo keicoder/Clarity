@@ -67,7 +67,6 @@
 {
     [super viewDidLoad];
     self.title = @"";
-    self.navigationItem.backBarButtonItem.title = @"";
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self addNoteTextView];                             //노트 텍스트 뷰
     [self addNoteTitleLabel];                           //노트 타이틀 레이블
@@ -1228,7 +1227,6 @@
 
 - (void)addObserverForNoteTitleChanged
 {
-    //노트 타이틀 변경 Notification 옵저버 등록
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceiveMessageNoteTitleChanged:)
                                                  name:@"DidChangeDropboxNoteTitleNotification"

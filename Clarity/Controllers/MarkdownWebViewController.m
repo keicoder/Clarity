@@ -218,8 +218,6 @@
 
 - (void)handleTap:(UITapGestureRecognizer *)gesture
 {
-    NSLog (@"Tap gesture recognized");
-    
     if ( _didTapped == NO)
     {
         _didTapped = YES;
