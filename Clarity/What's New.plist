@@ -8,17 +8,25 @@
 			<key>title</key>
 			<string>Auto Save</string>
 			<key>detail</key>
-			<string>To save note, just swipe right.</string>
+			<string>To save note, just swipe right</string>
 			<key>icon</key>
 			<string>swipeRight</string>
 		</dict>
 		<dict>
 			<key>title</key>
-			<string>Delete</string>
+			<string>Improved UI</string>
 			<key>detail</key>
-			<string>Now you can delete note in editing view.</string>
+			<string>More intuitive interface</string>
 			<key>icon</key>
-			<string>trash</string>
+			<string>partyhat</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>Stability improvements</string>
+			<key>detail</key>
+			<string>Several stability improvements and bug fixes</string>
+			<key>icon</key>
+			<string>equalizer</string>
 		</dict>
 	</array>
 </dict>
