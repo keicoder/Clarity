@@ -41,7 +41,9 @@
     [self configureViewAndTableView];           //뷰 및 테이블 뷰 속성
     [self changeColorOfCellImages];             //셀 이미지 색상
     
-    self.versionLabel.text = @"Version 1.0\nJuly 31, 2014\nThank you for purchasing Clarity.\nEnjoy Writing!";
+    NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
+    //    NSLog (@"versionString: %@\n", versionString);
+    self.versionLabel.text = [NSString stringWithFormat:@"Version %@\nAugust 27, 2014\nThank you for purchasing Clarity.\nEnjoy Writing!", versionString];
 }
 
 
