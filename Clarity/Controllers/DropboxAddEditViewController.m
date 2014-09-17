@@ -27,7 +27,7 @@
 #import "UIImage+ResizeMagick.h"                                        //이미지 리사이즈
 
 
-@interface DropboxAddEditViewController () <JSMQuayboardBarDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, SMTEFillDelegate>
+@interface DropboxAddEditViewController () <JSMQuayboardBarDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext; //컨텍스트
 @property (nonatomic, strong) ICTextView *noteTextView;                     //노트 텍스트 뷰
@@ -82,8 +82,6 @@
     [self addObserverForApplicationWillResignActive];   //ApplicationWillResignActive Notification 옵저버
     [self addButtonForFullscreen];                      //Full Screen 버튼
     [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
-    [self addTextExpanderObjectAndSetDelegate];
-//    [self showNoteDataToLogConsole];                    //노트 데이터 로그 콘솔에 보여주기
 }
 
 
@@ -121,62 +119,6 @@
     self.htmlString = nil;
 }
 
-
-#pragma mark - 텍스트 익스펜더
-
-- (void)addTextExpanderObjectAndSetDelegate
-{
-    self.textExpander = [[SMTEDelegateController alloc] init];
-    [self.noteTextView setDelegate:self.textExpander];
-    [self.textExpander setNextDelegate:self];
-    
-    BOOL allowFormatting = ([NSParagraphStyle class] !=nil);
-    if (allowFormatting) {
-        [self.noteTextView setAllowsEditingTextAttributes:YES];
-    }
-    
-    // properties for fill-in snippets
-	self.textExpander.fillCompletionScheme = @"ClarityHD.ClarityHD";	// (we have to declare and handle this)
-	//self.textExpander.fillForAppName = @"ClarityHD";
-	self.textExpander.fillDelegate = self;
-}
-
-
-#pragma mark 텍스트 익스펜더 Delegate
-// These three methods implement the SMTEFillDelegate protocol to support fill-ins
-
-- (NSString*)identifierForTextArea: (id)uiTextObject
-{
-	NSString *result = nil;
-	if (self.noteTextView == uiTextObject)
-		result =  @"textExpander delegate > identifierForTextArea > self.noteTextView";
-	
-	return result;
-}
-
-
-- (BOOL)prepareForFillSwitch: (NSString*)textIdentifier
-{
-    // At this point the app should save state since TextExpander touch is about
-	// to activate.
-	// It especially needs to save the contents of the textview/textfield!
-	return YES;
-}
-
-
-- (id)makeIdentifiedTextObjectFirstResponder: (NSString*)textIdentifier fillWasCanceled: (BOOL)userCanceledFill cursorPosition: (NSInteger*)ioInsertionPointLocation;
-{
-	if ([@"myTextView" isEqualToString: textIdentifier])
-    {
-		[self.noteTextView becomeFirstResponder];
-		UITextPosition *theLoc = [self.noteTextView positionFromPosition: self.noteTextView.beginningOfDocument
-                                                                  offset: *ioInsertionPointLocation];
-		if (theLoc != nil)
-			self.noteTextView.selectedTextRange = [self.noteTextView textRangeFromPosition: theLoc toPosition: theLoc];
-		return self.noteTextView;
-	}
-	return nil;
-}
 
 
 #pragma mark - 노트 텍스트 뷰

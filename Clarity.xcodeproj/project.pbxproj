@@ -94,7 +94,6 @@
 		C1ABF0D719985E9F00E622CA /* PaperButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0D619985E9F00E622CA /* PaperButton.m */; };
 		C1E74E7219AEFE1500AA3399 /* BNHtmlPdfKit.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E74E7119AEFE1500AA3399 /* BNHtmlPdfKit.m */; };
 		C1E74E7619AEFE2A00AA3399 /* NDHTMLtoPDF.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E74E7519AEFE2A00AA3399 /* NDHTMLtoPDF.m */; };
-		C1E74E7819AEFEBE00AA3399 /* TextExpander.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E74E7719AEFEBE00AA3399 /* TextExpander.framework */; };
 		C1E74E7A19AEFED500AA3399 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E74E7919AEFED500AA3399 /* AudioToolbox.framework */; };
 		C331FC139151431BB224E126 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6E8D91E9C764F1DBB2C6C0E /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -265,7 +264,6 @@
 		C1E74E7119AEFE1500AA3399 /* BNHtmlPdfKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNHtmlPdfKit.m; sourceTree = "<group>"; };
 		C1E74E7419AEFE2A00AA3399 /* NDHTMLtoPDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDHTMLtoPDF.h; sourceTree = "<group>"; };
 		C1E74E7519AEFE2A00AA3399 /* NDHTMLtoPDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDHTMLtoPDF.m; sourceTree = "<group>"; };
-		C1E74E7719AEFEBE00AA3399 /* TextExpander.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TextExpander.framework; sourceTree = "<group>"; };
 		C1E74E7919AEFED500AA3399 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D6E8D91E9C764F1DBB2C6C0E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -276,7 +274,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1E74E7A19AEFED500AA3399 /* AudioToolbox.framework in Frameworks */,
-				C1E74E7819AEFEBE00AA3399 /* TextExpander.framework in Frameworks */,
 				C122911219973FDF00460667 /* libMMMarkdown-iOS.a in Frameworks */,
 				C122903119973A2B00460667 /* CoreGraphics.framework in Frameworks */,
 				C122903519973A2B00460667 /* CoreData.framework in Frameworks */,
@@ -324,7 +321,6 @@
 			isa = PBXGroup;
 			children = (
 				C1E74E7919AEFED500AA3399 /* AudioToolbox.framework */,
-				C1E74E7719AEFEBE00AA3399 /* TextExpander.framework */,
 				C122910F19973FDF00460667 /* MMMarkdown */,
 				C122902E19973A2B00460667 /* Foundation.framework */,
 				C122903019973A2B00460667 /* CoreGraphics.framework */,
