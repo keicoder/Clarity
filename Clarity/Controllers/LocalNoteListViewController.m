@@ -449,7 +449,6 @@
     LocalNote *newNote = [NSEntityDescription insertNewObjectForEntityForName:@"LocalNote" 
                                                        inManagedObjectContext:managedObjectContext];
     
-    newNote.position = @([LocalNote highestPosition] + 1);
     [self presentNote:newNote inManagedObjectContext:managedObjectContext];
 }
 

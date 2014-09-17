@@ -1,22 +1,23 @@
 //
-//  DropboxNote.m
+//  Note.m
 //  Clarity
 //
 //  Created by jun on 9/17/14.
 //  Copyright (c) 2014 lovejunsoft. All rights reserved.
 //
 
-#import "DropboxNote.h"
+#import "Note.h"
 
-@interface DropboxNote ()
+@interface Note ()
 
 @property (nonatomic, strong) NSDateFormatter *formatter;
 
 @end
 
 
-@implementation DropboxNote
+@implementation Note
 
+@dynamic isOtherCloudNote;
 @dynamic date;
 @dynamic dateString;
 @dynamic dayString;
@@ -31,6 +32,7 @@
 @dynamic isDropboxNote;
 @dynamic isiCloudNote;
 @dynamic isLocalNote;
+@dynamic isNewNote;
 @dynamic location;
 @dynamic monthString;
 @dynamic noteAll;
@@ -41,11 +43,9 @@
 @dynamic noteSection;
 @dynamic noteTitle;
 @dynamic position;
+@dynamic sectionName;
 @dynamic syncID;
 @dynamic yearString;
-@dynamic sectionName;
-@dynamic isNewNote;
-@dynamic isOtherCloudNote;
 
 @synthesize formatter = _formatter;
 

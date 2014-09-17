@@ -449,7 +449,6 @@
     DropboxNote *newNote = [NSEntityDescription insertNewObjectForEntityForName:@"DropboxNote"
                                                          inManagedObjectContext:managedObjectContext];
     
-    newNote.position = @([DropboxNote highestPosition] + 1);
     [self presentNote:newNote inManagedObjectContext:managedObjectContext];
 }
 

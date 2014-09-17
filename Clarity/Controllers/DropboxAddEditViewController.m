@@ -187,7 +187,6 @@
     if (self.isNewNote)
     {
         [self.noteTextView becomeFirstResponder];
-        [self.currentNote saveDropboxNote:self.currentNote inManagedObjectContext:self.managedObjectContext];
     }
     else {
         [self.noteTextView resignFirstResponder];
@@ -933,7 +932,6 @@
     NSManagedObjectContext *mainManagedObjectContext = [managedObjectContext parentContext];
     
     [self updateNoteDataWithCurrentState];                         //업데이트 노트 데이터
-    [self.currentNote saveNote:self.currentNote];                  //노트 저장
     
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
     [standardUserDefaults setInteger:0 forKey:kSELECTED_DROPBOX_NOTE_INDEX];                    //해당 노트 최상단에 위치함
@@ -1544,7 +1542,7 @@
     kLOGBOOL(self.currentNote.hasNoteStar);
     kLOGBOOL(self.currentNote.hasNoteAnnotate);
     
-    NSLog (@"NSTimeInterval > date: %f\n", self.currentNote.date);
+    NSLog (@"NSDate > date: %@\n", self.currentNote.date);
     
     NSLog (@"NSData > imageData: %@\n", self.currentNote.imageData);
     NSLog (@"NSDate > imageCreatedDate: %@\n", self.currentNote.imageCreatedDate);

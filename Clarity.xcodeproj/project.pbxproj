@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C121D4E919C93BCD0098BC94 /* DropboxNote.m in Sources */ = {isa = PBXBuildFile; fileRef = C121D4E819C93BCD0098BC94 /* DropboxNote.m */; };
+		C121D4EC19C93BCE0098BC94 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = C121D4EB19C93BCE0098BC94 /* Note.m */; };
+		C121D4EF19C93BCE0098BC94 /* LocalNote.m in Sources */ = {isa = PBXBuildFile; fileRef = C121D4EE19C93BCE0098BC94 /* LocalNote.m */; };
 		C122902F19973A2B00460667 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122902E19973A2B00460667 /* Foundation.framework */; };
 		C122903119973A2B00460667 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122903019973A2B00460667 /* CoreGraphics.framework */; };
 		C122903319973A2B00460667 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122903219973A2B00460667 /* UIKit.framework */; };
@@ -69,8 +72,6 @@
 		C12290FB19973BAA00460667 /* LeftTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C12290F419973BAA00460667 /* LeftTableViewCell.xib */; };
 		C12290FC19973BAA00460667 /* NoteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290F619973BAA00460667 /* NoteTableViewCell.m */; };
 		C12290FD19973BAA00460667 /* NoteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C12290F719973BAA00460667 /* NoteTableViewCell.xib */; };
-		C122910619973BE100460667 /* DropboxNote.m in Sources */ = {isa = PBXBuildFile; fileRef = C122910019973BE100460667 /* DropboxNote.m */; };
-		C122910719973BE100460667 /* LocalNote.m in Sources */ = {isa = PBXBuildFile; fileRef = C122910219973BE100460667 /* LocalNote.m */; };
 		C122910819973BE100460667 /* NoteDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C122910419973BE100460667 /* NoteDataManager.m */; };
 		C122910C19973CE100460667 /* Clarity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C122910A19973CE100460667 /* Clarity.xcdatamodeld */; };
 		C122910E19973D0600460667 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C122910D19973D0600460667 /* Main.storyboard */; };
@@ -110,6 +111,13 @@
 
 /* Begin PBXFileReference section */
 		62EF1565489047DBA75023BE /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		C121D4E619C93AB30098BC94 /* ClarityHD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ClarityHD 2.xcdatamodel"; sourceTree = "<group>"; };
+		C121D4E719C93BCD0098BC94 /* DropboxNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxNote.h; sourceTree = "<group>"; };
+		C121D4E819C93BCD0098BC94 /* DropboxNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxNote.m; sourceTree = "<group>"; };
+		C121D4EA19C93BCE0098BC94 /* Note.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Note.h; sourceTree = "<group>"; };
+		C121D4EB19C93BCE0098BC94 /* Note.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Note.m; sourceTree = "<group>"; };
+		C121D4ED19C93BCE0098BC94 /* LocalNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNote.h; sourceTree = "<group>"; };
+		C121D4EE19C93BCE0098BC94 /* LocalNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalNote.m; sourceTree = "<group>"; };
 		C122902B19973A2B00460667 /* Clarity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clarity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C122902E19973A2B00460667 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C122903019973A2B00460667 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -218,10 +226,6 @@
 		C12290F519973BAA00460667 /* NoteTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteTableViewCell.h; sourceTree = "<group>"; };
 		C12290F619973BAA00460667 /* NoteTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteTableViewCell.m; sourceTree = "<group>"; };
 		C12290F719973BAA00460667 /* NoteTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NoteTableViewCell.xib; path = ../Views/NoteTableViewCell.xib; sourceTree = "<group>"; };
-		C12290FF19973BE100460667 /* DropboxNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxNote.h; sourceTree = "<group>"; };
-		C122910019973BE100460667 /* DropboxNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxNote.m; sourceTree = "<group>"; };
-		C122910119973BE100460667 /* LocalNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNote.h; sourceTree = "<group>"; };
-		C122910219973BE100460667 /* LocalNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalNote.m; sourceTree = "<group>"; };
 		C122910319973BE100460667 /* NoteDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteDataManager.h; sourceTree = "<group>"; };
 		C122910419973BE100460667 /* NoteDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteDataManager.m; sourceTree = "<group>"; };
 		C122910B19973CE100460667 /* ClarityHD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ClarityHD.xcdatamodel; sourceTree = "<group>"; };
@@ -584,13 +588,15 @@
 		C12290FE19973BE100460667 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C122910A19973CE100460667 /* Clarity.xcdatamodeld */,
+				C121D4ED19C93BCE0098BC94 /* LocalNote.h */,
+				C121D4EE19C93BCE0098BC94 /* LocalNote.m */,
+				C121D4EA19C93BCE0098BC94 /* Note.h */,
+				C121D4EB19C93BCE0098BC94 /* Note.m */,
+				C121D4E719C93BCD0098BC94 /* DropboxNote.h */,
+				C121D4E819C93BCD0098BC94 /* DropboxNote.m */,
 				C122910319973BE100460667 /* NoteDataManager.h */,
 				C122910419973BE100460667 /* NoteDataManager.m */,
-				C12290FF19973BE100460667 /* DropboxNote.h */,
-				C122910019973BE100460667 /* DropboxNote.m */,
-				C122910119973BE100460667 /* LocalNote.h */,
-				C122910219973BE100460667 /* LocalNote.m */,
+				C122910A19973CE100460667 /* Clarity.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -881,6 +887,7 @@
 				C12290D019973A7E00460667 /* DropboxNoteListViewController.m in Sources */,
 				C12290A719973A7200460667 /* UIImage+MakeThumbnail.m in Sources */,
 				C12290A419973A7200460667 /* UIButtonPressAndHold.m in Sources */,
+				C121D4EC19C93BCE0098BC94 /* Note.m in Sources */,
 				C12290F919973BAA00460667 /* ICTextView.m in Sources */,
 				C12290FC19973BAA00460667 /* NoteTableViewCell.m in Sources */,
 				C1E74E7619AEFE2A00AA3399 /* NDHTMLtoPDF.m in Sources */,
@@ -891,7 +898,6 @@
 				C122909719973A6400460667 /* YRDropdownView.m in Sources */,
 				C125D34419AEDA1D00D9E892 /* MTZCollectionView.m in Sources */,
 				C1ABF0CD19985CF400E622CA /* JASidePanelController.m in Sources */,
-				C122910719973BE100460667 /* LocalNote.m in Sources */,
 				C12290DB19973A7E00460667 /* OpenSourceLicencesViewController.m in Sources */,
 				C122904119973A2B00460667 /* AppDelegate.m in Sources */,
 				C12290EC19973BA100460667 /* WelcomePage.m in Sources */,
@@ -916,16 +922,17 @@
 				C122910819973BE100460667 /* NoteDataManager.m in Sources */,
 				C1ABF0D719985E9F00E622CA /* PaperButton.m in Sources */,
 				C1E74E7219AEFE1500AA3399 /* BNHtmlPdfKit.m in Sources */,
+				C121D4E919C93BCD0098BC94 /* DropboxNote.m in Sources */,
 				C122909319973A6400460667 /* SVWebViewController.m in Sources */,
 				C122910C19973CE100460667 /* Clarity.xcdatamodeld in Sources */,
 				C12290A319973A7200460667 /* NSUserDefaults+Extension.m in Sources */,
 				C122909419973A6400460667 /* SVWebViewControllerActivityChrome.m in Sources */,
-				C122910619973BE100460667 /* DropboxNote.m in Sources */,
 				C12290A619973A7200460667 /* UIImage+ChangeColor.m in Sources */,
 				C12290DD19973A7E00460667 /* WelcomePageViewController.m in Sources */,
 				C125D34719AEDA1D00D9E892 /* MTZWhatsNewViewController.m in Sources */,
 				C122909519973A6400460667 /* SVWebViewControllerActivitySafari.m in Sources */,
 				C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */,
+				C121D4EF19C93BCE0098BC94 /* LocalNote.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1096,7 +1103,7 @@
 					"$(PROJECT_DIR)/MMMarkdown",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "84498e10-11d1-4007-89ea-89d99b9ca5cc";
+				PROVISIONING_PROFILE = "EB14081F-8FF6-431C-B3DE-94163ACD7D7C";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1120,7 +1127,7 @@
 					"$(PROJECT_DIR)/MMMarkdown",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "84498e10-11d1-4007-89ea-89d99b9ca5cc";
+				PROVISIONING_PROFILE = "EB14081F-8FF6-431C-B3DE-94163ACD7D7C";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1224,7 +1231,7 @@
 					"$(PROJECT_DIR)/MMMarkdown",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "84498e10-11d1-4007-89ea-89d99b9ca5cc";
+				PROVISIONING_PROFILE = "EB14081F-8FF6-431C-B3DE-94163ACD7D7C";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Distribution;
@@ -1286,9 +1293,10 @@
 		C122910A19973CE100460667 /* Clarity.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				C121D4E619C93AB30098BC94 /* ClarityHD 2.xcdatamodel */,
 				C122910B19973CE100460667 /* ClarityHD.xcdatamodel */,
 			);
-			currentVersion = C122910B19973CE100460667 /* ClarityHD.xcdatamodel */;
+			currentVersion = C121D4E619C93AB30098BC94 /* ClarityHD 2.xcdatamodel */;
 			path = Clarity.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

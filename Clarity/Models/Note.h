@@ -1,5 +1,5 @@
 //
-//  LocalNote.h
+//  Note.h
 //  Clarity
 //
 //  Created by jun on 9/17/14.
@@ -10,8 +10,9 @@
 #import <CoreData/CoreData.h>
 
 
-@interface LocalNote : NSManagedObject
+@interface Note : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * isOtherCloudNote;
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) NSString * dateString;
 @property (nonatomic, retain) NSString * dayString;
@@ -26,6 +27,7 @@
 @property (nonatomic, retain) NSNumber * isDropboxNote;
 @property (nonatomic, retain) NSNumber * isiCloudNote;
 @property (nonatomic, retain) NSNumber * isLocalNote;
+@property (nonatomic, retain) NSNumber * isNewNote;
 @property (nonatomic, retain) NSString * location;
 @property (nonatomic, retain) NSString * monthString;
 @property (nonatomic, retain) NSString * noteAll;
@@ -36,10 +38,8 @@
 @property (nonatomic, retain) NSString * noteSection;
 @property (nonatomic, retain) NSString * noteTitle;
 @property (nonatomic, retain) NSNumber * position;
+@property (nonatomic, retain) NSString * sectionName;
 @property (nonatomic, retain) NSString * syncID;
 @property (nonatomic, retain) NSString * yearString;
-@property (nonatomic, retain) NSNumber * isOtherCloudNote;
-@property (nonatomic, retain) NSNumber * isNewNote;
-@property (nonatomic, retain) NSString * sectionName;
 
 @end
