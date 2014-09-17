@@ -56,10 +56,10 @@
 {
     [super viewDidLoad];
     [self configureViewAndTableView];
-    [self addBarButtonItem];                                                        //바 버튼
-    [self checkWhetherShowWelcomeView];                                             //앱 처음 실행인지 체크 > Welcome 뷰 보여줌
-    [self addObserverForNewNote];                                                   //애드,에딧 뷰에서 뉴 노트 생성 버튼 누를 때 필요한 옵저버
-    [self addObserverForWelcomeViewControllerDismissed];                            //웰컴 뷰 해제
+    [self addBarButtonItem];
+    [self checkWhetherShowWelcomeView];
+    [self addObserverForWelcomeViewControllerDismissed];
+//    [self addObserverForNewNote];         //애드,에딧 뷰에서 뉴 노트 생성 버튼 누를 때 필요한 옵저버
 }
 
 
@@ -68,12 +68,12 @@
     [super viewWillAppear:animated];
     [self showStatusBar];
     [self showNavigationBar];
-    [self executePerformFetch];                                                     //패치 코어데이터 아이템
-    [self initializeSearchResultNotes];                                             //서치 results 초기화
-    [self.tableView reloadData];                                                    //테이블 뷰 업데이트
-    [self performUpdateInfoButton];                                                 //업데이트 인포
-    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
-    [self saveCurrentView];                                                         //현재 뷰 > 유저 디폴트 저장
+    [self executePerformFetch];
+    [self initializeSearchResultNotes];
+    [self.tableView reloadData];
+    [self performUpdateInfoButton];
+    [self performCheckNoNote];          //노트 없으면 헬프 레이블 보여줄 것
+    [self saveCurrentView];
 }
 
 
@@ -87,9 +87,9 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:YES];
-    [self cancelCurrentView];                   //현재 뷰 > 유저 디폴트 캔슬
-    [self deActivateSearchDisplayController];   //서치 디스플레이 컨트롤러 비활성화 (애드에딧 뷰에서 나올때 서치 디스플레이 컨트롤러를 거치지 않고 테이블뷰로 바로 돌아옴)
-    self.formatter = nil;                       //데이트 Formatter > nil
+    [self cancelCurrentView];
+    [self deActivateSearchDisplayController];
+    self.formatter = nil;
     _fetchedResultsController = nil;
     self.title = @"";
 }
@@ -350,6 +350,7 @@
         self.selectedNote = (DropboxNote *)[self.searchResultNotes objectAtIndex:indexPath.row];
         
         controller.isSearchResultNote = YES;
+        controller.isNewNote = NO;
         controller.currentNote = self.selectedNote;
         
         [self.searchDisplayController.searchBar setText:self.searchDisplayController.searchBar.text];
@@ -371,6 +372,7 @@
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.isSearchResultNote = NO;
+        controller.isNewNote = NO;
         controller.currentNote = self.selectedNote;
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -407,58 +409,35 @@
     controller.currentNote.noteTitle = _titleString;
     
     [self.navigationController pushViewController:controller animated:YES];
-//    [self presentNote:newNote inManagedObjectContext:managedObjectContext];
 }
-
-
-#pragma mark Present 노트
-
-//- (void)presentNote:(DropboxNote *)aNote inManagedObjectContext:(NSManagedObjectContext *)aManagedObjectContext
-//{
-//    DropboxAddEditViewController *controller = (DropboxAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
-////    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-//    
-//    [controller note:aNote inManagedObjectContext:aManagedObjectContext];
-//    controller.isNewNote = YES;
-//    controller.isSearchResultNote = NO;
-//    controller.isDropboxNote = YES;
-//    [self formatter];                                       //데이트 Formatter
-//    [self setTitleString];                                  //데이트 Formatter > 타이틀 스트링
-//    controller.currentNote.noteTitle = _titleString;
-//    
-////    [self presentViewController:navigationController animated:YES completion:^{ }];
-//    [self.navigationController pushViewController:controller animated:YES];
-//}
 
 
 #pragma mark 타이틀 스트링
 
 - (NSString *)buildTitleString
 {
-    NSDate *current = [NSDate date];
+    NSDate *now = [NSDate date];
     
     [self.formatter setDateFormat:@"dd"];
-    NSString *stringDay = [self.formatter stringFromDate:current];
+    NSString *stringDay = [self.formatter stringFromDate:now];
     
     [self.formatter setDateFormat:@"EEEE"];
-    NSString *stringDate = [self.formatter stringFromDate:current];
+    NSString *stringDate = [self.formatter stringFromDate:now];
     NSString *stringdaysOfTheWeek = [[stringDate substringToIndex:3] uppercaseString];
     
     [self.formatter setDateFormat:@"H"];
-    NSString *stringHour = [self.formatter stringFromDate:current];
+    NSString *stringHour = [self.formatter stringFromDate:now];
     
     [self.formatter setDateFormat:@"m"];
-    NSString *stringMinute = [self.formatter stringFromDate:current];
+    NSString *stringMinute = [self.formatter stringFromDate:now];
     
     [self.formatter setDateFormat:@"s"];
-    NSString *stringSeconds = [self.formatter stringFromDate:current];
+    NSString *stringSeconds = [self.formatter stringFromDate:now];
     
     _titleString = nil;
-//    NSString *untitled = @"Untitled";
     NSString *blank = @" ";
     NSString *colon = @":";
     _titleString = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@", stringdaysOfTheWeek, blank, stringDay, blank, stringHour, colon, stringMinute, colon, stringSeconds];
-//    NSLog (@"_titleString: %@\n", _titleString);
     
     return _titleString;
 }
@@ -466,8 +445,7 @@
 
 #pragma mark 데이트 Formatter
 
-// When you need, just use self.formatter
-- (NSDateFormatter *)formatter
+- (NSDateFormatter *)formatter  // When you need, just use self.formatter
 {
     if (! _formatter) {
         _formatter = [[NSDateFormatter alloc] init];
@@ -852,17 +830,6 @@
 }
 
 
-#pragma mark - Dealloc
-
-- (void)dealloc
-{
-    [self deregisterForNotifications];                              //Remove 옵저버
-    _fetchedResultsController = nil;                                //fetchedResultsController
-    self.searchResultNotes = nil;                                   //검색결과를 담을 뮤터블 배열
-    NSLog(@"dealloc %@", self);
-}
-
-
 #pragma mark - 유저 디폴트
 #pragma mark 유저 디폴트 > 현재 인덱스패스 저장
 
@@ -903,6 +870,17 @@
     {
         [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_DROPBOX_NOTE_INDEX];
     }
+}
+
+
+#pragma mark - Dealloc
+
+- (void)dealloc
+{
+    [self deregisterForNotifications];                              //Remove 옵저버
+    _fetchedResultsController = nil;                                //fetchedResultsController
+    self.searchResultNotes = nil;                                   //검색결과를 담을 뮤터블 배열
+    NSLog(@"dealloc %@", self);
 }
 
 
@@ -1052,6 +1030,7 @@
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.isSearchResultNote = NO;
+        controller.isNewNote = NO;
         controller.currentNote = self.selectedNote;
         
         [self.navigationController pushViewController:controller animated:YES]; //Push

@@ -20,6 +20,6 @@
 @property (nonatomic, assign) BOOL isiCloudNote;
 @property (nonatomic, assign) BOOL isOtherCloudNote;
 
-- (void)note:(DropboxNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;   //스토리보드
+- (void)note:(DropboxNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

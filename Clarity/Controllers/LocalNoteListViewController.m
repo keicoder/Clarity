@@ -56,26 +56,24 @@
 {
     [super viewDidLoad];
     [self configureViewAndTableView];
-    [self addBarButtonItem];                                                        //바 버튼
-    [self hideSearchBar];                                                           //서치바 감춤
-    [self checkWhetherShowWelcomeView];                                             //앱 처음 실행인지 체크 > Welcome 뷰 보여줌
-    [self addObserverForNewNote];                                                   //애드,에딧 뷰에서 뉴 노트 생성 버튼 누를 때 필요한 옵저버
-    [self addObserverForWelcomeViewControllerDismissed];                            //웰컴 뷰 해제
+    [self addBarButtonItem];
+    [self checkWhetherShowWelcomeView];
+    [self addObserverForWelcomeViewControllerDismissed];
+//    [self addObserverForNewNote];         //애드,에딧 뷰에서 뉴 노트 생성 버튼 누를 때 필요한 옵저버
 }
 
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.title = @"Local";
     [self showStatusBar];
     [self showNavigationBar];
-    [self executePerformFetch];                                                     //패치 코어데이터 아이템
-    [self initializeSearchResultNotes];                                             //서치 results 초기화
-    [self.tableView reloadData];                                                    //테이블 뷰 업데이트
-    [self performUpdateInfoButton];                                                 //업데이트 인포
-    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
-    [self saveCurrentView];                                                         //현재 뷰 > 유저 디폴트 저장
+    [self executePerformFetch];
+    [self initializeSearchResultNotes];
+    [self.tableView reloadData];
+    [self performUpdateInfoButton];
+    [self performCheckNoNote];          //노트 없으면 헬프 레이블 보여줄 것
+    [self saveCurrentView];
 }
 
 
@@ -83,25 +81,15 @@
 {
     [super viewDidAppear:animated];
     [self checkToShowWhatsNewView];
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES)  // app already launched
-    {
-        NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
-        NSString *lastVersionString = [[NSUserDefaults standardUserDefaults] stringForKey:@"currentVersion"];
-        
-        if ([versionString isEqualToString:lastVersionString]) {
-            [self showLastUsedNote];    //마지막 노트로 돌아감
-        }
-    }
 }
 
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:YES];
-    self.formatter = nil;                       //데이트 Formatter > nil
-    [self cancelCurrentView];                   //현재 뷰 > 유저 디폴트 캔슬
-    [self deActivateSearchDisplayController];   //서치 디스플레이 컨트롤러 비활성화 (애드에딧 뷰에서 나올때 서치 디스플레이 컨트롤러를 거치지 않고 테이블뷰로 바로 돌아옴)
+    [self cancelCurrentView];
+    [self deActivateSearchDisplayController];
+    self.formatter = nil;
     _fetchedResultsController = nil;
     self.title = @"";
 }
@@ -130,9 +118,9 @@
 
 - (void)configureViewAndTableView
 {
-    self.view.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;//kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR;          //뷰
-    self.tableView.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;                                    //테이블 뷰 배경 색상
-    self.tableView.separatorColor = kTEXTVIEW_BACKGROUND_COLOR; //[UIColor colorWithRed:0.333 green:0.333 blue:0.333 alpha:0.1]; //구분선 색상
+    self.view.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
+    self.tableView.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;
+    self.tableView.separatorColor = kTEXTVIEW_BACKGROUND_COLOR;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
 }
@@ -394,49 +382,6 @@
 }
 
 
-#pragma mark - 유저 디폴트
-#pragma mark 유저 디폴트 > 현재 인덱스패스 저장
-
-- (void)saveIndexPath:(NSIndexPath *)indexPath
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setInteger:indexPath.row forKey:kSELECTED_LOCAL_NOTE_INDEX];          //인덱스
-    [standardUserDefaults setIndexPath:indexPath forKey:kSELECTED_LOCAL_NOTE_INDEXPATH];        //인덱스패스
-    [standardUserDefaults synchronize];
-//    NSLog(@"didSelectRowAtIndex > _selectedIndex > saved Index: %d\n", [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_LOCAL_NOTE_INDEX]);
-//    NSLog(@"didSelectRowAtIndexPath > _selectedIndexPath > saved IndexPath: %@", [standardUserDefaults indexPathForKey:kSELECTED_LOCAL_NOTE_INDEXPATH]);
-}
-
-
-#pragma mark 유저 디폴트 > 현재 뷰 저장
-
-- (void)saveCurrentView
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_LOCAL];                          //현재 뷰
-    [standardUserDefaults synchronize];
-}
-
-
-- (void)cancelCurrentView
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_LOCAL];                           //현재 뷰
-    [standardUserDefaults synchronize];
-}
-
-
-#pragma mark - 내비게이션 컨트롤러 델리게이트
-
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
-{
-    if (viewController == self)
-    {
-        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_LOCAL_NOTE_INDEX];
-    }
-}
-
-
 #pragma mark - Add 노트
 
 - (void)addNewNote:(id)sender
@@ -446,61 +391,53 @@
 //    [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
     NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
   
-    LocalNote *newNote = [NSEntityDescription insertNewObjectForEntityForName:@"LocalNote" 
+    LocalNote *note = [NSEntityDescription insertNewObjectForEntityForName:@"LocalNote"
                                                        inManagedObjectContext:managedObjectContext];
     
-    [self presentNote:newNote inManagedObjectContext:managedObjectContext];
-}
-
-
-#pragma mark Present 노트
-
-- (void)presentNote:(LocalNote *)aNote inManagedObjectContext:(NSManagedObjectContext *)aManagedObjectContext
-{
     LocalAddEditViewController *controller = (LocalAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LocalAddEditViewController"];
-//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [controller note:note inManagedObjectContext:managedObjectContext];
     
-    [controller note:aNote inManagedObjectContext:aManagedObjectContext];
-    controller.isNewNote = YES;
+    [self formatter];
+    [self buildTitleString];
+    
     controller.isSearchResultNote = NO;
+    controller.isNewNote = YES;
+    controller.isDropboxNote = NO;
     controller.isLocalNote = YES;
-    [self formatter];                                       //데이트 Formatter
-    [self setTitleString];                                  //데이트 Formatter > 타이틀 스트링
+    controller.isiCloudNote = NO;
+    controller.isOtherCloudNote = NO;
     controller.currentNote.noteTitle = _titleString;
     
-//    [self presentViewController:navigationController animated:YES completion:^{ }];
     [self.navigationController pushViewController:controller animated:YES];
 }
 
 
 #pragma mark 타이틀 스트링
 
-- (NSString *)setTitleString
+- (NSString *)buildTitleString
 {
-    NSDate *current = [NSDate date];
+    NSDate *now = [NSDate date];
     
     [self.formatter setDateFormat:@"dd"];
-    NSString *stringDay = [self.formatter stringFromDate:current];
+    NSString *stringDay = [self.formatter stringFromDate:now];
     
     [self.formatter setDateFormat:@"EEEE"];
-    NSString *stringDate = [self.formatter stringFromDate:current];
+    NSString *stringDate = [self.formatter stringFromDate:now];
     NSString *stringdaysOfTheWeek = [[stringDate substringToIndex:3] uppercaseString];
     
     [self.formatter setDateFormat:@"H"];
-    NSString *stringHour = [self.formatter stringFromDate:current];
+    NSString *stringHour = [self.formatter stringFromDate:now];
     
     [self.formatter setDateFormat:@"m"];
-    NSString *stringMinute = [self.formatter stringFromDate:current];
+    NSString *stringMinute = [self.formatter stringFromDate:now];
     
     [self.formatter setDateFormat:@"s"];
-    NSString *stringSeconds = [self.formatter stringFromDate:current];
+    NSString *stringSeconds = [self.formatter stringFromDate:now];
     
     _titleString = nil;
-//    NSString *untitled = @"Untitled";
     NSString *blank = @" ";
     NSString *colon = @":";
     _titleString = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@", stringdaysOfTheWeek, blank, stringDay, blank, stringHour, colon, stringMinute, colon, stringSeconds];
-//    NSLog (@"_titleString: %@\n", _titleString);
     
     return _titleString;
 }
@@ -508,8 +445,7 @@
 
 #pragma mark 데이트 Formatter
 
-// When you need, just use self.formatter
-- (NSDateFormatter *)formatter
+- (NSDateFormatter *)formatter  // When you need, just use self.formatter
 {
     if (! _formatter) {
         _formatter = [[NSDateFormatter alloc] init];
@@ -528,7 +464,7 @@
     else if (_fetchedResultsController == nil)
     {
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"LocalNote"];
-        [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO]]];
+        [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO]]];
         _fetchedResultsController = [[NSFetchedResultsController alloc]
                                      initWithFetchRequest:fetchRequest 
                                      managedObjectContext:[NoteDataManager sharedNoteDataManager].managedObjectContext 
@@ -694,7 +630,7 @@
     _totalNotes = (int)[[_fetchedResultsController fetchedObjects] count];        //노트 갯수
     
     if (_totalNotes == 0) {
-        [self.infoButton setTitle:@"" forState:UIControlStateNormal];
+        [self.infoButton setTitle:@"Local" forState:UIControlStateNormal];
     }
     else if (_totalNotes == 1)
     {
@@ -739,12 +675,6 @@
 - (void)hideSearchBar
 {
     if ((unsigned long)[[_fetchedResultsController fetchedObjects] count] == 0) {
-        CGRect newBounds = self.tableView.bounds;
-        newBounds.origin.y = newBounds.origin.y + self.searchBar.bounds.size.height;
-        self.tableView.bounds = newBounds;
-    }
-    else
-    {
         CGRect newBounds = self.tableView.bounds;
         newBounds.origin.y = newBounds.origin.y + self.searchBar.bounds.size.height;
         self.tableView.bounds = newBounds;
@@ -897,6 +827,49 @@
     [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
     
     [center removeObserver:self];
+}
+
+
+#pragma mark - 유저 디폴트
+#pragma mark 유저 디폴트 > 현재 인덱스패스 저장
+
+- (void)saveIndexPath:(NSIndexPath *)indexPath
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setInteger:indexPath.row forKey:kSELECTED_LOCAL_NOTE_INDEX];          //인덱스
+    [standardUserDefaults setIndexPath:indexPath forKey:kSELECTED_LOCAL_NOTE_INDEXPATH];        //인덱스패스
+    [standardUserDefaults synchronize];
+    //    NSLog(@"didSelectRowAtIndex > _selectedIndex > saved Index: %d\n", [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_LOCAL_NOTE_INDEX]);
+    //    NSLog(@"didSelectRowAtIndexPath > _selectedIndexPath > saved IndexPath: %@", [standardUserDefaults indexPathForKey:kSELECTED_LOCAL_NOTE_INDEXPATH]);
+}
+
+
+#pragma mark 유저 디폴트 > 현재 뷰 저장
+
+- (void)saveCurrentView
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_LOCAL];                          //현재 뷰
+    [standardUserDefaults synchronize];
+}
+
+
+- (void)cancelCurrentView
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_LOCAL];                           //현재 뷰
+    [standardUserDefaults synchronize];
+}
+
+
+#pragma mark - 내비게이션 컨트롤러 델리게이트
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (viewController == self)
+    {
+        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_LOCAL_NOTE_INDEX];
+    }
 }
 
 
