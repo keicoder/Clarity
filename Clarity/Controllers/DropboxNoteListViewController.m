@@ -66,19 +66,14 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.title = @"";
-    
     [self showStatusBar];
     [self showNavigationBar];
     [self executePerformFetch];                                                     //패치 코어데이터 아이템
     [self initializeSearchResultNotes];                                             //서치 results 초기화
-    
     [self.tableView reloadData];                                                    //테이블 뷰 업데이트
     [self performUpdateInfoButton];                                                 //업데이트 인포
     [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
     [self saveCurrentView];                                                         //현재 뷰 > 유저 디폴트 저장
-    
-    [self hideSearchBar];                                                           //서치바 감춤
 }
 
 
@@ -86,25 +81,15 @@
 {
     [super viewDidAppear:animated];
     [self checkToShowWhatsNewView];
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES)  // app already launched
-    {
-        NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
-        NSString *lastVersionString = [[NSUserDefaults standardUserDefaults] stringForKey:@"currentVersion"];
-        
-        if ([versionString isEqualToString:lastVersionString]) {
-//            [self showLastUsedNote];    //마지막 노트로 돌아감
-        }
-    }
 }
 
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:YES];
-    self.formatter = nil;                       //데이트 Formatter > nil
     [self cancelCurrentView];                   //현재 뷰 > 유저 디폴트 캔슬
     [self deActivateSearchDisplayController];   //서치 디스플레이 컨트롤러 비활성화 (애드에딧 뷰에서 나올때 서치 디스플레이 컨트롤러를 거치지 않고 테이블뷰로 바로 돌아옴)
+    self.formatter = nil;                       //데이트 Formatter > nil
     _fetchedResultsController = nil;
     self.title = @"";
 }
@@ -133,9 +118,9 @@
 
 - (void)configureViewAndTableView
 {
-    self.view.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;//kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR;          //뷰
-    self.tableView.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;                                    //테이블 뷰 배경 색상
-    self.tableView.separatorColor = kTEXTVIEW_BACKGROUND_COLOR; //[UIColor colorWithRed:0.333 green:0.333 blue:0.333 alpha:0.1]; //구분선 색상
+    self.view.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
+    self.tableView.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;
+    self.tableView.separatorColor = kTEXTVIEW_BACKGROUND_COLOR;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
 }
