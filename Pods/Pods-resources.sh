@@ -41,22 +41,6 @@ install_resource()
       ;;
   esac
 }
-install_resource "Quayboard/src/QuayboardResources/Resources/keyBackgroundPad.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyBackgroundPad@2x.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyBackgroundPadHighlighted.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyBackgroundPadHighlighted@2x.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyBackgroundPhone.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyBackgroundPhone@2x.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyBackgroundPhoneHighlightCenter.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyBackgroundPhoneHighlightCenter@2x.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyBackgroundPhoneHighlightLeft.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyBackgroundPhoneHighlightLeft@2x.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyBackgroundPhoneHighlightRight.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyBackgroundPhoneHighlightRight@2x.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyboardBackground.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyboardBackground@2x.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyboardBackgroundPad.png"
-install_resource "Quayboard/src/QuayboardResources/Resources/keyboardBackgroundPad@2x.png"
 
 rsync -avr --copy-links --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 if [[ "${ACTION}" == "install" ]]; then

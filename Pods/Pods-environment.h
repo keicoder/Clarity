@@ -24,15 +24,3 @@
 #define COCOAPODS_VERSION_MINOR_ParcelKit 0
 #define COCOAPODS_VERSION_PATCH_ParcelKit 1
 
-// Quayboard
-#define COCOAPODS_POD_AVAILABLE_Quayboard
-#define COCOAPODS_VERSION_MAJOR_Quayboard 0
-#define COCOAPODS_VERSION_MINOR_Quayboard 1
-#define COCOAPODS_VERSION_PATCH_Quayboard 2
-
-// pop
-#define COCOAPODS_POD_AVAILABLE_pop
-#define COCOAPODS_VERSION_MAJOR_pop 1
-#define COCOAPODS_VERSION_MINOR_pop 0
-#define COCOAPODS_VERSION_PATCH_pop 6
-

@@ -91,7 +91,6 @@
 		C1ABF0CD19985CF400E622CA /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C819985CF400E622CA /* JASidePanelController.m */; };
 		C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0CA19985CF400E622CA /* LogViewController.m */; };
 		C1ABF0CF19985CF400E622CA /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0CC19985CF400E622CA /* UIViewController+JASidePanel.m */; };
-		C1ABF0D719985E9F00E622CA /* PaperButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0D619985E9F00E622CA /* PaperButton.m */; };
 		C1E74E7219AEFE1500AA3399 /* BNHtmlPdfKit.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E74E7119AEFE1500AA3399 /* BNHtmlPdfKit.m */; };
 		C1E74E7619AEFE2A00AA3399 /* NDHTMLtoPDF.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E74E7519AEFE2A00AA3399 /* NDHTMLtoPDF.m */; };
 		C1E74E7A19AEFED500AA3399 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E74E7919AEFED500AA3399 /* AudioToolbox.framework */; };
@@ -258,8 +257,6 @@
 		C1ABF0CA19985CF400E622CA /* LogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogViewController.m; sourceTree = "<group>"; };
 		C1ABF0CB19985CF400E622CA /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
 		C1ABF0CC19985CF400E622CA /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
-		C1ABF0D519985E9F00E622CA /* PaperButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaperButton.h; sourceTree = "<group>"; };
-		C1ABF0D619985E9F00E622CA /* PaperButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaperButton.m; sourceTree = "<group>"; };
 		C1E74E7019AEFE1500AA3399 /* BNHtmlPdfKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNHtmlPdfKit.h; sourceTree = "<group>"; };
 		C1E74E7119AEFE1500AA3399 /* BNHtmlPdfKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNHtmlPdfKit.m; sourceTree = "<group>"; };
 		C1E74E7419AEFE2A00AA3399 /* NDHTMLtoPDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDHTMLtoPDF.h; sourceTree = "<group>"; };
@@ -386,7 +383,6 @@
 				C1E74E7319AEFE2A00AA3399 /* NDHTMLtoPDF */,
 				C1E74E6F19AEFE1500AA3399 /* BNHtmlPdfKit */,
 				C125D32B19AEDA1D00D9E892 /* WhatsNew */,
-				C1ABF0D419985E9F00E622CA /* POPPaperButton */,
 				C1ABF0C619985CF400E622CA /* JASidePanels */,
 				C122906419973A6400460667 /* DoActionSheet */,
 				C122906E19973A6400460667 /* SVWebViewController */,
@@ -687,15 +683,6 @@
 			path = JASidePanels;
 			sourceTree = "<group>";
 		};
-		C1ABF0D419985E9F00E622CA /* POPPaperButton */ = {
-			isa = PBXGroup;
-			children = (
-				C1ABF0D519985E9F00E622CA /* PaperButton.h */,
-				C1ABF0D619985E9F00E622CA /* PaperButton.m */,
-			);
-			path = POPPaperButton;
-			sourceTree = "<group>";
-		};
 		C1E74E6F19AEFE1500AA3399 /* BNHtmlPdfKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -760,7 +747,7 @@
 		C122902319973A2B00460667 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = lovejunsoft;
 				TargetAttributes = {
 					C122902A19973A2B00460667 = {
@@ -916,7 +903,6 @@
 				C125D34819AEDA1D00D9E892 /* NSLayoutConstraint+Common.m in Sources */,
 				C122903D19973A2B00460667 /* main.m in Sources */,
 				C122910819973BE100460667 /* NoteDataManager.m in Sources */,
-				C1ABF0D719985E9F00E622CA /* PaperButton.m in Sources */,
 				C1E74E7219AEFE1500AA3399 /* BNHtmlPdfKit.m in Sources */,
 				C121D4E919C93BCD0098BC94 /* DropboxNote.m in Sources */,
 				C122909319973A6400460667 /* SVWebViewController.m in Sources */,

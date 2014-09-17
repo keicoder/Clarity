@@ -25,8 +25,6 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "JASidePanelController.h"
-#import "PaperButton.h"             //POP버튼
-#import <POP/POP.h>                 //POP버튼
 #import "UIColor+CustomColors.h"    //POP버튼
 
 static char ja_kvoContext;
@@ -35,8 +33,6 @@ static char ja_kvoContext;
     CGRect _centerPanelRestingFrame;		
     CGPoint _locationBeforePan;
 }
-
-@property (nonatomic, strong) PaperButton *paperButton;
 
 @property (nonatomic, readwrite) JASidePanelState state;
 @property (nonatomic, weak) UIViewController *visiblePanel;
@@ -543,11 +539,9 @@ static char ja_kvoContext;
             } else {
                 [self _showRightPanel:YES bounce:self.bounceOnSidePanelOpen];
             }
-            [self.paperButton animateToClose];
             break;
 		}
         case JASidePanelLeftVisible: {
-            [self.paperButton animateToMenu];
             [self _showCenterPanel:YES bounce:self.bounceOnSidePanelClose];
             break;
 		}
@@ -600,7 +594,6 @@ static char ja_kvoContext;
 
 - (void)_centerPanelTapped:(__unused UIGestureRecognizer *)gesture {
     [self _showCenterPanel:YES bounce:NO];
-    [self.paperButton animateToMenu];
 }
 
 #pragma mark - Internal Methods
@@ -851,7 +844,6 @@ static char ja_kvoContext;
         self.tapView = [[UIView alloc] init];
     }
     
-    [self.paperButton animateToClose];
     [self _toggleScrollsToTopForCenter:NO left:YES right:NO];
 }
 
@@ -964,16 +956,7 @@ static char ja_kvoContext;
 
 - (UIBarButtonItem *)leftButtonForCenterPanel 
 {
-    self.paperButton = [PaperButton button];
-    [self.paperButton addTarget:self action:@selector(toggleLeftPanel:) forControlEvents:UIControlEventTouchUpInside];
-    //button.tintColor = [UIColor customBlueColor];
-    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithCustomView:self.paperButton];
-    
-    //self.navigationItem.rightBarButtonItem = barButton;
-    
-    return barButton;
-    
-    //return [[UIBarButtonItem alloc] initWithImage:[[self class] defaultImage] style:UIBarButtonItemStylePlain target:self action:@selector(toggleLeftPanel:)];
+    return [[UIBarButtonItem alloc] initWithImage:[[self class] defaultImage] style:UIBarButtonItemStylePlain target:self action:@selector(toggleLeftPanel:)];
 }
 
 - (void)showLeftPanel:(BOOL)animated {
