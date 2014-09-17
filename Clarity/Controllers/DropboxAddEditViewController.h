@@ -12,13 +12,14 @@
 
 @interface DropboxAddEditViewController : UIViewController
 
-@property (strong, nonatomic) DropboxNote *currentNote;     //리스트 뷰에서 넘겨받거나 넘겨 줄 노트
-@property (nonatomic, assign) BOOL isNewNote;               //Add 버튼으로 생긴 뉴 노트인지 확인
-@property (nonatomic, assign) BOOL isSearchResultNote;      //Search 디스플레이에서 푸시(모달)된 노트인지 확인
-@property (nonatomic, assign) BOOL isDropboxNote;           //드랍박스 노트인지 확인
+@property (strong, nonatomic) DropboxNote *currentNote;
+@property (nonatomic, assign) BOOL isSearchResultNote;
+@property (nonatomic, assign) BOOL isNewNote;
+@property (nonatomic, assign) BOOL isDropboxNote;
+@property (nonatomic, assign) BOOL isLocalNote;
+@property (nonatomic, assign) BOOL isiCloudNote;
+@property (nonatomic, assign) BOOL isOtherCloudNote;
 
-
-#pragma mark - 노트 in Managed Object Context
 - (void)note:(DropboxNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;   //스토리보드
 
 @end

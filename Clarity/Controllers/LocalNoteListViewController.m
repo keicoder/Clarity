@@ -633,7 +633,6 @@
     barButtonItemFixed.width = 22.0f;
     UIBarButtonItem *barButtonItemNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     barButtonItemNarrow.width = 5.0f;
-    //    UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
     UIImage *star = [UIImage imageNamed:@"star-256"];
     self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -657,30 +656,17 @@
     self.infoButton.tintColor = kINFOBUTTON_TEXTCOLOR;
     self.infoButton.autoresizesSubviews = YES;
     self.infoButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
-    [self.infoButton addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, -6, 0, 0);
+    self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     self.infoButton.userInteractionEnabled = NO;
     [infoButtonView addSubview:self.infoButton];
-    UIBarButtonItem* barButtonItemInfo = [[UIBarButtonItem alloc]initWithCustomView:infoButtonView];
     
     self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, self.barButtonItemStarred];
-    self.navigationItem.leftBarButtonItems = @[barButtonItemInfo];
-    
-    //    UIBarButtonItem *barButtonItemBlank = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(noAction:)];
-    //    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewNote:)];
-    //    self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithTitle:@"Starred" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemStarredPressed:)];
-    //    [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
+    self.navigationItem.titleView = infoButtonView;
 }
 
 
 #pragma mark 버튼 액션 메소드
-
-- (void)noAction:(id)sender
-{
-    
-}
-
 
 - (void)buttonSearchPressed:(id)sender
 {

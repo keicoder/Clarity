@@ -17,7 +17,7 @@
 #import "YRDropdownView.h"                                              //드랍다운 뷰
 #import <MessageUI/MessageUI.h>                                         //이메일/메시지 공유
 #import "DoActionSheet.h"                                               //DoActionSheet
-#import <MaryPopin/UIViewController+MaryPopin.h>                        //팝인 뷰 > 카테고리
+#import "UIViewController+MaryPopin.h"                                  //팝인 뷰 > 카테고리
 #import "NoteTitlePopinViewController.h"                                //팝인 뷰 > 노트 타이틀 뷰
 #import "UIButtonPressAndHold.h"
 #import "NSUserDefaults+Extension.h"
@@ -79,6 +79,9 @@
     [self addObserverForApplicationWillResignActive];   //ApplicationWillResignActive Notification 옵저버
     [self addButtonForFullscreen];                      //Full Screen 버튼
     [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
+    [self showNotePropertiesValue];
+    [self showNoteDataToLogConsole];
+    
 }
 
 
@@ -123,7 +126,7 @@
 
 - (void)checkNewNote
 {
-    if (self.isNewNote)
+    if (self.isNewNote == YES)
     {
         [self.noteTextView becomeFirstResponder];
     }
@@ -227,8 +230,8 @@
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    [self hideStatusBar];                                    //상태바 Up
-    [self hideNavigationBar];                                //내비게이션바 Up
+//    [self hideStatusBar];                                    //상태바 Up
+//    [self hideNavigationBar];                                //내비게이션바 Up
     [self hideButtonForFullscreenWithAnimation];             //Full Screen 버튼
     return YES;
 }
@@ -400,7 +403,7 @@
 {
     if (self.isNewNote == YES)
     {
-        self.isNewNote = NO;
+        self.currentNote.isNewNote = [NSNumber numberWithBool:NO];
         [self concatenateString];
         [self saveMethodInvoked];
     }
@@ -417,6 +420,7 @@
             [self saveMethodInvoked];
         }
     }
+    [self showNoteDataToLogConsole];
 }
 
 
@@ -445,6 +449,41 @@
 }
 
 
+#pragma mark 업데이트 노트 데이터
+
+- (void)updateNoteDataWithCurrentState
+{
+    NSDate *now = [NSDate date];
+    if (self.currentNote.date == nil) {
+        self.currentNote.date = now;
+    }
+    if (self.currentNote.noteCreatedDate == nil) {
+        self.currentNote.noteCreatedDate = now;
+    }
+    self.currentNote.noteModifiedDate = now;
+    
+    self.currentNote.hasImage = [NSNumber numberWithBool:NO];
+    self.currentNote.hasNoteAnnotate = [NSNumber numberWithBool:NO];
+    self.currentNote.hasNoteStar = [NSNumber numberWithBool:_didSelectStar];
+    self.currentNote.isNewNote = [NSNumber numberWithBool:NO];
+    self.currentNote.isLocalNote = [NSNumber numberWithBool:NO];
+    self.currentNote.isDropboxNote = [NSNumber numberWithBool:YES];
+    self.currentNote.isiCloudNote = [NSNumber numberWithBool:NO];
+    self.currentNote.isOtherCloudNote = [NSNumber numberWithBool:NO];
+    
+    NSString *newline = @"\n\n";
+    NSString *concatenateString = [NSString stringWithFormat:@"%@%@%@%@%@", self.noteTitleLabel.text, newline, self.noteTextView.text, newline, _didSelectStar ? @"YES" : @"NO"];
+    self.currentNote.noteAll = concatenateString;
+    self.currentNote.noteTitle = self.noteTitleLabel.text;
+    self.currentNote.noteBody = self.noteTextView.text;
+    //sectionName, dateString, dayString, monthString, yearString > 노트 생성시 들어가 있음.
+    
+    
+}
+
+
+#pragma mark concatenateString
+
 - (void)concatenateString
 {
     NSString *newline = @"\n\n";
@@ -453,24 +492,7 @@
 }
 
 
-#pragma mark 업데이트 노트 데이터
-
-- (void)updateNoteDataWithCurrentState
-{
-    self.currentNote.noteTitle = self.noteTitleLabel.text;
-    self.currentNote.noteBody = self.noteTextView.text;
-    self.currentNote.hasNoteStar = [NSNumber numberWithBool:_didSelectStar];
-    self.currentNote.isLocalNote = [NSNumber numberWithBool:NO];
-    self.currentNote.isDropboxNote = [NSNumber numberWithBool:YES];
-    self.currentNote.isiCloudNote = [NSNumber numberWithBool:NO];
-    self.currentNote.hasImage = [NSNumber numberWithBool:NO];
-    self.currentNote.hasNoteAnnotate = [NSNumber numberWithBool:NO];
-    
-    NSString *newline = @"\n\n";
-    NSString *concatenateString = [NSString stringWithFormat:@"%@%@%@%@%@", self.noteTitleLabel.text, newline, self.noteTextView.text, newline, _didSelectStar ? @"YES" : @"NO"];
-    self.currentNote.noteAll = concatenateString;
-}
-
+#pragma mark barButtonItemMarkdownPressed
 
 - (void)barButtonItemMarkdownPressed:(id)sender
 {
@@ -480,6 +502,8 @@
     [self.navigationController pushViewController:controller animated:YES];             //Push
 }
 
+
+#pragma mark barButtonItemStarredPressed
 
 - (void)barButtonItemStarredPressed:(id)sender
 {
@@ -1026,41 +1050,55 @@
 
 - (void)showNoteDataToLogConsole
 {
-    kLOGBOOL(self.isNewNote);
-    kLOGBOOL(self.isSearchResultNote);
-    
-    kLOGBOOL(self.currentNote.isDropboxNote);
-    kLOGBOOL(self.currentNote.isLocalNote);
-    kLOGBOOL(self.currentNote.isiCloudNote);
-    kLOGBOOL(self.currentNote.hasImage);
-    kLOGBOOL(self.currentNote.hasNoteStar);
-    kLOGBOOL(self.currentNote.hasNoteAnnotate);
-    
     NSLog (@"NSDate > date: %@\n", self.currentNote.date);
-    
-    NSLog (@"NSData > imageData: %@\n", self.currentNote.imageData);
-    NSLog (@"NSDate > imageCreatedDate: %@\n", self.currentNote.imageCreatedDate);
     NSLog (@"NSDate > noteCreatedDate: %@\n", self.currentNote.noteCreatedDate);
     NSLog (@"NSDate > noteModifiedDate: %@\n", self.currentNote.noteModifiedDate);
+    NSLog (@"NSDate > imageCreatedDate: %@\n", self.currentNote.imageCreatedDate);
+    
+    NSLog (@"NSData > imageData: %@\n", self.currentNote.imageData);
+    NSLog (@"id > image: %@\n", self.currentNote.image);
     
     NSLog (@"NSNumber > imageUniqueId: %@\n", self.currentNote.imageUniqueId);
     NSLog (@"NSNumber > position: %@\n", self.currentNote.position);
     
-    NSLog (@"NSString > sectionName: %@\n", self.currentNote.sectionName);
-    NSLog (@"NSString > dateString: %@\n", self.currentNote.dateString);
-    NSLog (@"NSString > dayString: %@\n", self.currentNote.dayString);
+    kLOGBOOL(self.isSearchResultNote);
+    kLOGBOOL(self.currentNote.isNewNote);
+    kLOGBOOL(self.currentNote.isDropboxNote);
+    kLOGBOOL(self.currentNote.isLocalNote);
+    kLOGBOOL(self.currentNote.isiCloudNote);
+    kLOGBOOL(self.currentNote.isOtherCloudNote);
+    kLOGBOOL(self.currentNote.hasImage);
+    kLOGBOOL(self.currentNote.hasNoteStar);
+    kLOGBOOL(self.currentNote.hasNoteAnnotate);
+    
     NSLog (@"NSString > imageName: %@\n", self.currentNote.imageName);
     NSLog (@"NSString > location: %@\n", self.currentNote.location);
-    NSLog (@"NSString > monthString: %@\n", self.currentNote.monthString);
-    NSLog (@"NSString > noteAll: %@\n", self.currentNote.noteAll);
     NSLog (@"NSString > noteAnnotate: %@\n", self.currentNote.noteAnnotate);
-    NSLog (@"NSString > noteBody: %@\n", self.currentNote.noteBody);
     NSLog (@"NSString > noteSection: %@\n", self.currentNote.noteSection);
-    NSLog (@"NSString > noteTitle: %@\n", self.currentNote.noteTitle);
     NSLog (@"NSString > syncID: %@\n", self.currentNote.syncID);
+    
+    NSLog (@"NSString > dateString: %@\n", self.currentNote.dateString);
+    NSLog (@"NSString > dayString: %@\n", self.currentNote.dayString);
+    NSLog (@"NSString > monthString: %@\n", self.currentNote.monthString);
     NSLog (@"NSString > yearString: %@\n", self.currentNote.yearString);
     
-    NSLog (@"id > image: %@\n", self.currentNote.image);
+    NSLog (@"NSString > sectionName: %@\n", self.currentNote.sectionName);
+    NSLog (@"NSString > noteTitle: %@\n", self.currentNote.noteTitle);
+    NSLog (@"NSString > noteBody: %@\n", self.currentNote.noteBody);
+    NSLog (@"NSString > noteAll: %@\n", self.currentNote.noteAll);
+}
+
+
+#pragma mark - 노트 데이터 로그 콘솔에 보여주기
+
+- (void)showNotePropertiesValue
+{
+    kLOGBOOL(self.isSearchResultNote);
+    kLOGBOOL(self.isNewNote);
+    kLOGBOOL(self.isDropboxNote);
+    kLOGBOOL(self.isLocalNote);
+    kLOGBOOL(self.isiCloudNote);
+    kLOGBOOL(self.isOtherCloudNote);
 }
 
 

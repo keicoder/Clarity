@@ -50,9 +50,20 @@
 @synthesize formatter = _formatter;
 
 
+#pragma mark 데이트 Formatter
+
+- (NSDateFormatter *)formatter
+{
+    if (!_formatter) {
+        _formatter = [[NSDateFormatter alloc] init];
+    }
+    return _formatter;
+}
+
+
 #pragma mark awakeFromInsert
 
-- (void) awakeFromInsert
+- (void)awakeFromInsert
 {
     [super awakeFromInsert];
     NSDate *now = [NSDate date];
@@ -78,31 +89,6 @@
     [self.formatter setDateFormat:@"MMM yyyy"];
     NSString *sectionName = [self.formatter stringFromDate:now];
     self.sectionName = sectionName;
-    
-    [self showNoteDataToLogConsole];
-}
-
-
-#pragma mark 데이트 Formatter
-
-- (NSDateFormatter *)formatter
-{
-    if (!_formatter) {
-        _formatter = [[NSDateFormatter alloc] init];
-    }
-    return _formatter;
-}
-
-
-#pragma mark - 노트 데이터 로그 콘솔에 보여주기
-
-- (void)showNoteDataToLogConsole
-{
-    NSLog (@"NSString > sectionName: %@\n", self.sectionName);
-    NSLog (@"NSString > dateString: %@\n", self.dateString);
-    NSLog (@"NSString > dayString: %@\n", self.dayString);
-    NSLog (@"NSString > monthString: %@\n", self.monthString);
-    NSLog (@"NSString > yearString: %@\n", self.yearString);
 }
 
 

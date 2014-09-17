@@ -1,16 +1,13 @@
 PODS:
   - Dropbox-Sync-API-SDK (3.0.2)
-  - MaryPopin (1.4.1)
   - ParcelKit (2.0.1):
     - Dropbox-Sync-API-SDK (~> 3.0.2)
 
 DEPENDENCIES:
-  - MaryPopin
   - ParcelKit
 
 SPEC CHECKSUMS:
   Dropbox-Sync-API-SDK: e672f9c163d3feb5929c97890b6945a6c5fae5f1
-  MaryPopin: f460c3040dbd2a18f730538f03c7dd1714fa0931
   ParcelKit: 6941191fc9849a8c859f217edf8ba0be9d0cdfda
 
 COCOAPODS: 0.33.1

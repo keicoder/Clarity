@@ -57,7 +57,6 @@
     [super viewDidLoad];
     [self configureViewAndTableView];
     [self addBarButtonItem];                                                        //바 버튼
-    [self hideSearchBar];                                                           //서치바 감춤
     [self checkWhetherShowWelcomeView];                                             //앱 처음 실행인지 체크 > Welcome 뷰 보여줌
     [self addObserverForNewNote];                                                   //애드,에딧 뷰에서 뉴 노트 생성 버튼 누를 때 필요한 옵저버
     [self addObserverForWelcomeViewControllerDismissed];                            //웰컴 뷰 해제
@@ -67,15 +66,19 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.title = @"Dropbox";
+    self.title = @"";
+    
     [self showStatusBar];
     [self showNavigationBar];
     [self executePerformFetch];                                                     //패치 코어데이터 아이템
     [self initializeSearchResultNotes];                                             //서치 results 초기화
+    
     [self.tableView reloadData];                                                    //테이블 뷰 업데이트
     [self performUpdateInfoButton];                                                 //업데이트 인포
     [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
     [self saveCurrentView];                                                         //현재 뷰 > 유저 디폴트 저장
+    
+    [self hideSearchBar];                                                           //서치바 감춤
 }
 
 
@@ -90,7 +93,7 @@
         NSString *lastVersionString = [[NSUserDefaults standardUserDefaults] stringForKey:@"currentVersion"];
         
         if ([versionString isEqualToString:lastVersionString]) {
-            [self showLastUsedNote];    //마지막 노트로 돌아감
+//            [self showLastUsedNote];    //마지막 노트로 돌아감
         }
     }
 }
@@ -362,7 +365,6 @@
         self.selectedNote = (DropboxNote *)[self.searchResultNotes objectAtIndex:indexPath.row];
         
         controller.isSearchResultNote = YES;
-        controller.isNewNote = NO;
         controller.currentNote = self.selectedNote;
         
         [self.searchDisplayController.searchBar setText:self.searchDisplayController.searchBar.text];
@@ -384,56 +386,12 @@
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.isSearchResultNote = NO;
-        controller.isNewNote = NO;
         controller.currentNote = self.selectedNote;
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     
     [self.navigationController pushViewController:controller animated:YES]; //Push
-}
-
-
-#pragma mark - 유저 디폴트
-#pragma mark 유저 디폴트 > 현재 인덱스패스 저장
-
-- (void)saveIndexPath:(NSIndexPath *)indexPath
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setInteger:indexPath.row forKey:kSELECTED_DROPBOX_NOTE_INDEX];        //인덱스
-    [standardUserDefaults setIndexPath:indexPath forKey:kSELECTED_DROPBOX_NOTE_INDEXPATH];      //인덱스패스
-    [standardUserDefaults synchronize];
-//    NSLog(@"didSelectRowAtIndex > _selectedIndex > saved Index: %d\n", [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_DROPBOX_NOTE_INDEX]);
-//    NSLog(@"didSelectRowAtIndexPath > _selectedIndexPath > saved IndexPath: %@", [standardUserDefaults indexPathForKey:kSELECTED_DROPBOX_NOTE_INDEXPATH]);
-}
-
-
-#pragma mark 유저 디폴트 > 현재 뷰 저장
-
-- (void)saveCurrentView
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
-    [standardUserDefaults synchronize];
-}
-
-
-- (void)cancelCurrentView
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_DROPBOX];                          //현재 뷰
-    [standardUserDefaults synchronize];
-}
-
-
-#pragma mark - 내비게이션 컨트롤러 델리게이트
-
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
-{
-    if (viewController == self)
-    {
-        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_DROPBOX_NOTE_INDEX];
-    }
 }
 
 
@@ -446,36 +404,51 @@
     [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
 //    NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
     
-    DropboxNote *newNote = [NSEntityDescription insertNewObjectForEntityForName:@"DropboxNote"
+    DropboxNote *note = [NSEntityDescription insertNewObjectForEntityForName:@"DropboxNote"
                                                          inManagedObjectContext:managedObjectContext];
     
-    [self presentNote:newNote inManagedObjectContext:managedObjectContext];
+    DropboxAddEditViewController *controller = (DropboxAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
+    [controller note:note inManagedObjectContext:managedObjectContext];
+    
+    [self formatter];
+    [self buildTitleString];
+    
+    controller.isSearchResultNote = NO;
+    controller.isNewNote = YES;
+    controller.isDropboxNote = YES;
+    controller.isLocalNote = NO;
+    controller.isiCloudNote = NO;
+    controller.isOtherCloudNote = NO;
+    controller.currentNote.noteTitle = _titleString;
+    
+    [self.navigationController pushViewController:controller animated:YES];
+//    [self presentNote:newNote inManagedObjectContext:managedObjectContext];
 }
 
 
 #pragma mark Present 노트
 
-- (void)presentNote:(DropboxNote *)aNote inManagedObjectContext:(NSManagedObjectContext *)aManagedObjectContext
-{
-    DropboxAddEditViewController *controller = (DropboxAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
-//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-    
-    [controller note:aNote inManagedObjectContext:aManagedObjectContext];
-    controller.isNewNote = YES;
-    controller.isSearchResultNote = NO;
-    controller.isDropboxNote = YES;
-    [self formatter];                                       //데이트 Formatter
-    [self setTitleString];                                  //데이트 Formatter > 타이틀 스트링
-    controller.currentNote.noteTitle = _titleString;
-    
-//    [self presentViewController:navigationController animated:YES completion:^{ }];
-    [self.navigationController pushViewController:controller animated:YES];
-}
+//- (void)presentNote:(DropboxNote *)aNote inManagedObjectContext:(NSManagedObjectContext *)aManagedObjectContext
+//{
+//    DropboxAddEditViewController *controller = (DropboxAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
+////    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+//    
+//    [controller note:aNote inManagedObjectContext:aManagedObjectContext];
+//    controller.isNewNote = YES;
+//    controller.isSearchResultNote = NO;
+//    controller.isDropboxNote = YES;
+//    [self formatter];                                       //데이트 Formatter
+//    [self setTitleString];                                  //데이트 Formatter > 타이틀 스트링
+//    controller.currentNote.noteTitle = _titleString;
+//    
+////    [self presentViewController:navigationController animated:YES completion:^{ }];
+//    [self.navigationController pushViewController:controller animated:YES];
+//}
 
 
 #pragma mark 타이틀 스트링
 
-- (NSString *)setTitleString
+- (NSString *)buildTitleString
 {
     NSDate *current = [NSDate date];
     
@@ -528,7 +501,7 @@
     else if (_fetchedResultsController == nil)
     {
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"DropboxNote"];
-        [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO]]];
+        [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO]]];
         _fetchedResultsController = [[NSFetchedResultsController alloc]
                                      initWithFetchRequest:fetchRequest
                                      managedObjectContext:[NoteDataManager sharedNoteDataManager].managedObjectContext
@@ -633,7 +606,6 @@
     barButtonItemFixed.width = 22.0f;
     UIBarButtonItem *barButtonItemNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     barButtonItemNarrow.width = 5.0f;
-//    UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
     UIImage *star = [UIImage imageNamed:@"star-256"];
     self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -657,30 +629,17 @@
     self.infoButton.tintColor = kINFOBUTTON_TEXTCOLOR;
     self.infoButton.autoresizesSubviews = YES;
     self.infoButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
-    [self.infoButton addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, -6, 0, 0);
+    self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
     self.infoButton.userInteractionEnabled = NO;
     [infoButtonView addSubview:self.infoButton];
-    UIBarButtonItem* barButtonItemInfo = [[UIBarButtonItem alloc]initWithCustomView:infoButtonView];
     
     self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, self.barButtonItemStarred];
-    self.navigationItem.leftBarButtonItems = @[barButtonItemInfo];
-    
-//    UIBarButtonItem *barButtonItemBlank = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(noAction:)];
-//    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewNote:)];
-//    self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithTitle:@"Starred" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemStarredPressed:)];
-//    [self.barButtonItemStarred setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
+    self.navigationItem.titleView = infoButtonView;
 }
 
 
 #pragma mark 버튼 액션 메소드
-
-- (void)noAction:(id)sender
-{
-    
-}
-
 
 - (void)buttonSearchPressed:(id)sender
 {
@@ -753,12 +712,6 @@
 - (void)hideSearchBar
 {
     if ((unsigned long)[[_fetchedResultsController fetchedObjects] count] == 0) {
-        CGRect newBounds = self.tableView.bounds;
-        newBounds.origin.y = newBounds.origin.y + self.searchBar.bounds.size.height;
-        self.tableView.bounds = newBounds;
-    }
-    else
-    {
         CGRect newBounds = self.tableView.bounds;
         newBounds.origin.y = newBounds.origin.y + self.searchBar.bounds.size.height;
         self.tableView.bounds = newBounds;
@@ -925,6 +878,49 @@
 }
 
 
+#pragma mark - 유저 디폴트
+#pragma mark 유저 디폴트 > 현재 인덱스패스 저장
+
+- (void)saveIndexPath:(NSIndexPath *)indexPath
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setInteger:indexPath.row forKey:kSELECTED_DROPBOX_NOTE_INDEX];        //인덱스
+    [standardUserDefaults setIndexPath:indexPath forKey:kSELECTED_DROPBOX_NOTE_INDEXPATH];      //인덱스패스
+    [standardUserDefaults synchronize];
+    //    NSLog(@"didSelectRowAtIndex > _selectedIndex > saved Index: %d\n", [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_DROPBOX_NOTE_INDEX]);
+    //    NSLog(@"didSelectRowAtIndexPath > _selectedIndexPath > saved IndexPath: %@", [standardUserDefaults indexPathForKey:kSELECTED_DROPBOX_NOTE_INDEXPATH]);
+}
+
+
+#pragma mark 유저 디폴트 > 현재 뷰 저장
+
+- (void)saveCurrentView
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
+    [standardUserDefaults synchronize];
+}
+
+
+- (void)cancelCurrentView
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_DROPBOX];                          //현재 뷰
+    [standardUserDefaults synchronize];
+}
+
+
+#pragma mark - 내비게이션 컨트롤러 델리게이트
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (viewController == self)
+    {
+        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_DROPBOX_NOTE_INDEX];
+    }
+}
+
+
 #pragma mark - 메모리 경고
 
 - (void)didReceiveMemoryWarning
@@ -1071,7 +1067,6 @@
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.isSearchResultNote = NO;
-        controller.isNewNote = NO;
         controller.currentNote = self.selectedNote;
         
         [self.navigationController pushViewController:controller animated:YES]; //Push

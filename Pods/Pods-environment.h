@@ -12,12 +12,6 @@
 #define COCOAPODS_VERSION_MINOR_Dropbox_Sync_API_SDK 0
 #define COCOAPODS_VERSION_PATCH_Dropbox_Sync_API_SDK 2
 
-// MaryPopin
-#define COCOAPODS_POD_AVAILABLE_MaryPopin
-#define COCOAPODS_VERSION_MAJOR_MaryPopin 1
-#define COCOAPODS_VERSION_MINOR_MaryPopin 4
-#define COCOAPODS_VERSION_PATCH_MaryPopin 1
-
 // ParcelKit
 #define COCOAPODS_POD_AVAILABLE_ParcelKit
 #define COCOAPODS_VERSION_MAJOR_ParcelKit 2

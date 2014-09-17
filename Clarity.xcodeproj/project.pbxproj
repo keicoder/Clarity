@@ -94,6 +94,7 @@
 		C1E74E7219AEFE1500AA3399 /* BNHtmlPdfKit.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E74E7119AEFE1500AA3399 /* BNHtmlPdfKit.m */; };
 		C1E74E7619AEFE2A00AA3399 /* NDHTMLtoPDF.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E74E7519AEFE2A00AA3399 /* NDHTMLtoPDF.m */; };
 		C1E74E7A19AEFED500AA3399 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E74E7919AEFED500AA3399 /* AudioToolbox.framework */; };
+		C1F0580C19C961BA0073530A /* UIViewController+MaryPopin.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F0580B19C961BA0073530A /* UIViewController+MaryPopin.m */; };
 		C331FC139151431BB224E126 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6E8D91E9C764F1DBB2C6C0E /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -262,6 +263,8 @@
 		C1E74E7419AEFE2A00AA3399 /* NDHTMLtoPDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDHTMLtoPDF.h; sourceTree = "<group>"; };
 		C1E74E7519AEFE2A00AA3399 /* NDHTMLtoPDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDHTMLtoPDF.m; sourceTree = "<group>"; };
 		C1E74E7919AEFED500AA3399 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		C1F0580A19C961BA0073530A /* UIViewController+MaryPopin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MaryPopin.h"; sourceTree = "<group>"; };
+		C1F0580B19C961BA0073530A /* UIViewController+MaryPopin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+MaryPopin.m"; sourceTree = "<group>"; };
 		D6E8D91E9C764F1DBB2C6C0E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -380,6 +383,7 @@
 		C122906319973A6400460667 /* 3rdParties */ = {
 			isa = PBXGroup;
 			children = (
+				C1F0580919C961BA0073530A /* MaryPopin */,
 				C1E74E7319AEFE2A00AA3399 /* NDHTMLtoPDF */,
 				C1E74E6F19AEFE1500AA3399 /* BNHtmlPdfKit */,
 				C125D32B19AEDA1D00D9E892 /* WhatsNew */,
@@ -701,6 +705,15 @@
 			path = NDHTMLtoPDF;
 			sourceTree = "<group>";
 		};
+		C1F0580919C961BA0073530A /* MaryPopin */ = {
+			isa = PBXGroup;
+			children = (
+				C1F0580A19C961BA0073530A /* UIViewController+MaryPopin.h */,
+				C1F0580B19C961BA0073530A /* UIViewController+MaryPopin.m */,
+			);
+			path = MaryPopin;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -898,6 +911,7 @@
 				C12290D819973A7E00460667 /* MarkdownWebViewController.m in Sources */,
 				C12290CF19973A7E00460667 /* DropboxAddEditViewController.m in Sources */,
 				C122909619973A6400460667 /* SVWebViewControllerActivity.m in Sources */,
+				C1F0580C19C961BA0073530A /* UIViewController+MaryPopin.m in Sources */,
 				C12290D719973A7E00460667 /* MarkdownGuideViewController.m in Sources */,
 				C125D34519AEDA1D00D9E892 /* MTZWhatsNewFeatureCollectionViewCell.m in Sources */,
 				C125D34819AEDA1D00D9E892 /* NSLayoutConstraint+Common.m in Sources */,

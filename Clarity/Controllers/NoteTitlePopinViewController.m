@@ -11,7 +11,7 @@
 #import "DropboxNote.h"
 #import "LocalAddEditViewController.h"
 #import "DropboxAddEditViewController.h"
-#import <MaryPopin/UIViewController+MaryPopin.h>
+#import "UIViewController+MaryPopin.h"
 
 
 @interface NoteTitlePopinViewController () <UITextFieldDelegate>

@@ -336,7 +336,6 @@
         self.selectedNote = (DropboxNote *)[self.searchResultNotes objectAtIndex:indexPath.row];
         
         controller.isSearchResultNote = YES;
-        controller.isNewNote = NO;
         controller.currentNote = self.selectedNote;
         
         [self.searchDisplayController.searchBar setText:self.searchDisplayController.searchBar.text];
@@ -356,7 +355,6 @@
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.isSearchResultNote = NO;
-        controller.isNewNote = NO;
         controller.currentNote = self.selectedNote;
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

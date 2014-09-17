@@ -17,7 +17,7 @@
 #import "YRDropdownView.h"                                              //드랍다운 뷰
 #import <MessageUI/MessageUI.h>                                         //이메일/메시지 공유
 #import "DoActionSheet.h"                                               //DoActionSheet
-#import <MaryPopin/UIViewController+MaryPopin.h>                        //팝인 뷰 > 카테고리
+#import "UIViewController+MaryPopin.h"                                  //팝인 뷰 > 카테고리
 #import "NoteTitlePopinViewController.h"                                //팝인 뷰 > 노트 타이틀 뷰
 #import "UIButtonPressAndHold.h"
 #import "NSUserDefaults+Extension.h"
