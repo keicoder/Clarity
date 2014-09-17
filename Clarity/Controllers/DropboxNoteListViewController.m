@@ -667,7 +667,7 @@
     _totalNotes = (int)[[_fetchedResultsController fetchedObjects] count];        //노트 갯수
     
     if (_totalNotes == 0) {
-        [self.infoButton setTitle:@"" forState:UIControlStateNormal];
+        [self.infoButton setTitle:@"Dropbox" forState:UIControlStateNormal];
     }
     else if (_totalNotes == 1)
     {

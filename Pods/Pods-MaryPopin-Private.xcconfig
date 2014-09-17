@@ -1,5 +1,0 @@
-#include "Pods-MaryPopin.xcconfig"
-GCC_PREPROCESSOR_DEFINITIONS = COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/MaryPopin" "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/Dropbox-Sync-API-SDK" "${PODS_ROOT}/Headers/MaryPopin" "${PODS_ROOT}/Headers/ParcelKit"
-OTHER_LDFLAGS = -ObjC ${PODS_MARYPOPIN_OTHER_LDFLAGS}
-PODS_ROOT = ${SRCROOT}
