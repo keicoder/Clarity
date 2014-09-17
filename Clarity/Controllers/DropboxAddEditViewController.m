@@ -1,6 +1,6 @@
 //
 //  DropboxAddEditViewController.m
-//  SwiftNoteiPad
+//  Clarity
 //
 //  Created by jun on 2014. 7. 19..
 //  Copyright (c) 2014년 lovejunsoft. All rights reserved.
@@ -66,36 +66,35 @@
     [super viewDidLoad];
     self.title = @"";
     self.automaticallyAdjustsScrollViewInsets = NO;
-    [self addNoteTextView];                             //노트 텍스트 뷰
-    [self addNoteTitleLabel];                           //노트 타이틀 레이블
-    [self registerKeyboardNotifications];               //키보드 노티피케이션
-    [self addBarButtonItems];                           //바 버튼
-    [self assignNoteData];                              //노트 데이터
-    [self.noteTextView assignTextViewAttribute];        //노트 텍스트 뷰 속성
-    [self updateStarImage];                             //스타 이미지 업데이트
-    [self addTapGestureRecognizer];                     //탭 제스처
-    [self addObserverForNoteTitleChanged];              //노트 타이틀 변경 Notification 옵저버
-    [self addObserverForHelpMessageMarkdownWebViewPopped]; //Help Message 마크다운 웹뷰에서 나올 때 Notification
-    [self addObserverForApplicationWillResignActive];   //ApplicationWillResignActive Notification 옵저버
-    [self addButtonForFullscreen];                      //Full Screen 버튼
-    [self checkNewNote];                                //뉴 노트 체크 > 키보드 Up
+    [self addNoteTextView];
+    [self addNoteTitleLabel];
+    [self registerKeyboardNotifications];
+    [self addBarButtonItems];
+    [self assignNoteData];
+    [self.noteTextView assignTextViewAttribute];
+    [self updateStarImage];
+    [self addTapGestureRecognizer];
+    [self addObserverForNoteTitleChanged];
+    [self addObserverForHelpMessageMarkdownWebViewPopped];
+    [self addObserverForApplicationWillResignActive];
+    [self addButtonForFullscreen];
+    [self checkNewNote];
     [self showNotePropertiesValue];
     [self showNoteDataToLogConsole];
-    
 }
 
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self saveCurrentView];                             //현재 뷰 > 유저 디폴트 저장
+    [self saveCurrentView];
 }
 
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self checkToShowHelpMessage];                      //헬프 message 보여줄건지 판단
+    [self checkToShowHelpMessage];
 //    PKSyncManager *manager = [[NoteDataManager sharedNoteDataManager] syncManager];
 //    [manager syncDatastore];    //manual sync
 //    NSLog(@"[manager syncDatastore] > manual sync invoked");
@@ -118,7 +117,6 @@
     self.starImage = nil;
     self.htmlString = nil;
 }
-
 
 
 #pragma mark - 노트 텍스트 뷰
@@ -404,11 +402,11 @@
     if (self.isNewNote == YES)
     {
         self.currentNote.isNewNote = [NSNumber numberWithBool:NO];
+        self.isNewNote = NO;
         [self concatenateString];
         [self saveMethodInvoked];
     }
-    else
-    {
+    else {
         NSString *newline = @"\n\n";
         NSString *concatenateString = [NSString stringWithFormat:@"%@%@%@%@%@", self.noteTitleLabel.text, newline, self.noteTextView.text, newline, _didSelectStar ? @"YES" : @"NO"];
         
@@ -476,9 +474,7 @@
     self.currentNote.noteAll = concatenateString;
     self.currentNote.noteTitle = self.noteTitleLabel.text;
     self.currentNote.noteBody = self.noteTextView.text;
-    //sectionName, dateString, dayString, monthString, yearString > 노트 생성시 들어가 있음.
-    
-    
+    /* sectionName, dateString, dayString, monthString, yearString > 노트 생성시 들어가 있음. */
 }
 
 
@@ -1089,7 +1085,7 @@
 }
 
 
-#pragma mark - 노트 데이터 로그 콘솔에 보여주기
+#pragma mark - 노트 프로퍼티 밸류 로그 콘솔에 보여주기
 
 - (void)showNotePropertiesValue
 {
