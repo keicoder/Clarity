@@ -702,7 +702,7 @@
     {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kDIDSHOW_NOTEVIEW_HELP];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        self.noteTextView.text = @"\n# Quick Guide\n\n### Notice\n**This quick guide note will not show again**.\n\n### Edit\n* To edit title, tap the date.\n* To save note, swipe right.\n* To remove keyboard, tap ▼ key or swipe down.\n\n### Preview\n* To preview markdown, tap 'M' button.\n* In Preview mode, Tap anywhere to enter full screen\n\n### Navigation\n* Swipe right to reveal lists.\n\n> Thank you for purchasing Clarity.  \nEnjoy Writing!";
+        self.noteTextView.text = @"\n# Quick Guide\n\n### Notice\n**This quick guide note will not show again**.\n\n### Edit\n* To edit title, tap the date.\n* To save note, swipe right.\n* To remove keyboard, just swipe down.\n\n### Preview\n* To preview markdown, tap 'M' button.\n* In Preview mode, Tap anywhere to enter full screen\n\n### Navigation\n* Swipe right to reveal lists.\n\n> Thank you for purchasing Clarity.  \nEnjoy Writing!";
         //        [self performSelector:@selector(barButtonItemMarkdownPressed:) withObject:nil afterDelay:0.0];
     }
     else {
