@@ -29,5 +29,16 @@
 			<string>equalizer</string>
 		</dict>
 	</array>
+	<key>1.3.0</key>
+	<array>
+		<dict>
+			<key>title</key>
+			<string>Support iOS 8</string>
+			<key>detail</key>
+			<string>Adds iOS 8 compatibility</string>
+			<key>icon</key>
+			<string>iOS8icon375by375</string>
+		</dict>
+	</array>
 </dict>
 </plist>

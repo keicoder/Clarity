@@ -2,13 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "partyhat.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "partyhat@2x.png"
+      "filename" : "iOS8icon375by375@2x.png"
     },
     {
       "idiom" : "universal",
