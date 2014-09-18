@@ -584,12 +584,12 @@
 		C12290FE19973BE100460667 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C121D4E719C93BCD0098BC94 /* DropboxNote.h */,
+				C121D4E819C93BCD0098BC94 /* DropboxNote.m */,
 				C121D4ED19C93BCE0098BC94 /* LocalNote.h */,
 				C121D4EE19C93BCE0098BC94 /* LocalNote.m */,
 				C121D4EA19C93BCE0098BC94 /* Note.h */,
 				C121D4EB19C93BCE0098BC94 /* Note.m */,
-				C121D4E719C93BCD0098BC94 /* DropboxNote.h */,
-				C121D4E819C93BCD0098BC94 /* DropboxNote.m */,
 				C122910319973BE100460667 /* NoteDataManager.h */,
 				C122910419973BE100460667 /* NoteDataManager.m */,
 				C122910A19973CE100460667 /* Clarity.xcdatamodeld */,

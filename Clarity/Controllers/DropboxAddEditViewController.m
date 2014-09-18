@@ -164,7 +164,7 @@
 {
     CGFloat noteTitleLabelHeight = 44;
     
-    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -40, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight)]; //-44
+    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -40, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight)];
     self.noteTitleLabelBackgroundView.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     [self.noteTextView addSubview:self.noteTitleLabelBackgroundView];
     [self.noteTitleLabelBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
@@ -401,7 +401,6 @@
 {
     if (self.isNewNote == YES)
     {
-        self.currentNote.isNewNote = [NSNumber numberWithBool:NO];
         self.isNewNote = NO;
         [self concatenateString];
         [self saveMethodInvoked];
@@ -637,102 +636,6 @@
 }
 
 
-#pragma mark - Do 액션 sheet (HTML 내보내기, 메일, 기타 공유 등)
-
-#pragma mark Do Action sheet
-
-- (void)displayDoActionSheet:(id)sender
-{
-    DoActionSheet *vActionSheet = [[DoActionSheet alloc] init];
-    [vActionSheet setStyle];
-    vActionSheet.dRound = 7;
-    vActionSheet.dButtonRound = 3;
-    vActionSheet.nAnimationType = 2; //0 > Default, 2 > POP
-    vActionSheet.doDimmedColor = [UIColor colorWithWhite:0.000 alpha:0.500];
-    vActionSheet.nDestructiveIndex = 5;
-    
-    [vActionSheet showC:@""
-                 cancel:@"Cancel"
-                buttons:@[@"Email as HTML", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"More actions as Plain Text...", @"Print Note"]
-                 result:^(int nResult)
-     {
-         switch (nResult)
-         {
-             case 0:
-             {
-                 self.htmlString = nil;
-                 if ([self.noteTextView.text length] == 0) {
-                     self.noteTextView.text = @"> No Contents";
-                 } else {
-                 }
-                 [self createHTMLString];                                                            //HTML 스트링
-                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];         //메일 컴포즈 컨트롤러
-             }
-                 break;
-             case 1:
-             {
-                 self.htmlString = nil;
-                 if ([self.noteTextView.text length] == 0) {
-                     self.noteTextView.text = @"> No Contents";
-                 } else {
-                 }
-                 [self createHTMLString];
-                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                 pasteboard.string = self.htmlString;                                                //Pasteboard Copy
-             }
-                 break;
-             case 2:
-             {
-                 self.htmlString = nil;
-                 if ([self.noteTextView.text length] == 0) {
-                     self.noteTextView.text = @"No Contents";
-                 } else {
-                 }
-                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];  //메일 컴포즈 컨트롤러
-             }
-                 break;
-             case 3:
-             {
-                 self.htmlString = nil;
-                 if ([self.noteTextView.text length] == 0) {
-                     self.noteTextView.text = @"> No Contents";
-                 } else {
-                 }
-                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                 pasteboard.string = self.noteTextView.text;                                         //Pasteboard Copy
-             }
-                 break;
-             case 4:
-             {
-                 self.htmlString = nil;
-                 if ([self.noteTextView.text length] == 0) {
-                     self.noteTextView.text = @"> No Contents";
-                 } else {
-                 }
-                 NSArray *itemsToShare = @[self.noteTextView.text];
-                 UIActivityViewController *activityViewController;
-                 activityViewController = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
-                 [self presentViewController:activityViewController animated:YES completion:^{
-                 }];
-             }
-                 break;
-             case 5:
-             {
-                 self.htmlString = nil;
-                 if ([self.noteTextView.text length] == 0) {
-                     self.noteTextView.text = @"> No Contents";
-                 } else {
-                 }
-                 [self createHTMLString];                                                            //HTML 스트링
-                 NSString *noteStringForPrint = self.htmlString;
-                 [self printNoteAsHTML:noteStringForPrint];                                          //프린트
-             }
-                 break;
-         }
-     }];
-}
-
-
 #pragma mark - 노티피케이션
 
 #pragma mark 노트 타이틀 변경 Notification 옵저버 등록
@@ -854,6 +757,102 @@
 - (void)popView
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+#pragma mark - Do 액션 sheet (HTML 내보내기, 메일, 기타 공유 등)
+
+#pragma mark Do Action sheet
+
+- (void)displayDoActionSheet:(id)sender
+{
+    DoActionSheet *vActionSheet = [[DoActionSheet alloc] init];
+    [vActionSheet setStyle];
+    vActionSheet.dRound = 7;
+    vActionSheet.dButtonRound = 3;
+    vActionSheet.nAnimationType = 2; //0 > Default, 2 > POP
+    vActionSheet.doDimmedColor = [UIColor colorWithWhite:0.000 alpha:0.500];
+    vActionSheet.nDestructiveIndex = 5;
+    
+    [vActionSheet showC:@""
+                 cancel:@"Cancel"
+                buttons:@[@"Email as HTML", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"More actions as Plain Text...", @"Print Note"]
+                 result:^(int nResult)
+     {
+         switch (nResult)
+         {
+             case 0:
+             {
+                 self.htmlString = nil;
+                 if ([self.noteTextView.text length] == 0) {
+                     self.noteTextView.text = @"> No Contents";
+                 } else {
+                 }
+                 [self createHTMLString];                                                            //HTML 스트링
+                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];         //메일 컴포즈 컨트롤러
+             }
+                 break;
+             case 1:
+             {
+                 self.htmlString = nil;
+                 if ([self.noteTextView.text length] == 0) {
+                     self.noteTextView.text = @"> No Contents";
+                 } else {
+                 }
+                 [self createHTMLString];
+                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                 pasteboard.string = self.htmlString;                                                //Pasteboard Copy
+             }
+                 break;
+             case 2:
+             {
+                 self.htmlString = nil;
+                 if ([self.noteTextView.text length] == 0) {
+                     self.noteTextView.text = @"No Contents";
+                 } else {
+                 }
+                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];  //메일 컴포즈 컨트롤러
+             }
+                 break;
+             case 3:
+             {
+                 self.htmlString = nil;
+                 if ([self.noteTextView.text length] == 0) {
+                     self.noteTextView.text = @"> No Contents";
+                 } else {
+                 }
+                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                 pasteboard.string = self.noteTextView.text;                                         //Pasteboard Copy
+             }
+                 break;
+             case 4:
+             {
+                 self.htmlString = nil;
+                 if ([self.noteTextView.text length] == 0) {
+                     self.noteTextView.text = @"> No Contents";
+                 } else {
+                 }
+                 NSArray *itemsToShare = @[self.noteTextView.text];
+                 UIActivityViewController *activityViewController;
+                 activityViewController = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+                 [self presentViewController:activityViewController animated:YES completion:^{
+                 }];
+             }
+                 break;
+             case 5:
+             {
+                 self.htmlString = nil;
+                 if ([self.noteTextView.text length] == 0) {
+                     self.noteTextView.text = @"> No Contents";
+                 } else {
+                 }
+                 [self createHTMLString];                                                            //HTML 스트링
+                 NSString *noteStringForPrint = self.htmlString;
+                 [self printNoteAsHTML:noteStringForPrint];                                          //프린트
+             }
+                 break;
+         }
+     }];
 }
 
 

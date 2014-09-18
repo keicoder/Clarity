@@ -679,6 +679,12 @@
         newBounds.origin.y = newBounds.origin.y + self.searchBar.bounds.size.height;
         self.tableView.bounds = newBounds;
     }
+    else
+    {
+        CGRect newBounds = self.tableView.bounds;
+        newBounds.origin.y = newBounds.origin.y + self.searchBar.bounds.size.height;
+        self.tableView.bounds = newBounds;
+    }
 }
 
 
@@ -763,7 +769,7 @@
     {
         self.helpLabel.alpha = 0.0;
         self.helpLabel.textColor = [UIColor clearColor];
-        self.tableView.separatorColor = kCLEAR_COLOR; //kTEXTVIEW_BACKGROUND_COLOR;
+        self.tableView.separatorColor = kCLEAR_COLOR;
     }
 }
 
