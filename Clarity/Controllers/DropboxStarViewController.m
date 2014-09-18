@@ -396,7 +396,7 @@
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"DropboxNote"];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hasNoteStar == %@", [NSNumber numberWithBool: YES] ];
         [fetchRequest setPredicate:predicate];
-        [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO]]];
+        [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO]]];
         _fetchedResultsController = [[NSFetchedResultsController alloc] 
                                      initWithFetchRequest:fetchRequest 
                                      managedObjectContext:[NoteDataManager sharedNoteDataManager].managedObjectContext
