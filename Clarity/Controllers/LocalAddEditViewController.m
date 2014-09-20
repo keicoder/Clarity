@@ -52,7 +52,7 @@
 
 #pragma mark - 노트 in Managed Object Context
 
-- (void)note:(LocalNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (void)note:(Note *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
 {
     self.currentNote = note;
     self.managedObjectContext = managedObjectContext;
@@ -493,7 +493,7 @@
 {
     MarkdownWebViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"MarkdownWebViewController"];
     [self updateNoteDataWithCurrentState];                                              //업데이트 노트 데이터
-    controller.currentLocalNote = self.currentNote;
+    controller.currentNote = self.currentNote;
     [self.navigationController pushViewController:controller animated:YES];             //Push
 }
 
@@ -623,7 +623,7 @@
     //    NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     //    NSManagedObjectContext *mainManagedObjectContext = [managedObjectContext parentContext];
-    [controller localNote:self.currentNote inManagedObjectContext:managedObjectContext];
+    [controller note:self.currentNote inManagedObjectContext:managedObjectContext];
     
     //팝인 뷰 속성
     [controller setPopinTransitionStyle:BKTPopinTransitionStyleSlide];  //BKTPopinTransitionStyleSlide, BKTPopinTransitionStyleCrossDissolve
@@ -644,7 +644,7 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceiveMessageNoteTitleChanged:)
-                                                 name:@"DidChangeLocalNoteTitleNotification"
+                                                 name:@"DidChangeNoteTitleNotification"
                                                object:nil];
 }
 
@@ -653,10 +653,10 @@
 
 - (void)didReceiveMessageNoteTitleChanged:(NSNotification *) notification
 {
-    if ([[notification name] isEqualToString:@"DidChangeLocalNoteTitleNotification"])
+    if ([[notification name] isEqualToString:@"DidChangeNoteTitleNotification"])
     {
         NSDictionary *userInfo = notification.userInfo;
-        LocalNote *receivedNote = [userInfo objectForKey:@"changedLocalNoteKey"];
+        Note *receivedNote = [userInfo objectForKey:@"didChangeNoteTitleKey"];
         self.currentNote = receivedNote;
         if (self.currentNote.noteTitle.length > 0) {
             self.noteTitleLabel.text = self.currentNote.noteTitle;
@@ -1107,7 +1107,7 @@
     [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [center removeObserver:self name:UIKeyboardDidHideNotification object:nil];
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"DidChangeLocalNoteTitleNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"DidChangeNoteTitleNotification" object:nil];
     [center removeObserver:self name:@"HelpMessageMarkdownWebViewPopped" object:nil];
     [center removeObserver:self name:@"ApplicationWillResignActiveNotification" object:nil];
     [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
@@ -1131,21 +1131,6 @@
 {
     [super didReceiveMemoryWarning];
     [self autoSave];
-}
-
-
-#pragma mark - 노트 in Managed Object Context (사용안함)
-#pragma mark xib 방식일 때
-
-- (id)initWithNote:(LocalNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-{
-    self = [super initWithNibName:@"LocalAddEditViewController" bundle:nil];
-    if (self)
-    {
-        _currentNote = note;
-        _managedObjectContext = managedObjectContext;
-    }
-    return self;
 }
 
 

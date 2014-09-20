@@ -7,8 +7,6 @@
 //
 
 #import "NoteTitlePopinViewController.h"
-#import "LocalNote.h"
-#import "DropboxNote.h"
 #import "Note.h"
 #import "LocalAddEditViewController.h"
 #import "DropboxAddEditViewController.h"
@@ -29,20 +27,6 @@
 @implementation NoteTitlePopinViewController
 
 #pragma mark - 노트 in Managed Object Context
-
-- (void)localNote:(LocalNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-{
-    _currentLocalNote = note;
-    _managedObjectContext = managedObjectContext;
-}
-
-
-- (void)dropboxNote:(DropboxNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-{
-    _currentDropboxNote = note;
-    _managedObjectContext = managedObjectContext;
-}
-
 
 - (void)note:(Note *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
 {

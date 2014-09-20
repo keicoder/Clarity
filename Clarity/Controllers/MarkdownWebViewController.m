@@ -32,8 +32,6 @@
 #import "MMMarkdown.h"
 #import "SVModalWebViewController.h"
 #import "SVWebViewController.h"
-#import "DropboxNote.h"
-#import "LocalNote.h"
 #import "Note.h"
 #import "UIImage+MakeThumbnail.h"
 
@@ -150,15 +148,12 @@
 - (NSString *)markdownString
 {
     NSError *error = nil;
-    NSString *markdownString;
-    if ([self.currentDropboxNote.noteBody length] == 0 && [self.currentLocalNote.noteBody length] == 0) {
+    NSString *markdownString = @"";
+    if ([self.currentNote.noteBody length] == 0) {
         markdownString = @"*No content*";
     }
-    if ([self.currentDropboxNote.noteBody length] > 0 && [self.currentLocalNote.noteBody length] == 0) {
-        markdownString = self.currentDropboxNote.noteBody;
-    }
-    if ([self.currentLocalNote.noteBody length] > 0 && [self.currentDropboxNote.noteBody length] == 0) {
-        markdownString = self.currentLocalNote.noteBody;
+    if ([self.currentNote.noteBody length] > 0) {
+        markdownString = self.currentNote.noteBody;
     }
     if (error != nil)
     {

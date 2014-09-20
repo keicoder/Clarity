@@ -97,33 +97,6 @@
         }
     }
     
-    
-//    //로컬 노트 영구 저장소
-//    {
-//        NSURL *storeURL = [applicationDocumentsDirectory URLByAppendingPathComponent:@"LocalNote.sqlite"];
-//        //        NSLog (@"NoteDataManager > Local Persistent Store URL: %@\n", storeURL);
-//        
-//        NSError *error = nil;
-//        
-//        _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-//        
-//        //lightweight migrations
-//        NSDictionary *options = @{ NSMigratePersistentStoresAutomaticallyOption : @YES,
-//                                   NSInferMappingModelAutomaticallyOption : @YES};
-//        
-//        if ([_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
-//                                                       configuration:nil
-//                                                                 URL:storeURL
-//                                                             options:options
-//                                                               error:&error] == NO)
-//        {
-//            [self showLocalCoreDataError];
-//            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-//            abort();
-//        }
-//    }
-    
-    //NSLog (@"NSPersistent Store Coordinator > _persistentStoreCoordinator: %@\n", _persistentStoreCoordinator);
     return _persistentStoreCoordinator;
 }
 

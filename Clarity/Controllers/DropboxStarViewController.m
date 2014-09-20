@@ -394,8 +394,13 @@
     else if (_fetchedResultsController == nil)
     {
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hasNoteStar == %@", [NSNumber numberWithBool: YES] ];
-        [fetchRequest setPredicate:predicate];
+        NSPredicate *predicateIsDropboxNote = [NSPredicate predicateWithFormat:@"isDropboxNote == %@", [NSNumber numberWithBool: YES] ];
+        NSPredicate *predicateHasNoteStar = [NSPredicate predicateWithFormat:@"hasNoteStar == %@", [NSNumber numberWithBool: YES] ];
+        
+        NSArray *predicatesArray = [NSArray arrayWithObjects:predicateIsDropboxNote, predicateHasNoteStar, nil];
+        NSPredicate * compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicatesArray];
+        [fetchRequest setPredicate:compoundPredicate];
+        
         [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO]]];
         _fetchedResultsController = [[NSFetchedResultsController alloc] 
                                      initWithFetchRequest:fetchRequest 

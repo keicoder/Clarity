@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LocalNote.h"
+#import "Note.h"
 
 
 @interface LocalAddEditViewController : UIViewController
 
-@property (strong, nonatomic) LocalNote *currentNote;
+@property (strong, nonatomic) Note *currentNote;
 @property (nonatomic, assign) BOOL isSearchResultNote;
 @property (nonatomic, assign) BOOL isNewNote;
 @property (nonatomic, assign) BOOL isDropboxNote;
@@ -20,6 +20,6 @@
 @property (nonatomic, assign) BOOL isiCloudNote;
 @property (nonatomic, assign) BOOL isOtherCloudNote;
 
-- (void)note:(LocalNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (void)note:(Note *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

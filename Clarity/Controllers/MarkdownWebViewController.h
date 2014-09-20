@@ -8,14 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class DropboxNote;
-@class LocalNote;
 @class Note;
 
 @interface MarkdownWebViewController : UIViewController
 
-@property (nonatomic, strong) LocalNote *currentLocalNote;
-@property (nonatomic, strong) DropboxNote *currentDropboxNote;
 @property (nonatomic, strong) Note *currentNote;
 
 @end

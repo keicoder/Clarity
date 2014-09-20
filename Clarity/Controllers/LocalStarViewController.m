@@ -14,7 +14,7 @@
 #import "LocalStarViewController.h"
 #import "AppDelegate.h"                                     //AppDelegate 참조
 #import "NoteDataManager.h"                                 //노트 데이터 매니저
-#import "LocalNote.h"                                       //노트 데이터 모델
+#import "Note.h"                                       //노트 데이터 모델
 #import "LocalAddEditViewController.h"                      //로컬 노트 생성 및 편집 뷰
 #import "NoteTableViewCell.h"                               //커스텀 셀
 #import "UIImage+ChangeColor.h"                             //이미지 컬러 변경
@@ -26,7 +26,7 @@
 @property (nonatomic, weak) IBOutlet UISearchBar *searchBar;                        //서치바
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController; //fetchedResultsController
 @property (nonatomic, strong) NSMutableArray *searchResultNotes;                    //서치바 검색결과를 담을 뮤터블 배열
-@property (nonatomic, strong) LocalNote *selectedNote;                              //AddEdit View로 넘겨 줄 노트
+@property (nonatomic, strong) Note *selectedNote;                              //AddEdit View로 넘겨 줄 노트
 @property (nonatomic, strong) UIButton *infoButton;                                 //인포 버튼
 @property (nonatomic, weak) IBOutlet UILabel *helpLabel;                            //헬프 레이블
 
@@ -164,7 +164,7 @@
         tableView.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;
         tableView.separatorColor = kTABLE_VIEW_SEPARATOR_COLOR;
         
-        LocalNote *note = self.searchResultNotes[indexPath.row];
+        Note *note = self.searchResultNotes[indexPath.row];
         cell.noteTitleLabel.text = note.noteTitle;
         cell.noteSubtitleLabel.text = note.noteBody;
         cell.dateLabel.text = note.dateString;
@@ -174,7 +174,7 @@
         [self configureImages:note cell:cell];
     }
     else {
-        LocalNote *note = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        Note *note = [self.fetchedResultsController objectAtIndexPath:indexPath];
         cell.noteTitleLabel.text = note.noteTitle;
         cell.noteSubtitleLabel.text = note.noteBody;
         cell.dateLabel.text = note.dateString;
@@ -219,7 +219,7 @@
 
 #pragma mark 셀 이미지
 
-- (void)configureImages:(LocalNote *)note cell:(NoteTableViewCell *)cell
+- (void)configureImages:(Note *)note cell:(NoteTableViewCell *)cell
 {
     UIImage *starredImage = [UIImage imageNameForChangingColor:@"star-256-white" color:kGOLD_COLOR];
     BOOL hasNoteStarCurrentState = [note.hasNoteStar boolValue];    //불리언 값, kLOGBOOL(hasNoteStarCurrentState);
@@ -333,7 +333,7 @@
     if (tableView == self.searchDisplayController.searchResultsTableView) 
     {
         NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
-        self.selectedNote = (LocalNote *)[self.searchResultNotes objectAtIndex:indexPath.row];
+        self.selectedNote = (Note *)[self.searchResultNotes objectAtIndex:indexPath.row];
         
         controller.isSearchResultNote = YES;
         controller.isNewNote = NO;
@@ -350,9 +350,9 @@
 //                                                        initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 //        [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
         
-        self.selectedNote = (LocalNote *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
+        self.selectedNote = (Note *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
         
-//        self.selectedNote = (LocalNote *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
+//        self.selectedNote = (Note *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.isSearchResultNote = NO;
@@ -395,12 +395,17 @@
     }
     else if (_fetchedResultsController == nil)
     {
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"LocalNote"];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"hasNoteStar == %@", [NSNumber numberWithBool: YES] ];
-        [fetchRequest setPredicate:predicate];
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
+        NSPredicate *predicateIsLocalNote = [NSPredicate predicateWithFormat:@"isLocalNote == %@", [NSNumber numberWithBool: YES] ];
+        NSPredicate *predicateHasNoteStar = [NSPredicate predicateWithFormat:@"hasNoteStar == %@", [NSNumber numberWithBool: YES] ];
+        
+        NSArray *predicatesArray = [NSArray arrayWithObjects:predicateIsLocalNote, predicateHasNoteStar, nil];
+        NSPredicate * compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicatesArray];
+        [fetchRequest setPredicate:compoundPredicate];
+        
         [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO]]];
-        _fetchedResultsController = [[NSFetchedResultsController alloc] 
-                                     initWithFetchRequest:fetchRequest 
+        _fetchedResultsController = [[NSFetchedResultsController alloc]
+                                     initWithFetchRequest:fetchRequest
                                      managedObjectContext:[NoteDataManager sharedNoteDataManager].managedObjectContext
                                      sectionNameKeyPath:@"sectionName" cacheName:nil];
         [fetchRequest setFetchBatchSize:20];

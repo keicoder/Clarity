@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C121D4E919C93BCD0098BC94 /* DropboxNote.m in Sources */ = {isa = PBXBuildFile; fileRef = C121D4E819C93BCD0098BC94 /* DropboxNote.m */; };
 		C121D4EC19C93BCE0098BC94 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = C121D4EB19C93BCE0098BC94 /* Note.m */; };
-		C121D4EF19C93BCE0098BC94 /* LocalNote.m in Sources */ = {isa = PBXBuildFile; fileRef = C121D4EE19C93BCE0098BC94 /* LocalNote.m */; };
 		C122902F19973A2B00460667 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122902E19973A2B00460667 /* Foundation.framework */; };
 		C122903119973A2B00460667 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122903019973A2B00460667 /* CoreGraphics.framework */; };
 		C122903319973A2B00460667 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122903219973A2B00460667 /* UIKit.framework */; };
@@ -111,12 +109,8 @@
 /* Begin PBXFileReference section */
 		62EF1565489047DBA75023BE /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		C121D4E619C93AB30098BC94 /* ClarityHD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ClarityHD 2.xcdatamodel"; sourceTree = "<group>"; };
-		C121D4E719C93BCD0098BC94 /* DropboxNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxNote.h; sourceTree = "<group>"; };
-		C121D4E819C93BCD0098BC94 /* DropboxNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxNote.m; sourceTree = "<group>"; };
 		C121D4EA19C93BCE0098BC94 /* Note.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Note.h; sourceTree = "<group>"; };
 		C121D4EB19C93BCE0098BC94 /* Note.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Note.m; sourceTree = "<group>"; };
-		C121D4ED19C93BCE0098BC94 /* LocalNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNote.h; sourceTree = "<group>"; };
-		C121D4EE19C93BCE0098BC94 /* LocalNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalNote.m; sourceTree = "<group>"; };
 		C122902B19973A2B00460667 /* Clarity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clarity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C122902E19973A2B00460667 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C122903019973A2B00460667 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -258,6 +252,7 @@
 		C1ABF0CA19985CF400E622CA /* LogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogViewController.m; sourceTree = "<group>"; };
 		C1ABF0CB19985CF400E622CA /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
 		C1ABF0CC19985CF400E622CA /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
+		C1ADEA9619CD67E800C4DDE0 /* ClarityHD 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ClarityHD 3.xcdatamodel"; sourceTree = "<group>"; };
 		C1E74E7019AEFE1500AA3399 /* BNHtmlPdfKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNHtmlPdfKit.h; sourceTree = "<group>"; };
 		C1E74E7119AEFE1500AA3399 /* BNHtmlPdfKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNHtmlPdfKit.m; sourceTree = "<group>"; };
 		C1E74E7419AEFE2A00AA3399 /* NDHTMLtoPDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDHTMLtoPDF.h; sourceTree = "<group>"; };
@@ -584,10 +579,6 @@
 		C12290FE19973BE100460667 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C121D4E719C93BCD0098BC94 /* DropboxNote.h */,
-				C121D4E819C93BCD0098BC94 /* DropboxNote.m */,
-				C121D4ED19C93BCE0098BC94 /* LocalNote.h */,
-				C121D4EE19C93BCE0098BC94 /* LocalNote.m */,
 				C121D4EA19C93BCE0098BC94 /* Note.h */,
 				C121D4EB19C93BCE0098BC94 /* Note.m */,
 				C122910319973BE100460667 /* NoteDataManager.h */,
@@ -918,7 +909,6 @@
 				C122903D19973A2B00460667 /* main.m in Sources */,
 				C122910819973BE100460667 /* NoteDataManager.m in Sources */,
 				C1E74E7219AEFE1500AA3399 /* BNHtmlPdfKit.m in Sources */,
-				C121D4E919C93BCD0098BC94 /* DropboxNote.m in Sources */,
 				C122909319973A6400460667 /* SVWebViewController.m in Sources */,
 				C122910C19973CE100460667 /* Clarity.xcdatamodeld in Sources */,
 				C12290A319973A7200460667 /* NSUserDefaults+Extension.m in Sources */,
@@ -928,7 +918,6 @@
 				C125D34719AEDA1D00D9E892 /* MTZWhatsNewViewController.m in Sources */,
 				C122909519973A6400460667 /* SVWebViewControllerActivitySafari.m in Sources */,
 				C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */,
-				C121D4EF19C93BCE0098BC94 /* LocalNote.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1292,10 +1281,11 @@
 		C122910A19973CE100460667 /* Clarity.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				C1ADEA9619CD67E800C4DDE0 /* ClarityHD 3.xcdatamodel */,
 				C121D4E619C93AB30098BC94 /* ClarityHD 2.xcdatamodel */,
 				C122910B19973CE100460667 /* ClarityHD.xcdatamodel */,
 			);
-			currentVersion = C121D4E619C93AB30098BC94 /* ClarityHD 2.xcdatamodel */;
+			currentVersion = C1ADEA9619CD67E800C4DDE0 /* ClarityHD 3.xcdatamodel */;
 			path = Clarity.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
