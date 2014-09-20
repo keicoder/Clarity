@@ -50,7 +50,6 @@
 @synthesize formatter = _formatter;
 
 
-
 #pragma mark 데이트 Formatter
 
 - (NSDateFormatter *)formatter
@@ -67,6 +66,12 @@
 - (void)awakeFromInsert
 {
     [super awakeFromInsert];
+    [self updateTableCellDateValue];
+}
+
+
+- (void)updateTableCellDateValue
+{
     NSDate *now = [NSDate date];
     
     [self.formatter setDateFormat:@"yyyy"];

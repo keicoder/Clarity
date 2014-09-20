@@ -66,6 +66,12 @@
 - (void)awakeFromInsert
 {
     [super awakeFromInsert];
+    [self updateTableCellDateValue];
+}
+
+
+- (void)updateTableCellDateValue
+{
     NSDate *now = [NSDate date];
     
     [self.formatter setDateFormat:@"yyyy"];

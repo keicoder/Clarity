@@ -13,32 +13,32 @@
 
 #import "DropboxNoteListViewController.h"
 //#import "FRLayeredNavigationController/FRLayeredNavigation.h"
-#import "AppDelegate.h"                                     //앱델리게이트 참조
-#import "NoteDataManager.h"                                 //노트 데이터 매니저
-#import "DropboxNote.h"                                     //노트 데이터 모델
-#import "DropboxAddEditViewController.h"                    //AddEdit View
-#import "DropboxStarViewController.h"                       //스타 뷰 컨트롤러
-#import "NoteTableViewCell.h"                               //커스텀 셀
-#import "UIImage+ChangeColor.h"                             //이미지 컬러 변경
-#import "NSUserDefaults+Extension.h"                        //셀 선택시 인덱스패스 유저 디폴트에 저장
-#import "WelcomePageViewController.h"                       //Welcome 뷰 > 앱 처음 실행인지 체크 > Welcome 뷰 보여줌
+#import "AppDelegate.h"
+#import "NoteDataManager.h"
+#import "Note.h"
+#import "DropboxAddEditViewController.h"
+#import "DropboxStarViewController.h"
+#import "NoteTableViewCell.h"
+#import "UIImage+ChangeColor.h"
+#import "NSUserDefaults+Extension.h"
+#import "WelcomePageViewController.h"
 #import "MTZWhatsNew.h"
 #import "MTZWhatsNewGridViewController.h"
 
 
 @interface DropboxNoteListViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, weak) IBOutlet UITableView *tableView;                        //테이블 뷰
-@property (nonatomic, weak) IBOutlet UISearchBar *searchBar;                        //서치바
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, strong) UIViewController *starViewController;                 //스타 뷰
-@property (nonatomic, strong) NSMutableArray *searchResultNotes;                    //서치바 검색결과를 담을 뮤터블 배열
-@property (nonatomic, strong) DropboxNote *selectedNote;                            //AddEdit View로 넘겨 줄 노트
-@property (nonatomic, strong) NSDateFormatter *formatter;                           //데이트 Formatter
-@property (nonatomic, strong) UIBarButtonItem *barButtonItemStarred;                //바 버튼 아이템
-@property (nonatomic, strong) UIButton *buttonStar;                                 //바 버튼 아이템
-@property (nonatomic, strong) UIButton *infoButton;                                 //인포 버튼
-@property (nonatomic, weak) IBOutlet UILabel *helpLabel;                            //헬프 레이블
+@property (nonatomic, strong) UIViewController *starViewController;
+@property (nonatomic, strong) NSMutableArray *searchResultNotes;
+@property (nonatomic, strong) Note *selectedNote;
+@property (nonatomic, strong) NSDateFormatter *formatter;
+@property (nonatomic, strong) UIBarButtonItem *barButtonItemStarred;
+@property (nonatomic, strong) UIButton *buttonStar;
+@property (nonatomic, strong) UIButton *infoButton;
+@property (nonatomic, weak) IBOutlet UILabel *helpLabel;
 
 @end
 
@@ -178,7 +178,7 @@
         tableView.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;
         tableView.separatorColor = kTABLE_VIEW_SEPARATOR_COLOR;
         
-        DropboxNote *note = self.searchResultNotes[indexPath.row];
+        Note *note = self.searchResultNotes[indexPath.row];
         cell.noteTitleLabel.text = note.noteTitle;
         cell.noteSubtitleLabel.text = note.noteBody;
         cell.dateLabel.text = note.dateString;
@@ -188,7 +188,7 @@
         [self configureImages:note cell:cell];
     }
     else {
-        DropboxNote *note = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        Note *note = [self.fetchedResultsController objectAtIndexPath:indexPath];
         cell.noteTitleLabel.text = note.noteTitle;
         cell.noteSubtitleLabel.text = note.noteBody;
         cell.dateLabel.text = note.dateString;
@@ -233,7 +233,7 @@
 
 #pragma mark 셀 이미지
 
-- (void)configureImages:(DropboxNote *)note cell:(NoteTableViewCell *)cell
+- (void)configureImages:(Note *)note cell:(NoteTableViewCell *)cell
 {
     UIImage *starredImage = [UIImage imageNameForChangingColor:@"star-256-white" color:kGOLD_COLOR];
     BOOL hasNoteStarCurrentState = [note.hasNoteStar boolValue];    //불리언 값, kLOGBOOL(hasNoteStarCurrentState);
@@ -347,7 +347,7 @@
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
         NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
-        self.selectedNote = (DropboxNote *)[self.searchResultNotes objectAtIndex:indexPath.row];
+        self.selectedNote = (Note *)[self.searchResultNotes objectAtIndex:indexPath.row];
         
         controller.isSearchResultNote = YES;
         controller.isNewNote = NO;
@@ -366,9 +366,9 @@
         
         [self saveIndexPath:indexPath]; //유저 디폴트 > 현재 인덱스패스 저장
         
-        self.selectedNote = (DropboxNote *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
+        self.selectedNote = (Note *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
         
-//        self.selectedNote = (DropboxNote *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
+//        self.selectedNote = (Note *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.isSearchResultNote = NO;
@@ -391,8 +391,7 @@
     [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
 //    NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
     
-    DropboxNote *note = [NSEntityDescription insertNewObjectForEntityForName:@"DropboxNote"
-                                                         inManagedObjectContext:managedObjectContext];
+    Note *note = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:managedObjectContext];
     
     DropboxAddEditViewController *controller = (DropboxAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
     [controller note:note inManagedObjectContext:managedObjectContext];
@@ -463,7 +462,9 @@
     }
     else if (_fetchedResultsController == nil)
     {
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"DropboxNote"];
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isDropboxNote == %@", [NSNumber numberWithBool: YES] ];
+        [fetchRequest setPredicate:predicate];
         [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO]]];
         _fetchedResultsController = [[NSFetchedResultsController alloc]
                                      initWithFetchRequest:fetchRequest
@@ -1013,7 +1014,7 @@
     self.navigationController.delegate = self;
     
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_DROPBOX_NOTE_INDEX];
-    //NSLog (@"selectedDropboxNoteIndex: %d, fetchedObjects count: %d", index, [[_fetchedResultsController fetchedObjects] count]);
+    //NSLog (@"selectedNoteIndex: %d, fetchedObjects count: %d", index, [[_fetchedResultsController fetchedObjects] count]);
     
     if (index < 0 || index >= [[_fetchedResultsController fetchedObjects] count])
     {
@@ -1030,9 +1031,9 @@
                                                         initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
         
-        self.selectedNote = (DropboxNote *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
+        self.selectedNote = (Note *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
         
-        //self.selectedNote = (DropboxNote *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
+        //self.selectedNote = (Note *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.isSearchResultNote = NO;

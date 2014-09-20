@@ -9,6 +9,7 @@
 #import "NoteTitlePopinViewController.h"
 #import "LocalNote.h"
 #import "DropboxNote.h"
+#import "Note.h"
 #import "LocalAddEditViewController.h"
 #import "DropboxAddEditViewController.h"
 #import "UIViewController+MaryPopin.h"
@@ -43,6 +44,13 @@
 }
 
 
+- (void)note:(Note *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+{
+    _currentNote = note;
+    _managedObjectContext = managedObjectContext;
+}
+
+
 #pragma mark - init
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -71,13 +79,8 @@
     self.titleTextField.returnKeyType = UIReturnKeyDone;
     [[UITextField appearance] setTintColor:[UIColor colorWithRed:0.949 green:0.427 blue:0.188 alpha:1]]; //텍스트 필드 캐럿 색상 변경
     
-    if (self.currentLocalNote.isLocalNote)
-    {
-        self.titleTextField.text = self.currentLocalNote.noteTitle;
-    }
-    else if (self.currentDropboxNote.isDropboxNote)
-    {
-        self.titleTextField.text = self.currentDropboxNote.noteTitle;
+    if (self.currentNote) {
+        self.titleTextField.text = self.currentNote.noteTitle;
     }
     
     [self.titleTextField performSelector:@selector(selectAll:) withObject:self.titleTextField afterDelay:0.f];
@@ -88,13 +91,6 @@
 {
     [super viewWillAppear:animated];
     [self.titleTextField becomeFirstResponder];
-}
-
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-//    [self.titleTextField setSelectedTextRange:[self.titleTextField textRangeFromPosition:self.titleTextField.beginningOfDocument toPosition:self.titleTextField.endOfDocument]];
 }
 
 
@@ -122,21 +118,12 @@
 
 - (void)saveMethodInvoked
 {
-    if (self.currentLocalNote.isLocalNote)
+    if (self.currentNote)
     {
-        self.currentLocalNote.noteTitle = self.titleTextField.text;
+        self.currentNote.noteTitle = self.titleTextField.text;
         
-        //타이틀 변경 노티피케이션 통보
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentLocalNote forKey:@"changedLocalNoteKey"];
-        [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeLocalNoteTitleNotification" object:nil userInfo:userInfo];
-    }
-    else if (self.currentDropboxNote.isDropboxNote)
-    {
-        self.currentDropboxNote.noteTitle = self.titleTextField.text;
-        
-        //타이틀 변경 노티피케이션 통보
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentDropboxNote forKey:@"changedDropboxNoteKey"];
-        [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeDropboxNoteTitleNotification" object:nil userInfo:userInfo];
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentNote forKey:@"didChangeNoteTitleKey"];
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeNoteTitleNotification" object:nil userInfo:userInfo];
     }
     
     [self performSelector:@selector(dismissView:) withObject:self afterDelay:0.1];
@@ -149,13 +136,7 @@
 }
 
 
-#pragma mark 텍스트 필드 델리게이트 > 텍스트 선택
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    
-}
-
+#pragma mark 텍스트 필드 델리게이트
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -168,7 +149,6 @@
 
 - (void)didReceiveMemoryWarning
 {
-    if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
     [super didReceiveMemoryWarning];
     NSLog(@"Memory Warning Invoked");
 }

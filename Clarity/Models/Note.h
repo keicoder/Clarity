@@ -42,4 +42,6 @@
 @property (nonatomic, retain) NSString * syncID;
 @property (nonatomic, retain) NSString * yearString;
 
+- (void)updateTableCellDateValue;
+
 @end

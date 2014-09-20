@@ -42,4 +42,6 @@
 @property (nonatomic, retain) NSNumber * isNewNote;
 @property (nonatomic, retain) NSNumber * isOtherCloudNote;
 
+- (void)updateTableCellDateValue;
+
 @end

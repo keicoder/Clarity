@@ -52,7 +52,7 @@
 
 #pragma mark - 노트 in Managed Object Context
 
-- (void)note:(DropboxNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (void)note:(Note *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
 {
     self.currentNote = note;
     self.managedObjectContext = managedObjectContext;
@@ -474,6 +474,8 @@
     self.currentNote.noteTitle = self.noteTitleLabel.text;
     self.currentNote.noteBody = self.noteTextView.text;
     /* sectionName, dateString, dayString, monthString, yearString > 노트 생성시 들어가 있음. */
+    
+    [self.currentNote updateTableCellDateValue];
 }
 
 
@@ -493,7 +495,7 @@
 {
     MarkdownWebViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"MarkdownWebViewController"];
     [self updateNoteDataWithCurrentState];                                              //업데이트 노트 데이터
-    controller.currentDropboxNote = self.currentNote;
+    controller.currentNote = self.currentNote;
     [self.navigationController pushViewController:controller animated:YES];             //Push
 }
 
@@ -623,7 +625,7 @@
     //    NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     NSManagedObjectContext *mainManagedObjectContext = [managedObjectContext parentContext];
-    [controller dropboxNote:self.currentNote inManagedObjectContext:mainManagedObjectContext];
+    [controller note:self.currentNote inManagedObjectContext:mainManagedObjectContext];
     
     //팝인 뷰 속성
     [controller setPopinTransitionStyle:BKTPopinTransitionStyleSlide];  //BKTPopinTransitionStyleSlide, BKTPopinTransitionStyleCrossDissolve
@@ -644,7 +646,7 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceiveMessageNoteTitleChanged:)
-                                                 name:@"DidChangeDropboxNoteTitleNotification"
+                                                 name:@"DidChangeNoteTitleNotification"
                                                object:nil];
 }
 
@@ -653,10 +655,10 @@
 
 - (void)didReceiveMessageNoteTitleChanged:(NSNotification *) notification
 {
-    if ([[notification name] isEqualToString:@"DidChangeDropboxNoteTitleNotification"])
+    if ([[notification name] isEqualToString:@"DidChangeNoteTitleNotification"])
     {
         NSDictionary *userInfo = notification.userInfo;
-        DropboxNote *receivedNote = [userInfo objectForKey:@"changedDropboxNoteKey"];
+        Note *receivedNote = [userInfo objectForKey:@"didChangeNoteTitleKey"];
         self.currentNote = receivedNote;
         if (self.currentNote.noteTitle.length > 0) {
             self.noteTitleLabel.text = self.currentNote.noteTitle;
@@ -730,8 +732,8 @@
     {
         NSLog(@"ApplicationWillResignActive Notification Received");
         [self autoSave];
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentNote forKey:@"currentDropboxNoteObjectIDKey"];
-        [[NSNotificationCenter defaultCenter] postNotificationName: @"CurrentDropboxNoteObjectIDKeyNotification" object:nil userInfo:userInfo];
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentNote forKey:@"currentNoteObjectIDKey"];
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"CurrentNoteObjectIDKeyNotification" object:nil userInfo:userInfo];
     }
 }
 
@@ -1107,7 +1109,7 @@
     [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [center removeObserver:self name:UIKeyboardDidHideNotification object:nil];
     
-    [center removeObserver:self name:@"DidChangeDropboxNoteTitleNotification" object:nil];
+    [center removeObserver:self name:@"DidChangeNoteTitleNotification" object:nil];
     [center removeObserver:self name:@"HelpMessageMarkdownWebViewPopped" object:nil];
     [center removeObserver:self name:@"ApplicationWillResignActiveNotification" object:nil];
     [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
@@ -1131,21 +1133,6 @@
 {
     [super didReceiveMemoryWarning];
     [self autoSave];
-}
-
-
-#pragma mark - 노트 in Managed Object Context (사용안함)
-#pragma mark xib 방식일 때
-
-- (id)initWithNote:(DropboxNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-{
-    self = [super initWithNibName:@"DropboxAddEditViewController" bundle:nil];
-    if (self)
-    {
-        _currentNote = note;
-        _managedObjectContext = managedObjectContext;
-    }
-    return self;
 }
 
 

@@ -10,17 +10,12 @@
 
 @class DropboxNote;
 @class LocalNote;
-
+@class Note;
 
 @interface MarkdownWebViewController : UIViewController
 
 @property (nonatomic, strong) LocalNote *currentLocalNote;
 @property (nonatomic, strong) DropboxNote *currentDropboxNote;
-
-
-#pragma mark - 노트 in Managed Object Context
-
-//스토리보드 방식일 때
-//- (void)dropboxNote:(DropboxNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+@property (nonatomic, strong) Note *currentNote;
 
 @end

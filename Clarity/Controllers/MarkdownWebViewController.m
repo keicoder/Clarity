@@ -29,12 +29,13 @@
 
 
 #import "MarkdownWebViewController.h"
-#import "MMMarkdown.h"                                          //MM 마크다운
-#import "SVModalWebViewController.h"                            //SV 모달 웹뷰
-#import "SVWebViewController.h"                                 //SV 웹뷰
-#import "DropboxNote.h"                                         //드랍박스 노트
-#import "LocalNote.h"                                           //로컬 노트
-#import "UIImage+MakeThumbnail.h"                               //이미지 섬네일
+#import "MMMarkdown.h"
+#import "SVModalWebViewController.h"
+#import "SVWebViewController.h"
+#import "DropboxNote.h"
+#import "LocalNote.h"
+#import "Note.h"
+#import "UIImage+MakeThumbnail.h"
 
 
 @interface MarkdownWebViewController () <UIWebViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIScrollViewDelegate>
@@ -53,17 +54,6 @@
 @implementation MarkdownWebViewController
 {
     BOOL _didTapped;                                                                //탭 제스처 상태 확인
-}
-
-
-#pragma mark - 노트 in Managed Object Context
-
-#pragma mark 스토리보드 방식일 때
-
-- (void)dropboxNote:(DropboxNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-{
-    self.currentDropboxNote = note;
-    self.managedObjectContext = managedObjectContext;
 }
 
 

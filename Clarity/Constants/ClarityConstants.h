@@ -39,12 +39,15 @@ extern NSString * const kIS_FIRST_TIME;
 #define kFRLAYERED_NAVIGATION_ITEM_WIDTH_RIGHT              320
 
 
+#define kCURRENT_VIEW_IS_LOCAL                              @"currentViewIsLocal"
 #define kSELECTED_LOCAL_NOTE_INDEX                          @"selectedLocalNoteIndex"
 #define kSELECTED_LOCAL_NOTE_INDEXPATH                      @"selectedLocalNoteIndexPath"
 #define kCURRENT_VIEW_IS_DROPBOX                            @"currentViewIsDropbox"
 #define kSELECTED_DROPBOX_NOTE_INDEX                        @"selectedDropboxNoteIndex"
 #define kSELECTED_DROPBOX_NOTE_INDEXPATH                    @"selectedDropboxNoteIndexPath"
-#define kCURRENT_VIEW_IS_LOCAL                              @"currentViewIsLocal"
+#define kCURRENT_VIEW_IS_ICLOUD                             @"currentViewIsiCloud"
+#define kSELECTED_NOTE_INDEX                                @"selectedNoteIndex"
+#define kSELECTED_NOTE_INDEXPATH                            @"selectedNoteIndexPath"
 
 #define kSHOW_GUIDE                                         @"showGuide"
 #define kDIDSHOW_NOTEVIEW_HELP                              @"didShowNoteViewHelp"
