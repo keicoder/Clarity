@@ -65,7 +65,7 @@ to add new note.</string>
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="-5054" y="-9934"/>
+            <point key="canvasLocation" x="-5422" y="-9938"/>
         </scene>
         <!--Detail-->
         <scene sceneID="fLg-sg-ffE">
@@ -81,7 +81,7 @@ to add new note.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L1K-JW-djk" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4295" y="-9934"/>
+            <point key="canvasLocation" x="-5029" y="-9938"/>
         </scene>
         <!--Left View Controller-->
         <scene sceneID="jGA-V0-Tgq">
@@ -138,7 +138,7 @@ to add new note.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iMz-c0-HSh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3522" y="-9565"/>
+            <point key="canvasLocation" x="-4270" y="-9559"/>
         </scene>
         <!--Dropbox Star View Controller-->
         <scene sceneID="Knc-q3-KKM">
@@ -199,7 +199,7 @@ to go back.</string>
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="-3902" y="-9934"/>
+            <point key="canvasLocation" x="-4636" y="-9938"/>
         </scene>
         <!--Support-->
         <scene sceneID="Sk7-jB-lQg">
@@ -579,7 +579,7 @@ to add new note.</string>
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="-5054" y="-9246"/>
+            <point key="canvasLocation" x="-5422" y="-9250"/>
         </scene>
         <!--Local Add Edit View Controller-->
         <scene sceneID="keL-2H-a8I">
@@ -594,7 +594,7 @@ to add new note.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zdw-Gh-iOY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4295" y="-9246"/>
+            <point key="canvasLocation" x="-5029" y="-9250"/>
         </scene>
         <!--Local Star View Controller-->
         <scene sceneID="k7b-fG-smK">
@@ -655,7 +655,7 @@ to go back.</string>
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="-3902" y="-9246"/>
+            <point key="canvasLocation" x="-4636" y="-9250"/>
         </scene>
         <!--Welcome Page View Controller-->
         <scene sceneID="zLA-kq-Rch">
@@ -728,78 +728,6 @@ to go back.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uF3-9j-kiB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-6194" y="-9579"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="SJ7-62-C1t">
-            <objects>
-                <navigationController storyboardIdentifier="DropboxNoteListViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="kwo-co-bZa" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ybF-Qy-Hoe">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="Y6h-MF-LhI" kind="relationship" relationship="rootViewController" id="Krd-qf-cku"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zqD-xr-UmE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-5428" y="-9934"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="CeK-Qt-SaR">
-            <objects>
-                <navigationController storyboardIdentifier="LocalNoteListViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="eME-uo-dhR" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Q64-7T-Nfw">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="cwG-ZO-JM1" kind="relationship" relationship="rootViewController" id="e5E-Am-qUF"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nZl-zw-IWd" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-5428" y="-9246"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="KHN-Ho-u7M">
-            <objects>
-                <navigationController storyboardIdentifier="DropboxAddEditViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="J5M-50-3Q2" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="C0r-e4-4jM">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="Rw0-Uf-X66" kind="relationship" relationship="rootViewController" id="iJn-XQ-jiz"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kzp-SD-kNj" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-4665" y="-9934"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="Kba-dN-2ep">
-            <objects>
-                <navigationController storyboardIdentifier="LocalAddEditViewNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="QGm-Tx-gcG" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="C7x-tZ-VFh">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="Aq9-jM-LOw" kind="relationship" relationship="rootViewController" id="XPX-zs-adC"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="9Oo-dN-pe5" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-4668" y="-9246"/>
         </scene>
     </scenes>
     <resources>

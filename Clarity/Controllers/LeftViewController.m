@@ -11,21 +11,22 @@
 
 
 #import "LeftViewController.h"
-#import "LeftTableViewCell.h"                                   //커스텀 셀
+#import "LeftTableViewCell.h"
 #import "UIViewController+JASidePanel.h"
 #import "MainSidePanelViewController.h"
 #import "DropboxNoteListViewController.h"
 #import "LocalNoteListViewController.h"
-#import "SupportTableViewController.h"                          //Support 테이블 뷰 컨틀롤러
-#import "SVWebViewController.h"                                 //SV 웹뷰
-#import "UIImage+ChangeColor.h"                                 //이미지 컬러 변경
+#import "SupportTableViewController.h"
+#import "SVWebViewController.h"
+#import "UIImage+ChangeColor.h"
 #import "AppDelegate.h"                                         //AppDelegate 참조 > 내비게이션 컨트롤러
-#import "DropboxSettingsTableViewController.h"                  //드랍박스 링크 셋팅
-#import "MarkdownGuideViewController.h"                         //마크다운 Syntax 가이드 뷰
+#import "DropboxSettingsTableViewController.h"
+#import "MarkdownGuideViewController.h"
 #import <MessageUI/MessageUI.h>                                 //이메일/메시지 공유
+#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 
 
-@interface LeftViewController () <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
+@interface LeftViewController () <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate, FRLayeredNavigationControllerDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSArray *firstSectionArray;
@@ -54,6 +55,9 @@
     [self configureViewAndTableView];                   //테이블 뷰 속성
     [self makeCellDataArray];                           //테이블 데이터
     [self addtitleLabel];                               //타이틀 레이블
+    if (iPad) {
+        [self chooseWhichViewLocatedInCenterView];
+    }
 }
 
 
@@ -70,7 +74,7 @@
 - (void)makeCellDataArray
 {
     //스트링
-    self.firstSectionArray = @[@"iPhone", @"Dropbox"];
+    self.firstSectionArray = @[@"Local", @"Dropbox"];
     self.secondSectionArray = @[@"Sync"];
     self.thirdSectionArray = @[@"Markdown Guide"];
     self.fourthSectionArray = @[@"About", @"Website", @"Twitter", @"Send Feedback"];
@@ -194,14 +198,10 @@
 
 - (void)configureCell:(LeftTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    //셀 속성
     if ([cell respondsToSelector:@selector(setSeparatorInset:)]) { cell.separatorInset = UIEdgeInsetsZero; }
-    cell.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR_LEFTVIEW;                                   //데이 모드
-    //cell.backgroundColor = [UIColor colorWithWhite:0.318 alpha:1.000];                            //나이트 모드
-    //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR_LEFTVIEW;
     cell.cellTitleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:18];
-    cell.cellTitleLabel.textColor = [UIColor colorWithRed:0.157 green:0.161 blue:0.176 alpha:1];    //데이 모드
-    //cell.cellTitleLabel.textColor = kWHITE_COLOR;                                                 //나이트 모드
+    cell.cellTitleLabel.textColor = [UIColor colorWithRed:0.157 green:0.161 blue:0.176 alpha:1];
 }
 
 
@@ -212,8 +212,7 @@
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     header.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13];
     [header.textLabel setTextColor:[UIColor whiteColor]];
-    header.contentView.backgroundColor = [UIColor colorWithWhite:0.578 alpha:1.000];                //데이 모드
-    //header.contentView.backgroundColor = [UIColor colorWithWhite:0.379 alpha:1.000];              //나이트 모드
+    header.contentView.backgroundColor = [UIColor colorWithWhite:0.578 alpha:1.000];
 }
 
 
@@ -223,44 +222,117 @@
 {
     if (indexPath.section == 0 && indexPath.row == 0)
     {
-        self.sidePanelController.centerPanel = [self.storyboard instantiateViewControllerWithIdentifier:@"LocalNoteListViewNavigationController"];
+        LocalNoteListViewController *controller = (LocalNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LocalNoteListViewController"];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        if (iPad) {
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:kFRLAYERED_NAVIGATION_ITEM_MAXIMUM_WIDTH animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+                layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE;
+                layeredNavigationItem.nextItemDistance = kFRLAYERED_NAVIGATION_ITEM_NEXT_ITEM_DISTANCE;
+                layeredNavigationItem.hasChrome = NO;
+                layeredNavigationItem.hasBorder = NO;
+                layeredNavigationItem.displayShadow = YES;
+            }];
+        } else {
+            self.sidePanelController.centerPanel = navigationController;
+        }
     }
     else if(indexPath.section == 0 && indexPath.row == 1)
     {
-        self.sidePanelController.centerPanel = [self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewNavigationController"];
+        DropboxNoteListViewController *controller = (DropboxNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewController"];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        if (iPad) {
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:kFRLAYERED_NAVIGATION_ITEM_MAXIMUM_WIDTH animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+                layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE;
+                layeredNavigationItem.nextItemDistance = kFRLAYERED_NAVIGATION_ITEM_NEXT_ITEM_DISTANCE;
+                layeredNavigationItem.hasChrome = NO;
+                layeredNavigationItem.hasBorder = NO;
+                layeredNavigationItem.displayShadow = YES;
+            }];
+        } else {
+            self.sidePanelController.centerPanel = navigationController;
+        }
     }
     else if(indexPath.section == 1 && indexPath.row == 0)
     {
         DropboxSettingsTableViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"DropboxSettingsTableViewController"];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-        self.sidePanelController.centerPanel = navigationController;
+        if (iPad) {
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+                layeredNavigationItem.width = 320;
+                layeredNavigationItem.nextItemDistance = 0;
+                layeredNavigationItem.hasChrome = NO;
+                layeredNavigationItem.hasBorder = NO;
+                layeredNavigationItem.displayShadow = YES;
+            }];
+        } else {
+            self.sidePanelController.centerPanel = navigationController;
+        }
     }
     else if(indexPath.section == 2 && indexPath.row == 0)
     {
         MarkdownGuideViewController *markdownGuideViewController = (MarkdownGuideViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MarkdownGuideViewController"];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:markdownGuideViewController];
-        self.sidePanelController.centerPanel = navigationController;
+        if (iPad) {
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+                //layeredNavigationItem.width = 320;
+                layeredNavigationItem.nextItemDistance = 0;
+                layeredNavigationItem.hasChrome = NO;
+                layeredNavigationItem.hasBorder = NO;
+                layeredNavigationItem.displayShadow = YES;
+            }];
+        } else {
+            self.sidePanelController.centerPanel = navigationController;
+        }
     }
     else if(indexPath.section == 3 && indexPath.row == 0)
     {
         SupportTableViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"SupportTableViewController"];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-        self.sidePanelController.centerPanel = navigationController;
-        
+        if (iPad) {
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+                layeredNavigationItem.width = 320;
+                layeredNavigationItem.nextItemDistance = 0;
+                layeredNavigationItem.hasChrome = NO;
+                layeredNavigationItem.hasBorder = NO;
+                layeredNavigationItem.displayShadow = YES;
+            }];
+        } else {
+            self.sidePanelController.centerPanel = navigationController;
+        }
     }
     else if(indexPath.section == 3 && indexPath.row == 1)
     {
         NSString *URL = @"http://lovejunsoft.com";
         self.svWebViewController = [[SVWebViewController alloc] initWithAddress:URL];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.svWebViewController];
-        self.sidePanelController.centerPanel = navigationController;
+        if (iPad) {
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+                //layeredNavigationItem.width = 320;
+                layeredNavigationItem.nextItemDistance = 0;
+                layeredNavigationItem.hasChrome = NO;
+                layeredNavigationItem.hasBorder = NO;
+                layeredNavigationItem.displayShadow = YES;
+            }];
+        } else {
+            self.sidePanelController.centerPanel = navigationController;
+        }
     }
     else if(indexPath.section == 3 && indexPath.row == 2)
     {
-        NSString *url = @"https://twitter.com/lovejunsoft";   //https://twitter.com/lovejunsoft, http://lovejunsoft.com/swift-note-for-iphone/
+        NSString *url = @"https://twitter.com/lovejunsoft";
         self.svWebViewController = [[SVWebViewController alloc] initWithAddress:url];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.svWebViewController];
-        self.sidePanelController.centerPanel = navigationController;
+        if (iPad) {
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+                //layeredNavigationItem.width = 320;
+                layeredNavigationItem.nextItemDistance = 0;
+                layeredNavigationItem.hasChrome = NO;
+                layeredNavigationItem.hasBorder = NO;
+                layeredNavigationItem.displayShadow = YES;
+            }];
+        } else {
+            self.sidePanelController.centerPanel = navigationController;
+        }
     }
     else if(indexPath.section == 3 && indexPath.row == 3)
     {
@@ -282,7 +354,7 @@
             sectionName = NSLocalizedString(@"Storage", @"Storage");
             break;
         case 1:
-            sectionName = NSLocalizedString(@"Cloud Settings", @"Cloud");
+            sectionName = NSLocalizedString(@"Cloud Settings", @"Cloud Settings");
             break;
         case 2:
             sectionName = NSLocalizedString(@"Guide", @"Guide");
@@ -380,6 +452,81 @@
     [controller dismissViewControllerAnimated:YES completion:^{
         
     }];
+}
+
+
+#pragma mark 유저 디폴트 > savedView 확인
+
+- (UINavigationController *)defaultNavigationController
+{
+    DropboxNoteListViewController *controller = (DropboxNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewController"];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    return navigationController;
+}
+
+
+- (void)chooseWhichViewLocatedInCenterView
+{
+    BOOL isDropboxView = [[NSUserDefaults standardUserDefaults] boolForKey:kCURRENT_VIEW_IS_DROPBOX];
+    BOOL isLocalView = [[NSUserDefaults standardUserDefaults] boolForKey:kCURRENT_VIEW_IS_LOCAL];
+    
+    if (isLocalView == YES && isDropboxView == NO)
+    {
+        LocalNoteListViewController *controller = (LocalNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LocalNoteListViewController"];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        
+        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:kFRLAYERED_NAVIGATION_ITEM_MAXIMUM_WIDTH animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE;
+            layeredNavigationItem.nextItemDistance = kFRLAYERED_NAVIGATION_ITEM_NEXT_ITEM_DISTANCE;
+            layeredNavigationItem.hasChrome = NO;
+            layeredNavigationItem.hasBorder = NO;
+            layeredNavigationItem.displayShadow = YES;
+        }];
+    }
+    else if (isLocalView == NO && isDropboxView == YES)
+    {
+        UINavigationController *navigationController = [self defaultNavigationController];
+        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:kFRLAYERED_NAVIGATION_ITEM_MAXIMUM_WIDTH animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE;
+            layeredNavigationItem.nextItemDistance = kFRLAYERED_NAVIGATION_ITEM_NEXT_ITEM_DISTANCE;
+            layeredNavigationItem.hasChrome = NO;
+            layeredNavigationItem.hasBorder = NO;
+            layeredNavigationItem.displayShadow = YES;
+        }];
+    }
+    else if (isLocalView == NO && isDropboxView == NO)
+    {
+        UINavigationController *navigationController = [self defaultNavigationController];
+        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:kFRLAYERED_NAVIGATION_ITEM_MAXIMUM_WIDTH animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE;
+            layeredNavigationItem.nextItemDistance = kFRLAYERED_NAVIGATION_ITEM_NEXT_ITEM_DISTANCE;
+            layeredNavigationItem.hasChrome = NO;
+            layeredNavigationItem.hasBorder = NO;
+            layeredNavigationItem.displayShadow = YES;
+        }];
+    }
+    else if (isLocalView == YES && isDropboxView == YES)
+    {
+        UINavigationController *navigationController = [self defaultNavigationController];
+        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:kFRLAYERED_NAVIGATION_ITEM_MAXIMUM_WIDTH animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE;
+            layeredNavigationItem.nextItemDistance = kFRLAYERED_NAVIGATION_ITEM_NEXT_ITEM_DISTANCE;
+            layeredNavigationItem.hasChrome = NO;
+            layeredNavigationItem.hasBorder = NO;
+            layeredNavigationItem.displayShadow = YES;
+        }];
+    }
+    else
+    {
+        UINavigationController *navigationController = [self defaultNavigationController];
+        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:kFRLAYERED_NAVIGATION_ITEM_MAXIMUM_WIDTH animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE;
+            layeredNavigationItem.nextItemDistance = kFRLAYERED_NAVIGATION_ITEM_NEXT_ITEM_DISTANCE;
+            layeredNavigationItem.hasChrome = NO;
+            layeredNavigationItem.hasBorder = NO;
+            layeredNavigationItem.displayShadow = YES;
+        }];
+    }
 }
 
 

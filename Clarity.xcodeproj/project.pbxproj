@@ -72,7 +72,7 @@
 		C12290FD19973BAA00460667 /* NoteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C12290F719973BAA00460667 /* NoteTableViewCell.xib */; };
 		C122910819973BE100460667 /* NoteDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C122910419973BE100460667 /* NoteDataManager.m */; };
 		C122910C19973CE100460667 /* Clarity.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C122910A19973CE100460667 /* Clarity.xcdatamodeld */; };
-		C122910E19973D0600460667 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C122910D19973D0600460667 /* Main.storyboard */; };
+		C122910E19973D0600460667 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C122910D19973D0600460667 /* Main_iPhone.storyboard */; };
 		C122911219973FDF00460667 /* libMMMarkdown-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C122911019973FDF00460667 /* libMMMarkdown-iOS.a */; };
 		C125D34219AEDA1D00D9E892 /* WhatsNew.strings in Resources */ = {isa = PBXBuildFile; fileRef = C125D32C19AEDA1D00D9E892 /* WhatsNew.strings */; };
 		C125D34319AEDA1D00D9E892 /* MTZWhatsNew.m in Sources */ = {isa = PBXBuildFile; fileRef = C125D33019AEDA1D00D9E892 /* MTZWhatsNew.m */; };
@@ -85,6 +85,8 @@
 		C125D34A19AEDA1D00D9E892 /* SAMGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = C125D34019AEDA1D00D9E892 /* SAMGradientView.m */; };
 		C125D34B19AEDA1D00D9E892 /* WhatsNewLICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = C125D34119AEDA1D00D9E892 /* WhatsNewLICENSE.md */; };
 		C125D34D19AEDA4800D9E892 /* What's New.plist in Resources */ = {isa = PBXBuildFile; fileRef = C125D34C19AEDA4800D9E892 /* What's New.plist */; };
+		C12FE79019CFBA64001209B2 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12FE78F19CFBA64001209B2 /* Main_iPad.storyboard */; };
+		C12FE79319CFD54A001209B2 /* BlankViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12FE79219CFD54A001209B2 /* BlankViewController.m */; };
 		C1ABF0C519985B7A00E622CA /* MainSidePanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */; };
 		C1ABF0CD19985CF400E622CA /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C819985CF400E622CA /* JASidePanelController.m */; };
 		C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0CA19985CF400E622CA /* LogViewController.m */; };
@@ -222,7 +224,7 @@
 		C122910319973BE100460667 /* NoteDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteDataManager.h; sourceTree = "<group>"; };
 		C122910419973BE100460667 /* NoteDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteDataManager.m; sourceTree = "<group>"; };
 		C122910B19973CE100460667 /* ClarityHD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ClarityHD.xcdatamodel; sourceTree = "<group>"; };
-		C122910D19973D0600460667 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		C122910D19973D0600460667 /* Main_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main_iPhone.storyboard; sourceTree = "<group>"; };
 		C122911019973FDF00460667 /* libMMMarkdown-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libMMMarkdown-iOS.a"; sourceTree = "<group>"; };
 		C122911119973FDF00460667 /* MMMarkdown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMMarkdown.h; sourceTree = "<group>"; };
 		C125D32D19AEDA1D00D9E892 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/WhatsNew.strings; sourceTree = "<group>"; };
@@ -244,6 +246,9 @@
 		C125D34019AEDA1D00D9E892 /* SAMGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SAMGradientView.m; sourceTree = "<group>"; };
 		C125D34119AEDA1D00D9E892 /* WhatsNewLICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WhatsNewLICENSE.md; sourceTree = "<group>"; };
 		C125D34C19AEDA4800D9E892 /* What's New.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "What's New.plist"; sourceTree = "<group>"; };
+		C12FE78F19CFBA64001209B2 /* Main_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main_iPad.storyboard; sourceTree = "<group>"; };
+		C12FE79119CFD54A001209B2 /* BlankViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlankViewController.h; sourceTree = "<group>"; };
+		C12FE79219CFD54A001209B2 /* BlankViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlankViewController.m; sourceTree = "<group>"; };
 		C1ABF0C319985B7A00E622CA /* MainSidePanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainSidePanelViewController.h; sourceTree = "<group>"; };
 		C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainSidePanelViewController.m; sourceTree = "<group>"; };
 		C1ABF0C719985CF400E622CA /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
@@ -530,6 +535,8 @@
 				C12290CA19973A7E00460667 /* WelcomePageViewController.m */,
 				C12290CB19973A7E00460667 /* WelcomeViewController.h */,
 				C12290CC19973A7E00460667 /* WelcomeViewController.m */,
+				C12FE79119CFD54A001209B2 /* BlankViewController.h */,
+				C12FE79219CFD54A001209B2 /* BlankViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -591,7 +598,8 @@
 		C122910519973BE100460667 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				C122910D19973D0600460667 /* Main.storyboard */,
+				C122910D19973D0600460667 /* Main_iPhone.storyboard */,
+				C12FE78F19CFBA64001209B2 /* Main_iPad.storyboard */,
 				C12290F419973BAA00460667 /* LeftTableViewCell.xib */,
 				C12290F719973BAA00460667 /* NoteTableViewCell.xib */,
 				C12290C419973A7E00460667 /* NoteTitlePopinViewController.xib */,
@@ -805,9 +813,10 @@
 				C122903B19973A2B00460667 /* InfoPlist.strings in Resources */,
 				C125D34D19AEDA4800D9E892 /* What's New.plist in Resources */,
 				C12290DA19973A7E00460667 /* NoteTitlePopinViewController.xib in Resources */,
+				C12FE79019CFBA64001209B2 /* Main_iPad.storyboard in Resources */,
 				C12290E319973B6000460667 /* AboutClarity.html in Resources */,
 				C125D34919AEDA1D00D9E892 /* LICENSE.txt in Resources */,
-				C122910E19973D0600460667 /* Main.storyboard in Resources */,
+				C122910E19973D0600460667 /* Main_iPhone.storyboard in Resources */,
 				C122908F19973A6400460667 /* UIImage-ResizeMagick.podspec in Resources */,
 				C122908B19973A6400460667 /* .gitignore in Resources */,
 				C122908C19973A6400460667 /* LICENSE_UIImage-ResizeMagick in Resources */,
@@ -893,6 +902,7 @@
 				C12290D319973A7E00460667 /* LeftViewController.m in Sources */,
 				C12290DC19973A7E00460667 /* SupportTableViewController.m in Sources */,
 				C125D34319AEDA1D00D9E892 /* MTZWhatsNew.m in Sources */,
+				C12FE79319CFD54A001209B2 /* BlankViewController.m in Sources */,
 				C12290DE19973A7E00460667 /* WelcomeViewController.m in Sources */,
 				C125D34A19AEDA1D00D9E892 /* SAMGradientView.m in Sources */,
 				C122909119973A6400460667 /* SVModalWebViewController.m in Sources */,
@@ -1090,6 +1100,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "EB14081F-8FF6-431C-B3DE-94163ACD7D7C";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1115,6 +1126,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "EB14081F-8FF6-431C-B3DE-94163ACD7D7C";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1220,6 +1232,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "EB14081F-8FF6-431C-B3DE-94163ACD7D7C";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Distribution;

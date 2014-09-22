@@ -9,11 +9,12 @@
 #import "AppDelegate.h"
 #import "NoteDataManager.h"
 #import "LeftViewController.h"
+#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 
-
-@interface AppDelegate ()
+@interface AppDelegate () <FRLayeredNavigationControllerDelegate>
 
 @property (nonatomic, strong) UIStoryboard *storyboard;
+@property (nonatomic, strong) FRLayeredNavigationController *layeredNavigationController;
 
 @end
 
@@ -27,6 +28,24 @@
 {
     [self applicationDocumentsDirectory];
 //    [NSManagedObjectModel mergedModelFromBundles:nil];
+    
+    if (iPad) {
+        self.storyboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle: nil];
+        LeftViewController *controller = (LeftViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LeftViewController"];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        
+        self.layeredNavigationController = [(FRLayeredNavigationController *)[FRLayeredNavigationController alloc] initWithRootViewController:navigationController configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_LEFT;
+            layeredNavigationItem.nextItemDistance = 0;
+            layeredNavigationItem.hasChrome = NO;
+            layeredNavigationItem.hasBorder = NO;
+            layeredNavigationItem.displayShadow = YES;
+        }];
+        self.layeredNavigationController.delegate = self;
+        self.window.rootViewController = self.layeredNavigationController;
+    } else {
+        
+    }
     
     //드랍박스 어카운트
     //Dropbox App Folder : 'ClarityApp'
@@ -78,10 +97,14 @@
 
 #pragma mark - 기기 방향 지원
 
-- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window  // iOS 6 autorotation fix
+- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
 {
-    return UIInterfaceOrientationMaskPortrait;
-//    return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
+    if (iPad) {
+        return UIInterfaceOrientationMaskAll;
+    } else {
+        return UIInterfaceOrientationMaskPortrait;
+    }
+    return YES;
 }
 
 
@@ -117,6 +140,29 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
+{
+    [[NSUserDefaults standardUserDefaults] synchronize]; // Save user defaults
+}
+
+
+#pragma mark - FRLayeredNavigationController Delegate
+
+- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
+                 willMoveController:(UIViewController*)controller
+{
+    
+}
+
+
+- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
+               movingViewController:(UIViewController*)controller
+{
+    
+}
+
+
+- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
+                  didMoveController:(UIViewController*)controller
 {
     
 }

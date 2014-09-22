@@ -14,7 +14,7 @@
 
 #define iOS7 (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber_iOS_7_0 && kCFCoreFoundationVersionNumber < kCFCoreFoundationVersionNumber_iOS_8_0)
 #define iOS8 ((kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber_iOS_8_0)
-#define iPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define iPad [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad //(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
 extern BOOL const kHasLaunchedOnce;
 extern NSString * const kIS_FIRST_TIME;
@@ -25,6 +25,15 @@ extern NSString * const kIS_FIRST_TIME;
 //kLOGBOOL(success);, Prints out 'success: NO' to the console
 
 
+#pragma mark - FRLayeredNavigationController
+#define kFRLAYERED_NAVIGATION_ITEM_WIDTH_LEFT               260
+#define kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE             320
+#define kFRLAYERED_NAVIGATION_ITEM_WIDTH_RIGHT              CGRectGetWidth(self.view.bounds)
+
+#define kFRLAYERED_NAVIGATION_ITEM_NEXT_ITEM_DISTANCE       0
+#define kFRLAYERED_NAVIGATION_ITEM_MAXIMUM_WIDTH            NO
+
+
 #pragma mark - JASidePanelController
 #define kJASIDEPANEL_LEFTGAP_PERCENTAGE                     0.7
 
@@ -32,12 +41,6 @@ extern NSString * const kIS_FIRST_TIME;
 #pragma mark - MarkdownWebView
 #define kAUTOMATICALLY_ADJUSTS_SCROLLVIEW_INSETS            NO
 #define kMARKDOWNWEBVIEW_SCROLLVIEW_CONTENTINSET            60.0
-
-
-#pragma mark - FRLayeredNavigationController
-#define kFRLAYERED_NAVIGATION_ITEM_WIDTH_LEFT               240
-#define kFRLAYERED_NAVIGATION_ITEM_WIDTH_MIDDLE             320
-#define kFRLAYERED_NAVIGATION_ITEM_WIDTH_RIGHT              320
 
 
 #define kCURRENT_VIEW_IS_LOCAL                              @"currentViewIsLocal"

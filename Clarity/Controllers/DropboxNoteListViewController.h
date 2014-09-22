@@ -11,4 +11,6 @@
 
 @interface DropboxNoteListViewController : UIViewController
 
+- (void)addNewNote:(id)sender;
+
 @end

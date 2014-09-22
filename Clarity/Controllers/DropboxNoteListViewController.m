@@ -12,7 +12,7 @@
 
 
 #import "DropboxNoteListViewController.h"
-//#import "FRLayeredNavigationController/FRLayeredNavigation.h"
+#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 #import "AppDelegate.h"
 #import "NoteDataManager.h"
 #import "Note.h"
@@ -24,9 +24,10 @@
 #import "WelcomePageViewController.h"
 #import "MTZWhatsNew.h"
 #import "MTZWhatsNewGridViewController.h"
+#import "BlankViewController.h"
 
 
-@interface DropboxNoteListViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UIAlertViewDelegate>
+@interface DropboxNoteListViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UIAlertViewDelegate, FRLayeredNavigationControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UISearchBar *searchBar;
@@ -34,6 +35,8 @@
 @property (nonatomic, strong) UIViewController *starViewController;
 @property (nonatomic, strong) NSMutableArray *searchResultNotes;
 @property (nonatomic, strong) Note *selectedNote;
+@property (nonatomic, strong) Note *receivedNote;
+@property (nonatomic, strong) Note *beDeletingNote;
 @property (nonatomic, strong) NSDateFormatter *formatter;
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemStarred;
 @property (nonatomic, strong) UIButton *buttonStar;
@@ -45,8 +48,8 @@
 
 @implementation DropboxNoteListViewController
 {
-    int _totalNotes;                                          //노트 갯수
-    NSString *_titleString;                                   //new 노트 타이틀 스트링
+    int _totalNotes;                                            //노트 갯수
+    NSString *_titleString;                                     //new 노트 타이틀 스트링
 }
 
 
@@ -57,9 +60,14 @@
     [super viewDidLoad];
     [self configureViewAndTableView];
     [self addBarButtonItem];
-    [self checkWhetherShowWelcomeView];
+//    [self checkWhetherShowWelcomeView];
     [self addObserverForWelcomeViewControllerDismissed];
-//    [self addObserverForNewNote];         //애드,에딧 뷰에서 뉴 노트 생성 버튼 누를 때 필요한 옵저버
+    if (iPad) {
+        self.layeredNavigationController.delegate = self;
+        [self hideSearchBar];
+        [self addObserverForNewNote];                           //애드, 에딧 뷰, 블랭크 뷰
+        [self addObserverForCurrentNoteObjectIDKey];            //우측 노트 오브젝트 ID
+    }
 }
 
 
@@ -72,7 +80,7 @@
     [self initializeSearchResultNotes];
     [self.tableView reloadData];
     [self performUpdateInfoButton];
-    [self performCheckNoNote];          //노트 없으면 헬프 레이블 보여줄 것
+    [self performCheckNoNote];                                  //헬프 레이블
     [self saveCurrentView];
 }
 
@@ -80,6 +88,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    if (iPad) {
+        [self showBlankView];
+    }
     [self checkToShowWhatsNewView];
 }
 
@@ -107,7 +118,7 @@
 
 - (void)deActivateSearchDisplayController
 {
-    if ([self.searchDisplayController isActive])    // check if searchDisplayController still active..
+    if ([self.searchDisplayController isActive])
     {
         [self.searchDisplayController setActive:NO];
     }
@@ -378,7 +389,18 @@
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     
-    [self.navigationController pushViewController:controller animated:YES]; //Push
+    if (iPad) {
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        
+        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+            layeredNavigationItem.nextItemDistance = 0;
+            layeredNavigationItem.hasChrome = NO;
+            layeredNavigationItem.hasBorder = NO;
+            layeredNavigationItem.displayShadow = YES;
+        }];
+    } else {
+        [self.navigationController pushViewController:controller animated:YES];
+    }
 }
 
 
@@ -407,7 +429,18 @@
     controller.isOtherCloudNote = NO;
     controller.currentNote.noteTitle = _titleString;
     
-    [self.navigationController pushViewController:controller animated:YES];
+    if (iPad) {
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        
+        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+            layeredNavigationItem.nextItemDistance = 0;
+            layeredNavigationItem.hasChrome = NO;
+            layeredNavigationItem.hasBorder = NO;
+            layeredNavigationItem.displayShadow = YES;
+        }];
+    } else {
+        [self.navigationController pushViewController:controller animated:YES];
+    }
 }
 
 
@@ -566,40 +599,80 @@
 
 - (void)addBarButtonItem
 {
-    UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixed.width = 22.0f;
-    UIBarButtonItem *barButtonItemNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemNarrow.width = 5.0f;
-    
-    UIImage *star = [UIImage imageNamed:@"star-256"];
-    self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
-    [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
-    self.buttonStar.frame = CGRectMake(0 ,0, 26, 26);
-    self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
-    
-    UIImage *add = [UIImage imageNamed:@"plus-256"];
-    UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttonAdd addTarget:self action:@selector(addNewNote:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
-    buttonAdd.frame = CGRectMake(0 ,0, 20, 20);
-    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
-    
-    UIView* infoButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 80, 40)];
-    self.infoButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.infoButton.backgroundColor = [UIColor clearColor];
-    self.infoButton.frame = infoButtonView.frame;
-    [self.infoButton setTitle:@"" forState:UIControlStateNormal];
-    self.infoButton.tintColor = kINFOBUTTON_TEXTCOLOR;
-    self.infoButton.autoresizesSubviews = YES;
-    self.infoButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
-    self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-    self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
-    self.infoButton.userInteractionEnabled = NO;
-    [infoButtonView addSubview:self.infoButton];
-    
-    self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, self.barButtonItemStarred];
-    self.navigationItem.titleView = infoButtonView;
+    if (iPad) {
+        UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        barButtonItemFixed.width = 22.0f;
+        UIBarButtonItem *barButtonItemNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        barButtonItemNarrow.width = 5.0f;
+        
+        UIImage *star = [UIImage imageNamed:@"star-256"];
+        self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
+        [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
+        self.buttonStar.frame = CGRectMake(0 ,0, 26, 26);
+        self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
+        
+        UIImage *add = [UIImage imageNamed:@"plus-256"];
+        UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
+        [buttonAdd addTarget:self action:@selector(addNewNote:)forControlEvents:UIControlEventTouchUpInside];
+        [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
+        buttonAdd.frame = CGRectMake(0 ,0, 20, 20);
+        UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
+        
+        UIView* infoButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 80, 40)];
+        self.infoButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.infoButton.backgroundColor = [UIColor clearColor];
+        self.infoButton.frame = infoButtonView.frame;
+        [self.infoButton setTitle:@"" forState:UIControlStateNormal];
+        self.infoButton.tintColor = kINFOBUTTON_TEXTCOLOR;
+        self.infoButton.autoresizesSubviews = YES;
+        self.infoButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
+        self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+        self.infoButton.userInteractionEnabled = NO;
+        [infoButtonView addSubview:self.infoButton];
+        
+        self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, self.barButtonItemStarred];
+        self.navigationItem.titleView = infoButtonView;
+        
+        self.navigationItem.leftBarButtonItems = @[self.editButtonItem];
+        [self.editButtonItem setTitleTextAttributes:@{NSForegroundColorAttributeName:kNAVIGATIONBAR_BUTTON_ITEM_LIGHTYELLOW_COLOR} forState:UIControlStateNormal];
+    } else {
+        UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        barButtonItemFixed.width = 22.0f;
+        UIBarButtonItem *barButtonItemNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        barButtonItemNarrow.width = 5.0f;
+        
+        UIImage *star = [UIImage imageNamed:@"star-256"];
+        self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
+        [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
+        self.buttonStar.frame = CGRectMake(0 ,0, 26, 26);
+        self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
+        
+        UIImage *add = [UIImage imageNamed:@"plus-256"];
+        UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
+        [buttonAdd addTarget:self action:@selector(addNewNote:)forControlEvents:UIControlEventTouchUpInside];
+        [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
+        buttonAdd.frame = CGRectMake(0 ,0, 20, 20);
+        UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
+        
+        UIView* infoButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 80, 40)];
+        self.infoButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.infoButton.backgroundColor = [UIColor clearColor];
+        self.infoButton.frame = infoButtonView.frame;
+        [self.infoButton setTitle:@"" forState:UIControlStateNormal];
+        self.infoButton.tintColor = kINFOBUTTON_TEXTCOLOR;
+        self.infoButton.autoresizesSubviews = YES;
+        self.infoButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
+        self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+        self.infoButton.userInteractionEnabled = NO;
+        [infoButtonView addSubview:self.infoButton];
+        
+        self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, self.barButtonItemStarred];
+        self.navigationItem.titleView = infoButtonView;
+    }
 }
 
 
@@ -788,6 +861,31 @@
 }
 
 
+#pragma mark CurrentNoteObjectID Notification 옵저버 등록
+
+- (void)addObserverForCurrentNoteObjectIDKey
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveNoteObjectIDKeyNotification:)
+                                                 name:@"CurrentNoteObjectIDKeyNotification"
+                                               object:nil];
+}
+
+
+#pragma mark CurrentNoteObjectIDKey 노티피케이션 수신 후 후속작업
+
+- (void)didReceiveNoteObjectIDKeyNotification:(NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:@"CurrentNoteObjectIDKeyNotification"])
+    {
+        NSDictionary *userInfo = notification.userInfo;
+        Note *receivedNote = [userInfo objectForKey:@"currentNoteObjectIDKey"];
+        self.receivedNote = receivedNote;
+        NSLog (@"self.receivedNote.objectID: %@\n", self.receivedNote.objectID);
+    }
+}
+
+
 #pragma mark WelcomeViewControllerDismissed Notification 옵저버 등록
 
 - (void)addObserverForWelcomeViewControllerDismissed
@@ -830,9 +928,9 @@
 - (void)deregisterForNotifications
 {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self name:@"CurrentNoteObjectIDKeyNotification" object:nil];
     [center removeObserver:self name:@"WelcomeViewControllerDismissedNotification" object:nil];
     [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
-    
     [center removeObserver:self];
 }
 
@@ -843,11 +941,9 @@
 - (void)saveIndexPath:(NSIndexPath *)indexPath
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setInteger:indexPath.row forKey:kSELECTED_DROPBOX_NOTE_INDEX];        //인덱스
-    [standardUserDefaults setIndexPath:indexPath forKey:kSELECTED_DROPBOX_NOTE_INDEXPATH];      //인덱스패스
+    [standardUserDefaults setInteger:indexPath.row forKey:kSELECTED_DROPBOX_NOTE_INDEX];
+    [standardUserDefaults setIndexPath:indexPath forKey:kSELECTED_DROPBOX_NOTE_INDEXPATH];
     [standardUserDefaults synchronize];
-    //    NSLog(@"didSelectRowAtIndex > _selectedIndex > saved Index: %d\n", [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_DROPBOX_NOTE_INDEX]);
-    //    NSLog(@"didSelectRowAtIndexPath > _selectedIndexPath > saved IndexPath: %@", [standardUserDefaults indexPathForKey:kSELECTED_DROPBOX_NOTE_INDEXPATH]);
 }
 
 
@@ -856,7 +952,7 @@
 - (void)saveCurrentView
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
+    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];
     [standardUserDefaults synchronize];
 }
 
@@ -864,7 +960,7 @@
 - (void)cancelCurrentView
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_DROPBOX];                          //현재 뷰
+    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_DROPBOX];
     [standardUserDefaults synchronize];
 }
 
@@ -903,7 +999,45 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return UIInterfaceOrientationIsPortrait(interfaceOrientation);
+    if (iPad) {
+        return YES;
+    } else {
+        return UIInterfaceOrientationIsPortrait(interfaceOrientation);
+    }
+    return YES;
+}
+
+
+#pragma mark - 블랭크 뷰 보여줌
+
+- (void)showBlankView
+{
+    BlankViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"BlankViewController"];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    
+    [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+        
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        
+        if(orientation == 0) {
+            layeredNavigationItem.width = 768-320; //Default
+        }
+        else if(orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+        {
+            layeredNavigationItem.width = 768-320;
+        }
+        else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+        {
+            layeredNavigationItem.width = 1024-320;
+        }
+        layeredNavigationItem.nextItemDistance = 320;                 //레이어가 가려질 거리;
+        layeredNavigationItem.hasChrome = NO;
+        layeredNavigationItem.hasBorder = NO;
+        layeredNavigationItem.displayShadow = YES;
+    }];
+    
+    [self performSelector:@selector(checkWhetherShowWelcomeView) withObject:nil afterDelay:0.3];
 }
 
 
@@ -980,15 +1114,12 @@
 {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), CGRectGetHeight(self.tableView.frame))];
     [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    //[view setBackgroundColor:[UIColor colorWithWhite:0.92 alpha:1]];
     [view setBackgroundColor:kCLEAR_COLOR];
     UIImage *image = [UIImage imageNamed:@"swiftNoteWideLogo102by38"];
-    //UIImage *imageThumb = [image makeThumbnailOfSize:CGSizeMake(image.size.width, image.size.height)];
     UIImageView *logoImageView = [[UIImageView alloc] initWithImage:image];
-    //[logoImageView setCenter:view.center];
     [logoImageView setFrame:({
         CGRect frame = logoImageView.frame;
-        frame.origin.x = 70; //(self.tableView.frame.size.width - frame.size.width) / 2;
+        frame.origin.x = 70;
         frame.origin.y = 20;
         CGRectIntegral(frame);
     })];
@@ -999,7 +1130,6 @@
     
     self.tableView.tableFooterView = view;
     
-    //[self.tableView setBackgroundColor:view.backgroundColor];
     self.tableView.contentInset = self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, - CGRectGetHeight(view.bounds), 0);
 }
 
@@ -1008,13 +1138,9 @@
 
 - (void)showLastUsedNote
 {
-    //DBAccountManager *accountManager = [DBAccountManager sharedManager];
-    //DBAccount *account = [accountManager linkedAccount];
-    
     self.navigationController.delegate = self;
     
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_DROPBOX_NOTE_INDEX];
-    //NSLog (@"selectedNoteIndex: %d, fetchedObjects count: %d", index, [[_fetchedResultsController fetchedObjects] count]);
     
     if (index < 0 || index >= [[_fetchedResultsController fetchedObjects] count])
     {

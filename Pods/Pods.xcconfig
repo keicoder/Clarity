@@ -1,6 +1,6 @@
 FRAMEWORK_SEARCH_PATHS = "$(PODS_ROOT)/Dropbox-Sync-API-SDK/dropbox-ios-sync-sdk-3.0.2" "${PODS_ROOT}/Dropbox-Sync-API-SDK/dropbox-ios-sync-sdk-3.0.2"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/Dropbox-Sync-API-SDK" "${PODS_ROOT}/Headers/ParcelKit"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers" -isystem "${PODS_ROOT}/Headers/Dropbox-Sync-API-SDK" -isystem "${PODS_ROOT}/Headers/ParcelKit"
-OTHER_LDFLAGS = -ObjC -lc++ -framework CFNetwork -framework CoreData -framework Dropbox -framework QuartzCore -framework Security -framework SystemConfiguration
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/Dropbox-Sync-API-SDK" "${PODS_ROOT}/Headers/FRLayeredNavigationController" "${PODS_ROOT}/Headers/ParcelKit"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers" -isystem "${PODS_ROOT}/Headers/Dropbox-Sync-API-SDK" -isystem "${PODS_ROOT}/Headers/FRLayeredNavigationController" -isystem "${PODS_ROOT}/Headers/ParcelKit"
+OTHER_LDFLAGS = -ObjC -lc++ -framework CFNetwork -framework CoreData -framework Dropbox -framework QuartzCore -framework Security -framework SystemConfiguration -framework UIKit
 PODS_ROOT = ${SRCROOT}/Pods

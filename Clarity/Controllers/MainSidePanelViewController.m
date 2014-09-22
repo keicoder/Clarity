@@ -7,6 +7,9 @@
 //  delete unused source path
 
 #import "MainSidePanelViewController.h"
+#import "LocalNoteListViewController.h"
+#import "DropboxNoteListViewController.h"
+
 
 @interface MainSidePanelViewController ()
 
@@ -31,6 +34,14 @@
 
 #pragma mark 유저 디폴트 > savedView 확인
 
+- (UINavigationController *)defaultNavigationController
+{
+    DropboxNoteListViewController *controller = (DropboxNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewController"];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    return navigationController;
+}
+
+
 - (void)chooseWhichViewLocatedInCenterView
 {
     if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
@@ -39,23 +50,29 @@
     BOOL isLocalView = [[NSUserDefaults standardUserDefaults] boolForKey:kCURRENT_VIEW_IS_LOCAL];
      
     if (isLocalView == YES && isDropboxView == NO) {
-        [self setCenterPanel:[self.storyboard instantiateViewControllerWithIdentifier:@"LocalNoteListViewNavigationController"]];
+        LocalNoteListViewController *controller = (LocalNoteListViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LocalNoteListViewController"];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        self.centerPanel = navigationController;
     }
     else if (isLocalView == NO && isDropboxView == YES)
     {
-        [self setCenterPanel:[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewNavigationController"]];
+        UINavigationController *navigationController = [self defaultNavigationController];
+        self.centerPanel = navigationController;
     }
     else if (isLocalView == NO && isDropboxView == NO)
     {
-        [self setCenterPanel:[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewNavigationController"]];
+        UINavigationController *navigationController = [self defaultNavigationController];
+        self.centerPanel = navigationController;
     }
     else if (isLocalView == YES && isDropboxView == YES)
     {
-        [self setCenterPanel:[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewNavigationController"]];
+        UINavigationController *navigationController = [self defaultNavigationController];
+        self.centerPanel = navigationController;
     }
     else
     {
-       [self setCenterPanel:[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxNoteListViewNavigationController"]];
+        UINavigationController *navigationController = [self defaultNavigationController];
+        self.centerPanel = navigationController;
     }
 }
 
