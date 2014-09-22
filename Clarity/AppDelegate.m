@@ -87,11 +87,6 @@
     [[UINavigationBar appearance] setBarTintColor:kWINDOW_BACKGROUND_COLOR];            //냅바 색상
     [[UINavigationBar appearance] setTintColor:kWHITE_COLOR];                           //냅바 버튼 색상
     [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:kWHITE_COLOR, NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-Medium" size:18.0]};
-    
-//    UIView *view=[[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.window.bounds), 20)];
-//    view.backgroundColor=kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR;
-//    view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-//    [self.window.rootViewController.view addSubview:view];
 }
 
 
@@ -117,34 +112,6 @@
 }
 
 
-#pragma mark - Application's State
-
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    [[NSUserDefaults standardUserDefaults] synchronize]; // Save user defaults
-}
-
-
 #pragma mark - FRLayeredNavigationController Delegate
 
 - (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
@@ -165,6 +132,34 @@
                   didMoveController:(UIViewController*)controller
 {
     
+}
+
+
+#pragma mark - Application's State
+
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ApplicationWillResignActiveNotification" object:nil];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    [[NSUserDefaults standardUserDefaults] synchronize]; // Save user defaults
 }
 
 

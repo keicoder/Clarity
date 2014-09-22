@@ -38,6 +38,7 @@
 @property (nonatomic, strong) NSArray *secondSectionImageArray;
 @property (nonatomic, strong) NSArray *thirdSectionImageArray;
 @property (nonatomic, strong) NSArray *fourthSectionImageArray;
+@property (nonatomic, weak) IBOutlet UILabel *versionLabel;
 
 @property (strong, nonatomic) SVWebViewController *svWebViewController;//sv 웹뷰 컨트롤러
 
