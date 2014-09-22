@@ -74,7 +74,6 @@
 
 - (void)makeCellDataArray
 {
-    //스트링
     self.firstSectionArray = @[@"Local", @"Dropbox"];
     self.secondSectionArray = @[@"Sync"];
     self.thirdSectionArray = @[@"Markdown Guide"];
@@ -82,10 +81,9 @@
     
     self.containerArray = @[self.firstSectionArray, self.secondSectionArray, self.thirdSectionArray, self.fourthSectionArray];
     
-    //이미지
     UIImage *mobile = [UIImage imageNameForChangingColor:@"mobile" color:kMENU_ICONIMAGE_COLOR];
     UIImage *dropbox = [UIImage imageNameForChangingColor:@"dropbox" color:kMENU_ICONIMAGE_COLOR];
-    self.firstSectionImageArray = @[mobile, dropbox]; //[NSArray arrayWithObjects:mobile, dropbox, nil];
+    self.firstSectionImageArray = @[mobile, dropbox];
     
     UIImage *sync = [UIImage imageNameForChangingColor:@"sync48" color:kMENU_ICONIMAGE_COLOR];
     self.secondSectionImageArray = @[sync];
@@ -107,11 +105,17 @@
 
 - (void)configureViewAndTableView
 {
-    self.view.backgroundColor = kTOOLBAR_DROPBOX_LIST_VIEW_BACKGROUND_COLOR;          //뷰
-    self.tableView.backgroundColor = kCLEAR_COLOR;                                    //테이블 뷰 배경 색상
-    self.tableView.separatorColor = [UIColor colorWithRed:0.333 green:0.333 blue:0.333 alpha:0.1]; //구분선 색상
+    if (iPad) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+        self.layeredNavigationController.delegate = self;
+    }
+    self.view.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
+    self.tableView.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR; //kLEFTVIEW_BACKGROUND_COLOR;
+    self.tableView.separatorColor = kTEXTVIEW_BACKGROUND_COLOR;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.versionLabel.text = @"2014 lovejunsoft";
+    self.versionLabel.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
 }
 
 
@@ -176,6 +180,7 @@
     {
         cell.cellTitleLabel.text = self.thirdSectionArray[indexPath.row];
         cell.logoImageView.image = self.thirdSectionImageArray[indexPath.row];
+        cell.logoImageView.frame = CGRectMake(21, 21, 20, 20);
     }
     else if(indexPath.section == 3)
     {
@@ -200,7 +205,7 @@
 - (void)configureCell:(LeftTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     if ([cell respondsToSelector:@selector(setSeparatorInset:)]) { cell.separatorInset = UIEdgeInsetsZero; }
-    cell.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR_LEFTVIEW;
+    cell.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     cell.cellTitleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:18];
     cell.cellTitleLabel.textColor = [UIColor colorWithRed:0.157 green:0.161 blue:0.176 alpha:1];
 }
@@ -394,9 +399,9 @@
     UIView *customTitleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
-    titleLabel.frame = CGRectMake(-((((CGRectGetWidth(self.view.bounds)*kJASIDEPANEL_LEFTGAP_PERCENTAGE)-CGRectGetWidth(titleLabel.bounds))/2)-14), -2, 100, 44);
+//    titleLabel.frame = CGRectMake(-((((CGRectGetWidth(self.view.bounds)*kJASIDEPANEL_LEFTGAP_PERCENTAGE)-CGRectGetWidth(titleLabel.bounds))/2)-14), -2, 100, 44);
     [titleLabel setTextColor:[UIColor colorWithWhite:1.000 alpha:0.550]];
-    [titleLabel setFont:[UIFont fontWithName:@"AvenirNextCondensed-Regular" size:20]];
+    [titleLabel setFont:[UIFont fontWithName:@"AvenirNextCondensed-Medium" size:24]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [titleLabel setNumberOfLines:1];
     [titleLabel setAdjustsFontSizeToFitWidth:NO];
@@ -427,6 +432,10 @@
     [mailViewController setMessageBody:NSLocalizedString(@"\n\n\n\n----\nClarity iOS\n", @"\n\n\n\n----\nClarity iOS\n") isHTML:NO];
     
     [self presentViewController:mailViewController animated:YES completion:^{
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent]; //상태 바 속성
+        [[UINavigationBar appearance] setBarTintColor:kWINDOW_BACKGROUND_COLOR];            //냅바 색상
+        [[UINavigationBar appearance] setTintColor:kWHITE_COLOR];                           //냅바 버튼 색상
+        [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:kWHITE_COLOR, NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-Medium" size:18.0]};
     }];
 }
 
