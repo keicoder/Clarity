@@ -1,0 +1,16 @@
+PODS:
+  - Dropbox-Sync-API-SDK (3.0.2)
+  - FRLayeredNavigationController (0.4.4)
+  - ParcelKit (2.0.1):
+    - Dropbox-Sync-API-SDK (~> 3.0.2)
+
+DEPENDENCIES:
+  - FRLayeredNavigationController
+  - ParcelKit
+
+SPEC CHECKSUMS:
+  Dropbox-Sync-API-SDK: 8110afff9598478e7fdc2d161e54024dab09a0d2
+  FRLayeredNavigationController: b4c5f240c8f37b06c5db536fef16fdb5d47ab6be
+  ParcelKit: 6941191fc9849a8c859f217edf8ba0be9d0cdfda
+
+COCOAPODS: 0.33.1
