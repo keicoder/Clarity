@@ -344,7 +344,7 @@
     
     if (iPad) {
         Note *noteForDelete = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        if (managedObject.objectID == self.receivedNote.objectID || noteForDelete.location == self.receivedNote.location) {
+        if (managedObject.objectID == self.receivedNote.objectID || noteForDelete.uniqueNoteIDString == self.receivedNote.uniqueNoteIDString) {
             [self.layeredNavigationController popViewControllerAnimated:YES];
             [self showBlankView];
         }

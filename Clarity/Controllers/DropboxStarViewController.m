@@ -75,7 +75,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self showBlankView];
+    if (iPad) {
+        [self showBlankView];
+    }
 }
 
 
@@ -101,7 +103,7 @@
 
 - (void)deActivateSearchDisplayController
 {
-    if ([self.searchDisplayController isActive])    // check if searchDisplayController still active..
+    if ([self.searchDisplayController isActive])
     {
         [self.searchDisplayController setActive:NO];
     }
@@ -297,15 +299,15 @@
             [self.searchResultNotes removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             
-            [self deleteCoreDataNoteObject:indexPath];  //코어 데이터 노트
+            [self deleteCoreDataNoteObject:indexPath];
         }
         else
         {
-            [self deleteCoreDataNoteObject:indexPath];  //코어 데이터 노트
+            [self deleteCoreDataNoteObject:indexPath];
         }
     }
-    [self performUpdateInfoButton];                                                 //업데이트 인포
-    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
+    [self performUpdateInfoButton];
+    [self performCheckNoNote];
 }
 
 
@@ -316,11 +318,12 @@
     
     Note *noteForDelete = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    if (managedObject.objectID == self.receivedNote.objectID || noteForDelete.location == self.receivedNote.location) {
+    if (managedObject.objectID == self.receivedNote.objectID || noteForDelete.uniqueNoteIDString == self.receivedNote.uniqueNoteIDString) {
         if (iPad) {
             [self.layeredNavigationController popViewControllerAnimated:YES];
         }
     }
+    
     [managedObjectContext deleteObject:managedObject];
     NSError *error = nil;
     [managedObjectContext save:&error];
@@ -374,11 +377,12 @@
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
+    
     if (iPad) {
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
         
         [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-            //            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_RIGHT;
+//            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_RIGHT;
             layeredNavigationItem.nextItemDistance = 0;
             layeredNavigationItem.hasChrome = NO;
             layeredNavigationItem.hasBorder = NO;
@@ -397,7 +401,7 @@
 - (void)saveCurrentView
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
+    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];
     [standardUserDefaults synchronize];
 }
 
@@ -405,7 +409,7 @@
 - (void)cancelCurrentView
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_DROPBOX];                          //현재 뷰
+    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_DROPBOX];
     [standardUserDefaults synchronize];
 }
 
