@@ -1,6 +1,6 @@
 //
 //  LocalNoteListViewController.m
-//  SwiftNoteiPad
+//  Clarity
 //
 //  Created by jun on 2014. 7. 19..
 //  Copyright (c) 2014년 lovejunsoft. All rights reserved.
@@ -12,7 +12,7 @@
 
 
 #import "LocalNoteListViewController.h"
-//#import "FRLayeredNavigationController/FRLayeredNavigation.h"
+#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 #import "AppDelegate.h"
 #import "NoteDataManager.h"
 #import "Note.h"
@@ -24,9 +24,10 @@
 #import "WelcomePageViewController.h"
 #import "MTZWhatsNew.h"
 #import "MTZWhatsNewGridViewController.h"
+#import "BlankViewController.h"
 
 
-@interface LocalNoteListViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UIAlertViewDelegate>
+@interface LocalNoteListViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UIAlertViewDelegate, FRLayeredNavigationControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UISearchBar *searchBar;
@@ -34,6 +35,8 @@
 @property (nonatomic, strong) UIViewController *starViewController;
 @property (nonatomic, strong) NSMutableArray *searchResultNotes;
 @property (nonatomic, strong) Note *selectedNote;
+@property (nonatomic, strong) Note *receivedNote;
+@property (nonatomic, strong) Note *beDeletingNote;
 @property (nonatomic, strong) NSDateFormatter *formatter;
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemStarred;
 @property (nonatomic, strong) UIButton *buttonStar;
@@ -45,8 +48,8 @@
 
 @implementation LocalNoteListViewController
 {
-    int _totalNotes;                                          //노트 갯수
-    NSString *_titleString;                                   //new 노트 타이틀 스트링
+    int _totalNotes;
+    NSString *_titleString;
 }
 
 
@@ -59,7 +62,13 @@
     [self addBarButtonItem];
     [self checkWhetherShowWelcomeView];
     [self addObserverForWelcomeViewControllerDismissed];
-//    [self addObserverForNewNote];         //애드,에딧 뷰에서 뉴 노트 생성 버튼 누를 때 필요한 옵저버
+    [self saveCurrentView];
+    if (iPad) {
+        self.layeredNavigationController.delegate = self;
+        [self hideSearchBar];
+        [self addObserverForNewNote];
+        [self addObserverForCurrentNoteObjectIDKey];
+    }
 }
 
 
@@ -72,14 +81,16 @@
     [self initializeSearchResultNotes];
     [self.tableView reloadData];
     [self performUpdateInfoButton];
-    [self performCheckNoNote];          //노트 없으면 헬프 레이블 보여줄 것
-    [self saveCurrentView];
+    [self performCheckNoNote];
 }
 
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    if (iPad) {
+        [self showBlankView];
+    }
     [self checkToShowWhatsNewView];
 }
 
@@ -95,6 +106,15 @@
 }
 
 
+#pragma mark - override UIViewController's setEditing method (내비게이션 바 edit 버튼 메소드)
+
+-(void) setEditing:(BOOL)editing animated:(BOOL)animated
+{
+    [super setEditing:editing animated:animated];
+    [self.tableView setEditing:editing animated:animated];
+}
+
+
 #pragma mark - 검색결과를 담을 뮤터블 배열 초기화
 
 - (void)initializeSearchResultNotes
@@ -107,7 +127,7 @@
 
 - (void)deActivateSearchDisplayController
 {
-    if ([self.searchDisplayController isActive])    // check if searchDisplayController still active..
+    if ([self.searchDisplayController isActive])
     {
         [self.searchDisplayController setActive:NO];
     }
@@ -174,7 +194,6 @@
     }
     
     if (tableView == self.searchDisplayController.searchResultsTableView) {
-        //테이블 뷰 속성
         tableView.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;
         tableView.separatorColor = kTABLE_VIEW_SEPARATOR_COLOR;
         
@@ -205,7 +224,6 @@
 
 - (void)configureCell:(NoteTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    //셀 속성
     if ([cell respondsToSelector:@selector(setSeparatorInset:)]) { cell.separatorInset = UIEdgeInsetsZero; }
     cell.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;
     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -236,7 +254,7 @@
 - (void)configureImages:(Note *)note cell:(NoteTableViewCell *)cell
 {
     UIImage *starredImage = [UIImage imageNameForChangingColor:@"star-256-white" color:kGOLD_COLOR];
-    BOOL hasNoteStarCurrentState = [note.hasNoteStar boolValue];    //불리언 값, kLOGBOOL(hasNoteStarCurrentState);
+    BOOL hasNoteStarCurrentState = [note.hasNoteStar boolValue];
     
     if (hasNoteStarCurrentState) {
         cell.starImageView.image = starredImage;
@@ -254,8 +272,7 @@
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     header.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13];
     [header.textLabel setTextColor:[UIColor colorWithRed:0.467 green:0.482 blue:0.482 alpha:1]];
-    header.contentView.backgroundColor = [UIColor colorWithWhite:0.904 alpha:1.000];                //데이 모드
-    //header.contentView.backgroundColor = [UIColor colorWithWhite:0.379 alpha:1.000];              //나이트 모드
+    header.contentView.backgroundColor = [UIColor colorWithWhite:0.904 alpha:1.000];
 }
 
 
@@ -308,15 +325,15 @@
             [self.searchResultNotes removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             
-            [self deleteCoreDataNoteObject:indexPath];  //코어 데이터 노트
+            [self deleteCoreDataNoteObject:indexPath];
         }
         else
         {
-            [self deleteCoreDataNoteObject:indexPath];  //코어 데이터 노트
+            [self deleteCoreDataNoteObject:indexPath];
         }
     }
-    [self performUpdateInfoButton];                                                 //업데이트 인포
-    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
+    [self performUpdateInfoButton];
+    [self performCheckNoNote];
 }
 
 
@@ -324,6 +341,15 @@
 {
     NSManagedObject *managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
     NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
+    
+    if (iPad) {
+        Note *noteForDelete = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        if (managedObject.objectID == self.receivedNote.objectID || noteForDelete.location == self.receivedNote.location) {
+            [self.layeredNavigationController popViewControllerAnimated:YES];
+            [self showBlankView];
+        }
+    }
+    
     [managedObjectContext deleteObject:managedObject];
     NSError *error = nil;
     [managedObjectContext save:&error];
@@ -344,40 +370,52 @@
 {
     LocalAddEditViewController *controller = (LocalAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LocalAddEditViewController"];
     
-    if (tableView == self.searchDisplayController.searchResultsTableView) 
-    {
+    controller.isNewNote = NO;
+    controller.isDropboxNote = NO;
+    controller.isLocalNote = YES;
+    controller.isiCloudNote = NO;
+    controller.isOtherCloudNote = NO;
+    
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
         NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
         self.selectedNote = (Note *)[self.searchResultNotes objectAtIndex:indexPath.row];
         
-        controller.isSearchResultNote = YES;
-        controller.isNewNote = NO;
         controller.currentNote = self.selectedNote;
+        controller.isSearchResultNote = YES;
         
         [self.searchDisplayController.searchBar setText:self.searchDisplayController.searchBar.text];
         [self.searchDisplayController.searchBar resignFirstResponder];
         [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
-    else 
-    {
+    } else {
         NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
 //        NSManagedObjectContext *managedObjectContext = [[NSManagedObjectContext alloc]
 //                                                        initWithConcurrencyType:NSPrivateQueueConcurrencyType];
 //        [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
         
-        [self saveIndexPath:indexPath]; //유저 디폴트 > 현재 인덱스패스 저장
+        [self saveIndexPath:indexPath];
         
-        self.selectedNote = (Note *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
-        
+        self.selectedNote = (Note *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]]; //self.selectedNote = (Note *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
-        controller.isSearchResultNote = NO;
-        controller.isNewNote = NO;
         controller.currentNote = self.selectedNote;
+        controller.isSearchResultNote = NO;
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
     
-    [self.navigationController pushViewController:controller animated:YES]; //Push
+    if (iPad) {
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        
+        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+//            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_RIGHT;
+            layeredNavigationItem.nextItemDistance = 0;
+            layeredNavigationItem.hasChrome = NO;
+            layeredNavigationItem.hasBorder = NO;
+            layeredNavigationItem.displayShadow = YES;
+        }];
+    } else {
+        [self.navigationController pushViewController:controller animated:YES];
+    }
 }
 
 
@@ -392,6 +430,9 @@
   
     Note *note = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:managedObjectContext];
     
+    NSString *uniqueNoteIDString = [NSString stringWithFormat:@"%lli", arc4random() % 999999999999999999];
+    note.uniqueNoteIDString = uniqueNoteIDString;
+    
     LocalAddEditViewController *controller = (LocalAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LocalAddEditViewController"];
     [controller note:note inManagedObjectContext:managedObjectContext];
     
@@ -404,9 +445,22 @@
     controller.isLocalNote = YES;
     controller.isiCloudNote = NO;
     controller.isOtherCloudNote = NO;
+    controller.uniqueNoteIDString = uniqueNoteIDString;
     controller.currentNote.noteTitle = _titleString;
     
-    [self.navigationController pushViewController:controller animated:YES];
+    if (iPad) {
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        
+        [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+//            layeredNavigationItem.width = 400;
+            layeredNavigationItem.nextItemDistance = 0;
+            layeredNavigationItem.hasChrome = NO;
+            layeredNavigationItem.hasBorder = NO;
+            layeredNavigationItem.displayShadow = YES;
+        }];
+    } else {
+        [self.navigationController pushViewController:controller animated:YES];
+    }
 }
 
 
@@ -462,7 +516,7 @@
     else if (_fetchedResultsController == nil)
     {
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
-        NSPredicate *predicateIsLocalNote = [NSPredicate predicateWithFormat:@"isLocalNote == %@", [NSNumber numberWithBool: YES] ];
+        NSPredicate *predicateIsLocalNote = [NSPredicate predicateWithFormat:@"isLocalNote == %@", [NSNumber numberWithBool: YES]];
         [fetchRequest setPredicate:predicateIsLocalNote];
         [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO]]];
         _fetchedResultsController = [[NSFetchedResultsController alloc]
@@ -518,8 +572,8 @@
         case NSFetchedResultsChangeMove:
             break;
     }
-    [self performUpdateInfoButton];                                                 //업데이트 인포
-    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
+    [self performUpdateInfoButton];
+    [self performCheckNoNote];
 }
 
 
@@ -539,8 +593,8 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [tableView reloadData];                 //테이블 뷰 업데이트
-            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
+            [tableView reloadData];
+            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
             
         case NSFetchedResultsChangeMove:
@@ -550,8 +604,8 @@
                              withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
     }
-    [self performUpdateInfoButton];                                                 //업데이트 인포
-    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
+    [self performUpdateInfoButton];
+    [self performCheckNoNote];
 }
 
 
@@ -599,6 +653,11 @@
     
     self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, self.barButtonItemStarred];
     self.navigationItem.titleView = infoButtonView;
+    
+    if (iPad) {
+        self.navigationItem.leftBarButtonItems = @[self.editButtonItem];
+        [self.editButtonItem setTitleTextAttributes:@{NSForegroundColorAttributeName:kNAVIGATIONBAR_BUTTON_ITEM_LIGHTYELLOW_COLOR} forState:UIControlStateNormal];
+    }
 }
 
 
@@ -621,13 +680,13 @@
 
 - (void)performUpdateInfoButton
 {
-    [self performSelector:@selector(updateInfoButton) withObject:self.infoButton afterDelay:0.5];
+    [self performSelector:@selector(updateInfoButton) withObject:self.infoButton afterDelay:0.3];
 }
 
 
 - (void)updateInfoButton
 {
-    _totalNotes = (int)[[_fetchedResultsController fetchedObjects] count];        //노트 갯수
+    _totalNotes = (int)[[_fetchedResultsController fetchedObjects] count];
     
     if (_totalNotes == 0) {
         [self.infoButton setTitle:@"Local" forState:UIControlStateNormal];
@@ -769,7 +828,7 @@
     {
         self.helpLabel.alpha = 0.0;
         self.helpLabel.textColor = [UIColor clearColor];
-        self.tableView.separatorColor = kCLEAR_COLOR; //kTEXTVIEW_BACKGROUND_COLOR;
+        self.tableView.separatorColor = kCLEAR_COLOR;
     }
 }
 
@@ -784,6 +843,31 @@
                                              selector:@selector(addNewNote:)
                                                  name:@"AddNewNoteNotification"
                                                object:nil];
+}
+
+
+#pragma mark CurrentNoteObjectID Notification 옵저버 등록
+
+- (void)addObserverForCurrentNoteObjectIDKey
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveNoteObjectIDKeyNotification:)
+                                                 name:@"CurrentNoteObjectIDKeyNotification"
+                                               object:nil];
+}
+
+
+#pragma mark CurrentNoteObjectIDKey 노티피케이션 수신 후 후속작업
+
+- (void)didReceiveNoteObjectIDKeyNotification:(NSNotification *)notification
+{
+    if ([[notification name] isEqualToString:@"CurrentNoteObjectIDKeyNotification"])
+    {
+        NSDictionary *userInfo = notification.userInfo;
+        Note *receivedNote = [userInfo objectForKey:@"currentNoteObjectIDKey"];
+        self.receivedNote = receivedNote;
+        NSLog (@"self.receivedNote.objectID: %@\n", self.receivedNote.objectID);
+    }
 }
 
 
@@ -829,9 +913,9 @@
 - (void)deregisterForNotifications
 {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self name:@"CurrentNoteObjectIDKeyNotification" object:nil];
     [center removeObserver:self name:@"WelcomeViewControllerDismissedNotification" object:nil];
     [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
-    
     [center removeObserver:self];
 }
 
@@ -842,11 +926,9 @@
 - (void)saveIndexPath:(NSIndexPath *)indexPath
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setInteger:indexPath.row forKey:kSELECTED_LOCAL_NOTE_INDEX];          //인덱스
-    [standardUserDefaults setIndexPath:indexPath forKey:kSELECTED_LOCAL_NOTE_INDEXPATH];        //인덱스패스
+    [standardUserDefaults setInteger:indexPath.row forKey:kSELECTED_LOCAL_NOTE_INDEX];
+    [standardUserDefaults setIndexPath:indexPath forKey:kSELECTED_LOCAL_NOTE_INDEXPATH];
     [standardUserDefaults synchronize];
-    //    NSLog(@"didSelectRowAtIndex > _selectedIndex > saved Index: %d\n", [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_LOCAL_NOTE_INDEX]);
-    //    NSLog(@"didSelectRowAtIndexPath > _selectedIndexPath > saved IndexPath: %@", [standardUserDefaults indexPathForKey:kSELECTED_LOCAL_NOTE_INDEXPATH]);
 }
 
 
@@ -855,7 +937,7 @@
 - (void)saveCurrentView
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_LOCAL];                          //현재 뷰
+    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_LOCAL];
     [standardUserDefaults synchronize];
 }
 
@@ -863,7 +945,7 @@
 - (void)cancelCurrentView
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_LOCAL];                           //현재 뷰
+    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_LOCAL];
     [standardUserDefaults synchronize];
 }
 
@@ -883,9 +965,9 @@
 
 - (void)dealloc
 {
-    [self deregisterForNotifications];                              //Remove 옵저버
-    _fetchedResultsController = nil;                                //fetchedResultsController
-    self.searchResultNotes = nil;                                   //검색결과를 담을 뮤터블 배열
+    [self deregisterForNotifications];
+    _fetchedResultsController = nil;
+    self.searchResultNotes = nil;
     NSLog(@"dealloc %@", self);
 }
 
@@ -898,11 +980,36 @@
 }
 
 
-#pragma mark - 디바이스 방향 지원
+#pragma mark - 블랭크 뷰 보여줌
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void)showBlankView
 {
-    return UIInterfaceOrientationIsPortrait(interfaceOrientation);
+    BlankViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"BlankViewController"];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    
+    [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+        
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        
+        if(orientation == 0) {
+            layeredNavigationItem.width = 768-320;
+        }
+        else if(orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+        {
+            layeredNavigationItem.width = 768-320;
+        }
+        else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+        {
+            layeredNavigationItem.width = 1024-320;
+        }
+        layeredNavigationItem.nextItemDistance = 320;
+        layeredNavigationItem.hasChrome = NO;
+        layeredNavigationItem.hasBorder = NO;
+        layeredNavigationItem.displayShadow = YES;
+    }];
+    
+    [self performSelector:@selector(checkWhetherShowWelcomeView) withObject:nil afterDelay:0.3];
 }
 
 
@@ -910,12 +1017,13 @@
 
 - (void)checkWhetherShowWelcomeView
 {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES)  // app already launched
-    { }
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES) {
+        
+    }
     else {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kHasLaunchedOnce"]; //app first launched
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kHasLaunchedOnce"];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        [self showWelcomeView];       //Welcome 뷰 보여줌
+        [self showWelcomeView];
     }
 }
 
@@ -923,7 +1031,11 @@
 - (void)showWelcomeView
 {
     WelcomePageViewController *controller = (WelcomePageViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-    [self.navigationController pushViewController:controller animated:YES];
+    if (iPad) {
+        [self.navigationController presentViewController:controller animated:YES completion:nil];
+    } else {
+        [self.navigationController pushViewController:controller animated:YES];
+    }
 }
 
 
@@ -931,25 +1043,14 @@
 
 - (void)checkToShowWhatsNewView
 {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES)  // app already launched
-    {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES) {
         NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
-        //NSLog (@"versionString: %@\n", versionString);
-        
         NSString *lastVersionString = [[NSUserDefaults standardUserDefaults] stringForKey:@"currentVersion"];
-        //NSLog (@"lastVersionString: %@\n", lastVersionString);
-        
-        if ([versionString isEqualToString:lastVersionString]) {
-            
-        }
-        else {
+        if (![versionString isEqualToString:lastVersionString]) {
             [self performSelector:@selector(showWhatsNewView) withObject:nil afterDelay:0.3];
             [[NSUserDefaults standardUserDefaults] setObject:versionString forKey:@"currentVersion"];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
-    }
-    else {
-        
     }
 }
 
@@ -958,18 +1059,13 @@
 
 - (void)showWhatsNewView
 {
-    [MTZWhatsNew handleWhatsNew:^(NSDictionary *whatsNew)
-     {
-         MTZWhatsNewGridViewController *vc = [[MTZWhatsNewGridViewController alloc] initWithFeatures:whatsNew];
-         
-         vc.backgroundGradientTopColor = kWHITE_COLOR; //[UIColor colorWithHue:0.77 saturation:0.77 brightness:0.76 alpha:1];
-         vc.backgroundGradientBottomColor = kWHITE_COLOR; //[UIColor colorWithHue:0.78 saturation:0.6 brightness:0.95 alpha:1];
-         
-         [self.navigationController presentViewController:vc animated:YES completion:nil];
-         
-         vc.dismissButtonTitle = @"Dismiss";
-         
-     } sinceVersion:@"1.0"];
+    [MTZWhatsNew handleWhatsNew:^(NSDictionary *whatsNew) {
+        MTZWhatsNewGridViewController *vc = [[MTZWhatsNewGridViewController alloc] initWithFeatures:whatsNew];
+        vc.backgroundGradientTopColor = kWHITE_COLOR;
+        vc.backgroundGradientBottomColor = kWHITE_COLOR;
+        [self.navigationController presentViewController:vc animated:YES completion:nil];
+        vc.dismissButtonTitle = @"Dismiss";
+    } sinceVersion:@"1.0"];
 }
 
 
@@ -979,15 +1075,12 @@
 {
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), CGRectGetHeight(self.tableView.frame))];
     [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    //[view setBackgroundColor:[UIColor colorWithWhite:0.92 alpha:1]];
     [view setBackgroundColor:kCLEAR_COLOR];
     UIImage *image = [UIImage imageNamed:@"swiftNoteWideLogo102by38"];
-    //UIImage *imageThumb = [image makeThumbnailOfSize:CGSizeMake(image.size.width, image.size.height)];
     UIImageView *logoImageView = [[UIImageView alloc] initWithImage:image];
-    //[logoImageView setCenter:view.center];
     [logoImageView setFrame:({
         CGRect frame = logoImageView.frame;
-        frame.origin.x = 70; //(self.tableView.frame.size.width - frame.size.width) / 2;
+        frame.origin.x = 70;
         frame.origin.y = 20;
         CGRectIntegral(frame);
     })];
@@ -998,7 +1091,6 @@
     
     self.tableView.tableFooterView = view;
     
-    //[self.tableView setBackgroundColor:view.backgroundColor];
     self.tableView.contentInset = self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, - CGRectGetHeight(view.bounds), 0);
 }
 
@@ -1007,17 +1099,13 @@
 
 - (void)showLastUsedNote
 {
-    //DBAccountManager *accountManager = [DBAccountManager sharedManager];
-    //DBAccount *account = [accountManager linkedAccount];
-    
     self.navigationController.delegate = self;
     
     NSInteger index = [[NSUserDefaults standardUserDefaults] integerForKey:kSELECTED_LOCAL_NOTE_INDEX];
-    //NSLog (@"selectedNoteIndex: %d, fetchedObjects count: %d", index, [[_fetchedResultsController fetchedObjects] count]);
     
     if (index < 0 || index >= [[_fetchedResultsController fetchedObjects] count])
     {
-        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_LOCAL_NOTE_INDEX];  //해당 노트로 이동 방지
+        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_LOCAL_NOTE_INDEX];
     }
     else if (index >= 0 && index < [[_fetchedResultsController fetchedObjects] count])
     {
@@ -1031,17 +1119,45 @@
         //[managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
         
         self.selectedNote = (Note *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
-        
         //self.selectedNote = (Note *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
+        controller.currentNote = self.selectedNote;
         controller.isSearchResultNote = NO;
         controller.isNewNote = NO;
-        controller.currentNote = self.selectedNote;
+        controller.isDropboxNote = NO;
+        controller.isLocalNote = YES;
+        controller.isiCloudNote = NO;
+        controller.isOtherCloudNote = NO;
         
-        [self.navigationController pushViewController:controller animated:YES]; //Push
+        if (iPad) {
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+            
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+//            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_RIGHT;
+                layeredNavigationItem.nextItemDistance = 0;
+                layeredNavigationItem.hasChrome = NO;
+                layeredNavigationItem.hasBorder = NO;
+                layeredNavigationItem.displayShadow = YES;
+            }];
+        } else {
+            [self.navigationController pushViewController:controller animated:YES];
+        }
     }
 }
+
+
+//#pragma mark - 디바이스 방향 지원
+//
+//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+//{
+//    if (iPad) {
+//        return YES;
+//    } else {
+//        return UIInterfaceOrientationIsPortrait(interfaceOrientation);
+//    }
+//    return YES;
+//}
 
 
 @end

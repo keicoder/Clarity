@@ -1,6 +1,6 @@
 //
 //  DropboxNoteListViewController.m
-//  SwiftNoteiPad
+//  Clarity
 //
 //  Created by jun on 2014. 7. 19..
 //  Copyright (c) 2014년 lovejunsoft. All rights reserved.
@@ -48,8 +48,8 @@
 
 @implementation DropboxNoteListViewController
 {
-    int _totalNotes;                                            //노트 갯수
-    NSString *_titleString;                                     //new 노트 타이틀 스트링
+    int _totalNotes;
+    NSString *_titleString;
 }
 
 
@@ -60,13 +60,14 @@
     [super viewDidLoad];
     [self configureViewAndTableView];
     [self addBarButtonItem];
-//    [self checkWhetherShowWelcomeView];
+    [self checkWhetherShowWelcomeView];
     [self addObserverForWelcomeViewControllerDismissed];
+    [self saveCurrentView];
     if (iPad) {
         self.layeredNavigationController.delegate = self;
         [self hideSearchBar];
-        [self addObserverForNewNote];                           //애드, 에딧 뷰, 블랭크 뷰
-        [self addObserverForCurrentNoteObjectIDKey];            //우측 노트 오브젝트 ID
+        [self addObserverForNewNote];
+        [self addObserverForCurrentNoteObjectIDKey];
     }
 }
 
@@ -80,8 +81,7 @@
     [self initializeSearchResultNotes];
     [self.tableView reloadData];
     [self performUpdateInfoButton];
-    [self performCheckNoNote];                                  //헬프 레이블
-    [self saveCurrentView];
+    [self performCheckNoNote];
 }
 
 
@@ -194,7 +194,6 @@
     }
     
     if (tableView == self.searchDisplayController.searchResultsTableView) {
-        //테이블 뷰 속성
         tableView.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;
         tableView.separatorColor = kTABLE_VIEW_SEPARATOR_COLOR;
         
@@ -225,7 +224,6 @@
 
 - (void)configureCell:(NoteTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    //셀 속성
     if ([cell respondsToSelector:@selector(setSeparatorInset:)]) { cell.separatorInset = UIEdgeInsetsZero; }
     cell.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;
     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -256,7 +254,7 @@
 - (void)configureImages:(Note *)note cell:(NoteTableViewCell *)cell
 {
     UIImage *starredImage = [UIImage imageNameForChangingColor:@"star-256-white" color:kGOLD_COLOR];
-    BOOL hasNoteStarCurrentState = [note.hasNoteStar boolValue];    //불리언 값, kLOGBOOL(hasNoteStarCurrentState);
+    BOOL hasNoteStarCurrentState = [note.hasNoteStar boolValue];
     
     if (hasNoteStarCurrentState) {
         cell.starImageView.image = starredImage;
@@ -274,8 +272,7 @@
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     header.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13];
     [header.textLabel setTextColor:[UIColor colorWithRed:0.467 green:0.482 blue:0.482 alpha:1]];
-    header.contentView.backgroundColor = [UIColor colorWithWhite:0.904 alpha:1.000];                //데이 모드
-    //header.contentView.backgroundColor = [UIColor colorWithWhite:0.379 alpha:1.000];              //나이트 모드
+    header.contentView.backgroundColor = [UIColor colorWithWhite:0.904 alpha:1.000];
 }
 
 
@@ -328,11 +325,11 @@
             [self.searchResultNotes removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             
-            [self deleteCoreDataNoteObject:indexPath];  //코어 데이터 노트
+            [self deleteCoreDataNoteObject:indexPath];
         }
         else
         {
-            [self deleteCoreDataNoteObject:indexPath];  //코어 데이터 노트
+            [self deleteCoreDataNoteObject:indexPath];
         }
     }
     [self performUpdateInfoButton];
@@ -347,11 +344,9 @@
     
     if (iPad) {
         Note *noteForDelete = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        
         if (managedObject.objectID == self.receivedNote.objectID || noteForDelete.location == self.receivedNote.location) {
             [self.layeredNavigationController popViewControllerAnimated:YES];
-            
-            [self showBlankView];                                                      //블랭크 뷰 보여줌
+            [self showBlankView];
         }
     }
     
@@ -407,6 +402,7 @@
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
+    
     if (iPad) {
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
         
@@ -520,7 +516,7 @@
     else if (_fetchedResultsController == nil)
     {
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
-        NSPredicate *predicateIsDropboxNote = [NSPredicate predicateWithFormat:@"isDropboxNote == %@", [NSNumber numberWithBool: YES] ];
+        NSPredicate *predicateIsDropboxNote = [NSPredicate predicateWithFormat:@"isDropboxNote == %@", [NSNumber numberWithBool: YES]];
         [fetchRequest setPredicate:predicateIsDropboxNote];
         [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO]]];
         _fetchedResultsController = [[NSFetchedResultsController alloc]
@@ -576,8 +572,8 @@
         case NSFetchedResultsChangeMove:
             break;
     }
-    [self performUpdateInfoButton];                                                 //업데이트 인포
-    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
+    [self performUpdateInfoButton];
+    [self performCheckNoNote];
 }
 
 
@@ -597,8 +593,8 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [tableView reloadData];                 //테이블 뷰 업데이트
-            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
+            [tableView reloadData];
+            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
             
         case NSFetchedResultsChangeMove:
@@ -608,8 +604,8 @@
                              withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
     }
-    [self performUpdateInfoButton];                                                 //업데이트 인포
-    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
+    [self performUpdateInfoButton];
+    [self performCheckNoNote];
 }
 
 
@@ -684,7 +680,7 @@
 
 - (void)performUpdateInfoButton
 {
-    [self performSelector:@selector(updateInfoButton) withObject:self.infoButton afterDelay:0.5];
+    [self performSelector:@selector(updateInfoButton) withObject:self.infoButton afterDelay:0.3];
 }
 
 
@@ -969,9 +965,9 @@
 
 - (void)dealloc
 {
-    [self deregisterForNotifications];                              //Remove 옵저버
-    _fetchedResultsController = nil;                                //fetchedResultsController
-    self.searchResultNotes = nil;                                   //검색결과를 담을 뮤터블 배열
+    [self deregisterForNotifications];
+    _fetchedResultsController = nil;
+    self.searchResultNotes = nil;
     NSLog(@"dealloc %@", self);
 }
 
@@ -982,19 +978,6 @@
 {
     [super didReceiveMemoryWarning];
 }
-
-
-//#pragma mark - 디바이스 방향 지원
-//
-//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-//{
-//    if (iPad) {
-//        return YES;
-//    } else {
-//        return UIInterfaceOrientationIsPortrait(interfaceOrientation);
-//    }
-//    return YES;
-//}
 
 
 #pragma mark - 블랭크 뷰 보여줌
@@ -1010,7 +993,7 @@
         UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
         
         if(orientation == 0) {
-            layeredNavigationItem.width = 768-320; //Default
+            layeredNavigationItem.width = 768-320;
         }
         else if(orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
         {
@@ -1020,7 +1003,7 @@
         {
             layeredNavigationItem.width = 1024-320;
         }
-        layeredNavigationItem.nextItemDistance = 320;                 //레이어가 가려질 거리;
+        layeredNavigationItem.nextItemDistance = 320;
         layeredNavigationItem.hasChrome = NO;
         layeredNavigationItem.hasBorder = NO;
         layeredNavigationItem.displayShadow = YES;
@@ -1122,7 +1105,7 @@
     
     if (index < 0 || index >= [[_fetchedResultsController fetchedObjects] count])
     {
-        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_DROPBOX_NOTE_INDEX];  //해당 노트로 이동 방지
+        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_DROPBOX_NOTE_INDEX];
     }
     else if (index >= 0 && index < [[_fetchedResultsController fetchedObjects] count])
     {
@@ -1136,17 +1119,45 @@
         [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
         
         self.selectedNote = (Note *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
-        
         //self.selectedNote = (Note *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
+        controller.currentNote = self.selectedNote;
         controller.isSearchResultNote = NO;
         controller.isNewNote = NO;
-        controller.currentNote = self.selectedNote;
+        controller.isDropboxNote = YES;
+        controller.isLocalNote = NO;
+        controller.isiCloudNote = NO;
+        controller.isOtherCloudNote = NO;
         
-        [self.navigationController pushViewController:controller animated:YES]; //Push
+        if (iPad) {
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+            
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+//            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_RIGHT;
+                layeredNavigationItem.nextItemDistance = 0;
+                layeredNavigationItem.hasChrome = NO;
+                layeredNavigationItem.hasBorder = NO;
+                layeredNavigationItem.displayShadow = YES;
+            }];
+        } else {
+            [self.navigationController pushViewController:controller animated:YES];
+        }
     }
 }
+
+
+//#pragma mark - 디바이스 방향 지원
+//
+//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+//{
+//    if (iPad) {
+//        return YES;
+//    } else {
+//        return UIInterfaceOrientationIsPortrait(interfaceOrientation);
+//    }
+//    return YES;
+//}
 
 
 @end

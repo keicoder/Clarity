@@ -11,4 +11,6 @@
 
 @interface LocalNoteListViewController : UIViewController
 
+- (void)addNewNote:(id)sender;
+
 @end
