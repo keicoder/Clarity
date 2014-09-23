@@ -26,15 +26,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self configureViewAndTableView];                                                       //뷰 및 테이블 뷰 속성
-    self.syncSwitch.on = [[DBAccountManager sharedManager] linkedAccount] != nil;
-    [self saveCurrentView];                                                                 //현재 뷰 > 유저 디폴트 저장
+    self.title = @"Link";
+    [self configureViewAndTableView];
 }
 
+
+#pragma mark - 뷰 life cycle
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.tableView reloadData];
+    self.syncSwitch.on = [[DBAccountManager sharedManager] linkedAccount] != nil;
+    [self saveCurrentView];
 }
 
 
@@ -42,7 +46,6 @@
 
 - (void)configureViewAndTableView
 {
-    self.title = @"Link";
     self.tableView.separatorColor = [UIColor colorWithWhite:0.333 alpha:0.300];
 }
 
@@ -52,7 +55,7 @@
 - (void)saveCurrentView
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
+    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];
     [standardUserDefaults synchronize];
 }
 

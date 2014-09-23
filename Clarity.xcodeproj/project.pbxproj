@@ -87,6 +87,7 @@
 		C125D34D19AEDA4800D9E892 /* What's New.plist in Resources */ = {isa = PBXBuildFile; fileRef = C125D34C19AEDA4800D9E892 /* What's New.plist */; };
 		C12FE79019CFBA64001209B2 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12FE78F19CFBA64001209B2 /* Main_iPad.storyboard */; };
 		C12FE79319CFD54A001209B2 /* BlankViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12FE79219CFD54A001209B2 /* BlankViewController.m */; };
+		C12FE79819D12014001209B2 /* JGActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = C12FE79719D12014001209B2 /* JGActionSheet.m */; };
 		C1ABF0C519985B7A00E622CA /* MainSidePanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */; };
 		C1ABF0CD19985CF400E622CA /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C819985CF400E622CA /* JASidePanelController.m */; };
 		C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0CA19985CF400E622CA /* LogViewController.m */; };
@@ -250,6 +251,8 @@
 		C12FE79119CFD54A001209B2 /* BlankViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlankViewController.h; sourceTree = "<group>"; };
 		C12FE79219CFD54A001209B2 /* BlankViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlankViewController.m; sourceTree = "<group>"; };
 		C12FE79419D1110E001209B2 /* ClarityHD 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ClarityHD 4.xcdatamodel"; sourceTree = "<group>"; };
+		C12FE79619D12014001209B2 /* JGActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGActionSheet.h; sourceTree = "<group>"; };
+		C12FE79719D12014001209B2 /* JGActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGActionSheet.m; sourceTree = "<group>"; };
 		C1ABF0C319985B7A00E622CA /* MainSidePanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainSidePanelViewController.h; sourceTree = "<group>"; };
 		C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainSidePanelViewController.m; sourceTree = "<group>"; };
 		C1ABF0C719985CF400E622CA /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
@@ -384,6 +387,7 @@
 		C122906319973A6400460667 /* 3rdParties */ = {
 			isa = PBXGroup;
 			children = (
+				C12FE79519D12014001209B2 /* JGActionSheet */,
 				C1F0580919C961BA0073530A /* MaryPopin */,
 				C1E74E7319AEFE2A00AA3399 /* NDHTMLtoPDF */,
 				C1E74E6F19AEFE1500AA3399 /* BNHtmlPdfKit */,
@@ -674,6 +678,15 @@
 			path = SAMGradientView;
 			sourceTree = "<group>";
 		};
+		C12FE79519D12014001209B2 /* JGActionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				C12FE79619D12014001209B2 /* JGActionSheet.h */,
+				C12FE79719D12014001209B2 /* JGActionSheet.m */,
+			);
+			path = JGActionSheet;
+			sourceTree = "<group>";
+		};
 		C1ABF0C619985CF400E622CA /* JASidePanels */ = {
 			isa = PBXGroup;
 			children = (
@@ -924,6 +937,7 @@
 				C122910C19973CE100460667 /* Clarity.xcdatamodeld in Sources */,
 				C12290A319973A7200460667 /* NSUserDefaults+Extension.m in Sources */,
 				C122909419973A6400460667 /* SVWebViewControllerActivityChrome.m in Sources */,
+				C12FE79819D12014001209B2 /* JGActionSheet.m in Sources */,
 				C12290A619973A7200460667 /* UIImage+ChangeColor.m in Sources */,
 				C12290DD19973A7E00460667 /* WelcomePageViewController.m in Sources */,
 				C125D34719AEDA1D00D9E892 /* MTZWhatsNewViewController.m in Sources */,

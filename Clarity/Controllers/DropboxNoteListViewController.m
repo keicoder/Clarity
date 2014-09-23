@@ -375,40 +375,38 @@
 {
     DropboxAddEditViewController *controller = (DropboxAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
     
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-    {
+    controller.isNewNote = NO;
+    controller.isDropboxNote = YES;
+    controller.isLocalNote = NO;
+    controller.isiCloudNote = NO;
+    controller.isOtherCloudNote = NO;
+    
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
         NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
         self.selectedNote = (Note *)[self.searchResultNotes objectAtIndex:indexPath.row];
         
-        controller.isSearchResultNote = YES;
-        controller.isNewNote = NO;
         controller.currentNote = self.selectedNote;
+        controller.isSearchResultNote = YES;
         
         [self.searchDisplayController.searchBar setText:self.searchDisplayController.searchBar.text];
         [self.searchDisplayController.searchBar resignFirstResponder];
         [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
-    else
-    {
+    } else {
 //        NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
         NSManagedObjectContext *managedObjectContext = [[NSManagedObjectContext alloc]
                                                         initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
         
-        [self saveIndexPath:indexPath]; //유저 디폴트 > 현재 인덱스패스 저장
+        [self saveIndexPath:indexPath];
         
-        self.selectedNote = (Note *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]];
-        
-//        self.selectedNote = (Note *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
+        self.selectedNote = (Note *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]]; //self.selectedNote = (Note *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
-        controller.isSearchResultNote = NO;
-        controller.isNewNote = NO;
         controller.currentNote = self.selectedNote;
+        controller.isSearchResultNote = NO;
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
-    
     if (iPad) {
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
         
