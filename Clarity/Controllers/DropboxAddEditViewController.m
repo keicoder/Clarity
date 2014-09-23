@@ -134,7 +134,7 @@
 
 - (void)checkNewNote
 {
-    if (self.isNewNote) {
+    if (self.isNewNote == YES) {
         [self.noteTextView becomeFirstResponder];
     } else {
         [self.noteTextView resignFirstResponder];
@@ -148,10 +148,10 @@
 
 - (void)assignNoteData
 {
-    self.noteTitleLabel.text = self.currentNote.noteTitle;      //타이틀
-    self.noteTextView.text = self.currentNote.noteBody;         //본문
-    _didSelectStar = [self.currentNote.hasNoteStar boolValue];  //스타 불리언 값
-    _originalNote = self.currentNote.noteAll;                   //저장 시 비교하기위한 원본 노트
+    self.noteTitleLabel.text = self.currentNote.noteTitle;
+    self.noteTextView.text = self.currentNote.noteBody;
+    _didSelectStar = [self.currentNote.hasNoteStar boolValue];
+    _originalNote = self.currentNote.noteAll;
 }
 
 
@@ -216,7 +216,6 @@
 - (void)keyboardDidShow:(NSNotification *)notification
 {
     [self.noteTextView keyboardDidShow:notification];
-//    NSLog(@"keyboardDidShow > \n%@", [notification userInfo]);
 }
 
 
@@ -444,17 +443,6 @@
 }
 
 
-#pragma mark 노트 삭제
-
-- (void)deleteNote:(id)sender
-{
-    NSManagedObject *managedObject = self.currentNote;
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    [managedObjectContext deleteObject:managedObject];
-    [managedObjectContext save:nil];
-}
-
-
 #pragma mark 노트 저장
 
 - (void)autoSave
@@ -569,7 +557,7 @@
         self.currentNote.hasNoteStar = [NSNumber numberWithBool:YES];
         
         [YRDropdownView showDropdownInView:self.view coloredTitle:@"Starred" image:nil animated:YES hideAfter:0.2];
-        [self performSelector:@selector(updateStarImage) withObject:self afterDelay:0.2];    //툴바 뷰 스타 이미지 업데이트
+        [self performSelector:@selector(updateStarImage) withObject:self afterDelay:0.2];
     }
     else
     {
@@ -577,7 +565,7 @@
         self.currentNote.hasNoteStar = [NSNumber numberWithBool:NO];
         
         [YRDropdownView showDropdownInView:self.view unColoredTitle:@"UnStarred" image:nil animated:YES hideAfter:0.2];
-        [self performSelector:@selector(updateStarImage) withObject:self afterDelay:0.2];   //툴바 뷰 스타 이미지 업데이트
+        [self performSelector:@selector(updateStarImage) withObject:self afterDelay:0.2];
     }
 }
 
@@ -617,7 +605,6 @@
                                    " <style> %@ </style>"
                                    " </head> ", [self cssUTF8String]]];
     [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:[self noteString] error:&error]];
-    //NSLog (@"HTML 스트링: %@\n", self.htmlString);
     
     return self.htmlString;
 }
@@ -679,23 +666,19 @@
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     
-    //Create the popin view controller
     NoteTitlePopinViewController *controller = [[NoteTitlePopinViewController alloc] initWithNibName:@"NoteTitlePopinViewController" bundle:nil];
     
-    [self updateNoteDataWithCurrentState];                  //업데이트 노트 데이터
+    [self updateNoteDataWithCurrentState];
     
-    //넘겨줄 노트 데이터
-    //    NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     NSManagedObjectContext *mainManagedObjectContext = [managedObjectContext parentContext];
     [controller note:self.currentNote inManagedObjectContext:mainManagedObjectContext];
     
-    //팝인 뷰 속성
-    [controller setPopinTransitionStyle:BKTPopinTransitionStyleSlide];  //BKTPopinTransitionStyleSlide, BKTPopinTransitionStyleCrossDissolve
+    [controller setPopinTransitionStyle:BKTPopinTransitionStyleSlide];
     [controller setPopinOptions:BKTPopinDefault];                               //BKTPopinDefault > Dismissable
-    [controller setPopinTransitionDirection:BKTPopinTransitionDirectionTop];    //Set popin transition direction
-    [controller setPopinAlignment:BKTPopinAlignementOptionUp];                  //Set popin alignment
-    [controller setPopinOptions:[controller popinOptions]|BKTPopinDefault];     //Add option for a blurry background > ex) BKTPopinBlurryDimmingView
+    [controller setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
+    [controller setPopinAlignment:BKTPopinAlignementOptionUp];
+    [controller setPopinOptions:[controller popinOptions]|BKTPopinDefault];
     
     [self.navigationController presentPopinController:controller animated:YES completion:^{ }];
 }
@@ -768,7 +751,6 @@
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kDIDSHOW_NOTEVIEW_HELP];
         [[NSUserDefaults standardUserDefaults] synchronize];
         self.noteTextView.text = @"\n# Quick Guide\n\n### Notice\n**This quick guide note will not show again**.\n\n### Edit\n* To edit title, tap the date.\n* To save note, swipe right.\n* To remove keyboard, just swipe down.\n\n### Preview\n* To preview markdown, tap 'M' button.\n* In Preview mode, Tap anywhere to enter full screen\n\n### Navigation\n* Swipe right to reveal lists.\n\n> Thank you for purchasing Clarity.  \nEnjoy Writing!";
-        //        [self performSelector:@selector(barButtonItemMarkdownPressed:) withObject:nil afterDelay:0.0];
     }
     else {
         
@@ -806,7 +788,7 @@
 - (void)saveCurrentView
 {
     NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];                         //현재 뷰
+    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];
     [standardUserDefaults synchronize];
 }
 
@@ -1005,16 +987,16 @@
 	switch (result)
 	{
 		case MFMailComposeResultCancelled:
-            //			NSLog(@"mail composer cancelled");
+//			NSLog(@"mail composer cancelled");
 			break;
 		case MFMailComposeResultSaved:
-            //			NSLog(@"mail composer saved");
+//			NSLog(@"mail composer saved");
 			break;
 		case MFMailComposeResultSent:
-            //			NSLog(@"mail composer sent");
+//			NSLog(@"mail composer sent");
 			break;
 		case MFMailComposeResultFailed:
-            //			NSLog(@"mail composer failed");
+//			NSLog(@"mail composer failed");
 			break;
 	}
     [controller dismissViewControllerAnimated:YES completion:nil];
@@ -1042,9 +1024,9 @@
         
         [printController presentAnimated:YES completionHandler: ^(UIPrintInteractionController *printInteractionController, BOOL completed, NSError *error){
             if (!completed && (error != nil)) {
-                //                 NSLog(@"Error Printing: %@", error);
+//                 NSLog(@"Error Printing: %@", error);
             } else {
-                //                 NSLog(@"Printing Completed");
+//                 NSLog(@"Printing Completed");
             }
         }];
     }
@@ -1466,12 +1448,10 @@
     [center removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [center removeObserver:self name:UIKeyboardDidHideNotification object:nil];
-    
     [center removeObserver:self name:@"DidChangeNoteTitleNotification" object:nil];
     [center removeObserver:self name:@"HelpMessageMarkdownWebViewPopped" object:nil];
     [center removeObserver:self name:@"ApplicationWillResignActiveNotification" object:nil];
     [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
-    
     [center removeObserver:self];
 }
 
