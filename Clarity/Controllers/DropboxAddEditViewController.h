@@ -19,6 +19,7 @@
 @property (nonatomic, assign) BOOL isLocalNote;
 @property (nonatomic, assign) BOOL isiCloudNote;
 @property (nonatomic, assign) BOOL isOtherCloudNote;
+@property (nonatomic, strong) NSString *uniqueNoteIDString;
 
 - (void)note:(Note *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 

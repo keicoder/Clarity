@@ -106,6 +106,15 @@
 }
 
 
+#pragma mark - override UIViewController's setEditing method (내비게이션 바 edit 버튼 메소드)
+
+-(void) setEditing:(BOOL)editing animated:(BOOL)animated
+{
+    [super setEditing:editing animated:animated];
+    [self.tableView setEditing:editing animated:animated];
+}
+
+
 #pragma mark - 검색결과를 담을 뮤터블 배열 초기화
 
 - (void)initializeSearchResultNotes
@@ -326,8 +335,8 @@
             [self deleteCoreDataNoteObject:indexPath];  //코어 데이터 노트
         }
     }
-    [self performUpdateInfoButton];                                                 //업데이트 인포
-    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
+    [self performUpdateInfoButton];
+    [self performCheckNoNote];
 }
 
 
@@ -335,6 +344,17 @@
 {
     NSManagedObject *managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
     NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
+    
+    if (iPad) {
+        Note *noteForDelete = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        
+        if (managedObject.objectID == self.receivedNote.objectID || noteForDelete.location == self.receivedNote.location) {
+            [self.layeredNavigationController popViewControllerAnimated:YES];
+            
+            [self showBlankView];                                                      //블랭크 뷰 보여줌
+        }
+    }
+    
     [managedObjectContext deleteObject:managedObject];
     NSError *error = nil;
     [managedObjectContext save:&error];
@@ -393,6 +413,7 @@
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
         
         [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+//            layeredNavigationItem.width = kFRLAYERED_NAVIGATION_ITEM_WIDTH_RIGHT;
             layeredNavigationItem.nextItemDistance = 0;
             layeredNavigationItem.hasChrome = NO;
             layeredNavigationItem.hasBorder = NO;
@@ -415,6 +436,9 @@
     
     Note *note = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:managedObjectContext];
     
+    NSString *uniqueNoteIDString = [NSString stringWithFormat:@"%lli", arc4random() % 999999999999999999];
+    note.uniqueNoteIDString = uniqueNoteIDString;
+    
     DropboxAddEditViewController *controller = (DropboxAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
     [controller note:note inManagedObjectContext:managedObjectContext];
     
@@ -427,12 +451,14 @@
     controller.isLocalNote = NO;
     controller.isiCloudNote = NO;
     controller.isOtherCloudNote = NO;
+    controller.uniqueNoteIDString = uniqueNoteIDString;
     controller.currentNote.noteTitle = _titleString;
     
     if (iPad) {
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
         
         [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+//            layeredNavigationItem.width = 400;
             layeredNavigationItem.nextItemDistance = 0;
             layeredNavigationItem.hasChrome = NO;
             layeredNavigationItem.hasBorder = NO;
@@ -599,79 +625,44 @@
 
 - (void)addBarButtonItem
 {
+    UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    barButtonItemFixed.width = 22.0f;
+    UIBarButtonItem *barButtonItemNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    barButtonItemNarrow.width = 5.0f;
+    
+    UIImage *star = [UIImage imageNamed:@"star-256"];
+    self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
+    [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
+    self.buttonStar.frame = CGRectMake(0 ,0, 26, 26);
+    self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
+    
+    UIImage *add = [UIImage imageNamed:@"plus-256"];
+    UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonAdd addTarget:self action:@selector(addNewNote:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
+    buttonAdd.frame = CGRectMake(0 ,0, 20, 20);
+    UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
+    
+    UIView* infoButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 80, 40)];
+    self.infoButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.infoButton.backgroundColor = [UIColor clearColor];
+    self.infoButton.frame = infoButtonView.frame;
+    [self.infoButton setTitle:@"" forState:UIControlStateNormal];
+    self.infoButton.tintColor = kINFOBUTTON_TEXTCOLOR;
+    self.infoButton.autoresizesSubviews = YES;
+    self.infoButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
+    self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+    self.infoButton.userInteractionEnabled = NO;
+    [infoButtonView addSubview:self.infoButton];
+    
+    self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, self.barButtonItemStarred];
+    self.navigationItem.titleView = infoButtonView;
+    
     if (iPad) {
-        UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        barButtonItemFixed.width = 22.0f;
-        UIBarButtonItem *barButtonItemNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        barButtonItemNarrow.width = 5.0f;
-        
-        UIImage *star = [UIImage imageNamed:@"star-256"];
-        self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
-        [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
-        self.buttonStar.frame = CGRectMake(0 ,0, 26, 26);
-        self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
-        
-        UIImage *add = [UIImage imageNamed:@"plus-256"];
-        UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
-        [buttonAdd addTarget:self action:@selector(addNewNote:)forControlEvents:UIControlEventTouchUpInside];
-        [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
-        buttonAdd.frame = CGRectMake(0 ,0, 20, 20);
-        UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
-        
-        UIView* infoButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 80, 40)];
-        self.infoButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        self.infoButton.backgroundColor = [UIColor clearColor];
-        self.infoButton.frame = infoButtonView.frame;
-        [self.infoButton setTitle:@"" forState:UIControlStateNormal];
-        self.infoButton.tintColor = kINFOBUTTON_TEXTCOLOR;
-        self.infoButton.autoresizesSubviews = YES;
-        self.infoButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
-        self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
-        self.infoButton.userInteractionEnabled = NO;
-        [infoButtonView addSubview:self.infoButton];
-        
-        self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, self.barButtonItemStarred];
-        self.navigationItem.titleView = infoButtonView;
-        
         self.navigationItem.leftBarButtonItems = @[self.editButtonItem];
         [self.editButtonItem setTitleTextAttributes:@{NSForegroundColorAttributeName:kNAVIGATIONBAR_BUTTON_ITEM_LIGHTYELLOW_COLOR} forState:UIControlStateNormal];
-    } else {
-        UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        barButtonItemFixed.width = 22.0f;
-        UIBarButtonItem *barButtonItemNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        barButtonItemNarrow.width = 5.0f;
-        
-        UIImage *star = [UIImage imageNamed:@"star-256"];
-        self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
-        [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
-        self.buttonStar.frame = CGRectMake(0 ,0, 26, 26);
-        self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
-        
-        UIImage *add = [UIImage imageNamed:@"plus-256"];
-        UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
-        [buttonAdd addTarget:self action:@selector(addNewNote:)forControlEvents:UIControlEventTouchUpInside];
-        [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
-        buttonAdd.frame = CGRectMake(0 ,0, 20, 20);
-        UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
-        
-        UIView* infoButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 80, 40)];
-        self.infoButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        self.infoButton.backgroundColor = [UIColor clearColor];
-        self.infoButton.frame = infoButtonView.frame;
-        [self.infoButton setTitle:@"" forState:UIControlStateNormal];
-        self.infoButton.tintColor = kINFOBUTTON_TEXTCOLOR;
-        self.infoButton.autoresizesSubviews = YES;
-        self.infoButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin;
-        self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        self.infoButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
-        self.infoButton.userInteractionEnabled = NO;
-        [infoButtonView addSubview:self.infoButton];
-        
-        self.navigationItem.rightBarButtonItems = @[barButtonItemNarrow, barButtonItemAdd, barButtonItemFixed, self.barButtonItemStarred];
-        self.navigationItem.titleView = infoButtonView;
     }
 }
 
@@ -701,7 +692,7 @@
 
 - (void)updateInfoButton
 {
-    _totalNotes = (int)[[_fetchedResultsController fetchedObjects] count];        //노트 갯수
+    _totalNotes = (int)[[_fetchedResultsController fetchedObjects] count];
     
     if (_totalNotes == 0) {
         [self.infoButton setTitle:@"Dropbox" forState:UIControlStateNormal];
@@ -995,17 +986,17 @@
 }
 
 
-#pragma mark - 디바이스 방향 지원
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    if (iPad) {
-        return YES;
-    } else {
-        return UIInterfaceOrientationIsPortrait(interfaceOrientation);
-    }
-    return YES;
-}
+//#pragma mark - 디바이스 방향 지원
+//
+//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+//{
+//    if (iPad) {
+//        return YES;
+//    } else {
+//        return UIInterfaceOrientationIsPortrait(interfaceOrientation);
+//    }
+//    return YES;
+//}
 
 
 #pragma mark - 블랭크 뷰 보여줌
@@ -1045,12 +1036,13 @@
 
 - (void)checkWhetherShowWelcomeView
 {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES)  // app already launched
-    { }
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES) {
+        
+    }
     else {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kHasLaunchedOnce"]; //app first launched
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kHasLaunchedOnce"];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        [self showWelcomeView];       //Welcome 뷰 보여줌
+        [self showWelcomeView];
     }
 }
 
@@ -1058,7 +1050,11 @@
 - (void)showWelcomeView
 {
     WelcomePageViewController *controller = (WelcomePageViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-    [self.navigationController pushViewController:controller animated:YES];
+    if (iPad) {
+        [self.navigationController presentViewController:controller animated:YES completion:nil];
+    } else {
+        [self.navigationController pushViewController:controller animated:YES];
+    }
 }
 
 
@@ -1066,25 +1062,14 @@
 
 - (void)checkToShowWhatsNewView
 {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES)  // app already launched
-    {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES) {
         NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
-        //NSLog (@"versionString: %@\n", versionString);
-        
         NSString *lastVersionString = [[NSUserDefaults standardUserDefaults] stringForKey:@"currentVersion"];
-        //NSLog (@"lastVersionString: %@\n", lastVersionString);
-        
-        if ([versionString isEqualToString:lastVersionString]) {
-            
-        }
-        else {
+        if (![versionString isEqualToString:lastVersionString]) {
             [self performSelector:@selector(showWhatsNewView) withObject:nil afterDelay:0.3];
             [[NSUserDefaults standardUserDefaults] setObject:versionString forKey:@"currentVersion"];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
-    }
-    else {
-        
     }
 }
 
@@ -1093,17 +1078,12 @@
 
 - (void)showWhatsNewView
 {
-    [MTZWhatsNew handleWhatsNew:^(NSDictionary *whatsNew)
-     {
+    [MTZWhatsNew handleWhatsNew:^(NSDictionary *whatsNew) {
          MTZWhatsNewGridViewController *vc = [[MTZWhatsNewGridViewController alloc] initWithFeatures:whatsNew];
-         
-         vc.backgroundGradientTopColor = kWHITE_COLOR; //[UIColor colorWithHue:0.77 saturation:0.77 brightness:0.76 alpha:1];
-         vc.backgroundGradientBottomColor = kWHITE_COLOR; //[UIColor colorWithHue:0.78 saturation:0.6 brightness:0.95 alpha:1];
-         
+         vc.backgroundGradientTopColor = kWHITE_COLOR;
+         vc.backgroundGradientBottomColor = kWHITE_COLOR;
          [self.navigationController presentViewController:vc animated:YES completion:nil];
-         
          vc.dismissButtonTitle = @"Dismiss";
-         
      } sinceVersion:@"1.0"];
 }
 

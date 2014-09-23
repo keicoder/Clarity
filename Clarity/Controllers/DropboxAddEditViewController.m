@@ -1079,6 +1079,7 @@
     NSLog (@"NSString > monthString: %@\n", self.currentNote.monthString);
     NSLog (@"NSString > yearString: %@\n", self.currentNote.yearString);
     
+    NSLog (@"NSString > uniqueNoteIDString: %@\n", self.currentNote.uniqueNoteIDString);
     NSLog (@"NSString > sectionName: %@\n", self.currentNote.sectionName);
     NSLog (@"NSString > noteTitle: %@\n", self.currentNote.noteTitle);
     NSLog (@"NSString > noteBody: %@\n", self.currentNote.noteBody);
@@ -1096,6 +1097,7 @@
     kLOGBOOL(self.isLocalNote);
     kLOGBOOL(self.isiCloudNote);
     kLOGBOOL(self.isOtherCloudNote);
+    NSLog (@"NSString > uniqueNoteIDString: %@\n", self.uniqueNoteIDString);
 }
 
 

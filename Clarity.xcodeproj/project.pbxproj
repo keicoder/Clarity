@@ -249,6 +249,7 @@
 		C12FE78F19CFBA64001209B2 /* Main_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main_iPad.storyboard; sourceTree = "<group>"; };
 		C12FE79119CFD54A001209B2 /* BlankViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlankViewController.h; sourceTree = "<group>"; };
 		C12FE79219CFD54A001209B2 /* BlankViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlankViewController.m; sourceTree = "<group>"; };
+		C12FE79419D1110E001209B2 /* ClarityHD 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ClarityHD 4.xcdatamodel"; sourceTree = "<group>"; };
 		C1ABF0C319985B7A00E622CA /* MainSidePanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainSidePanelViewController.h; sourceTree = "<group>"; };
 		C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainSidePanelViewController.m; sourceTree = "<group>"; };
 		C1ABF0C719985CF400E622CA /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
@@ -1294,11 +1295,12 @@
 		C122910A19973CE100460667 /* Clarity.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				C12FE79419D1110E001209B2 /* ClarityHD 4.xcdatamodel */,
 				C1ADEA9619CD67E800C4DDE0 /* ClarityHD 3.xcdatamodel */,
 				C121D4E619C93AB30098BC94 /* ClarityHD 2.xcdatamodel */,
 				C122910B19973CE100460667 /* ClarityHD.xcdatamodel */,
 			);
-			currentVersion = C1ADEA9619CD67E800C4DDE0 /* ClarityHD 3.xcdatamodel */;
+			currentVersion = C12FE79419D1110E001209B2 /* ClarityHD 4.xcdatamodel */;
 			path = Clarity.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

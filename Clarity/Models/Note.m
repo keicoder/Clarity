@@ -46,6 +46,7 @@
 @dynamic sectionName;
 @dynamic syncID;
 @dynamic yearString;
+@dynamic uniqueNoteIDString;
 
 @synthesize formatter = _formatter;
 
