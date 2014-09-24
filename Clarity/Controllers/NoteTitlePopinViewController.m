@@ -15,7 +15,7 @@
 
 @interface NoteTitlePopinViewController () <UITextFieldDelegate>
 
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext; //컨텍스트
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic, weak) IBOutlet UITextField *titleTextField;
 @property (nonatomic, weak) IBOutlet UIButton *buttonCancel;
@@ -46,8 +46,7 @@
 }
 
 
-#pragma mark -
-#pragma mark 뷰 life cycle
+#pragma mark - 뷰 life cycle
 
 - (void)viewDidLoad
 {
@@ -67,7 +66,7 @@
         self.titleTextField.text = self.currentNote.noteTitle;
     }
     
-    [self.titleTextField performSelector:@selector(selectAll:) withObject:self.titleTextField afterDelay:0.f];
+//    [self.titleTextField performSelector:@selector(selectAll:) withObject:self.titleTextField afterDelay:0.f];
 }
 
 
@@ -135,6 +134,14 @@
 {
     [super didReceiveMemoryWarning];
     NSLog(@"Memory Warning Invoked");
+}
+
+
+#pragma mark - Dealloc
+
+- (void)dealloc
+{
+    NSLog(@"dealloc %@", self);
 }
 
 

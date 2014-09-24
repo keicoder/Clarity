@@ -666,7 +666,13 @@
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     
-    NoteTitlePopinViewController *controller = [[NoteTitlePopinViewController alloc] initWithNibName:@"NoteTitlePopinViewController" bundle:nil];
+    NoteTitlePopinViewController *controller;
+    
+    if (iPad) {
+        controller = [[NoteTitlePopinViewController alloc] initWithNibName:@"NoteTitlePopinViewController_iPad" bundle:nil];
+    } else {
+        controller = [[NoteTitlePopinViewController alloc] initWithNibName:@"NoteTitlePopinViewController" bundle:nil];
+    }
     
     [self updateNoteDataWithCurrentState];
     
@@ -675,7 +681,7 @@
     [controller note:self.currentNote inManagedObjectContext:mainManagedObjectContext];
     
     [controller setPopinTransitionStyle:BKTPopinTransitionStyleSlide];
-    [controller setPopinOptions:BKTPopinDefault];                               //BKTPopinDefault > Dismissable
+    [controller setPopinOptions:BKTPopinDefault]; //BKTPopinDefault > Dismissable
     [controller setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
     [controller setPopinAlignment:BKTPopinAlignementOptionUp];
     [controller setPopinOptions:[controller popinOptions]|BKTPopinDefault];

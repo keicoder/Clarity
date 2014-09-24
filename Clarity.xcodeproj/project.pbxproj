@@ -92,6 +92,7 @@
 		C173259019D24C1C001ED5D5 /* ClarityiPad_OpenSourceLicences_iPad.html in Resources */ = {isa = PBXBuildFile; fileRef = C173258D19D24C1C001ED5D5 /* ClarityiPad_OpenSourceLicences_iPad.html */; };
 		C173259119D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html in Resources */ = {isa = PBXBuildFile; fileRef = C173258E19D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html */; };
 		C173259319D24F29001ED5D5 /* jMarkdown_iPad.css in Resources */ = {isa = PBXBuildFile; fileRef = C173259219D24F29001ED5D5 /* jMarkdown_iPad.css */; };
+		C173259519D25D84001ED5D5 /* NoteTitlePopinViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = C173259419D25D84001ED5D5 /* NoteTitlePopinViewController_iPad.xib */; };
 		C1ABF0C519985B7A00E622CA /* MainSidePanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */; };
 		C1ABF0CD19985CF400E622CA /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C819985CF400E622CA /* JASidePanelController.m */; };
 		C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0CA19985CF400E622CA /* LogViewController.m */; };
@@ -261,6 +262,7 @@
 		C173258D19D24C1C001ED5D5 /* ClarityiPad_OpenSourceLicences_iPad.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ClarityiPad_OpenSourceLicences_iPad.html; sourceTree = "<group>"; };
 		C173258E19D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ClarityMarkdownSyntaxGuide_iPad.html; sourceTree = "<group>"; };
 		C173259219D24F29001ED5D5 /* jMarkdown_iPad.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = jMarkdown_iPad.css; sourceTree = "<group>"; };
+		C173259419D25D84001ED5D5 /* NoteTitlePopinViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteTitlePopinViewController_iPad.xib; sourceTree = "<group>"; };
 		C1ABF0C319985B7A00E622CA /* MainSidePanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainSidePanelViewController.h; sourceTree = "<group>"; };
 		C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainSidePanelViewController.m; sourceTree = "<group>"; };
 		C1ABF0C719985CF400E622CA /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
@@ -612,6 +614,7 @@
 				C12290F419973BAA00460667 /* LeftTableViewCell.xib */,
 				C12290F719973BAA00460667 /* NoteTableViewCell.xib */,
 				C12290C419973A7E00460667 /* NoteTitlePopinViewController.xib */,
+				C173259419D25D84001ED5D5 /* NoteTitlePopinViewController_iPad.xib */,
 				C122910919973C7A00460667 /* Images */,
 			);
 			path = UI;
@@ -839,6 +842,7 @@
 				C173259319D24F29001ED5D5 /* jMarkdown_iPad.css in Resources */,
 				C122910E19973D0600460667 /* Main_iPhone.storyboard in Resources */,
 				C122908F19973A6400460667 /* UIImage-ResizeMagick.podspec in Resources */,
+				C173259519D25D84001ED5D5 /* NoteTitlePopinViewController_iPad.xib in Resources */,
 				C122908B19973A6400460667 /* .gitignore in Resources */,
 				C122908C19973A6400460667 /* LICENSE_UIImage-ResizeMagick in Resources */,
 				C173259019D24C1C001ED5D5 /* ClarityiPad_OpenSourceLicences_iPad.html in Resources */,
