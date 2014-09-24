@@ -662,7 +662,7 @@
 
 - (void)addTapGestureRecognizer
 {
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(shoPopInNoteTitleField:)];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPopInNoteTitleField:)];
     tapGesture.delegate = self;
     tapGesture.numberOfTapsRequired = 1;
     [self.noteTitleLabelBackgroundView addGestureRecognizer:tapGesture];
@@ -671,7 +671,7 @@
 
 #pragma mark 탭 제스처 > 팝인 노트 타이틀 필드
 
-- (void)shoPopInNoteTitleField:(UITapGestureRecognizer *)gesture
+- (void)showPopInNoteTitleField:(UITapGestureRecognizer *)gesture
 {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     [self.navigationController setNavigationBarHidden:NO animated:NO];

@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-#ifndef kCFCoreFoundationVersionNumber_iOS_7_0
-#define kCFCoreFoundationVersionNumber_iOS_7_0 838.00
+#ifndef                 kCFCoreFoundationVersionNumber_iOS_7_0
+#define                 kCFCoreFoundationVersionNumber_iOS_7_0 838.00
 #endif
 
-#define iOS7 (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber_iOS_7_0)
-#define iPad [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad //(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-
-extern BOOL const kHasLaunchedOnce;
+#define iOS7            (kCFCoreFoundationVersionNumber >= kCFCoreFoundationVersionNumber_iOS_7_0)
+#define iPad            [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad
+#define iPhone          [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone
+extern BOOL const       kHasLaunchedOnce;
 extern NSString * const kIS_FIRST_TIME;
 
 
