@@ -170,20 +170,30 @@
 
 - (void)addNoteTitleLabel
 {
-    CGFloat noteTitleLabelHeight = 44;
+    CGFloat noteTitleLabelHeight_iPhone = 44.0;
+    CGFloat noteTitleLabelHeight_iPad = 50.0;
+    int labelPadding_iPhone = 10.0;
+    int labelPadding_iPad = 80.0;
     
-    self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -40, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight)];
+    if (iPad) {
+        self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -40, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight_iPad)];
+    } else {
+        self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -40, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight_iPhone)];
+    }
     self.noteTitleLabelBackgroundView.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     [self.noteTextView addSubview:self.noteTitleLabelBackgroundView];
     [self.noteTitleLabelBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     
-    int labelPadding = 10;
-    self.noteTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelPadding, 0, CGRectGetWidth(self.view.bounds) - (labelPadding * 2), CGRectGetHeight(self.noteTitleLabelBackgroundView.bounds))];
+    if (iPad) {
+        self.noteTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelPadding_iPad, 0, CGRectGetWidth(self.view.bounds) - (labelPadding_iPad * 2), CGRectGetHeight(self.noteTitleLabelBackgroundView.bounds))];
+    } else {
+        self.noteTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelPadding_iPhone, 0, CGRectGetWidth(self.view.bounds) - (labelPadding_iPhone * 2), CGRectGetHeight(self.noteTitleLabelBackgroundView.bounds))];
+    }
     self.noteTitleLabel.font = kTEXTVIEW_LABEL_FONT;
     self.noteTitleLabel.textColor = kTEXTVIEW_LABEL_TEXT_COLOR;
     self.noteTitleLabel.backgroundColor = kCLEAR_COLOR;
     self.noteTitleLabel.textAlignment = NSTextAlignmentCenter;
-    self.noteTitleLabel.lineBreakMode = NSLineBreakByTruncatingTail; //NSLineBreakByCharWrapping
+    self.noteTitleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     [self.noteTitleLabelBackgroundView addSubview:self.noteTitleLabel];
     [self.noteTitleLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
 }
@@ -652,7 +662,7 @@
 
 - (void)addTapGestureRecognizer
 {
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(shoPopInNoteTitleField:)];
     tapGesture.delegate = self;
     tapGesture.numberOfTapsRequired = 1;
     [self.noteTitleLabelBackgroundView addGestureRecognizer:tapGesture];
@@ -661,7 +671,7 @@
 
 #pragma mark 탭 제스처 > 팝인 노트 타이틀 필드
 
-- (void)handleTap:(UITapGestureRecognizer *)gesture
+- (void)shoPopInNoteTitleField:(UITapGestureRecognizer *)gesture
 {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
