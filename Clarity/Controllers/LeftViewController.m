@@ -279,7 +279,7 @@
         MarkdownGuideViewController *markdownGuideViewController = (MarkdownGuideViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"MarkdownGuideViewController"];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:markdownGuideViewController];
         if (iPad) {
-            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
                 //layeredNavigationItem.width = 320;
                 layeredNavigationItem.nextItemDistance = 0;
                 layeredNavigationItem.hasChrome = NO;
@@ -312,7 +312,7 @@
         self.svWebViewController = [[SVWebViewController alloc] initWithAddress:URL];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.svWebViewController];
         if (iPad) {
-            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
                 //layeredNavigationItem.width = 320;
                 layeredNavigationItem.nextItemDistance = 0;
                 layeredNavigationItem.hasChrome = NO;
@@ -329,7 +329,7 @@
         self.svWebViewController = [[SVWebViewController alloc] initWithAddress:url];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.svWebViewController];
         if (iPad) {
-            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
                 //layeredNavigationItem.width = 320;
                 layeredNavigationItem.nextItemDistance = 0;
                 layeredNavigationItem.hasChrome = NO;

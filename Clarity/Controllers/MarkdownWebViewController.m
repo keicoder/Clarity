@@ -132,7 +132,12 @@
 - (NSString *)cssUTF8String
 {
     NSError *error = nil;
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown" ofType:@"css"];
+    NSString *filePath;
+    if (iPad) {
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad" ofType:@"css"];
+    } else {
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown" ofType:@"css"];
+    }
     NSString *cssString = [NSString stringWithContentsOfFile:filePath
                                                     encoding:NSUTF8StringEncoding
                                                        error:&error];

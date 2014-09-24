@@ -76,7 +76,11 @@
     
     [[NSNotificationCenter defaultCenter] postNotificationName: @"WelcomeViewControllerDismissedNotification" object:nil userInfo:nil];
     
-    [self.navigationController popViewControllerAnimated:YES];
+    if (iPad) {
+        [self dismissViewControllerAnimated:YES completion:^{ }];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 

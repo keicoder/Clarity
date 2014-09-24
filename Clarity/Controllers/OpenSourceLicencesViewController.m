@@ -74,8 +74,12 @@
 
 - (void)loadLocalFileIntoAWebView
 {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"ClarityiPad_OpenSourceLicences" ofType:@"html" inDirectory:nil];
-    NSLog(@"%@", path);
+    NSString *path;
+    if (iPad) {
+        path = [[NSBundle mainBundle] pathForResource:@"ClarityiPad_OpenSourceLicences_iPad" ofType:@"html" inDirectory:nil];
+    } else {
+        path = [[NSBundle mainBundle] pathForResource:@"ClarityiPad_OpenSourceLicences" ofType:@"html" inDirectory:nil];
+    }
     NSURL *url = [NSURL fileURLWithPath:path];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:request];

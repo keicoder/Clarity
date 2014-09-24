@@ -11,11 +11,12 @@
 
 
 #import "SupportTableViewController.h"
-#import "AboutViewController.h"                                 //About 뷰
-#import "WelcomePageViewController.h"                           //Welcome 뷰
-#import "OpenSourceLicencesViewController.h"                    //오픈소스 라이센스
-#import "UIImage+ChangeColor.h"                                 //이미지 컬러 변경
-#import "SVWebViewController.h"                                 //SV 웹뷰
+#import "AboutViewController.h"
+#import "WelcomePageViewController.h"
+#import "OpenSourceLicencesViewController.h"
+#import "UIImage+ChangeColor.h"
+#import "SVWebViewController.h"
+#import "FRLayeredNavigationController/FRLayeredNavigation.h"
 
 
 @interface SupportTableViewController ()
@@ -24,7 +25,7 @@
 @property (nonatomic, weak) IBOutlet UIImageView *welcomeImageView;
 @property (nonatomic, weak) IBOutlet UIImageView *opensourceImageView;
 @property (nonatomic, weak) IBOutlet UILabel *versionLabel;
-@property (strong, nonatomic) SVWebViewController *svWebViewController; //sv 웹뷰 컨트롤러
+@property (strong, nonatomic) SVWebViewController *svWebViewController;
 
 @end
 
@@ -32,17 +33,15 @@
 @implementation SupportTableViewController
 
 
-#pragma mark -
-#pragma mark 뷰 life cycle
+#pragma mark - 뷰 life cycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self configureViewAndTableView];           //뷰 및 테이블 뷰 속성
-    [self changeColorOfCellImages];             //셀 이미지 색상
+    [self configureViewAndTableView];
+    [self changeColorOfCellImages];
     
     NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
-    //    NSLog (@"versionString: %@\n", versionString);
     self.versionLabel.text = [NSString stringWithFormat:@"Version %@\nSeptember 17, 2014\nThank you for purchasing Clarity.\nEnjoy Writing!", versionString];
 }
 
@@ -53,8 +52,8 @@
 {
     self.title = @"About";
     self.view.backgroundColor = kNAVIGATIONBAR_DROPBOX_LIST_VIEW_BAR_TINT_COLOR;
-    self.tableView.backgroundColor = kNAVIGATIONBAR_DROPBOX_LIST_VIEW_BAR_TINT_COLOR;                              //테이블 뷰 배경 색상
-    self.tableView.separatorColor = [UIColor colorWithWhite:0.333 alpha:0.300]; //[UIColor colorWithRed:0.333 green:0.333 blue:0.333 alpha:0.1]; //구분선 색상
+    self.tableView.backgroundColor = kNAVIGATIONBAR_DROPBOX_LIST_VIEW_BAR_TINT_COLOR;
+    self.tableView.separatorColor = [UIColor colorWithWhite:0.333 alpha:0.300];
 }
 
 
@@ -67,17 +66,46 @@
     if (indexPath.section == 1 && indexPath.row == 0)
     {
         AboutViewController *aboutViewController = (AboutViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"AboutViewController"];
-        [self.navigationController pushViewController:aboutViewController animated:YES];
+        
+        if (iPad) {
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:aboutViewController];
+            
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+                layeredNavigationItem.nextItemDistance = 0;
+                layeredNavigationItem.hasChrome = NO;
+                layeredNavigationItem.hasBorder = NO;
+                layeredNavigationItem.displayShadow = YES;
+            }];
+        } else {
+            [self.navigationController pushViewController:aboutViewController animated:YES];
+        }
     }
     else if(indexPath.section == 1 && indexPath.row == 1)
     {
         WelcomePageViewController *welcomePageViewController = (WelcomePageViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-        [self.navigationController pushViewController:welcomePageViewController animated:YES];
+        
+        if (iPad) {
+            [self.navigationController presentViewController:welcomePageViewController animated:YES completion:nil];
+        } else {
+            [self.navigationController pushViewController:welcomePageViewController animated:YES];
+        }
     }
     else if(indexPath.section == 2 && indexPath.row == 0)
     {
         OpenSourceLicencesViewController *openSourceLicencesViewController = (OpenSourceLicencesViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"OpenSourceLicencesViewController"];
-        [self.navigationController pushViewController:openSourceLicencesViewController animated:YES];
+        
+        if (iPad) {
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:openSourceLicencesViewController];
+            
+            [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+                layeredNavigationItem.nextItemDistance = 0;                 //레이어가 가려질 거리;
+                layeredNavigationItem.hasChrome = NO;
+                layeredNavigationItem.hasBorder = NO;
+                layeredNavigationItem.displayShadow = YES;
+            }];
+        } else {
+            [self.navigationController pushViewController:openSourceLicencesViewController animated:YES];
+        }
     }
 }
 

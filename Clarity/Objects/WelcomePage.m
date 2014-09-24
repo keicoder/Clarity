@@ -36,7 +36,11 @@
 
 - (UIImage *)welcomeImage
 {
-    return [UIImage imageNamed:[NSString stringWithFormat:@"welcome%d", self.index + 1]];
+    if (iPad) {
+        return [UIImage imageNamed:[NSString stringWithFormat:@"welcome_iPad%d", self.index + 1]];
+    } else {
+        return [UIImage imageNamed:[NSString stringWithFormat:@"welcome%d", self.index + 1]];
+    }
 }
 
 
