@@ -63,9 +63,9 @@
     [self checkWhetherShowWelcomeView];
     [self addObserverForWelcomeViewControllerDismissed];
     [self saveCurrentView];
+    [self hideSearchBar];
     if (iPad) {
         self.layeredNavigationController.delegate = self;
-        [self hideSearchBar];
         [self addObserverForNewNote];
         [self addObserverForCurrentNoteObjectIDKey];
     }

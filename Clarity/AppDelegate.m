@@ -21,13 +21,11 @@
 
 @implementation AppDelegate
 
-
 #pragma mark - didFinishLaunchingWithOptions
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [self applicationDocumentsDirectory];
-//    [NSManagedObjectModel mergedModelFromBundles:nil];
     
     if (iPad) {
         self.storyboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle: nil];
@@ -43,24 +41,15 @@
         }];
         self.layeredNavigationController.delegate = self;
         self.window.rootViewController = self.layeredNavigationController;
-    } else {
-        
     }
     
-    //드랍박스 어카운트
-    //Dropbox App Folder : 'ClarityApp'
     DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"mew6arv9f06qgva" secret:@"umw2fac5kt92i3z"];
     [DBAccountManager setSharedManager:accountManager];
-    if ([accountManager linkedAccount])
-    {
+    if ([accountManager linkedAccount]) {
         [[NoteDataManager sharedNoteDataManager] setSyncEnabled:YES];
     }
     
-    [self styleUI];                                 //유저 인터페이스
-    
-    //Tmp
-    //[[NSUserDefaults standardUserDefaults] setBool:NO forKey:kDIDSHOW_NOTEVIEW_HELP];
-    
+    [self styleUI];
     return YES;
 }
 
@@ -77,61 +66,25 @@
 }
 
 
-#pragma mark - 유저 인터페이스
-
-- (void)styleUI
-{
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent]; //상태 바 속성
-    self.window.backgroundColor = kWINDOW_BACKGROUND_COLOR;                             //윈도 배경 색상
-    self.window.tintColor = [UIColor whiteColor];                                       //윈도 틴트 색상
-    [[UINavigationBar appearance] setBarTintColor:kWINDOW_BACKGROUND_COLOR];            //냅바 색상
-    [[UINavigationBar appearance] setTintColor:kWHITE_COLOR];                           //냅바 버튼 색상
-    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:kWHITE_COLOR, NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-Medium" size:18.0]};
-}
-
-
-#pragma mark - 기기 방향 지원
-
-- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
-{
-    if (iPad) {
-        return UIInterfaceOrientationMaskAll;
-    } else {
-        return UIInterfaceOrientationMaskPortrait;
-    }
-    return YES;
-}
-
-
 #pragma mark - Application's Documents directory
 
 - (NSURL *)applicationDocumentsDirectory
 {
-    NSLog(@"applicationDocumentsDirectory: %@\n", [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
+//    NSLog(@"applicationDocumentsDirectory: %@\n", [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
 
-#pragma mark - FRLayeredNavigationController Delegate
+#pragma mark - 유저 인터페이스
 
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-                 willMoveController:(UIViewController*)controller
+- (void)styleUI
 {
-    
-}
-
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-               movingViewController:(UIViewController*)controller
-{
-    
-}
-
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-                  didMoveController:(UIViewController*)controller
-{
-    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    self.window.backgroundColor = kWINDOW_BACKGROUND_COLOR;
+    self.window.tintColor = [UIColor whiteColor];
+    [[UINavigationBar appearance] setBarTintColor:kWINDOW_BACKGROUND_COLOR];
+    [[UINavigationBar appearance] setTintColor:kWHITE_COLOR];
+    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:kWHITE_COLOR, NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-Medium" size:18.0]};
 }
 
 
@@ -141,6 +94,13 @@
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ApplicationWillResignActiveNotification" object:nil];
 }
+
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
@@ -157,31 +117,5 @@
     
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    [[NSUserDefaults standardUserDefaults] synchronize]; // Save user defaults
-}
-
-
-#pragma mark 로고 뷰 (사용 안 함)
-
-- (void)addLogoImageView
-{
-    //100 by 100
-    UIImage *logo = [UIImage imageNamed:@"penColor64"];
-    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:logo];
-    CGFloat windowWidth = CGRectGetWidth(self.window.bounds);
-    CGFloat windowHeight = CGRectGetHeight(self.window.bounds);
-    CGFloat imageViewWidth = CGRectGetWidth(logoImageView.bounds);
-    CGFloat imageViewHeight = CGRectGetHeight(logoImageView.bounds);
-    logoImageView.frame = CGRectMake((windowWidth - imageViewWidth) / 2, (windowHeight - imageViewHeight) / 2, imageViewWidth, imageViewHeight);
-    
-    UIView *aView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, windowWidth, windowHeight)];
-    [aView addSubview:logoImageView];
-    
-    [self.window addSubview:aView];
-    [self.window setAutoresizesSubviews:YES];
-    [aView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-}
 
 @end
