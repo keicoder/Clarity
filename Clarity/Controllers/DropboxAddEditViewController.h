@@ -1,6 +1,6 @@
 //
 //  DropboxAddEditViewController.h
-//  SwiftNoteiPad
+//  Clarity
 //
 //  Created by jun on 2014. 7. 19..
 //  Copyright (c) 2014년 lovejunsoft. All rights reserved.

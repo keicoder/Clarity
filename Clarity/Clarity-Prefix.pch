@@ -18,4 +18,5 @@
 #import <ParcelKit/ParcelKit.h>         //파슬킷
 #import <Dropbox/Dropbox.h>             //드랍박스
 #import "ClarityConstants.h"            //define
+#include <tgmath.h>
 #endif

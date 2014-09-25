@@ -40,6 +40,7 @@
 @property (nonatomic, strong) UIButton *buttonForFullscreen;
 @property (nonatomic, strong) UIImage *starImage;
 @property (nonatomic, strong) NDHTMLtoPDF *pdfCreator;
+@property (nonatomic, strong) UIToolbar *keyboardAccessoryToolBar;
 
 @end
 
@@ -89,6 +90,7 @@
     [self addObserverForApplicationWillResignActive];
     [self addButtonForFullscreen];
     [self checkNewNote];
+    [self addKeyboardAccessoryToolBar];
 //    [self showNotePropertiesValue];
 //    [self showNoteDataToLogConsole];
 }
@@ -107,25 +109,35 @@
     [self checkToShowHelpMessage];
 //    PKSyncManager *manager = [[NoteDataManager sharedNoteDataManager] syncManager];
 //    [manager syncDatastore];    //manual sync
-//    NSLog(@"[manager syncDatastore] > manual sync invoked");
 }
 
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self autoSaveAndRegisterStarListViewWillShowNotification];
+    if (iPad) {
+        
+    } else {
+        [self autoSaveAndRegisterStarListViewWillShowNotification];
+    }
+    self.keyboardAccessoryToolBar = nil;
+    self.starImage = nil;
+    self.htmlString = nil;
+    self.noteTitleLabel = nil;
+    self.noteTitleLabelBackgroundView = nil;
+    self.noteTextView = nil;
+}
+
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
 }
 
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    self.noteTextView = nil;
-    self.noteTitleLabel = nil;
-    self.noteTitleLabelBackgroundView = nil;
-    self.starImage = nil;
-    self.htmlString = nil;
 }
 
 
@@ -161,8 +173,8 @@
 {
     self.noteTextView = [[ICTextView alloc] initWithFrame:self.view.bounds];
     self.noteTextView.delegate = self;
-    [self.view addSubview:self.noteTextView];
     [self.noteTextView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [self.view addSubview:self.noteTextView];
 }
 
 
@@ -219,25 +231,33 @@
 
 - (void)keyboardWillShow:(NSNotification *)notification
 {
-    [self.noteTextView keyboardWillShow:notification];
+    if ([self.noteTextView isFirstResponder]) {
+        [self.noteTextView keyboardWillShow:notification];
+    }
 }
 
 
 - (void)keyboardDidShow:(NSNotification *)notification
 {
-    [self.noteTextView keyboardDidShow:notification];
+    if ([self.noteTextView isFirstResponder]) {
+        [self.noteTextView keyboardDidShow:notification];
+    }
 }
 
 
 - (void)keyboardWillHide:(NSNotification*)notification
 {
-    [self.noteTextView keyboardWillHide:notification];
+    if ([self.noteTextView isFirstResponder]) {
+        [self.noteTextView keyboardWillHide:notification];
+    }
 }
 
 
 - (void)keyboardDidHide:(NSNotification*)notification
 {
-    [self.noteTextView keyboardDidHide:notification];
+    if ([self.noteTextView isFirstResponder]) {
+        [self.noteTextView keyboardDidHide:notification];
+    }
 }
 
 
@@ -245,11 +265,13 @@
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    if (iPad) {
-        [self hideStatusBar];
-        [self hideNavigationBar];
+    if ([self.noteTextView isFirstResponder]) {
+        if (iPad) {
+            [self hideStatusBar];
+            [self hideNavigationBar];
+        }
+        [self hideButtonForFullscreenWithAnimation];
     }
-    [self hideButtonForFullscreenWithAnimation];
     return YES;
 }
 
@@ -258,17 +280,21 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    [self.noteTextView textViewDidChange:self.noteTextView];
+    if ([self.noteTextView isFirstResponder]) {
+        [self.noteTextView textViewDidChange:self.noteTextView];
+    }
 }
 
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
-	[self.noteTextView textViewShouldEndEditing:self.noteTextView];
-    [self showStatusBar];                                    //상태바 Down
-    [self showNavigationBar];                                //내비게이션바 Down
-    [self hideButtonForFullscreenWithAnimation];             //Full Screen 버튼
-    [self autoSave];
+    if ([self.noteTextView isFirstResponder]) {
+        if (iPad) {
+            [self showStatusBar];
+            [self showNavigationBar];
+        }
+        [self hideButtonForFullscreenWithAnimation];
+    }
     return YES;
 }
 
@@ -280,24 +306,7 @@
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     barButtonItemFixed.width = 40.0f;
     
-    UIBarButtonItem *barButtonItemFixedNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixedNarrow.width = 12.0f;
-    
     UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
-    UIImage *blankNarrow = [UIImage imageNamed:@""];
-    UIButton *buttonBlankNarrow = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttonBlankNarrow addTarget:self action:@selector(noAction:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonBlankNarrow setBackgroundImage:blankNarrow forState:UIControlStateNormal];
-    buttonBlankNarrow.frame = CGRectMake(0 ,0, 2, 2);
-    UIBarButtonItem *barButtonItemBlankNarrow = [[UIBarButtonItem alloc] initWithCustomView:buttonBlankNarrow];
-    
-    UIImage *blankNormal = [UIImage imageNamed:@""];
-    UIButton *buttonBlankNormal = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttonBlankNormal addTarget:self action:@selector(noAction:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonBlankNormal setBackgroundImage:blankNormal forState:UIControlStateNormal];
-    //buttonBlankNarrow.frame = CGRectMake(0 ,0, 44, 44);
-    UIBarButtonItem *barButtonItemBlankNormal = [[UIBarButtonItem alloc] initWithCustomView:buttonBlankNormal];
     
     UIImage *fullScreen = [UIImage imageNamed:@"expand-256"];
     [fullScreen resizedImageByHeight:20];
@@ -321,7 +330,7 @@
     UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
     [buttonAdd addTarget:self action:@selector(barButtonItemAddPressed:)forControlEvents:UIControlEventTouchUpInside];
     [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
-    buttonAdd.frame = CGRectMake(0 ,0, 26, 26);
+    buttonAdd.frame = CGRectMake(0 ,0, 21, 21);
     UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
     
     
@@ -354,11 +363,10 @@
     UIBarButtonItem *barButtonItemDelete = [[UIBarButtonItem alloc] initWithCustomView:buttonDelete];
     
     if (iPad) {
-        NSArray *navigationBarItems = @[barButtonItemBlankNarrow, barButtonItemFullScreen, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFixed, barButtonItemShare, barButtonItemFixed, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemAdd, barButtonItemFlexible, barButtonItemBlankNormal, barButtonItemFixed, barButtonItemBlankNormal, barButtonItemFixed, barButtonItemBlankNormal, barButtonItemFixed, barButtonItemFixed, barButtonItemFixed, barButtonItemDelete, barButtonItemBlankNarrow];
+        NSArray *navigationBarItems = @[barButtonItemFlexible, barButtonItemDelete, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemAdd, barButtonItemFlexible];
         self.navigationItem.rightBarButtonItems = navigationBarItems;
     } else {
         NSArray *navigationBarItems = @[barButtonItemFullScreen, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFixed, barButtonItemShare, barButtonItemFixed, barButtonItemMarkdown];
-        
         self.navigationItem.rightBarButtonItems = navigationBarItems;
     }
 }
@@ -1514,6 +1522,43 @@
     {
         
     }
+}
+
+
+- (void)addKeyboardAccessoryToolBar
+{
+    //키보드 인풋 액세서리 뷰
+#define kOne        @"M"
+#define kTwo        @"W"
+    
+    self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
+    
+    UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    UIButton *one = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [one setTitle:kOne forState:UIControlStateNormal];
+    one.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:24.0];
+    [one setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [one setContentEdgeInsets:UIEdgeInsetsMake(3, 0, 0, 0)];
+    [one sizeToFit];
+    [one addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barButtonItemOne = [[UIBarButtonItem alloc] initWithCustomView: one];
+    [barButtonItemOne setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor grayColor]} forState:UIControlStateNormal];
+    
+    UIButton *two = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [two setTitle:kTwo forState:UIControlStateNormal];
+    two.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:24.0];
+    [two setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [two setContentEdgeInsets:UIEdgeInsetsMake(3, 0, 0, 0)];
+    [two sizeToFit];
+    [two addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barButtonItemTwo = [[UIBarButtonItem alloc] initWithCustomView: two];
+    [barButtonItemTwo setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor grayColor]} forState:UIControlStateNormal];
+    
+    NSArray *navigationBarItems = @[barButtonItemFlexible, barButtonItemOne, barButtonItemFlexible, barButtonItemTwo, barButtonItemFlexible];
+    self.self.keyboardAccessoryToolBar.items = navigationBarItems;
+    
+    self.noteTextView.inputAccessoryView = self.keyboardAccessoryToolBar;
 }
 
 

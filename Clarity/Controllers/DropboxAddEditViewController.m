@@ -31,7 +31,7 @@
 @interface DropboxAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, strong) UITextView *noteTextView;
+@property (nonatomic, strong) ICTextView *noteTextView;
 @property (nonatomic, strong) UILabel *noteTitleLabel;
 @property (nonatomic, strong) UIView *noteTitleLabelBackgroundView;
 @property (nonatomic, strong) NSMutableString *htmlString;
@@ -82,7 +82,7 @@
     [self registerKeyboardNotifications];
     [self addBarButtonItems];
     [self assignNoteData];
-//    [self.noteTextView assignTextViewAttribute];
+    [self.noteTextView assignTextViewAttribute];
     [self updateStarImage];
     [self addTapGestureRecognizer];
     [self addObserverForNoteTitleChanged];
@@ -107,13 +107,19 @@
 {
     [super viewDidAppear:animated];
     [self checkToShowHelpMessage];
+//    PKSyncManager *manager = [[NoteDataManager sharedNoteDataManager] syncManager];
+//    [manager syncDatastore];    //manual sync
 }
 
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self autoSaveAndRegisterStarListViewWillShowNotification];
+    if (iPad) {
+        
+    } else {
+        [self autoSaveAndRegisterStarListViewWillShowNotification];
+    }
     self.keyboardAccessoryToolBar = nil;
     self.starImage = nil;
     self.htmlString = nil;
@@ -165,21 +171,8 @@
 
 - (void)addNoteTextView
 {
-    self.noteTextView = [[UITextView alloc] initWithFrame:self.view.bounds];
+    self.noteTextView = [[ICTextView alloc] initWithFrame:self.view.bounds];
     self.noteTextView.delegate = self;
-    self.noteTextView.alwaysBounceVertical = YES;
-    self.noteTextView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-    if (iPad) {
-        self.noteTextView.contentInset = UIEdgeInsetsMake(110.0f, 0.0f, 20.0f, 0.0f);
-        self.noteTextView.textContainer.lineFragmentPadding = 60.0f;
-    } else {
-        self.noteTextView.contentInset = UIEdgeInsetsMake(80.0f, 0.0f, 20.0f, 0.0f);
-        self.noteTextView.textContainer.lineFragmentPadding = 20.0f;
-    }
-    self.noteTextView.font = kTEXTVIEW_FONT;
-    self.noteTextView.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
-    self.noteTextView.textColor = kTEXTVIEW_TEXT_COLOR;
-    [[UITextView appearance] setTintColor:[UIColor colorWithRed:0.949 green:0.427 blue:0.188 alpha:1]];
     [self.noteTextView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:self.noteTextView];
 }
@@ -238,52 +231,33 @@
 
 - (void)keyboardWillShow:(NSNotification *)notification
 {
-    if ([self.noteTextView isFirstResponder])
-    {
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-        [self.navigationController setNavigationBarHidden:YES animated:YES];
-        
-        NSDictionary *info = [notification userInfo];
-        CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-        CGFloat duration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-        
-        [UIView animateWithDuration:duration
-                         animations:^{
-                             self.noteTextView.contentInset = UIEdgeInsetsMake(self.noteTextView.contentInset.top, self.noteTextView.contentInset.left, kbSize.height, 0);
-                             self.noteTextView.scrollIndicatorInsets = UIEdgeInsetsMake(self.noteTextView.contentInset.top, self.noteTextView.scrollIndicatorInsets.left, kbSize.height, 0);
-                         }];
+    if ([self.noteTextView isFirstResponder]) {
+        [self.noteTextView keyboardWillShow:notification];
     }
 }
 
 
 - (void)keyboardDidShow:(NSNotification *)notification
 {
-    
+    if ([self.noteTextView isFirstResponder]) {
+        [self.noteTextView keyboardDidShow:notification];
+    }
 }
 
 
 - (void)keyboardWillHide:(NSNotification*)notification
 {
-    if ([self.noteTextView isFirstResponder])
-    {
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-        
-        NSDictionary *info = [notification userInfo];
-        CGFloat duration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-        
-        [UIView animateWithDuration:duration
-                         animations:^{
-                             self.noteTextView.contentInset = UIEdgeInsetsMake(self.noteTextView.contentInset.top, self.noteTextView.contentInset.left, 0, 0);
-                             self.noteTextView.scrollIndicatorInsets = UIEdgeInsetsMake(self.noteTextView.contentInset.top, self.noteTextView.scrollIndicatorInsets.left, 0, 0);
-                         }];
+    if ([self.noteTextView isFirstResponder]) {
+        [self.noteTextView keyboardWillHide:notification];
     }
 }
 
 
 - (void)keyboardDidHide:(NSNotification*)notification
 {
-    
+    if ([self.noteTextView isFirstResponder]) {
+        [self.noteTextView keyboardDidHide:notification];
+    }
 }
 
 
@@ -291,11 +265,13 @@
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    if (iPad) {
-        [self hideStatusBar];
-        [self hideNavigationBar];
+    if ([self.noteTextView isFirstResponder]) {
+        if (iPad) {
+            [self hideStatusBar];
+            [self hideNavigationBar];
+        }
+        [self hideButtonForFullscreenWithAnimation];
     }
-    [self hideButtonForFullscreenWithAnimation];
     return YES;
 }
 
@@ -304,17 +280,21 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    
+    if ([self.noteTextView isFirstResponder]) {
+        [self.noteTextView textViewDidChange:self.noteTextView];
+    }
 }
 
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
-    if (iPad) {
-        [self showStatusBar];
-        [self showNavigationBar];
+    if ([self.noteTextView isFirstResponder]) {
+        if (iPad) {
+            [self showStatusBar];
+            [self showNavigationBar];
+        }
+        [self hideButtonForFullscreenWithAnimation];
     }
-    [self hideButtonForFullscreenWithAnimation];
     return YES;
 }
 
@@ -326,24 +306,7 @@
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     barButtonItemFixed.width = 40.0f;
     
-    UIBarButtonItem *barButtonItemFixedNarrow = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixedNarrow.width = 12.0f;
-    
     UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
-//    UIImage *blankNarrow = [UIImage imageNamed:@""];
-//    UIButton *buttonBlankNarrow = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [buttonBlankNarrow addTarget:self action:@selector(noAction:)forControlEvents:UIControlEventTouchUpInside];
-//    [buttonBlankNarrow setBackgroundImage:blankNarrow forState:UIControlStateNormal];
-//    buttonBlankNarrow.frame = CGRectMake(0 ,0, 2, 2);
-//    UIBarButtonItem *barButtonItemBlankNarrow = [[UIBarButtonItem alloc] initWithCustomView:buttonBlankNarrow];
-    
-//    UIImage *blankNormal = [UIImage imageNamed:@""];
-//    UIButton *buttonBlankNormal = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [buttonBlankNormal addTarget:self action:@selector(noAction:)forControlEvents:UIControlEventTouchUpInside];
-//    [buttonBlankNormal setBackgroundImage:blankNormal forState:UIControlStateNormal];
-//    //buttonBlankNarrow.frame = CGRectMake(0 ,0, 44, 44);
-//    UIBarButtonItem *barButtonItemBlankNormal = [[UIBarButtonItem alloc] initWithCustomView:buttonBlankNormal];
     
     UIImage *fullScreen = [UIImage imageNamed:@"expand-256"];
     [fullScreen resizedImageByHeight:20];
@@ -367,7 +330,7 @@
     UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
     [buttonAdd addTarget:self action:@selector(barButtonItemAddPressed:)forControlEvents:UIControlEventTouchUpInside];
     [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
-    buttonAdd.frame = CGRectMake(0 ,0, 26, 26);
+    buttonAdd.frame = CGRectMake(0 ,0, 21, 21);
     UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
     
     
@@ -400,7 +363,7 @@
     UIBarButtonItem *barButtonItemDelete = [[UIBarButtonItem alloc] initWithCustomView:buttonDelete];
     
     if (iPad) {
-        NSArray *navigationBarItems = @[barButtonItemFlexible, barButtonItemDelete, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemAdd, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible];
+        NSArray *navigationBarItems = @[barButtonItemFlexible, barButtonItemDelete, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemAdd, barButtonItemFlexible];
         self.navigationItem.rightBarButtonItems = navigationBarItems;
     } else {
         NSArray *navigationBarItems = @[barButtonItemFullScreen, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFixed, barButtonItemShare, barButtonItemFixed, barButtonItemMarkdown];

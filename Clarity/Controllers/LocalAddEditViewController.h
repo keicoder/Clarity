@@ -1,9 +1,9 @@
 //
 //  LocalAddEditViewController.h
-//  SwiftNote
+//  Clarity
 //
-//  Created by jun on 6/5/14.
-//  Copyright (c) 2014 Overcommitted, LLC. All rights reserved.
+//  Created by jun on 2014. 7. 19..
+//  Copyright (c) 2014년 lovejunsoft. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
