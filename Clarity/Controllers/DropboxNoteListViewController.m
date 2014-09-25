@@ -516,8 +516,8 @@
     else if (_fetchedResultsController == nil)
     {
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
-        NSPredicate *predicateIsDropboxNote = [NSPredicate predicateWithFormat:@"isDropboxNote == %@", [NSNumber numberWithBool: YES]];
-        [fetchRequest setPredicate:predicateIsDropboxNote];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isDropboxNote == %@", [NSNumber numberWithBool: YES]];
+        [fetchRequest setPredicate:predicate];
         [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO]]];
         _fetchedResultsController = [[NSFetchedResultsController alloc]
                                      initWithFetchRequest:fetchRequest
@@ -866,7 +866,6 @@
         NSDictionary *userInfo = notification.userInfo;
         Note *receivedNote = [userInfo objectForKey:@"currentNoteObjectIDKey"];
         self.receivedNote = receivedNote;
-        NSLog (@"self.receivedNote.objectID: %@\n", self.receivedNote.objectID);
     }
 }
 
@@ -1145,19 +1144,6 @@
         }
     }
 }
-
-
-//#pragma mark - 디바이스 방향 지원
-//
-//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-//{
-//    if (iPad) {
-//        return YES;
-//    } else {
-//        return UIInterfaceOrientationIsPortrait(interfaceOrientation);
-//    }
-//    return YES;
-//}
 
 
 @end

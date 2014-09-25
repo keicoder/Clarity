@@ -63,9 +63,9 @@
     [self checkWhetherShowWelcomeView];
     [self addObserverForWelcomeViewControllerDismissed];
     [self saveCurrentView];
+    [self hideSearchBar];
     if (iPad) {
         self.layeredNavigationController.delegate = self;
-        [self hideSearchBar];
         [self addObserverForNewNote];
         [self addObserverForCurrentNoteObjectIDKey];
     }
@@ -516,8 +516,8 @@
     else if (_fetchedResultsController == nil)
     {
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
-        NSPredicate *predicateIsLocalNote = [NSPredicate predicateWithFormat:@"isLocalNote == %@", [NSNumber numberWithBool: YES]];
-        [fetchRequest setPredicate:predicateIsLocalNote];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isLocalNote == %@", [NSNumber numberWithBool: YES]];
+        [fetchRequest setPredicate:predicate];
         [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO]]];
         _fetchedResultsController = [[NSFetchedResultsController alloc]
                                      initWithFetchRequest:fetchRequest 
@@ -866,7 +866,6 @@
         NSDictionary *userInfo = notification.userInfo;
         Note *receivedNote = [userInfo objectForKey:@"currentNoteObjectIDKey"];
         self.receivedNote = receivedNote;
-        NSLog (@"self.receivedNote.objectID: %@\n", self.receivedNote.objectID);
     }
 }
 
@@ -1145,19 +1144,6 @@
         }
     }
 }
-
-
-//#pragma mark - 디바이스 방향 지원
-//
-//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-//{
-//    if (iPad) {
-//        return YES;
-//    } else {
-//        return UIInterfaceOrientationIsPortrait(interfaceOrientation);
-//    }
-//    return YES;
-//}
 
 
 @end
