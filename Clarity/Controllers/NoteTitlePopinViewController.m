@@ -103,8 +103,11 @@
 {
     if (self.currentNote)
     {
-        self.currentNote.noteTitle = self.titleTextField.text;
-        
+        if ([self.titleTextField.text length] == 0) {
+            self.currentNote.noteTitle = @"Untitled";
+        } else if ([self.titleTextField.text length] > 0) {
+            self.currentNote.noteTitle = self.titleTextField.text;
+        }
         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentNote forKey:@"didChangeNoteTitleKey"];
         [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeNoteTitleNotification" object:nil userInfo:userInfo];
     }

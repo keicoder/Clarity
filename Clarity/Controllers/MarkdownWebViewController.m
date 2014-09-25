@@ -141,7 +141,7 @@
     if ([self.currentNote.noteBody length] == 0) {
         markdownString = @"*No content*";
     }
-    if ([self.currentNote.noteBody length] > 0) {
+    else if ([self.currentNote.noteBody length] > 0) {
         markdownString = self.currentNote.noteBody;
     }
     if (error != nil)
@@ -157,22 +157,15 @@
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    if ( navigationType == UIWebViewNavigationTypeLinkClicked )
-    {
-        if ( _didTapped == NO)
-        {
+    if ( navigationType == UIWebViewNavigationTypeLinkClicked ) {
+        if ( _didTapped == NO) {
             
-        }
-        else
-        {
-            _didTapped = NO;
+        } else {
             [self showStatusBar];
             [self showNavigationBar];
         }
-        
-        self.svWebViewController = [[SVWebViewController alloc] initWithAddress:[NSString stringWithFormat:@"%@", [request URL]]];      //SV 웹뷰
+        self.svWebViewController = [[SVWebViewController alloc] initWithAddress:[NSString stringWithFormat:@"%@", [request URL]]];
         [self.navigationController pushViewController:self.svWebViewController animated:YES]; //Push
-        
         return NO;
     }
     return YES;
@@ -192,14 +185,11 @@
 
 - (void)handleTap:(UITapGestureRecognizer *)gesture
 {
-    if ( _didTapped == NO)
-    {
+    if ( _didTapped == NO) {
         _didTapped = YES;
         [self hideStatusBar];
         [self hideNavigationBar];
-    }
-    else
-    {
+    } else {
         _didTapped = NO;
         [self showStatusBar];
         [self showNavigationBar];
@@ -218,7 +208,7 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
-    return YES;     //Simultaneous Gesture Recognize
+    return YES;
 }
 
 
