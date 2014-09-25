@@ -1,6 +1,6 @@
 //
 //  DropboxStarViewController.m
-//  SwiftNote
+//  Clarity
 //
 //  Created by jun on 5/15/14.
 //  Copyright (c) 2014 jun. All rights reserved.
@@ -424,10 +424,10 @@
     else if (_fetchedResultsController == nil)
     {
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
-        NSPredicate *predicateIsDropboxNote = [NSPredicate predicateWithFormat:@"isDropboxNote == %@", [NSNumber numberWithBool: YES] ];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isDropboxNote == %@", [NSNumber numberWithBool: YES] ];
         NSPredicate *predicateHasNoteStar = [NSPredicate predicateWithFormat:@"hasNoteStar == %@", [NSNumber numberWithBool: YES] ];
         
-        NSArray *predicatesArray = [NSArray arrayWithObjects:predicateIsDropboxNote, predicateHasNoteStar, nil];
+        NSArray *predicatesArray = [NSArray arrayWithObjects:predicate, predicateHasNoteStar, nil];
         NSPredicate * compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicatesArray];
         [fetchRequest setPredicate:compoundPredicate];
         
