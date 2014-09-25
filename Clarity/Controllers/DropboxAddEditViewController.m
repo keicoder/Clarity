@@ -369,7 +369,7 @@
 
 - (void)noAction:(id)sender
 {
-    NSLog(@"noAction");
+    
 }
 
 
@@ -825,8 +825,8 @@
                      self.noteTextView.text = @"> No Contents";
                  } else {
                  }
-                 [self createHTMLString];                                                            //HTML 스트링
-                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];         //메일 컴포즈 컨트롤러
+                 [self createHTMLString];
+                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];
              }
                  break;
              case 1:
@@ -838,7 +838,7 @@
                  }
                  [self createHTMLString];
                  UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                 pasteboard.string = self.htmlString;                                                //Pasteboard Copy
+                 pasteboard.string = self.htmlString;
              }
                  break;
              case 2:
@@ -848,7 +848,7 @@
                      self.noteTextView.text = @"No Contents";
                  } else {
                  }
-                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];  //메일 컴포즈 컨트롤러
+                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
              }
                  break;
              case 3:
@@ -859,7 +859,7 @@
                  } else {
                  }
                  UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                 pasteboard.string = self.noteTextView.text;                                         //Pasteboard Copy
+                 pasteboard.string = self.noteTextView.text;
              }
                  break;
              case 4:
@@ -883,9 +883,9 @@
                      self.noteTextView.text = @"> No Contents";
                  } else {
                  }
-                 [self createHTMLString];                                                            //HTML 스트링
+                 [self createHTMLString];
                  NSString *noteStringForPrint = self.htmlString;
-                 [self printNoteAsHTML:noteStringForPrint];                                          //프린트
+                 [self printNoteAsHTML:noteStringForPrint];
              }
                  break;
          }
@@ -1057,44 +1057,44 @@
                 {
                     self.htmlString = nil;
                     if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
+                        self.noteTextView.text = @"*No Contents*";
                     } else {
                     }
-                    [self createHTMLString];                                                            //HTML 스트링
-                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];         //메일 컴포즈 컨트롤러
+                    [self createHTMLString];
+                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];
                 }
                     break;
                 case 1:
                 {
                     self.htmlString = nil;
                     if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
+                        self.noteTextView.text = @"*No Contents*";
                     } else {
                     }
                     [self createHTMLString];
                     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                    pasteboard.string = self.htmlString;                                                //Pasteboard Copy
+                    pasteboard.string = self.htmlString;
                 }
                     break;
                 case 2:
                 {
                     self.htmlString = nil;
                     if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"No Contents";
+                        self.noteTextView.text = @"*No Contents*";
                     } else {
                     }
-                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];  //메일 컴포즈 컨트롤러
+                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
                 }
                     break;
                 case 3:
                 {
                     self.htmlString = nil;
                     if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
+                        self.noteTextView.text = @"*No Contents*";
                     } else {
                     }
                     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                    pasteboard.string = self.noteTextView.text;                                         //Pasteboard Copy
+                    pasteboard.string = self.noteTextView.text;
                 }
                     break;
                 case 4:
@@ -1102,7 +1102,7 @@
                     [self.managedObjectContext deleteObject:self.currentNote];
                     [self saveMethodInvoked];
                     [self.layeredNavigationController popViewControllerAnimated:YES];
-                    [self showBlankView]; //Show 블랭크 뷰
+                    [self showBlankView];
                 }
                     break;
                 case 5:
@@ -1409,7 +1409,7 @@
 
 - (void)addKeyboardAccessoryToolBar
 {
-        //키보드 인풋 액세서리 뷰
+    //키보드 인풋 액세서리 뷰
 #define kOne        @"M"
 #define kTwo        @"W"
     

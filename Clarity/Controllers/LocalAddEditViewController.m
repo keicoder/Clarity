@@ -48,6 +48,7 @@
 @implementation LocalAddEditViewController
 {
     BOOL _didSelectStar;
+    BOOL _didHideNavigationBar;
     NSString *_originalNote;
     
     JGActionSheet *_currentAnchoredActionSheet;
@@ -110,8 +111,6 @@
 {
     [super viewDidAppear:animated];
     [self checkToShowHelpMessage];
-//    PKSyncManager *manager = [[NoteDataManager sharedNoteDataManager] syncManager];
-//    [manager syncDatastore];    //manual sync
 }
 
 
@@ -152,6 +151,7 @@
     if (self.isNewNote == YES) {
         [self.noteTextView becomeFirstResponder];
     } else {
+        [self.noteTextView becomeFirstResponder];
         [self.noteTextView resignFirstResponder];
     }
 }
@@ -166,6 +166,7 @@
     self.noteTitleLabel.text = self.currentNote.noteTitle;
     self.noteTextView.text = self.currentNote.noteBody;
     _didSelectStar = [self.currentNote.hasNoteStar boolValue];
+    _didHideNavigationBar = NO;
     _originalNote = self.currentNote.noteAll;
 }
 
@@ -191,7 +192,7 @@
     int labelPadding_iPad = 80.0;
     
     if (iPad) {
-        self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -40, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight_iPad)];
+        self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -60, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight_iPad)];
         self.noteTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelPadding_iPad, 0, CGRectGetWidth(self.view.bounds) - (labelPadding_iPad * 2), CGRectGetHeight(self.noteTitleLabelBackgroundView.bounds))];
     } else {
         self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -40, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight_iPhone)];
@@ -232,33 +233,25 @@
 
 - (void)keyboardWillShow:(NSNotification *)notification
 {
-    if ([self.noteTextView isFirstResponder]) {
-        [self.noteTextView keyboardWillShow:notification];
-    }
+    [self.noteTextView keyboardWillShow:notification];
 }
 
 
 - (void)keyboardDidShow:(NSNotification *)notification
 {
-    if ([self.noteTextView isFirstResponder]) {
-        [self.noteTextView keyboardDidShow:notification];
-    }
+    [self.noteTextView keyboardDidShow:notification];
 }
 
 
 - (void)keyboardWillHide:(NSNotification*)notification
 {
-    if ([self.noteTextView isFirstResponder]) {
-        [self.noteTextView keyboardWillHide:notification];
-    }
+    [self.noteTextView keyboardWillHide:notification];
 }
 
 
 - (void)keyboardDidHide:(NSNotification*)notification
 {
-    if ([self.noteTextView isFirstResponder]) {
-        [self.noteTextView keyboardDidHide:notification];
-    }
+    [self.noteTextView keyboardDidHide:notification];
 }
 
 
@@ -266,10 +259,11 @@
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    if ([self.noteTextView isFirstResponder]) {
+    if (_didHideNavigationBar == NO) {
         if (iPad) {
             [self hideStatusBar];
             [self hideNavigationBar];
+            _didHideNavigationBar = YES;
         }
         [self hideButtonForFullscreenWithAnimation];
     }
@@ -281,20 +275,18 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    if ([self.noteTextView isFirstResponder]) {
-        [self.noteTextView textViewDidChange:self.noteTextView];
-    }
+    [self.noteTextView textViewDidChange:self.noteTextView];
 }
 
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
-    if ([self.noteTextView isFirstResponder]) {
+    if (_didHideNavigationBar == YES) {
         if (iPad) {
             [self showStatusBar];
             [self showNavigationBar];
+            _didHideNavigationBar = NO;
         }
-        [self hideButtonForFullscreenWithAnimation];
     }
     return YES;
 }
@@ -331,7 +323,7 @@
     UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
     [buttonAdd addTarget:self action:@selector(barButtonItemAddPressed:)forControlEvents:UIControlEventTouchUpInside];
     [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
-    buttonAdd.frame = CGRectMake(0 ,0, 21, 21);
+    buttonAdd.frame = CGRectMake(0 ,0, 28, 28);
     UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
     
     
@@ -346,28 +338,28 @@
     [barButtonItemMarkdown setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
     
     
-    UIImage *share = [UIImage imageNameForChangingColor:@"upload" color:kWHITE_COLOR];
-    [share resizedImageByHeight:21];
-    UIButton *buttonShare = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttonShare addTarget:self action:@selector(barButtonItemSharePressed:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonShare setBackgroundImage:share forState:UIControlStateNormal];
-    buttonShare.frame = CGRectMake(0 ,0, 16, 21);
-    UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithCustomView:buttonShare];
+    UIImage *share_iPhone = [UIImage imageNameForChangingColor:@"upload" color:kWHITE_COLOR];
+    [share_iPhone resizedImageByHeight:21];
+    UIButton *buttonShare_iPhone = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonShare_iPhone addTarget:self action:@selector(displayDoActionSheet:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonShare_iPhone setBackgroundImage:share_iPhone forState:UIControlStateNormal];
+    buttonShare_iPhone.frame = CGRectMake(0 ,0, 16, 21);
+    UIBarButtonItem *barButtonItemShare_iPhone = [[UIBarButtonItem alloc] initWithCustomView:buttonShare_iPhone];
     
     
-    UIImage *delete = [UIImage imageNameForChangingColor:@"trash" color:kWHITE_COLOR];
-    [delete resizedImageByHeight:20];
-    UIButton *buttonDelete = [UIButton buttonWithType:UIButtonTypeCustom];
-    buttonDelete.frame = CGRectMake(0 ,0, 19, 19);
-    [buttonDelete addTarget:self action:@selector(showDeleteSheetFromBarButtonItem:withEvent:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonDelete setBackgroundImage:delete forState:UIControlStateNormal];
-    UIBarButtonItem *barButtonItemDelete = [[UIBarButtonItem alloc] initWithCustomView:buttonDelete];
+    UIImage *share_iPad = [UIImage imageNameForChangingColor:@"upload" color:kWHITE_COLOR];
+    [share_iPad resizedImageByHeight:21];
+    UIButton *buttonShare_iPad = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonShare_iPad addTarget:self action:@selector(displayJGActionSheet:withEvent:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonShare_iPad setBackgroundImage:share_iPad forState:UIControlStateNormal];
+    buttonShare_iPad.frame = CGRectMake(0 ,0, 16, 21);
+    UIBarButtonItem *barButtonItemShare_iPad = [[UIBarButtonItem alloc] initWithCustomView:buttonShare_iPad];
     
     if (iPad) {
-        NSArray *navigationBarItems = @[barButtonItemFlexible, barButtonItemDelete, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemAdd, barButtonItemFlexible];
+        NSArray *navigationBarItems = @[barButtonItemFlexible, barButtonItemShare_iPad, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemAdd, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible];
         self.navigationItem.rightBarButtonItems = navigationBarItems;
     } else {
-        NSArray *navigationBarItems = @[barButtonItemFullScreen, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFixed, barButtonItemShare, barButtonItemFixed, barButtonItemMarkdown];
+        NSArray *navigationBarItems = @[barButtonItemFullScreen, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFixed, barButtonItemShare_iPhone, barButtonItemFixed, barButtonItemMarkdown];
         self.navigationItem.rightBarButtonItems = navigationBarItems;
     }
 }
@@ -377,7 +369,7 @@
 
 - (void)noAction:(id)sender
 {
-    NSLog(@"noAction");
+    
 }
 
 
@@ -399,9 +391,12 @@
 
 - (void)barButtonItemFullScreenPressed:(id)sender
 {
-    [self hideStatusBar];
-    [self hideNavigationBar];
-    [self showButtonForFullscreenWithAnimation];
+    if (_didHideNavigationBar == NO) {
+        [self hideStatusBar];
+        [self hideNavigationBar];
+        [self showButtonForFullscreenWithAnimation];
+        _didHideNavigationBar = YES;
+    }
 }
 
 
@@ -411,7 +406,7 @@
     UIImage *imageThumb = [image makeThumbnailOfSize:CGSizeMake(24, 24)];
     
     self.buttonForFullscreen = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.buttonForFullscreen.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, -44, 44, 44);
+    self.buttonForFullscreen.frame = CGRectMake(0, -44, 44, 44);
     [self.buttonForFullscreen setImage:imageThumb forState:UIControlStateNormal];
     self.buttonForFullscreen.tintColor = [UIColor colorWithRed:0.094 green:0.071 blue:0.188 alpha:1];
     [self.view addSubview:self.buttonForFullscreen];
@@ -424,7 +419,7 @@
 {
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         self.buttonForFullscreen.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, 0, 44, 44);
+                         self.buttonForFullscreen.frame = CGRectMake(0, 0, 44, 44);
                          self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.5, 1.5);
                          self.buttonForFullscreen.alpha = 0.5;}
                      completion:^(BOOL finished) {
@@ -442,7 +437,7 @@
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         self.buttonForFullscreen.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, -44, 44, 44);
+                         self.buttonForFullscreen.frame = CGRectMake(0, -44, 44, 44);
                          self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.5, 1.5);
                          self.buttonForFullscreen.alpha = 0.6;}
                      completion:^(BOOL finished) {
@@ -456,9 +451,12 @@
 
 - (void)showStatbarNavbarAndHideFullScreenButton
 {
-    [self showStatusBar];
-    [self showNavigationBar];
-    [self hideButtonForFullscreenWithAnimation];
+    if (_didHideNavigationBar == YES) {
+        [self showStatusBar];
+        [self showNavigationBar];
+        [self hideButtonForFullscreenWithAnimation];
+        _didHideNavigationBar = NO;
+    }
 }
 
 
@@ -627,7 +625,12 @@
 - (NSString *)cssUTF8String
 {
     NSError *error = nil;
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown" ofType:@"css"];
+    NSString *filePath;
+    if (iPad) {
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad" ofType:@"css"];
+    } else {
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown" ofType:@"css"];
+    }
     NSString *cssString = [NSString stringWithContentsOfFile:filePath
                                                     encoding:NSUTF8StringEncoding
                                                        error:&error];
@@ -648,18 +651,6 @@
 }
 
 
-#pragma mark 바 바튼 아이템 Share Pressed
-
-- (void)barButtonItemSharePressed:(id)sender
-{
-    if (iPad) {
-        [self displayJGActionSheet:sender withEvent:UIEventTypeTouches];
-    } else {
-        [self displayDoActionSheet:sender];
-    }
-}
-
-
 #pragma mark - 탭 제스처
 
 - (void)addTapGestureRecognizer
@@ -675,8 +666,11 @@
 
 - (void)showPopInNoteTitleField:(UITapGestureRecognizer *)gesture
 {
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    if (_didHideNavigationBar == YES) {
+        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
+        _didHideNavigationBar = NO;
+    }
     
     NoteTitlePopinViewController *controller;
     
@@ -724,6 +718,7 @@
         NSDictionary *userInfo = notification.userInfo;
         Note *receivedNote = [userInfo objectForKey:@"didChangeNoteTitleKey"];
         self.currentNote = receivedNote;
+        
         if (self.currentNote.noteTitle.length > 0) {
             self.noteTitleLabel.text = self.currentNote.noteTitle;
         }
@@ -830,8 +825,8 @@
                      self.noteTextView.text = @"> No Contents";
                  } else {
                  }
-                 [self createHTMLString];                                                            //HTML 스트링
-                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];         //메일 컴포즈 컨트롤러
+                 [self createHTMLString];
+                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];
              }
                  break;
              case 1:
@@ -843,7 +838,7 @@
                  }
                  [self createHTMLString];
                  UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                 pasteboard.string = self.htmlString;                                                //Pasteboard Copy
+                 pasteboard.string = self.htmlString;
              }
                  break;
              case 2:
@@ -853,7 +848,7 @@
                      self.noteTextView.text = @"No Contents";
                  } else {
                  }
-                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];  //메일 컴포즈 컨트롤러
+                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
              }
                  break;
              case 3:
@@ -864,7 +859,7 @@
                  } else {
                  }
                  UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                 pasteboard.string = self.noteTextView.text;                                         //Pasteboard Copy
+                 pasteboard.string = self.noteTextView.text;
              }
                  break;
              case 4:
@@ -888,9 +883,9 @@
                      self.noteTextView.text = @"> No Contents";
                  } else {
                  }
-                 [self createHTMLString];                                                            //HTML 스트링
+                 [self createHTMLString];
                  NSString *noteStringForPrint = self.htmlString;
-                 [self printNoteAsHTML:noteStringForPrint];                                          //프린트
+                 [self printNoteAsHTML:noteStringForPrint];
              }
                  break;
          }
@@ -952,9 +947,7 @@
 
 - (void)sendEmailWithTitle:(NSString *)title andBody:(NSString *)body
 {
-    //이메일 공유 : email 공유를 위해선 MessageUI 프레임워크가 필요함
     if (![MFMailComposeViewController canSendMail]) {
-        //        NSLog(@"Can't send email");
         return;
     }
     
@@ -1039,146 +1032,16 @@
 
 #pragma mark - JG 액션 시트
 
-#pragma mark 노트 공유
-
 - (void)displayJGActionSheet:(UIBarButtonItem *)barButtonItem withEvent:(UIEvent *)event {
     UIView *view = [event.allTouches.anyObject view];
     
-    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as HTML", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"More actions as Plain Text...", @"Print Note"] buttonStyle:JGActionSheetButtonStyleBlue];
+    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as HTML", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"Delete Note", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
     
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:0];
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:1];
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:2];
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:3];
-    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:4];
-    [section setButtonStyle:JGActionSheetButtonStyleBlue forButtonAtIndex:5];
-    
-    NSArray *sections = (iPad ? @[section] : @[section, [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"Cancel"] buttonStyle:JGActionSheetButtonStyleGreen]]);
-    
-    JGActionSheet *sheet = [[JGActionSheet alloc] initWithSections:sections];
-    
-    sheet.delegate = self;
-    
-    [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath) {
-        
-        if (indexPath.section == 0) {
-            switch (indexPath.row) {
-                case 0:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
-                    } else {
-                    }
-                    [self createHTMLString];                                                            //HTML 스트링
-                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];         //메일 컴포즈 컨트롤러
-                }
-                    break;
-                case 1:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
-                    } else {
-                    }
-                    [self createHTMLString];
-                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                    pasteboard.string = self.htmlString;                                                //Pasteboard Copy
-                }
-                    break;
-                case 2:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"No Contents";
-                    } else {
-                    }
-                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];  //메일 컴포즈 컨트롤러
-                }
-                    break;
-                case 3:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
-                    } else {
-                    }
-                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                    pasteboard.string = self.noteTextView.text;                                         //Pasteboard Copy
-                }
-                    break;
-                case 4:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
-                    } else {
-                    }
-                    NSArray *itemsToShare = @[self.noteTextView.text];
-                    UIActivityViewController *activityViewController;
-                    activityViewController = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
-                    [self presentViewController:activityViewController animated:YES completion:^{
-                    }];
-                }
-                    break;
-                case 5:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
-                    } else {
-                    }
-                    [self createHTMLString];
-                    [self printNoteAsHTML:self.htmlString];
-                }
-                    break;
-                case 6:
-                {
-                    self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"> No Contents";
-                    } else {
-                    }
-                    [self createHTMLString];
-                    [self createPDFDocument:self.htmlString];
-                }
-                    break;
-                default:
-                    break;
-            }
-        }
-        [sheet dismissAnimated:YES];
-    }];
-    
-    if (iPad) {
-        [sheet setOutsidePressBlock:^(JGActionSheet *sheet) {
-            [sheet dismissAnimated:YES];
-        }];
-        
-        CGPoint point = (CGPoint){CGRectGetMidX(view.bounds), CGRectGetMaxY(view.bounds)};
-        
-        point = [self.navigationController.view convertPoint:point fromView:view];
-        
-        _currentAnchoredActionSheet = sheet;
-        _anchorView = view;
-        _anchorLeft = NO;
-        
-        [sheet showFromPoint:point inView:self.navigationController.view arrowDirection:JGActionSheetArrowDirectionTop animated:YES];
-    }
-    else {
-        [sheet showInView:self.navigationController.view animated:YES];
-    }
-}
-
-
-#pragma mark 노트 삭제
-
-- (void)showDeleteSheetFromBarButtonItem:(UIBarButtonItem *)barButtonItem withEvent:(UIEvent *)event {
-    UIView *view = [event.allTouches.anyObject view];
-    
-    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Delete Note", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
-    
-    [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:0];
+    [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:4];
     
     NSArray *sections = (iPad ? @[section] : @[section, [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"Cancel"] buttonStyle:JGActionSheetButtonStyleCancel]]);
     
@@ -1192,14 +1055,57 @@
             switch (indexPath.row) {
                 case 0:
                 {
-                    [self.managedObjectContext deleteObject:self.currentNote];
-                    [self saveMethodInvoked];
-                    [self.layeredNavigationController popViewControllerAnimated:YES];
-                    
-                    [self showBlankView]; //Show 블랭크 뷰
+                    self.htmlString = nil;
+                    if ([self.noteTextView.text length] == 0) {
+                        self.noteTextView.text = @"*No Contents*";
+                    } else {
+                    }
+                    [self createHTMLString];
+                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];
                 }
                     break;
                 case 1:
+                {
+                    self.htmlString = nil;
+                    if ([self.noteTextView.text length] == 0) {
+                        self.noteTextView.text = @"*No Contents*";
+                    } else {
+                    }
+                    [self createHTMLString];
+                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                    pasteboard.string = self.htmlString;
+                }
+                    break;
+                case 2:
+                {
+                    self.htmlString = nil;
+                    if ([self.noteTextView.text length] == 0) {
+                        self.noteTextView.text = @"*No Contents*";
+                    } else {
+                    }
+                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
+                }
+                    break;
+                case 3:
+                {
+                    self.htmlString = nil;
+                    if ([self.noteTextView.text length] == 0) {
+                        self.noteTextView.text = @"*No Contents*";
+                    } else {
+                    }
+                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                    pasteboard.string = self.noteTextView.text;
+                }
+                    break;
+                case 4:
+                {
+                    [self.managedObjectContext deleteObject:self.currentNote];
+                    [self saveMethodInvoked];
+                    [self.layeredNavigationController popViewControllerAnimated:YES];
+                    [self showBlankView];
+                }
+                    break;
+                case 5:
                     break;
                 default:
                     break;
@@ -1250,20 +1156,20 @@
 #pragma mark JGActionSheet Delegate
 
 - (void)actionSheetWillPresent:(JGActionSheet *)actionSheet {
-    //    NSLog(@"Action sheet %p will present", actionSheet);
+    
 }
 
 - (void)actionSheetDidPresent:(JGActionSheet *)actionSheet {
-    //    NSLog(@"Action sheet %p did present", actionSheet);
+    
 }
 
 - (void)actionSheetWillDismiss:(JGActionSheet *)actionSheet {
-    //    NSLog(@"Action sheet %p will dismiss", actionSheet);
+    
     _currentAnchoredActionSheet = nil;
 }
 
 - (void)actionSheetDidDismiss:(JGActionSheet *)actionSheet {
-    //    NSLog(@"Action sheet %p did dismiss", actionSheet);
+    
 }
 
 
@@ -1336,6 +1242,12 @@
 
 
 - (void)showNavigationBar
+{
+    [self performSelector:@selector(showNavigationBarAfterDelay) withObject:nil afterDelay:0.2];
+}
+
+
+- (void)showNavigationBarAfterDelay
 {
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
@@ -1501,7 +1413,11 @@
 #define kOne        @"M"
 #define kTwo        @"W"
     
-    self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
+    if (iPad) {
+        self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
+    } else {
+        self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
+    }
     
     UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
