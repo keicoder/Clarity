@@ -645,7 +645,7 @@ typedef enum {
     };
 
     if (animated) {
-        [UIView animateWithDuration:0.5
+        [UIView animateWithDuration:0.25
                               delay:0
                             options: UIViewAnimationOptionCurveLinear
                          animations:^{
@@ -769,7 +769,7 @@ typedef enum {
     };
 
     if(animated) {
-        [UIView animateWithDuration:0.5
+        [UIView animateWithDuration:0.25
                               delay:0
                             options: UIViewAnimationOptionCurveEaseOut
                          animations:^{
