@@ -37,9 +37,8 @@ extern NSString * const kIS_FIRST_TIME;
 #define kJASIDEPANEL_LEFTGAP_PERCENTAGE                     0.84
 
 
-#pragma mark - MarkdownWebView
-#define kAUTOMATICALLY_ADJUSTS_SCROLLVIEW_INSETS            NO
-#define kMARKDOWNWEBVIEW_SCROLLVIEW_CONTENTINSET            60.0
+#pragma mark - WebView
+#define kWEBVIEW_SCROLLVIEW_CONTENTINSET                    50.0
 
 
 #define kCURRENT_VIEW_IS_LOCAL                              @"currentViewIsLocal"

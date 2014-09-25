@@ -86,7 +86,6 @@
     [self updateStarImage];
     [self addTapGestureRecognizer];
     [self addObserverForNoteTitleChanged];
-    [self addObserverForHelpMessageMarkdownWebViewPopped];
     [self addObserverForApplicationWillResignActive];
     [self addButtonForFullscreen];
     [self checkNewNote];
@@ -736,29 +735,6 @@
         else {
             self.noteTitleLabel.text = @"Untitled";
         }
-    }
-}
-
-
-#pragma mark 헬프 메시지 Notification 옵저버 등록
-
-- (void)addObserverForHelpMessageMarkdownWebViewPopped
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(helpMessageMarkdownWebViewPopped:)
-                                                 name:@"HelpMessageMarkdownWebViewPopped"
-                                               object:nil];
-}
-
-
-#pragma mark 헬프 메시지 노티피케이션 수신 후 후속작업
-
-- (void)helpMessageMarkdownWebViewPopped:(NSNotification *) notification
-{
-    if ([[notification name] isEqualToString:@"HelpMessageMarkdownWebViewPopped"])
-    {
-        //    NSLog (@"helpMessageMarkdownWebViewPopped");
-        [self.noteTextView resignFirstResponder];
     }
 }
 
@@ -1473,7 +1449,6 @@
     [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [center removeObserver:self name:UIKeyboardDidHideNotification object:nil];
     [center removeObserver:self name:@"DidChangeNoteTitleNotification" object:nil];
-    [center removeObserver:self name:@"HelpMessageMarkdownWebViewPopped" object:nil];
     [center removeObserver:self name:@"ApplicationWillResignActiveNotification" object:nil];
     [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
     [center removeObserver:self];

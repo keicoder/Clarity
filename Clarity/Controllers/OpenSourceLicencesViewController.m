@@ -28,19 +28,19 @@
 
 
 #import "OpenSourceLicencesViewController.h"
-#import "SVWebViewController.h"                                 //SV 웹뷰
+#import "SVWebViewController.h"
 
 
 @interface OpenSourceLicencesViewController () <UIWebViewDelegate, UIGestureRecognizerDelegate>
 
-@property (strong, nonatomic) SVWebViewController *svWebViewController; //sv 웹뷰 컨트롤러
+@property (strong, nonatomic) SVWebViewController *svWebViewController;
 
 @end
 
 
 @implementation OpenSourceLicencesViewController
 {
-    BOOL _didTapped;                                            //탭 제스처 상태 확인
+    BOOL _didTapped;
 }
 
 
@@ -50,10 +50,10 @@
 {
     [super viewDidLoad];
     self.title = @"Open Sources";
-    self.automaticallyAdjustsScrollViewInsets = kAUTOMATICALLY_ADJUSTS_SCROLLVIEW_INSETS;
-    [self assignWebViewAttribute];                              //웹뷰 속성
-    [self loadLocalFileIntoAWebView];                           //로컬 파일 웹뷰로 가져오기
-    [self addTapGestureRecognizer];                             //탭 제스처
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self assignWebViewAttribute];
+    [self loadLocalFileIntoAWebView];
+    [self addTapGestureRecognizer];
 }
 
 
@@ -90,9 +90,9 @@
 
 - (void)assignWebViewAttribute
 {
-    self.webView.delegate = self;                                           //UIWebView 델리게이트
-    _didTapped = NO;                                                        //탭 제스처 상태 초기화
-    self.webView.scrollView.contentInset = UIEdgeInsetsMake(kMARKDOWNWEBVIEW_SCROLLVIEW_CONTENTINSET, 0, 0, 0);   //웹뷰 인셋
+    self.webView.delegate = self;
+    _didTapped = NO;
+    self.webView.scrollView.contentInset = UIEdgeInsetsMake(kWEBVIEW_SCROLLVIEW_CONTENTINSET, 0, 0, 0);
 }
 
 
@@ -114,7 +114,7 @@
         }
         //SV 웹뷰
         self.svWebViewController = [[SVWebViewController alloc] initWithAddress:[NSString stringWithFormat:@"%@", [request URL]]];
-        [self.navigationController pushViewController:self.svWebViewController animated:YES];             //Push
+        [self.navigationController pushViewController:self.svWebViewController animated:YES];
         return NO;
     }
     return YES;

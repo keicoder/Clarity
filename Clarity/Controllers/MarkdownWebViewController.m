@@ -1,6 +1,6 @@
 //
 //  MarkdownWebViewController.m
-//  SwiftNote
+//  Clarity
 //
 //  Created by jun on 6/8/14.
 //  Copyright (c) 2014 Overcommitted, LLC. All rights reserved.
@@ -9,7 +9,7 @@
 
 #pragma mark - 마크다운 웹뷰
 
-#define kMARKDOWN_WEBVIEW_BACKGROUND_COLOR                      [UIColor whiteColor] //[UIColor colorWithRed:0.91 green:0.925 blue:0.929 alpha:1] //[UIColor whiteColor]
+#define kMARKDOWN_WEBVIEW_BACKGROUND_COLOR                      [UIColor whiteColor]
 #define kMARKDOWN_FLOATING_BUTTON_TINT_COLOR                    [UIColor whiteColor]
 #define kMARKDOWN_FLOATING_BUTTON_ALPHA_OPAQUE                  1.0
 #define kMARKDOWN_FLOATING_BUTTON_ALPHA_TRANSLUCENT             0.33
@@ -38,20 +38,18 @@
 
 @interface MarkdownWebViewController () <UIWebViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIScrollViewDelegate>
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;         //컨텍스트
-@property (strong, nonatomic) SVModalWebViewController *svModalWebViewController;   //sv 모달 웹뷰 컨트롤러
-@property (strong, nonatomic) SVWebViewController *svWebViewController;             //sv 웹뷰 컨트롤러
-@property (weak, nonatomic) IBOutlet UIWebView *markdownWebView;                    //마크다운 웹뷰
-@property (strong, nonatomic) NSMutableString *htmlString;                          //마크다운 스트링
-@property (strong, nonatomic) UIView *statusView;                                   //상태바 아래 플로팅 뷰
-@property (assign) CGPoint tapPoint;                                                //탭 제스처
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) SVWebViewController *svWebViewController;
+@property (weak, nonatomic) IBOutlet UIWebView *markdownWebView;
+@property (strong, nonatomic) NSMutableString *htmlString;
+@property (assign) CGPoint tapPoint;
 
 @end
 
 
 @implementation MarkdownWebViewController
 {
-    BOOL _didTapped;                                                                //탭 제스처 상태 확인
+    BOOL _didTapped;
 }
 
 
@@ -60,25 +58,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.automaticallyAdjustsScrollViewInsets = kAUTOMATICALLY_ADJUSTS_SCROLLVIEW_INSETS;
-    [self assignAttributeToMarkdownWebView];                    //마크다운 웹뷰 속성
-    [self makeMarkdownString];                                  //마크다운 스트링
-    [self addTapGestureRecognizer];                             //탭 제스처
-    [self addNavigationBarButtonItems];                         //내비게이션 바 버튼
     self.title = @"Preview";
-}
-
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:YES];
-    
-}
-
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName: @"HelpMessageMarkdownWebViewPopped" object:nil userInfo:nil];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self assignAttributeToMarkdownWebView];
+    [self makeMarkdownString];
+    [self addTapGestureRecognizer];
+    [self addNavigationBarButtonItems];
 }
 
 
@@ -87,8 +72,8 @@
 - (void)webViewDidFinishLoad:(UIWebView *)aWebView
 {
     aWebView = self.markdownWebView;
-    aWebView.scrollView.maximumZoomScale = 20; // set as you want.
-    aWebView.scrollView.minimumZoomScale = 1; // set as you want.
+    aWebView.scrollView.maximumZoomScale = 20;
+    aWebView.scrollView.minimumZoomScale = 1;
 }
 
 
@@ -96,7 +81,7 @@
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
 {
-    self.markdownWebView.scrollView.maximumZoomScale = 20; // set similar to previous.
+    self.markdownWebView.scrollView.maximumZoomScale = 20;
 }
 
 
@@ -104,12 +89,11 @@
 
 - (void)assignAttributeToMarkdownWebView
 {
-    _didTapped = NO;                                            //탭 제스처 상태 초기화
-    
-    self.markdownWebView.delegate = self;                       //UIWebView 델리게이트
-    self.markdownWebView.scrollView.delegate = self;            //UIScrollVieW 델리게이트
+    _didTapped = NO;
+    self.markdownWebView.delegate = self;
+    self.markdownWebView.scrollView.delegate = self;
     self.markdownWebView.scrollView.scrollEnabled = YES;
-    self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(kMARKDOWNWEBVIEW_SCROLLVIEW_CONTENTINSET, 0, 0, 0);  //마크다운 웹뷰 인셋
+    self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(kWEBVIEW_SCROLLVIEW_CONTENTINSET, 0, 0, 0);
 }
 
 #pragma mark 마크다운 스트링
