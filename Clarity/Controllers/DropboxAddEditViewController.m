@@ -119,12 +119,6 @@
     } else {
         [self autoSaveAndRegisterStarListViewWillShowNotification];
     }
-    self.keyboardAccessoryToolBar = nil;
-    self.starImage = nil;
-    self.htmlString = nil;
-    self.noteTitleLabel = nil;
-    self.noteTitleLabelBackgroundView = nil;
-    self.noteTextView = nil;
 }
 
 
@@ -137,6 +131,12 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    self.keyboardAccessoryToolBar = nil;
+    self.starImage = nil;
+    self.htmlString = nil;
+    self.noteTitleLabel = nil;
+    self.noteTitleLabelBackgroundView = nil;
+    self.noteTextView = nil;
 }
 
 
@@ -467,7 +467,7 @@
     if (self.isNewNote == YES)
     {
         self.isNewNote = NO;
-        [self concatenateString];
+        //[self concatenateString];
         [self saveMethodInvoked];
     }
     else {
@@ -478,7 +478,7 @@
             
         } else
         {
-            [self concatenateString];
+            //[self concatenateString];
             [self saveMethodInvoked];
         }
     }
@@ -503,9 +503,9 @@
         NSError *error = nil;
         if ([managedObjectContext save:&error]) {
             [mainManagedObjectContext save:&error];
-            NSLog (@"managedObjectContext saved");
+            //NSLog (@"managedObjectContext saved");
         } else {
-            NSLog(@"Error saving context: %@", error);
+            //NSLog(@"Error saving context: %@", error);
         }
     }];
 }

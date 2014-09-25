@@ -67,21 +67,12 @@
 }
 
 
-#pragma mark - UIWebView Delegate (마크다운 웹 뷰 Finish Load)
-
-- (void)webViewDidFinishLoad:(UIWebView *)aWebView
+- (void)viewWillDisappear:(BOOL)animated
 {
-    aWebView = self.markdownWebView;
-    aWebView.scrollView.maximumZoomScale = 20;
-    aWebView.scrollView.minimumZoomScale = 1;
-}
-
-
-#pragma mark - UIScrollView Delegate Methods
-
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
-{
-    self.markdownWebView.scrollView.maximumZoomScale = 20;
+    [super viewWillDisappear:animated];
+    self.htmlString = nil;
+    self.svWebViewController = nil;
+    self.markdownWebView = nil;
 }
 
 
@@ -94,6 +85,8 @@
     self.markdownWebView.scrollView.delegate = self;
     self.markdownWebView.scrollView.scrollEnabled = YES;
     self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(kWEBVIEW_SCROLLVIEW_CONTENTINSET, 0, 0, 0);
+    self.markdownWebView.scrollView.maximumZoomScale = 20.0;
+    self.markdownWebView.scrollView.minimumZoomScale = 1.0;
 }
 
 #pragma mark 마크다운 스트링
@@ -257,14 +250,12 @@
 - (void)hideStatusBar
 {
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-//    [self statusViewUp];
 }
 
 
 - (void)showStatusBar
 {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-//    [self statusViewDown];
 }
 
 
@@ -281,7 +272,6 @@
 - (void)dealloc
 {
     NSLog(@"dealloc %@", self);
-    self.htmlString = nil;
 }
 
 

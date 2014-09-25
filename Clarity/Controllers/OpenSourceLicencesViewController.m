@@ -100,19 +100,13 @@
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    if ( navigationType == UIWebViewNavigationTypeLinkClicked )
-    {
-        if ( _didTapped == NO)
-        {
+    if ( navigationType == UIWebViewNavigationTypeLinkClicked ) {
+        if ( _didTapped == NO) {
             
-        }
-        else
-        {
-            _didTapped = NO;
+        } else {
             [self showStatusBar];
             [self showNavigationBar];
         }
-        //SV 웹뷰
         self.svWebViewController = [[SVWebViewController alloc] initWithAddress:[NSString stringWithFormat:@"%@", [request URL]]];
         [self.navigationController pushViewController:self.svWebViewController animated:YES];
         return NO;

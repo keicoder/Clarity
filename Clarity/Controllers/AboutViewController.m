@@ -93,6 +93,8 @@
     self.webView.delegate = self;
     _didTapped = NO;
     self.webView.scrollView.contentInset = UIEdgeInsetsMake(kWEBVIEW_SCROLLVIEW_CONTENTINSET, 0, 0, 0);
+    self.webView.scrollView.maximumZoomScale = 20.0;
+    self.webView.scrollView.minimumZoomScale = 1.0;
 }
 
 
@@ -100,22 +102,15 @@
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    if ( navigationType == UIWebViewNavigationTypeLinkClicked )
-    {
-        if ( _didTapped == NO)
-        {
+    if ( navigationType == UIWebViewNavigationTypeLinkClicked ) {
+        if ( _didTapped == NO) {
             
-        }
-        else
-        {
-            _didTapped = NO;
+        } else {
             [self showStatusBar];
             [self showNavigationBar];
         }
-        
-        //SV 웹뷰
         self.svWebViewController = [[SVWebViewController alloc] initWithAddress:[NSString stringWithFormat:@"%@", [request URL]]];
-        [self.navigationController pushViewController:self.svWebViewController animated:YES];             //Push
+        [self.navigationController pushViewController:self.svWebViewController animated:YES];
         return NO;
     }
     return YES;
@@ -154,7 +149,7 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
-    return YES;     //Simultaneous Gesture Recognize
+    return YES;
 }
 
 
