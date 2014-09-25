@@ -188,21 +188,19 @@
     
     if (iPad) {
         self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -40, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight_iPad)];
+        self.noteTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelPadding_iPad, 0, CGRectGetWidth(self.view.bounds) - (labelPadding_iPad * 2), CGRectGetHeight(self.noteTitleLabelBackgroundView.bounds))];
     } else {
         self.noteTitleLabelBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, -40, CGRectGetWidth(self.view.bounds), noteTitleLabelHeight_iPhone)];
+        self.noteTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelPadding_iPhone, 0, CGRectGetWidth(self.view.bounds) - (labelPadding_iPhone * 2), CGRectGetHeight(self.noteTitleLabelBackgroundView.bounds))];
     }
+    
     self.noteTitleLabelBackgroundView.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     [self.noteTextView addSubview:self.noteTitleLabelBackgroundView];
     [self.noteTitleLabelBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     
-    if (iPad) {
-        self.noteTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelPadding_iPad, 0, CGRectGetWidth(self.view.bounds) - (labelPadding_iPad * 2), CGRectGetHeight(self.noteTitleLabelBackgroundView.bounds))];
-    } else {
-        self.noteTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(labelPadding_iPhone, 0, CGRectGetWidth(self.view.bounds) - (labelPadding_iPhone * 2), CGRectGetHeight(self.noteTitleLabelBackgroundView.bounds))];
-    }
     self.noteTitleLabel.font = kTEXTVIEW_LABEL_FONT;
     self.noteTitleLabel.textColor = kTEXTVIEW_LABEL_TEXT_COLOR;
-    self.noteTitleLabel.backgroundColor = kCLEAR_COLOR;
+    self.noteTitleLabel.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     self.noteTitleLabel.textAlignment = NSTextAlignmentCenter;
     self.noteTitleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     [self.noteTitleLabelBackgroundView addSubview:self.noteTitleLabel];
@@ -464,25 +462,19 @@
 
 - (void)autoSave
 {
-    if (self.isNewNote == YES)
-    {
+    if (self.isNewNote == YES) {
         self.isNewNote = NO;
-        //[self concatenateString];
         [self saveMethodInvoked];
-    }
-    else {
+    } else {
         NSString *newline = @"\n\n";
         NSString *concatenateString = [NSString stringWithFormat:@"%@%@%@%@%@", self.noteTitleLabel.text, newline, self.noteTextView.text, newline, _didSelectStar ? @"YES" : @"NO"];
         
         if ([_originalNote isEqualToString:concatenateString]) {
             
-        } else
-        {
-            //[self concatenateString];
+        } else {
             [self saveMethodInvoked];
         }
     }
-//    [self showNoteDataToLogConsole];
 }
 
 
@@ -503,9 +495,8 @@
         NSError *error = nil;
         if ([managedObjectContext save:&error]) {
             [mainManagedObjectContext save:&error];
-            //NSLog (@"managedObjectContext saved");
         } else {
-            //NSLog(@"Error saving context: %@", error);
+            NSLog(@"Error saving context: %@", error);
         }
     }];
 }
