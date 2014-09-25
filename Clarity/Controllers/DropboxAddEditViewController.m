@@ -151,6 +151,7 @@
     if (self.isNewNote == YES) {
         [self.noteTextView becomeFirstResponder];
     } else {
+        [self.noteTextView becomeFirstResponder];
         [self.noteTextView resignFirstResponder];
     }
 }
@@ -274,9 +275,7 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    if ([self.noteTextView isFirstResponder]) {
-        [self.noteTextView textViewDidChange:self.noteTextView];
-    }
+    [self.noteTextView textViewDidChange:self.noteTextView];
 }
 
 
