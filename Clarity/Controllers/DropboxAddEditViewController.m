@@ -89,7 +89,11 @@
     [self addObserverForApplicationWillResignActive];
     [self addButtonForFullscreen];
     [self checkNewNote];
-    [self addKeyboardAccessoryToolBar];
+    if (self.keyboardAccessoryToolBar != nil) {
+        self.noteTextView.inputAccessoryView = self.keyboardAccessoryToolBar;
+    } else {
+        [self addKeyboardAccessoryToolBar];
+    }
 //    [self showNotePropertiesValue];
 //    [self showNoteDataToLogConsole];
 }
@@ -1493,38 +1497,38 @@
 
 - (void)addKeyboardAccessoryToolBar
 {
-    //키보드 인풋 액세서리 뷰
+        //키보드 인풋 액세서리 뷰
 #define kOne        @"M"
 #define kTwo        @"W"
-    
-    self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
-    
-    UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
-    UIButton *one = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [one setTitle:kOne forState:UIControlStateNormal];
-    one.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:24.0];
-    [one setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [one setContentEdgeInsets:UIEdgeInsetsMake(3, 0, 0, 0)];
-    [one sizeToFit];
-    [one addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *barButtonItemOne = [[UIBarButtonItem alloc] initWithCustomView: one];
-    [barButtonItemOne setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor grayColor]} forState:UIControlStateNormal];
-    
-    UIButton *two = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [two setTitle:kTwo forState:UIControlStateNormal];
-    two.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:24.0];
-    [two setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [two setContentEdgeInsets:UIEdgeInsetsMake(3, 0, 0, 0)];
-    [two sizeToFit];
-    [two addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *barButtonItemTwo = [[UIBarButtonItem alloc] initWithCustomView: two];
-    [barButtonItemTwo setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor grayColor]} forState:UIControlStateNormal];
-    
-    NSArray *navigationBarItems = @[barButtonItemFlexible, barButtonItemOne, barButtonItemFlexible, barButtonItemTwo, barButtonItemFlexible];
-    self.self.keyboardAccessoryToolBar.items = navigationBarItems;
-    
-    self.noteTextView.inputAccessoryView = self.keyboardAccessoryToolBar;
+        
+        self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
+        
+        UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        
+        UIButton *one = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [one setTitle:kOne forState:UIControlStateNormal];
+        one.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:24.0];
+        [one setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        [one setContentEdgeInsets:UIEdgeInsetsMake(3, 0, 0, 0)];
+        [one sizeToFit];
+        [one addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *barButtonItemOne = [[UIBarButtonItem alloc] initWithCustomView: one];
+        [barButtonItemOne setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor grayColor]} forState:UIControlStateNormal];
+        
+        UIButton *two = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [two setTitle:kTwo forState:UIControlStateNormal];
+        two.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:24.0];
+        [two setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        [two setContentEdgeInsets:UIEdgeInsetsMake(3, 0, 0, 0)];
+        [two sizeToFit];
+        [two addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *barButtonItemTwo = [[UIBarButtonItem alloc] initWithCustomView: two];
+        [barButtonItemTwo setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor grayColor]} forState:UIControlStateNormal];
+        
+        NSArray *navigationBarItems = @[barButtonItemFlexible, barButtonItemOne, barButtonItemFlexible, barButtonItemTwo, barButtonItemFlexible];
+        self.self.keyboardAccessoryToolBar.items = navigationBarItems;
+        
+        self.noteTextView.inputAccessoryView = self.keyboardAccessoryToolBar;
 }
 
 

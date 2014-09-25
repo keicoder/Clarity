@@ -89,7 +89,11 @@
     [self addObserverForApplicationWillResignActive];
     [self addButtonForFullscreen];
     [self checkNewNote];
-    [self addKeyboardAccessoryToolBar];
+    if (self.keyboardAccessoryToolBar != nil) {
+        self.noteTextView.inputAccessoryView = self.keyboardAccessoryToolBar;
+    } else {
+        [self addKeyboardAccessoryToolBar];
+    }
 //    [self showNotePropertiesValue];
 //    [self showNoteDataToLogConsole];
 }
