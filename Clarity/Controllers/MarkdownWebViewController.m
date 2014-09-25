@@ -209,9 +209,13 @@
 
 - (void)addNavigationBarButtonItems
 {
-    UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithTitle:@"Share" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemSharePressed:)];
-    
-    self.navigationItem.rightBarButtonItem = barButtonItemShare;
+    if (iPad) {
+        
+    } else {
+        UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithTitle:@"Share" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemSharePressed:)];
+        
+        self.navigationItem.rightBarButtonItem = barButtonItemShare;
+    }
 }
 
 

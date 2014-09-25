@@ -129,13 +129,23 @@ extern NSString * const kIS_FIRST_TIME;
 
 #pragma mark - 텍스트 뷰
 
-#define kTEXTVIEW_LINE_IMAGEVIEW_ALPHA                      0.3
-#define kINSET_TOP                                        120.0   //78.0  //120.0   // 텍스트 뷰 인셋 top
-#define kINSET_LEFT                                         0.0     // 텍스트 뷰 인셋 left
-#define kINSET_BOTTOM                                      44.0     // 텍스트 뷰 인셋 bottom
-#define kINSET_RIGHT                                        0.0     // 텍스트 뷰 인셋 right
-#define kTEXTVIEW_PADDING                                  20.0     // 텍스트 뷰 padding
-#define kMOVE_TEXT_POSITION_DURATION                       0.40     // 캐럿 이동 시간
+#define kINSET_TOP_IPAD                                    150.0     // 텍스트 뷰 인셋 top
+#define kINSET_LEFT_IPAD                                     0.0     // 텍스트 뷰 인셋 left
+#define kINSET_BOTTOM_IPAD                                  88.0     // 텍스트 뷰 인셋 bottom
+#define kINSET_RIGHT_IPAD                                    0.0     // 텍스트 뷰 인셋 right
+#define kTEXTVIEW_PADDING_IPAD                             100.0     // 텍스트 뷰 padding
+#define kMOVE_TEXT_POSITION_DURATION_IPAD                   0.40     // 캐럿 이동 시간
+//폰트
+#define kTEXTVIEW_FONT_IPAD                                      [UIFont fontWithName:@"AvenirNext-Regular" size:22.f]
+#define kTEXTVIEW_LABEL_FONT_IPAD                                [UIFont fontWithName:@"Avenir-Black" size:24.f]
+
+
+#define kINSET_TOP                                         120.0     //78.0  //120.0   // 텍스트 뷰 인셋 top
+#define kINSET_LEFT                                          0.0     // 텍스트 뷰 인셋 left
+#define kINSET_BOTTOM                                       44.0     // 텍스트 뷰 인셋 bottom
+#define kINSET_RIGHT                                         0.0     // 텍스트 뷰 인셋 right
+#define kTEXTVIEW_PADDING                                   20.0     // 텍스트 뷰 padding
+#define kMOVE_TEXT_POSITION_DURATION                        0.40     // 캐럿 이동 시간
 //폰트
 #define kTEXTVIEW_FONT                                      [UIFont fontWithName:@"AvenirNext-Regular" size:20.f]
 #define kTEXTVIEW_LABEL_FONT                                [UIFont fontWithName:@"Avenir-Black" size:22.f]

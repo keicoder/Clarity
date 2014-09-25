@@ -42,7 +42,7 @@
     [self changeColorOfCellImages];
     
     NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
-    self.versionLabel.text = [NSString stringWithFormat:@"Version %@\nSeptember 17, 2014\nThank you for purchasing Clarity.\nEnjoy Writing!", versionString];
+    self.versionLabel.text = [NSString stringWithFormat:@"Version %@\nSeptember 25, 2014\nThank you for purchasing Clarity.\nEnjoy Writing!", versionString];
 }
 
 

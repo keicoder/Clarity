@@ -61,41 +61,27 @@ static BOOL _highlightingSupported;
 
 - (void)assignTextViewAttribute
 {
-    //self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     self.font = kTEXTVIEW_FONT;
-    
-    //배경 컬러 > 데이 모드
     self.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     self.textColor = kTEXTVIEW_TEXT_COLOR;
     
-    //텍스트 뷰 캐럿 색상 변경
-    [[UITextView appearance] setTintColor:[UIColor colorWithRed:0.949 green:0.427 blue:0.188 alpha:1]]; //[UIColor colorWithRed:0.128 green:0.179 blue:0.581 alpha:1.000]];
-    
+    [[UITextView appearance] setTintColor:[UIColor colorWithRed:0.949 green:0.427 blue:0.188 alpha:1]];
     self.alwaysBounceVertical = YES;
     self.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     self.layer.cornerRadius = 0.0;
     self.autocapitalizationType = UITextAutocapitalizationTypeSentences;
     self.autocorrectionType = UITextAutocorrectionTypeYes;
-//    self.scrollsToTop = YES;
     
-    self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING;
-    
-    UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
-    self.contentInset = contentInset;
-    //self.textContainerInset = contentInset;
-    //self.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0); 
-    
-//    UIMenuController *menuController = [UIMenuController sharedMenuController];
-//    UIMenuItem *undoItem = [[UIMenuItem alloc] initWithTitle:@"Undo" action:@selector(undoButtonPressed:)];
-//    UIMenuItem *redoItem = [[UIMenuItem alloc] initWithTitle:@"Redo" action:@selector(redoButtonPressed:)];
-//    [menuController setMenuItems:[NSArray arrayWithObjects:undoItem, redoItem, nil]];
+    if (iPad) {
+        self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING_IPAD;
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP_IPAD, kINSET_LEFT_IPAD, kINSET_BOTTOM_IPAD, kINSET_RIGHT_IPAD);
+        self.contentInset = contentInset;
+    } else {
+        self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING;
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
+        self.contentInset = contentInset;
+    }
 }
-
-
-//- (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
-//{
-//    return YES;
-//}
 
 
 #pragma mark - 텍스트 뷰
@@ -104,36 +90,40 @@ static BOOL _highlightingSupported;
 
 - (void)updateNoteTextViewInsetWithKeyboard
 {
-//    UIEdgeInsets contentInset = self.contentInset;
-//    UIEdgeInsets newInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, _keyboardRect.size.height, kINSET_RIGHT);
-//    contentInset = newInset;
-//    self.contentInset = contentInset;
-//    self.scrollIndicatorInsets = contentInset;
-    
-    CGFloat contentInsetTop = kINSET_TOP; //20.f;
     CGFloat scrollIndicatorInsetTop = 0.f;
     CGFloat contentInsetBottom = 0.f;
-    contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
-    UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
-    self.contentInset = contentInset;
-    self.scrollIndicatorInsets = UIEdgeInsetsMake(scrollIndicatorInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
+    
+    if (iPad) {
+        CGFloat contentInsetTop = kINSET_TOP_IPAD;
+        contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT_IPAD, contentInsetBottom, kINSET_RIGHT_IPAD);
+        self.contentInset = contentInset;
+        self.scrollIndicatorInsets = UIEdgeInsetsMake(scrollIndicatorInsetTop, kINSET_LEFT_IPAD, contentInsetBottom, kINSET_RIGHT_IPAD);
+    } else {
+        CGFloat contentInsetTop = kINSET_TOP;
+        contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
+        self.contentInset = contentInset;
+        self.scrollIndicatorInsets = UIEdgeInsetsMake(scrollIndicatorInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
+    }
 }
-
 
 
 - (void)updateNoteTextViewInsetWithoutKeyboard
 {
-//    UIEdgeInsets contentInset = self.contentInset;
-//    contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
-//    self.contentInset = contentInset;
-//    self.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-    
     CGFloat contentInsetTop = 0.f;
     CGFloat scrollIndicatorInsetTop = contentInsetTop;
     CGFloat contentInsetBottom = 0.f;
-    UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
-    self.contentInset = contentInset;
-    self.scrollIndicatorInsets = UIEdgeInsetsMake(scrollIndicatorInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
+    
+    if (iPad) {
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP_IPAD, kINSET_LEFT_IPAD, kINSET_BOTTOM_IPAD, kINSET_RIGHT_IPAD);
+        self.contentInset = contentInset;
+        self.scrollIndicatorInsets = UIEdgeInsetsMake(scrollIndicatorInsetTop, kINSET_LEFT_IPAD, contentInsetBottom, kINSET_RIGHT_IPAD);
+    } else {
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
+        self.contentInset = contentInset;
+        self.scrollIndicatorInsets = UIEdgeInsetsMake(scrollIndicatorInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
+    }
 }
 
 
@@ -146,14 +136,12 @@ static BOOL _highlightingSupported;
     CGFloat duration = [[userInfoDictionary objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     //int curve = [[userInfoDictionary objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
     _keyboardRect = [[userInfoDictionary objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    //NSLog (@"_keyboardRect: %@", NSStringFromCGRect(_keyboardRect));
 
     [UIView animateWithDuration:duration delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                     animations:^{ 
-                        [self updateNoteTextViewInsetWithKeyboard];                     //텍스트 뷰 인셋 조정
+                        [self updateNoteTextViewInsetWithKeyboard];
                     } completion:^(BOOL finished) {
-                        //[self moveTextPositionAboveKeyboard:self withAnimation:YES];    //캐럿 위치 이동
-                        [self scrollToVisibleCaretAnimated];                            //PSPDFTextView 캐럿 위치 이동
+                        [self scrollToVisibleCaretAnimated];
                     }];
 }
 
