@@ -1389,6 +1389,14 @@
 - (void)addKeyboardAccessoryToolBar
 {
     //키보드 인풋 액세서리 뷰
+#define kToolBarHeight_iPhone   44.0
+#define kToolBarHeight_iPad     60.0
+#define kInset_iPhone           10.0
+#define kInset_iPad             18.0
+#define kFontSize_iPhone        30.0
+#define kFontSize_iPad          30.0
+#define kFontInset_iPhone       4.0
+#define kFontInset_iPad         4.0
 #define kButtonNormalColor      [UIColor grayColor]
 #define kButtonHighlightedColor [UIColor redColor]
 #define kTextNormalColor        [UIColor darkGrayColor]
@@ -1399,12 +1407,10 @@
 #define kThree                  @"▼"
 #define kThreeAction            hideKeyboardButtonPressed
     
-    
-    
     if (iPad) {
-        self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
+        self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, kToolBarHeight_iPad)];
     } else {
-        self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
+        self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, kToolBarHeight_iPhone)];
     }
     
     UIBarButtonItem *f = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
@@ -1417,7 +1423,13 @@
     [buttonOne setImage:oneImageNormal forState:UIControlStateNormal];
     [buttonOne setImage:oneImageHighlighted forState:UIControlStateSelected];
     [buttonOne setImage:oneImageHighlighted forState:UIControlStateHighlighted];
-    buttonOne.frame = CGRectMake(0 ,0, 24, 24);
+    if (iPad) {
+        buttonOne.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
+        [buttonOne setImageEdgeInsets:UIEdgeInsetsMake(kInset_iPad, kInset_iPad, kInset_iPad, kInset_iPad)];
+    } else {
+        buttonOne.frame = CGRectMake(0 ,0, kToolBarHeight_iPhone, kToolBarHeight_iPhone);
+        [buttonOne setImageEdgeInsets:UIEdgeInsetsMake(kInset_iPhone, kInset_iPhone, kInset_iPhone, kInset_iPhone)];
+    }
     UIBarButtonItem *barButtonItemOne = [[UIBarButtonItem alloc] initWithCustomView:buttonOne];
     
     
@@ -1428,16 +1440,28 @@
     [buttonTwo setImage:twoImageNormal forState:UIControlStateNormal];
     [buttonTwo setImage:twoImageHighlighted forState:UIControlStateSelected];
     [buttonTwo setImage:twoImageHighlighted forState:UIControlStateHighlighted];
-    buttonTwo.frame = CGRectMake(0 ,0, 24, 24);
+    if (iPad) {
+        buttonTwo.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
+        [buttonTwo setImageEdgeInsets:UIEdgeInsetsMake(kInset_iPad, kInset_iPad, kInset_iPad, kInset_iPad)];
+    } else {
+        buttonTwo.frame = CGRectMake(0 ,0, kToolBarHeight_iPhone, kToolBarHeight_iPhone);
+        [buttonTwo setImageEdgeInsets:UIEdgeInsetsMake(kInset_iPhone, kInset_iPhone, kInset_iPhone, kInset_iPhone)];
+    }
     UIBarButtonItem *barButtonItemTwo = [[UIBarButtonItem alloc] initWithCustomView:buttonTwo];
 
     
     UIButton *buttonThree = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [buttonThree setTitle:kThree forState:UIControlStateNormal];
-    buttonThree.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:30.0];
     [buttonThree setTitleColor:kTextNormalColor forState:UIControlStateNormal];
-    [buttonThree setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
-    [buttonThree sizeToFit];
+    if (iPad) {
+        buttonThree.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_iPad];
+        [buttonThree setContentEdgeInsets:UIEdgeInsetsMake(kFontInset_iPad, 0, 0, 0)];
+        buttonThree.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
+    } else {
+        buttonThree.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_iPhone];
+        [buttonThree setContentEdgeInsets:UIEdgeInsetsMake(kFontInset_iPhone, 0, 0, 0)];
+        buttonThree.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPhone);
+    }
     [buttonThree addTarget:self action:@selector(kThreeAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *barButtonItemThree = [[UIBarButtonItem alloc] initWithCustomView: buttonThree];
     
