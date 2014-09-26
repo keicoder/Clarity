@@ -3,16 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "welcome_iPad3.png"
+      "filename" : "arrowLeft.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "welcome_iPad3@2x.png"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "arrowLeft@2x.png"
     }
   ],
   "info" : {

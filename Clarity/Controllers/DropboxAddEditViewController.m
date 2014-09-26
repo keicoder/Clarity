@@ -96,7 +96,7 @@
         [self addKeyboardAccessoryToolBar];
     }
     
-    [self showNoteDataToLogConsole];
+//    [self showNoteDataToLogConsole];
 }
 
 
@@ -1384,11 +1384,22 @@
 }
 
 
+#pragma mark - 키보드 액세서리 뷰
+
 - (void)addKeyboardAccessoryToolBar
 {
     //키보드 인풋 액세서리 뷰
-#define kOne        @"M"
-#define kTwo        @"W"
+#define kButtonNormalColor      [UIColor grayColor]
+#define kButtonHighlightedColor [UIColor redColor]
+#define kTextNormalColor        [UIColor darkGrayColor]
+#define kOneImage               @"arrowLeft"
+#define kOneAction              previousCharacterButtonPressed
+#define kTwoImage               @"arrowRight"
+#define kTwoAction              nextCharacterButtonPressed
+#define kThree                  @"▼"
+#define kThreeAction            hideKeyboardButtonPressed
+    
+    
     
     if (iPad) {
         self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
@@ -1396,32 +1407,87 @@
         self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
     }
     
-        UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        
-        UIButton *one = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [one setTitle:kOne forState:UIControlStateNormal];
-        one.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:24.0];
-        [one setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [one setContentEdgeInsets:UIEdgeInsetsMake(3, 0, 0, 0)];
-        [one sizeToFit];
-        [one addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
-        UIBarButtonItem *barButtonItemOne = [[UIBarButtonItem alloc] initWithCustomView: one];
-        [barButtonItemOne setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor grayColor]} forState:UIControlStateNormal];
-        
-        UIButton *two = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [two setTitle:kTwo forState:UIControlStateNormal];
-        two.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:24.0];
-        [two setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [two setContentEdgeInsets:UIEdgeInsetsMake(3, 0, 0, 0)];
-        [two sizeToFit];
-        [two addTarget:self action:@selector(noAction:) forControlEvents:UIControlEventTouchUpInside];
-        UIBarButtonItem *barButtonItemTwo = [[UIBarButtonItem alloc] initWithCustomView: two];
-        [barButtonItemTwo setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor grayColor]} forState:UIControlStateNormal];
-        
-        NSArray *navigationBarItems = @[barButtonItemFlexible, barButtonItemOne, barButtonItemFlexible, barButtonItemTwo, barButtonItemFlexible];
-        self.self.keyboardAccessoryToolBar.items = navigationBarItems;
-        
-        self.noteTextView.inputAccessoryView = self.keyboardAccessoryToolBar;
+    UIBarButtonItem *f = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    
+    UIImage *oneImageNormal = [UIImage imageNameForChangingColor:kOneImage color:kButtonNormalColor];
+    UIImage *oneImageHighlighted = [UIImage imageNameForChangingColor:kOneImage color:kButtonHighlightedColor];
+    UIButton *buttonOne = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonOne addTarget:self action:@selector(kOneAction:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonOne setImage:oneImageNormal forState:UIControlStateNormal];
+    [buttonOne setImage:oneImageHighlighted forState:UIControlStateSelected];
+    [buttonOne setImage:oneImageHighlighted forState:UIControlStateHighlighted];
+    buttonOne.frame = CGRectMake(0 ,0, 24, 24);
+    UIBarButtonItem *barButtonItemOne = [[UIBarButtonItem alloc] initWithCustomView:buttonOne];
+    
+    
+    UIImage *twoImageNormal = [UIImage imageNameForChangingColor:kTwoImage color:kButtonNormalColor];
+    UIImage *twoImageHighlighted = [UIImage imageNameForChangingColor:kTwoImage color:kButtonHighlightedColor];
+    UIButton *buttonTwo = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonTwo addTarget:self action:@selector(kTwoAction:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonTwo setImage:twoImageNormal forState:UIControlStateNormal];
+    [buttonTwo setImage:twoImageHighlighted forState:UIControlStateSelected];
+    [buttonTwo setImage:twoImageHighlighted forState:UIControlStateHighlighted];
+    buttonTwo.frame = CGRectMake(0 ,0, 24, 24);
+    UIBarButtonItem *barButtonItemTwo = [[UIBarButtonItem alloc] initWithCustomView:buttonTwo];
+
+    
+    UIButton *buttonThree = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [buttonThree setTitle:kThree forState:UIControlStateNormal];
+    buttonThree.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:30.0];
+    [buttonThree setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+    [buttonThree setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
+    [buttonThree sizeToFit];
+    [buttonThree addTarget:self action:@selector(kThreeAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barButtonItemThree = [[UIBarButtonItem alloc] initWithCustomView: buttonThree];
+    
+    
+    NSArray *navigationBarItems = @[f, barButtonItemOne, f, barButtonItemThree, f, barButtonItemTwo, f];
+    self.self.keyboardAccessoryToolBar.items = navigationBarItems;
+    
+    self.noteTextView.inputAccessoryView = self.keyboardAccessoryToolBar;
+}
+
+
+#pragma mark 키보드 액세서리 뷰 액션 메소드
+
+#pragma mark previousCharacterButtonPressed
+
+- (void)previousCharacterButtonPressed:(id)sender
+{
+    UITextRange *selectedRange = [self.noteTextView selectedTextRange];
+    
+    if (self.noteTextView.selectedRange.location > 0)
+    {
+        UITextPosition *newPosition = [self.noteTextView positionFromPosition:selectedRange.start offset:-1];
+        UITextRange *newRange = [self.noteTextView textRangeFromPosition:newPosition toPosition:newPosition];
+        [self.noteTextView setSelectedTextRange:newRange];
+    }
+    [self.noteTextView textViewDidChange:self.noteTextView];
+}
+
+
+#pragma mark nextCharacterButtonPressed
+
+- (void)nextCharacterButtonPressed:(id)sender
+{
+    UITextRange *selectedRange = [self.noteTextView selectedTextRange];
+    
+    if (self.noteTextView.selectedRange.location < self.noteTextView.text.length)
+    {
+        UITextPosition *newPosition = [self.noteTextView positionFromPosition:selectedRange.start offset:1];
+        UITextRange *newRange = [self.noteTextView textRangeFromPosition:newPosition toPosition:newPosition];
+        [self.noteTextView setSelectedTextRange:newRange];
+    }
+    [self.noteTextView textViewDidChange:self.noteTextView];
+}
+
+
+#pragma mark hideKeyboardButtonPressed
+
+- (void)hideKeyboardButtonPressed:(id)sender
+{
+    [self.noteTextView resignFirstResponder];
 }
 
 
