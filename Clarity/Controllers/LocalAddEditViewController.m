@@ -517,13 +517,7 @@
     }
     self.currentNote.noteModifiedDate = now;
     
-    self.currentNote.hasImage = [NSNumber numberWithBool:NO];
-    self.currentNote.hasNoteAnnotate = [NSNumber numberWithBool:NO];
     self.currentNote.hasNoteStar = [NSNumber numberWithBool:_didSelectStar];
-    self.currentNote.isLocalNote = [NSNumber numberWithBool:YES];
-    self.currentNote.isDropboxNote = [NSNumber numberWithBool:NO];
-    self.currentNote.isiCloudNote = [NSNumber numberWithBool:NO];
-    self.currentNote.isOtherCloudNote = [NSNumber numberWithBool:NO];
     
     NSString *newline = @"\n\n";
     NSString *concatenateString = [NSString stringWithFormat:@"%@%@%@%@%@", self.noteTitleLabel.text, newline, self.noteTextView.text, newline, _didSelectStar ? @"YES" : @"NO"];
