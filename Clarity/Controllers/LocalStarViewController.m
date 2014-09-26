@@ -344,19 +344,12 @@
 {
     LocalAddEditViewController *controller = (LocalAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LocalAddEditViewController"];
     
-    controller.isNewNote = NO;
-    controller.isDropboxNote = NO;
-    controller.isLocalNote = YES;
-    controller.isiCloudNote = NO;
-    controller.isOtherCloudNote = NO;
-    
     if (tableView == self.searchDisplayController.searchResultsTableView) 
     {
         NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
         self.selectedNote = (Note *)[self.searchResultNotes objectAtIndex:indexPath.row];
         
         controller.currentNote = self.selectedNote;
-        controller.isSearchResultNote = YES;
         
         [self.searchDisplayController.searchBar setText:self.searchDisplayController.searchBar.text];
         [self.searchDisplayController.searchBar resignFirstResponder];
@@ -373,7 +366,6 @@
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.currentNote = self.selectedNote;
-        controller.isSearchResultNote = NO;
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }

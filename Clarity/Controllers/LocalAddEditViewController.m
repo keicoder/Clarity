@@ -95,8 +95,8 @@
     } else {
         [self addKeyboardAccessoryToolBar];
     }
-//    [self showNotePropertiesValue];
-//    [self showNoteDataToLogConsole];
+    
+    [self showNoteDataToLogConsole];
 }
 
 
@@ -148,7 +148,7 @@
 
 - (void)checkNewNote
 {
-    if (self.isNewNote == YES) {
+    if ([self.currentNote.isNewNote boolValue] == YES) {
         [self.noteTextView becomeFirstResponder];
     } else {
         [self.noteTextView becomeFirstResponder];
@@ -464,8 +464,8 @@
 
 - (void)autoSave
 {
-    if (self.isNewNote == YES) {
-        self.isNewNote = NO;
+    if ([self.currentNote.isNewNote boolValue] == YES) {
+        self.currentNote.isNewNote = [NSNumber numberWithBool:NO];
         [self saveMethodInvoked];
     } else {
         NSString *newline = @"\n\n";
@@ -520,7 +520,6 @@
     self.currentNote.hasImage = [NSNumber numberWithBool:NO];
     self.currentNote.hasNoteAnnotate = [NSNumber numberWithBool:NO];
     self.currentNote.hasNoteStar = [NSNumber numberWithBool:_didSelectStar];
-    self.currentNote.isNewNote = [NSNumber numberWithBool:NO];
     self.currentNote.isLocalNote = [NSNumber numberWithBool:YES];
     self.currentNote.isDropboxNote = [NSNumber numberWithBool:NO];
     self.currentNote.isiCloudNote = [NSNumber numberWithBool:NO];
@@ -551,7 +550,7 @@
 - (void)barButtonItemMarkdownPressed:(id)sender
 {
     MarkdownWebViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"MarkdownWebViewController"];
-    [self updateNoteDataWithCurrentState];
+    self.currentNote.noteBody = self.noteTextView.text;
     controller.currentNote = self.currentNote;
     [self.navigationController pushViewController:controller animated:YES];
 }
@@ -736,7 +735,7 @@
     if ([[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == YES) {
         
     }
-    else if (self.isNewNote == YES && [[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == NO)
+    else if ([self.currentNote.isNewNote boolValue] == YES && [[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == NO)
     {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kDIDSHOW_NOTEVIEW_HELP];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -1301,15 +1300,14 @@
     NSLog (@"NSNumber > imageUniqueId: %@\n", self.currentNote.imageUniqueId);
     NSLog (@"NSNumber > position: %@\n", self.currentNote.position);
     
-    kLOGBOOL(self.isSearchResultNote);
-    kLOGBOOL(self.currentNote.isNewNote);
-    kLOGBOOL(self.currentNote.isDropboxNote);
-    kLOGBOOL(self.currentNote.isLocalNote);
-    kLOGBOOL(self.currentNote.isiCloudNote);
-    kLOGBOOL(self.currentNote.isOtherCloudNote);
-    kLOGBOOL(self.currentNote.hasImage);
-    kLOGBOOL(self.currentNote.hasNoteStar);
-    kLOGBOOL(self.currentNote.hasNoteAnnotate);
+    kLOGBOOL([self.currentNote.isNewNote boolValue]);
+    kLOGBOOL([self.currentNote.isLocalNote boolValue]);
+    kLOGBOOL([self.currentNote.isDropboxNote boolValue]);
+    kLOGBOOL([self.currentNote.isiCloudNote boolValue]);
+    kLOGBOOL([self.currentNote.isOtherCloudNote boolValue]);
+    kLOGBOOL([self.currentNote.hasImage boolValue]);
+    kLOGBOOL([self.currentNote.hasNoteStar boolValue]);
+    kLOGBOOL([self.currentNote.hasNoteAnnotate boolValue]);
     
     NSLog (@"NSString > imageName: %@\n", self.currentNote.imageName);
     NSLog (@"NSString > location: %@\n", self.currentNote.location);
@@ -1328,21 +1326,6 @@
     NSLog (@"NSString > noteBody: %@\n", self.currentNote.noteBody);
     NSLog (@"NSString > noteAll: %@\n", self.currentNote.noteAll);
     NSLog (@"\n");
-}
-
-
-#pragma mark - 노트 프로퍼티 밸류 로그 콘솔에 보여주기
-
-- (void)showNotePropertiesValue
-{
-    NSLog (@"\n***showNotePropertiesValue***\n");
-    kLOGBOOL(self.isSearchResultNote);
-    kLOGBOOL(self.isNewNote);
-    kLOGBOOL(self.isDropboxNote);
-    kLOGBOOL(self.isLocalNote);
-    kLOGBOOL(self.isiCloudNote);
-    kLOGBOOL(self.isOtherCloudNote);
-    NSLog (@"NSString > uniqueNoteIDString: %@\n", self.uniqueNoteIDString);
 }
 
 

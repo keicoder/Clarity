@@ -370,18 +370,11 @@
 {
     LocalAddEditViewController *controller = (LocalAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LocalAddEditViewController"];
     
-    controller.isNewNote = NO;
-    controller.isDropboxNote = NO;
-    controller.isLocalNote = YES;
-    controller.isiCloudNote = NO;
-    controller.isOtherCloudNote = NO;
-    
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
         self.selectedNote = (Note *)[self.searchResultNotes objectAtIndex:indexPath.row];
         
         controller.currentNote = self.selectedNote;
-        controller.isSearchResultNote = YES;
         
         [self.searchDisplayController.searchBar setText:self.searchDisplayController.searchBar.text];
         [self.searchDisplayController.searchBar resignFirstResponder];
@@ -398,7 +391,6 @@
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.currentNote = self.selectedNote;
-        controller.isSearchResultNote = NO;
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
@@ -433,19 +425,21 @@
     NSString *uniqueNoteIDString = [NSString stringWithFormat:@"%lli", arc4random() % 999999999999999999];
     note.uniqueNoteIDString = uniqueNoteIDString;
     
+    note.isNewNote = [NSNumber numberWithBool:YES];
+    note.isLocalNote = [NSNumber numberWithBool:YES];
+    note.isDropboxNote = [NSNumber numberWithBool:NO];
+    note.isiCloudNote = [NSNumber numberWithBool:NO];
+    note.isOtherCloudNote = [NSNumber numberWithBool:NO];
+    note.hasImage = [NSNumber numberWithBool:NO];
+    note.hasNoteStar = [NSNumber numberWithBool:NO];
+    note.hasNoteAnnotate = [NSNumber numberWithBool:NO];
+    
     LocalAddEditViewController *controller = (LocalAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LocalAddEditViewController"];
     [controller note:note inManagedObjectContext:managedObjectContext];
     
     [self formatter];
     [self buildTitleString];
     
-    controller.isSearchResultNote = NO;
-    controller.isNewNote = YES;
-    controller.isDropboxNote = NO;
-    controller.isLocalNote = YES;
-    controller.isiCloudNote = NO;
-    controller.isOtherCloudNote = NO;
-    controller.uniqueNoteIDString = uniqueNoteIDString;
     controller.currentNote.noteTitle = _titleString;
     
     if (iPad) {
@@ -1122,12 +1116,6 @@
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.currentNote = self.selectedNote;
-        controller.isSearchResultNote = NO;
-        controller.isNewNote = NO;
-        controller.isDropboxNote = NO;
-        controller.isLocalNote = YES;
-        controller.isiCloudNote = NO;
-        controller.isOtherCloudNote = NO;
         
         if (iPad) {
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];

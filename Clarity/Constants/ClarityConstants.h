@@ -20,7 +20,8 @@ extern NSString * const kIS_FIRST_TIME;
 
 
 #define debug 1
-#define kLOGBOOL(BOOL) NSLog(@"%s: %@",#BOOL, BOOL ? @"YES" : @"NO" )   //사용법: BOOL success = NO;,
+#define kLOGBOOL(BOOL) NSLog(@"%s: %@",#BOOL, BOOL ? @"YES" : @"NO" )   
+//사용법: BOOL success = NO;,
 //kLOGBOOL(success);, Prints out 'success: NO' to the console
 
 
