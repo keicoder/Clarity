@@ -439,7 +439,6 @@
     
     [self formatter];
     [self buildTitleString];
-    
     controller.currentNote.noteTitle = _titleString;
     
     if (iPad) {
