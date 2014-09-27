@@ -13,17 +13,7 @@
 @interface DropboxAddEditViewController : UIViewController
 
 @property (strong, nonatomic) Note *currentNote;
-@property (nonatomic, strong) UIToolbar *keyboardAccessoryToolBar;
 
 - (void)note:(Note *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-- (void)addKeyboardAccessoryToolBar;
-- (void)previousCharacterButtonPressed:(id)sender;
-- (void)nextCharacterButtonPressed:(id)sender;
-- (void)hideKeyboardButtonPressed:(id)sender;
-- (void)hashButtonPressed:(id)sender;
-- (void)asteriskButtonPressed:(id)sender;
-- (void)tabButtonPressed:(id)sender;
-- (void)selectWordButonPressed:(id)sender;
-
 
 @end
