@@ -404,9 +404,12 @@
 {
     UIImage *image = [UIImage imageNamed:@"collapse-black-256"];
     UIImage *imageThumb = [image makeThumbnailOfSize:CGSizeMake(24, 24)];
-    
     self.buttonForFullscreen = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.buttonForFullscreen.frame = CGRectMake(0, -44, 44, 44);
+    if (iPad) {
+        self.buttonForFullscreen.frame = CGRectMake(0, -44, 44, 44);
+    } else {
+        self.buttonForFullscreen.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, -44, 44, 44);
+    }
     [self.buttonForFullscreen setImage:imageThumb forState:UIControlStateNormal];
     self.buttonForFullscreen.tintColor = [UIColor colorWithRed:0.094 green:0.071 blue:0.188 alpha:1];
     [self.view addSubview:self.buttonForFullscreen];
@@ -419,7 +422,11 @@
 {
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         self.buttonForFullscreen.frame = CGRectMake(0, 0, 44, 44);
+                         if (iPad) {
+                             self.buttonForFullscreen.frame = CGRectMake(0, 0, 44, 44);
+                         } else {
+                             self.buttonForFullscreen.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, 0, 44, 44);
+                         }
                          self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.5, 1.5);
                          self.buttonForFullscreen.alpha = 0.5;}
                      completion:^(BOOL finished) {
@@ -437,7 +444,11 @@
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         self.buttonForFullscreen.frame = CGRectMake(0, -44, 44, 44);
+                         if (iPad) {
+                             self.buttonForFullscreen.frame = CGRectMake(0, -44, 44, 44);
+                         } else {
+                             self.buttonForFullscreen.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, -44, 44, 44);
+                         }
                          self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.5, 1.5);
                          self.buttonForFullscreen.alpha = 0.6;}
                      completion:^(BOOL finished) {
@@ -1386,17 +1397,21 @@
 
 #pragma mark - 키보드 액세서리 뷰
 
-- (void)addKeyboardAccessoryToolBar
-{
-    //키보드 인풋 액세서리 뷰
+- (void)addKeyboardAccessoryToolBar {
+    
 #define kToolBarHeight_iPhone   44.0
 #define kToolBarHeight_iPad     60.0
 #define kInset_iPhone           10.0
 #define kInset_iPad             18.0
 #define kFontSize_iPhone        30.0
 #define kFontSize_iPad          30.0
+#define kFontSize_Small_iPhone  24.0
+#define kFontSize_Small_iPad    24.0
+#define kFontSize_Large_iPhone  38.0
+#define kFontSize_Large_iPad    38.0
 #define kFontInset_iPhone       4.0
 #define kFontInset_iPad         4.0
+#define kButtonBackgroundColor  [UIColor clearColor] //[UIColor colorWithRed:0.153 green:0.520 blue:1.000 alpha:0.500]
 #define kButtonNormalColor      [UIColor grayColor]
 #define kButtonHighlightedColor [UIColor redColor]
 #define kTextNormalColor        [UIColor darkGrayColor]
@@ -1406,6 +1421,16 @@
 #define kTwoAction              nextCharacterButtonPressed
 #define kThree                  @"▼"
 #define kThreeAction            hideKeyboardButtonPressed
+#define kFour                   @"#"
+#define kFourAction             hashButtonPressed
+#define kFive                   @"*"
+#define kFiveAction             asteriskButtonPressed
+#define kFiveFontInset_iPhone   16.0
+#define kFiveFontInset_iPad     16.0
+#define kSix                    @"⍈"
+#define kSixAction              tabButtonPressed
+#define kSeven                  @"{}"
+#define kSevenAction            selectWordButonPressed
     
     if (iPad) {
         self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, kToolBarHeight_iPad)];
@@ -1431,6 +1456,7 @@
         [buttonOne setImageEdgeInsets:UIEdgeInsetsMake(kInset_iPhone, kInset_iPhone, kInset_iPhone, kInset_iPhone)];
     }
     UIBarButtonItem *barButtonItemOne = [[UIBarButtonItem alloc] initWithCustomView:buttonOne];
+    buttonOne.backgroundColor = kButtonBackgroundColor;
     
     
     UIImage *twoImageNormal = [UIImage imageNameForChangingColor:kTwoImage color:kButtonNormalColor];
@@ -1448,7 +1474,8 @@
         [buttonTwo setImageEdgeInsets:UIEdgeInsetsMake(kInset_iPhone, kInset_iPhone, kInset_iPhone, kInset_iPhone)];
     }
     UIBarButtonItem *barButtonItemTwo = [[UIBarButtonItem alloc] initWithCustomView:buttonTwo];
-
+    buttonTwo.backgroundColor = kButtonBackgroundColor;
+    
     
     UIButton *buttonThree = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [buttonThree setTitle:kThree forState:UIControlStateNormal];
@@ -1464,9 +1491,79 @@
     }
     [buttonThree addTarget:self action:@selector(kThreeAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *barButtonItemThree = [[UIBarButtonItem alloc] initWithCustomView: buttonThree];
+    buttonThree.backgroundColor = kButtonBackgroundColor;
+    //[buttonThree sizeToFit];
     
     
-    NSArray *navigationBarItems = @[f, barButtonItemOne, f, barButtonItemThree, f, barButtonItemTwo, f];
+    UIButton *buttonFour = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [buttonFour setTitle:kFour forState:UIControlStateNormal];
+    [buttonFour setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+    if (iPad) {
+        buttonFour.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_Small_iPad];
+        [buttonFour setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
+        buttonFour.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
+    } else {
+        buttonFour.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_Small_iPhone];
+        [buttonFour setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
+        buttonFour.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPhone);
+    }
+    [buttonFour addTarget:self action:@selector(kFourAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barButtonItemFour = [[UIBarButtonItem alloc] initWithCustomView: buttonFour];
+    buttonFour.backgroundColor = kButtonBackgroundColor;
+    
+    
+    UIButton *buttonFive = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [buttonFive setTitle:kFive forState:UIControlStateNormal];
+    [buttonFive setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+    if (iPad) {
+        buttonFive.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_Large_iPad];
+        [buttonFive setContentEdgeInsets:UIEdgeInsetsMake(kFiveFontInset_iPad, 0, 0, 0)];
+        buttonFive.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
+    } else {
+        buttonFive.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_Large_iPhone];
+        [buttonFive setContentEdgeInsets:UIEdgeInsetsMake(kFiveFontInset_iPhone, 0, 0, 0)];
+        buttonFive.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPhone);
+    }
+    [buttonFive addTarget:self action:@selector(kFiveAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barButtonItemFive = [[UIBarButtonItem alloc] initWithCustomView: buttonFive];
+    buttonFive.backgroundColor = kButtonBackgroundColor;
+    
+    
+    UIButton *buttonSix = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [buttonSix setTitle:kSix forState:UIControlStateNormal];
+    [buttonSix setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+    if (iPad) {
+        buttonSix.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_iPad];
+        [buttonSix setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
+        buttonSix.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
+    } else {
+        buttonSix.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_iPhone];
+        [buttonSix setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
+        buttonSix.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPhone);
+    }
+    [buttonSix addTarget:self action:@selector(kSixAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barButtonItemSix = [[UIBarButtonItem alloc] initWithCustomView: buttonSix];
+    buttonSix.backgroundColor = kButtonBackgroundColor;
+    
+    
+    UIButton *buttonSeven = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [buttonSeven setTitle:kSeven forState:UIControlStateNormal];
+    [buttonSeven setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+    if (iPad) {
+        buttonSeven.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_Small_iPad];
+        [buttonSeven setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+        buttonSeven.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
+    } else {
+        buttonSeven.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_Small_iPhone];
+        [buttonSeven setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+        buttonSeven.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPhone);
+    }
+    [buttonSeven addTarget:self action:@selector(kSevenAction:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barButtonItemSeven = [[UIBarButtonItem alloc] initWithCustomView: buttonSeven];
+    buttonSeven.backgroundColor = kButtonBackgroundColor;
+    
+    
+    NSArray *navigationBarItems = @[f, barButtonItemOne, f,  barButtonItemFour, f, barButtonItemFive, f, barButtonItemThree, f, barButtonItemSix, f, barButtonItemSeven, f, barButtonItemTwo, f];
     self.self.keyboardAccessoryToolBar.items = navigationBarItems;
     
     self.noteTextView.inputAccessoryView = self.keyboardAccessoryToolBar;
@@ -1512,6 +1609,99 @@
 - (void)hideKeyboardButtonPressed:(id)sender
 {
     [self.noteTextView resignFirstResponder];
+}
+
+
+#pragma mark hashButtonPressed
+
+- (void)hashButtonPressed:(id)sender
+{
+    NSRange range = self.noteTextView.selectedRange;
+    
+    NSString *firstHalfString = [self.noteTextView.text substringToIndex:range.location];
+    NSString *insertingString = @"#";
+    NSString *secondHalfString = [self.noteTextView.text substringFromIndex:range.location+range.length];
+    
+    self.noteTextView.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
+    
+    range.location += insertingString.length;
+    range.length = 0;
+    self.noteTextView.selectedRange = range;
+    
+    [self.noteTextView textViewDidChange:self.noteTextView];
+}
+
+
+#pragma mark asteriskButtonPressed
+
+- (void)asteriskButtonPressed:(id)sender
+{
+    NSRange range = self.noteTextView.selectedRange;
+    
+    NSString *firstHalfString = [self.noteTextView.text substringToIndex:range.location];
+    NSString *insertingString = @"*";
+    NSString *secondHalfString = [self.noteTextView.text substringFromIndex:range.location+range.length];
+    
+    self.noteTextView.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
+    
+    range.location += insertingString.length;
+    range.length = 0;
+    self.noteTextView.selectedRange = range;
+    
+    [self.noteTextView textViewDidChange:self.noteTextView];
+}
+
+
+#pragma mark tabButtonPressed
+
+- (void)tabButtonPressed:(id)sender
+{
+    NSRange range = self.noteTextView.selectedRange;
+    
+    NSString *firstHalfString = [self.noteTextView.text substringToIndex:range.location];
+    NSString *insertingString = @"\t";
+    NSString *secondHalfString = [self.noteTextView.text substringFromIndex:range.location+range.length];
+    
+    self.noteTextView.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
+    
+    range.location += insertingString.length;
+    range.length = 0;
+    self.noteTextView.selectedRange = range;
+    
+    [self.noteTextView textViewDidChange:self.noteTextView];
+}
+
+
+#pragma mark selectWordButonPressed
+
+- (void)selectWordButonPressed:(id)sender
+{
+    NSRange selectedRange = self.noteTextView.selectedRange;
+    
+    if (![self.noteTextView hasText])
+    {
+        [self.noteTextView select:self];
+    }
+    else if ([self.noteTextView hasText] && selectedRange.length == 0)
+    {
+        [self.noteTextView select:self];
+    }
+    else if ([self.noteTextView hasText] && selectedRange.length > 0)
+    {
+        selectedRange.location = selectedRange.location + selectedRange.length;
+        selectedRange.length = 0;
+        self.noteTextView.selectedRange = selectedRange;
+    }
+    //[self cursorPosition];
+}
+
+
+#pragma mark cursorPosition
+
+- (CGPoint)cursorPosition;
+{
+    CGPoint cursorPosition = [self.noteTextView caretRectForPosition:self.noteTextView.selectedTextRange.start].origin;
+    return cursorPosition;
 }
 
 
