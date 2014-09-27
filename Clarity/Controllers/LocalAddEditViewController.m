@@ -26,6 +26,7 @@
 #import "UIImage+ResizeMagick.h"
 #import "JGActionSheet.h"
 #import "BlankViewController.h"
+#import "DropboxAddEditViewController.h"    //키보드 액션 메소드 호출
 
 
 @interface LocalAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate>
@@ -93,7 +94,10 @@
     if (self.keyboardAccessoryToolBar != nil) {
         self.noteTextView.inputAccessoryView = self.keyboardAccessoryToolBar;
     } else {
-        [self addKeyboardAccessoryToolBar];
+        DropboxAddEditViewController *controller;
+        self.keyboardAccessoryToolBar = controller.keyboardAccessoryToolBar;
+        [controller addKeyboardAccessoryToolBar];
+        
     }
     
     [self showNoteDataToLogConsole];

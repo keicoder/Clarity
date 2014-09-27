@@ -40,7 +40,7 @@
 @property (nonatomic, strong) UIButton *buttonForFullscreen;
 @property (nonatomic, strong) UIImage *starImage;
 @property (nonatomic, strong) NDHTMLtoPDF *pdfCreator;
-@property (nonatomic, strong) UIToolbar *keyboardAccessoryToolBar;
+
 
 @end
 
@@ -95,8 +95,6 @@
     } else {
         [self addKeyboardAccessoryToolBar];
     }
-    
-//    [self showNoteDataToLogConsole];
 }
 
 
