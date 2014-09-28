@@ -19,64 +19,12 @@
 @property (nonatomic, strong) UIBarButtonItem *actionBarButtonItem;
 
 @property (nonatomic, strong) UIWebView *webView;
-@property (nonatomic, strong) NSURL *URL;
-
-- (id)initWithAddress:(NSString*)urlString;
-- (id)initWithURL:(NSURL*)URL;
-- (void)loadURL:(NSURL*)URL;
-
-- (void)updateToolbarItems;
-
-- (void)goBackClicked:(UIBarButtonItem *)sender;
-- (void)goForwardClicked:(UIBarButtonItem *)sender;
-- (void)reloadClicked:(UIBarButtonItem *)sender;
-- (void)stopClicked:(UIBarButtonItem *)sender;
-- (void)actionButtonClicked:(UIBarButtonItem *)sender;
+@property (nonatomic, strong) NSURLRequest *request;
 
 @end
 
 
 @implementation SVWebViewController
-
-
-#pragma mark - 상태바, 내비게이션바 컨트롤
-
-- (void)hideNavigationBar
-{
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-
-
-- (void)showNavigationBar
-{
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-}
-
-
-- (void)hideStatusBar
-{
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-}
-
-
-- (void)showStatusBar
-{
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-}
-
-
-
-#pragma mark - 상태바, 내비게이션 바 등 스타일
-
-- (void)styleUI //사용안함
-{
-//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];         //상태 바 속성
-//    //self.navigationController.navigationBar.topItem.title = @"";                         //내비게이션 바 타이틀
-//    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:0.133 green:0.102 blue:0.192 alpha:1];
-//    [[UINavigationBar appearance] setTintColor:kWHITE_COLOR];
-//    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:kWHITE_COLOR}];
-}
-
 
 #pragma mark - Initialization
 
@@ -86,33 +34,35 @@
     self.webView.delegate = nil;
 }
 
-- (id)initWithAddress:(NSString *)urlString {
+- (instancetype)initWithAddress:(NSString *)urlString {
     return [self initWithURL:[NSURL URLWithString:urlString]];
 }
 
-- (id)initWithURL:(NSURL*)pageURL {
-    
-    if(self = [super init]) {
-        self.URL = pageURL;
+- (instancetype)initWithURL:(NSURL*)pageURL {
+    return [self initWithURLRequest:[NSURLRequest requestWithURL:pageURL]];
+}
+
+- (instancetype)initWithURLRequest:(NSURLRequest*)request {
+    self = [super init];
+    if (self) {
+        self.request = request;
     }
-    
     return self;
 }
 
-- (void)loadURL:(NSURL *)pageURL {
-    [self.webView loadRequest:[NSURLRequest requestWithURL:pageURL]];
+- (void)loadRequest:(NSURLRequest*)request {
+    [self.webView loadRequest:request];
 }
 
 #pragma mark - View lifecycle
 
 - (void)loadView {
     self.view = self.webView;
-    [self loadURL:self.URL];
+    [self loadRequest:self.request];
 }
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-    //[self styleUI];
     [self updateToolbarItems];
 }
 
@@ -126,30 +76,21 @@
     _actionBarButtonItem = nil;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
+- (void)viewWillAppear:(BOOL)animated {
     NSAssert(self.navigationController, @"SVWebViewController needs to be contained in a UINavigationController. If you are presenting SVWebViewController modally, use SVModalWebViewController instead.");
-    [self showStatusBar];
-    [self showNavigationBar];
     
-//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-//    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:0.981 green:0.981 blue:0.981 alpha:1];
-//    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:0.231 green:0.271 blue:0.314 alpha:1];
-//    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor colorWithRed:0.231 green:0.271 blue:0.314 alpha:1]};
-
+	[super viewWillAppear:animated];
+	
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         [self.navigationController setToolbarHidden:NO animated:animated];
+    }
+    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [self.navigationController setToolbarHidden:YES animated:animated];
     }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-//    [self hideNavigationBar];
-//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-//    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:0.133 green:0.102 blue:0.192 alpha:1];
-//    self.navigationController.navigationBar.tintColor = kWHITE_COLOR;
-//    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : kWHITE_COLOR};
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         [self.navigationController setToolbarHidden:YES animated:animated];
@@ -184,7 +125,7 @@
         _backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SVWebViewController.bundle/SVWebViewControllerBack"]
                                                               style:UIBarButtonItemStylePlain
                                                              target:self
-                                                             action:@selector(goBackClicked:)];
+                                                             action:@selector(goBackTapped:)];
 		_backBarButtonItem.width = 18.0f;
     }
     return _backBarButtonItem;
@@ -195,7 +136,7 @@
         _forwardBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SVWebViewController.bundle/SVWebViewControllerNext"]
                                                                  style:UIBarButtonItemStylePlain
                                                                 target:self
-                                                                action:@selector(goForwardClicked:)];
+                                                                action:@selector(goForwardTapped:)];
 		_forwardBarButtonItem.width = 18.0f;
     }
     return _forwardBarButtonItem;
@@ -203,21 +144,21 @@
 
 - (UIBarButtonItem *)refreshBarButtonItem {
     if (!_refreshBarButtonItem) {
-        _refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadClicked:)];
+        _refreshBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadTapped:)];
     }
     return _refreshBarButtonItem;
 }
 
 - (UIBarButtonItem *)stopBarButtonItem {
     if (!_stopBarButtonItem) {
-        _stopBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(stopClicked:)];
+        _stopBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(stopTapped:)];
     }
     return _stopBarButtonItem;
 }
 
 - (UIBarButtonItem *)actionBarButtonItem {
     if (!_actionBarButtonItem) {
-        _actionBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
+        _actionBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonTapped:)];
     }
     return _actionBarButtonItem;
 }
@@ -227,7 +168,6 @@
 - (void)updateToolbarItems {
     self.backBarButtonItem.enabled = self.self.webView.canGoBack;
     self.forwardBarButtonItem.enabled = self.self.webView.canGoForward;
-    self.actionBarButtonItem.enabled = !self.self.webView.isLoading;
     
     UIBarButtonItem *refreshStopBarButtonItem = self.self.webView.isLoading ? self.stopBarButtonItem : self.refreshBarButtonItem;
     
@@ -286,7 +226,10 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     
-    self.navigationItem.title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    if (self.navigationItem.title == nil) {
+        self.navigationItem.title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    }
+    
     [self updateToolbarItems];
 }
 
@@ -297,31 +240,39 @@
 
 #pragma mark - Target actions
 
-- (void)goBackClicked:(UIBarButtonItem *)sender {
+- (void)goBackTapped:(UIBarButtonItem *)sender {
     [self.webView goBack];
 }
 
-- (void)goForwardClicked:(UIBarButtonItem *)sender {
+- (void)goForwardTapped:(UIBarButtonItem *)sender {
     [self.webView goForward];
 }
 
-- (void)reloadClicked:(UIBarButtonItem *)sender {
+- (void)reloadTapped:(UIBarButtonItem *)sender {
     [self.webView reload];
 }
 
-- (void)stopClicked:(UIBarButtonItem *)sender {
+- (void)stopTapped:(UIBarButtonItem *)sender {
     [self.webView stopLoading];
 	[self updateToolbarItems];
 }
 
-- (void)actionButtonClicked:(id)sender {
-    NSArray *activities = @[[SVWebViewControllerActivitySafari new], [SVWebViewControllerActivityChrome new]];
-    NSURL *url = self.webView.request.URL ? self.webView.request.URL : self.URL;
-    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:activities];
-    [self presentViewController:activityController animated:YES completion:nil];
+- (void)actionButtonTapped:(id)sender {
+    NSURL *url = self.webView.request.URL ? self.webView.request.URL : self.request.URL;
+    if (url != nil) {
+        NSArray *activities = @[[SVWebViewControllerActivitySafari new], [SVWebViewControllerActivityChrome new]];
+        
+        if ([[url absoluteString] hasPrefix:@"file:///"]) {
+            UIDocumentInteractionController *dc = [UIDocumentInteractionController interactionControllerWithURL:url];
+            [dc presentOptionsMenuFromRect:self.view.bounds inView:self.view animated:YES];
+        } else {
+            UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:activities];
+            [self presentViewController:activityController animated:YES completion:nil];
+        }
+    }
 }
 
-- (void)doneButtonClicked:(id)sender {
+- (void)doneButtonTapped:(id)sùender {
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 

@@ -19,7 +19,7 @@ extern BOOL const       kHasLaunchedOnce;
 extern NSString * const kIS_FIRST_TIME;
 
 
-#define debug 1
+#define debug 0
 #define kLOGBOOL(BOOL) NSLog(@"%s: %@",#BOOL, BOOL ? @"YES" : @"NO" )   
 //사용법: BOOL success = NO;,
 //kLOGBOOL(success);, Prints out 'success: NO' to the console
@@ -39,7 +39,7 @@ extern NSString * const kIS_FIRST_TIME;
 
 
 #pragma mark - WebView
-#define kWEBVIEW_SCROLLVIEW_CONTENTINSET                    50.0
+#define kWEBVIEW_SCROLLVIEW_CONTENTINSET                    60.0
 
 
 #define kCURRENT_VIEW_IS_LOCAL                              @"currentViewIsLocal"

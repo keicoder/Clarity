@@ -48,28 +48,34 @@
 
 
 @implementation MarkdownWebViewController
-{
-    BOOL _didTapped;
-}
 
 
 #pragma mark - 뷰 life cycle
 
 - (void)viewDidLoad
 {
+    if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
     [super viewDidLoad];
+}
+
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
+    [super viewWillAppear:animated];
     self.title = @"Preview";
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self assignAttributeToMarkdownWebView];
     [self makeMarkdownString];
-    [self addTapGestureRecognizer];
     [self addNavigationBarButtonItems];
 }
 
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
     [super viewWillDisappear:animated];
+    self.title = @"";
     self.htmlString = nil;
     self.svWebViewController = nil;
     self.markdownWebView = nil;
@@ -80,14 +86,22 @@
 
 - (void)assignAttributeToMarkdownWebView
 {
-    _didTapped = NO;
     self.markdownWebView.delegate = self;
     self.markdownWebView.scrollView.delegate = self;
     self.markdownWebView.scrollView.scrollEnabled = YES;
     self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(60.0, 0, 0, 0);
-    self.markdownWebView.scrollView.maximumZoomScale = 20.0;
-    self.markdownWebView.scrollView.minimumZoomScale = 1.0;
 }
+
+
+#pragma mark - UIWebView Delegate (마크다운 웹 뷰 Finish Load)
+
+- (void)webViewDidFinishLoad:(UIWebView *)aWebView
+{
+    aWebView = self.markdownWebView;
+    aWebView.scrollView.maximumZoomScale = 20;
+    aWebView.scrollView.minimumZoomScale = 1;
+}
+
 
 #pragma mark 마크다운 스트링
 
@@ -150,53 +164,16 @@
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    if ( navigationType == UIWebViewNavigationTypeLinkClicked ) {
-        if ( _didTapped == NO) {
-            
-        } else {
-            [self showStatusBar];
-            [self showNavigationBar];
-        }
+    if ( navigationType == UIWebViewNavigationTypeLinkClicked )
+    {
         self.svWebViewController = [[SVWebViewController alloc] initWithAddress:[NSString stringWithFormat:@"%@", [request URL]]];
-        [self.navigationController pushViewController:self.svWebViewController animated:YES]; //Push
+        [self.navigationController pushViewController:self.svWebViewController animated:YES];
+        
         return NO;
     }
     return YES;
 }
 
-
-#pragma mark - 탭 제스처
-
-- (void)addTapGestureRecognizer
-{
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    tapGesture.delegate = self;
-    tapGesture.numberOfTapsRequired = 1;
-    [self.markdownWebView addGestureRecognizer:tapGesture];
-}
-
-
-- (void)handleTap:(UITapGestureRecognizer *)gesture
-{
-    if ( _didTapped == NO) {
-        _didTapped = YES;
-        [self hideStatusBar];
-        [self hideNavigationBar];
-    } else {
-        _didTapped = NO;
-        [self showStatusBar];
-        [self showNavigationBar];
-    }
-}
-
-
-#pragma mark 제스처 Recognizer 델리게이트
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch * touch = [touches anyObject];
-    self.tapPoint = [touch locationInView:self.markdownWebView];
-}
 
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
@@ -234,46 +211,6 @@
                                             animated:YES
                                           completion:nil];
                      }];
-}
-
-
-#pragma mark - 상태바, 내비게이션바 컨트롤
-
-- (void)hideNavigationBar
-{
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-
-
-- (void)showNavigationBar
-{
-    [self performSelector:@selector(showNavigationBarAfterDelay) withObject:nil afterDelay:0.1];
-}
-
-
-- (void)showNavigationBarAfterDelay
-{
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-}
-
-
-- (void)hideStatusBar
-{
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-}
-
-
-- (void)showStatusBar
-{
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-}
-
-
-#pragma mark - 메모리 경고
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
 }
 
 
