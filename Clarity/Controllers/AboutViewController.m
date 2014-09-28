@@ -28,12 +28,12 @@
 
 
 #import "AboutViewController.h"
-#import "SVWebViewController.h"
+#import "TOWebViewController.h"
 
 
 @interface AboutViewController () <UIWebViewDelegate, UIGestureRecognizerDelegate>
 
-@property (strong, nonatomic) SVWebViewController *svWebViewController;
+@property (strong, nonatomic) TOWebViewController *toWebViewController;
 
 @end
 
@@ -49,7 +49,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"About";
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self assignWebViewAttribute];
     [self loadLocalFileIntoAWebView];
@@ -60,13 +60,17 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.title = @"About";
 }
 
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
+    self.title = @"";
     [self showStatusBar];
     [self showNavigationBar];
+    self.toWebViewController = nil;
 }
 
 
@@ -98,7 +102,7 @@
 }
 
 
-#pragma mark - SV 웹 뷰
+#pragma mark - 웹 뷰
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -109,8 +113,8 @@
             [self showStatusBar];
             [self showNavigationBar];
         }
-        self.svWebViewController = [[SVWebViewController alloc] initWithAddress:[NSString stringWithFormat:@"%@", [request URL]]];
-        [self.navigationController pushViewController:self.svWebViewController animated:YES];
+        self.toWebViewController = [[TOWebViewController alloc] initWithURLString:[NSString stringWithFormat:@"%@", [request URL]]];
+        [self.navigationController pushViewController:self.toWebViewController animated:YES];
         return NO;
     }
     return YES;
@@ -123,7 +127,7 @@
 {
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     tapGesture.delegate = self;
-    tapGesture.numberOfTapsRequired = 1;
+    tapGesture.numberOfTapsRequired = 2;
     [self.webView addGestureRecognizer:tapGesture];
 }
 

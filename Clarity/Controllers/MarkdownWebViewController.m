@@ -30,16 +30,15 @@
 
 #import "MarkdownWebViewController.h"
 #import "MMMarkdown.h"
-#import "SVModalWebViewController.h"
-#import "SVWebViewController.h"
 #import "Note.h"
 #import "UIImage+MakeThumbnail.h"
+#import "TOWebViewController.h"
 
 
 @interface MarkdownWebViewController () <UIWebViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (strong, nonatomic) SVWebViewController *svWebViewController;
+@property (strong, nonatomic) TOWebViewController *toWebViewController;
 @property (weak, nonatomic) IBOutlet UIWebView *markdownWebView;
 @property (strong, nonatomic) NSMutableString *htmlString;
 @property (assign) CGPoint tapPoint;
@@ -77,7 +76,7 @@
     [super viewWillDisappear:animated];
     self.title = @"";
     self.htmlString = nil;
-    self.svWebViewController = nil;
+    self.toWebViewController = nil;
     self.markdownWebView = nil;
 }
 
@@ -160,15 +159,16 @@
 }
 
 
-#pragma mark - SV 웹 뷰
+#pragma mark - 웹 뷰
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     if ( navigationType == UIWebViewNavigationTypeLinkClicked )
     {
-        self.svWebViewController = [[SVWebViewController alloc] initWithAddress:[NSString stringWithFormat:@"%@", [request URL]]];
-        [self.navigationController pushViewController:self.svWebViewController animated:YES];
-        
+        NSURL *url = nil;
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [request URL]]];
+        self.toWebViewController = [[TOWebViewController alloc] initWithURL:url];
+        [self.navigationController pushViewController:self.toWebViewController animated:YES];
         return NO;
     }
     return YES;

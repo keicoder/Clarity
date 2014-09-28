@@ -17,7 +17,7 @@
 #import "DropboxNoteListViewController.h"
 #import "LocalNoteListViewController.h"
 #import "SupportTableViewController.h"
-#import "SVWebViewController.h"
+#import "TOWebViewController.h"
 #import "UIImage+ChangeColor.h"
 #import "AppDelegate.h"                                         //AppDelegate 참조 > 내비게이션 컨트롤러
 #import "DropboxSettingsTableViewController.h"
@@ -40,7 +40,7 @@
 @property (nonatomic, strong) NSArray *fourthSectionImageArray;
 @property (nonatomic, weak) IBOutlet UILabel *versionLabel;
 
-@property (strong, nonatomic) SVWebViewController *svWebViewController;//sv 웹뷰 컨트롤러
+@property (strong, nonatomic) TOWebViewController *toWebViewController;
 
 @end
 
@@ -308,9 +308,9 @@
     }
     else if(indexPath.section == 3 && indexPath.row == 1)
     {
-        NSString *URL = @"http://lovejunsoft.com";
-        self.svWebViewController = [[SVWebViewController alloc] initWithAddress:URL];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.svWebViewController];
+        NSString *urlString = @"http://lovejunsoft.com";
+        self.toWebViewController = [[TOWebViewController alloc] initWithURLString:urlString];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.toWebViewController];
         if (iPad) {
             [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
                 //layeredNavigationItem.width = 320;
@@ -325,9 +325,9 @@
     }
     else if(indexPath.section == 3 && indexPath.row == 2)
     {
-        NSString *url = @"https://twitter.com/lovejunsoft";
-        self.svWebViewController = [[SVWebViewController alloc] initWithAddress:url];
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.svWebViewController];
+        NSString *urlString = @"https://twitter.com/lovejunsoft";
+        self.toWebViewController = [[TOWebViewController alloc] initWithURLString:urlString];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.toWebViewController];
         if (iPad) {
             [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
                 //layeredNavigationItem.width = 320;

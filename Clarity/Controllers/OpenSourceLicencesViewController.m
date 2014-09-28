@@ -28,12 +28,12 @@
 
 
 #import "OpenSourceLicencesViewController.h"
-#import "SVWebViewController.h"
+#import "TOWebViewController.h"
 
 
 @interface OpenSourceLicencesViewController () <UIWebViewDelegate, UIGestureRecognizerDelegate>
 
-@property (strong, nonatomic) SVWebViewController *svWebViewController;
+@property (strong, nonatomic) TOWebViewController *toWebViewController;
 
 @end
 
@@ -107,8 +107,8 @@
             [self showStatusBar];
             [self showNavigationBar];
         }
-        self.svWebViewController = [[SVWebViewController alloc] initWithAddress:[NSString stringWithFormat:@"%@", [request URL]]];
-        [self.navigationController pushViewController:self.svWebViewController animated:YES];
+        self.toWebViewController = [[TOWebViewController alloc] initWithURLString:[NSString stringWithFormat:@"%@", [request URL]]];
+        [self.navigationController pushViewController:self.toWebViewController animated:YES];
         return NO;
     }
     return YES;

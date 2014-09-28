@@ -15,7 +15,6 @@
 #import "WelcomePageViewController.h"
 #import "OpenSourceLicencesViewController.h"
 #import "UIImage+ChangeColor.h"
-#import "SVWebViewController.h"
 #import "FRLayeredNavigationController/FRLayeredNavigation.h"
 
 
@@ -25,7 +24,6 @@
 @property (nonatomic, weak) IBOutlet UIImageView *welcomeImageView;
 @property (nonatomic, weak) IBOutlet UIImageView *opensourceImageView;
 @property (nonatomic, weak) IBOutlet UILabel *versionLabel;
-@property (strong, nonatomic) SVWebViewController *svWebViewController;
 
 @end
 
@@ -50,10 +48,23 @@
 
 - (void)configureViewAndTableView
 {
-    self.title = @"About";
     self.view.backgroundColor = kNAVIGATIONBAR_DROPBOX_LIST_VIEW_BAR_TINT_COLOR;
     self.tableView.backgroundColor = kNAVIGATIONBAR_DROPBOX_LIST_VIEW_BAR_TINT_COLOR;
     self.tableView.separatorColor = [UIColor colorWithWhite:0.333 alpha:0.300];
+}
+
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.title = @"About";
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.title = @"";
 }
 
 

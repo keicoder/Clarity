@@ -28,12 +28,12 @@
 
 
 #import "MarkdownGuideViewController.h"
-#import "SVWebViewController.h"
+#import "TOWebViewController.h"
 
 
 @interface MarkdownGuideViewController () <UIWebViewDelegate, UIGestureRecognizerDelegate>
 
-@property (strong, nonatomic) SVWebViewController *svWebViewController;
+@property (strong, nonatomic) TOWebViewController *toWebViewController;
 
 @end
 
@@ -96,7 +96,7 @@
 }
 
 
-#pragma mark - SV 웹 뷰
+#pragma mark - 웹 뷰
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -107,8 +107,8 @@
             [self showStatusBar];
             [self showNavigationBar];
         }
-        self.svWebViewController = [[SVWebViewController alloc] initWithAddress:[NSString stringWithFormat:@"%@", [request URL]]];
-        [self.navigationController pushViewController:self.svWebViewController animated:YES];
+        self.toWebViewController = [[TOWebViewController alloc] initWithURLString:[NSString stringWithFormat:@"%@", [request URL]]];
+        [self.navigationController pushViewController:self.toWebViewController animated:YES];
         return NO;
     }
     return YES;
@@ -121,7 +121,7 @@
 {
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     tapGesture.delegate = self;
-    tapGesture.numberOfTapsRequired = 1;
+    tapGesture.numberOfTapsRequired = 2;
     [self.webView addGestureRecognizer:tapGesture];
 }
 
