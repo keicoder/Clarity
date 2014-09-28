@@ -47,7 +47,9 @@
 
 
 @implementation MarkdownWebViewController
-
+{
+    BOOL _didTapped;
+}
 
 #pragma mark - 뷰 life cycle
 
@@ -55,6 +57,8 @@
 {
     if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
     [super viewDidLoad];
+    _didTapped = NO;
+    [self addTapGestureRecognizer];
 }
 
 
@@ -163,8 +167,11 @@
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    if ( navigationType == UIWebViewNavigationTypeLinkClicked )
-    {
+    if ( navigationType == UIWebViewNavigationTypeLinkClicked ) {
+        if (self.navigationController.navigationBarHidden == YES) {
+            [self showStatusBar];
+            [self showNavigationBar];
+        }
         NSURL *url = nil;
         url = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [request URL]]];
         self.toWebViewController = [[TOWebViewController alloc] initWithURL:url];
@@ -175,10 +182,65 @@
 }
 
 
+#pragma mark - 탭 제스처
+
+- (void)addTapGestureRecognizer
+{
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    tapGesture.delegate = self;
+    tapGesture.numberOfTapsRequired = 2;
+    [self.markdownWebView addGestureRecognizer:tapGesture];
+}
+
+
+- (void)handleTap:(UITapGestureRecognizer *)gesture
+{
+    if ( _didTapped == NO)
+    {
+        _didTapped = YES;
+        [self hideStatusBar];
+        [self hideNavigationBar];
+    }
+    else
+    {
+        _didTapped = NO;
+        [self showStatusBar];
+        [self showNavigationBar];
+    }
+}
+
+
+#pragma mark 제스처 Recognizer 델리게이트
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     return YES;
+}
+
+
+#pragma mark 내비게이션 및 상태 바 컨트롤
+
+- (void)showNavigationBar
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
+
+- (void)hideNavigationBar
+{
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
+
+- (void)showStatusBar
+{
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+}
+
+
+- (void)hideStatusBar
+{
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 }
 
 

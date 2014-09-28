@@ -107,9 +107,7 @@
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     if ( navigationType == UIWebViewNavigationTypeLinkClicked ) {
-        if ( _didTapped == NO) {
-            
-        } else {
+        if (self.navigationController.navigationBarHidden == YES) {
             [self showStatusBar];
             [self showNavigationBar];
         }

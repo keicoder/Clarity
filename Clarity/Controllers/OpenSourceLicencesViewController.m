@@ -76,9 +76,9 @@
 {
     NSString *path;
     if (iPad) {
-        path = [[NSBundle mainBundle] pathForResource:@"ClarityiPad_OpenSourceLicences_iPad" ofType:@"html" inDirectory:nil];
+        path = [[NSBundle mainBundle] pathForResource:@"Clarity_OpenSourceLicences_iPad" ofType:@"html" inDirectory:nil];
     } else {
-        path = [[NSBundle mainBundle] pathForResource:@"ClarityiPad_OpenSourceLicences" ofType:@"html" inDirectory:nil];
+        path = [[NSBundle mainBundle] pathForResource:@"Clarity_OpenSourceLicences" ofType:@"html" inDirectory:nil];
     }
     NSURL *url = [NSURL fileURLWithPath:path];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -101,9 +101,7 @@
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     if ( navigationType == UIWebViewNavigationTypeLinkClicked ) {
-        if ( _didTapped == NO) {
-            
-        } else {
+        if (self.navigationController.navigationBarHidden == YES) {
             [self showStatusBar];
             [self showNavigationBar];
         }
@@ -121,7 +119,7 @@
 {
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     tapGesture.delegate = self;
-    tapGesture.numberOfTapsRequired = 1;
+    tapGesture.numberOfTapsRequired = 2;
     [self.webView addGestureRecognizer:tapGesture];
 }
 
