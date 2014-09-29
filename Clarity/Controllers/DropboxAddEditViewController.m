@@ -29,7 +29,7 @@
 #import "FCFileManager.h"
 
 
-@interface DropboxAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate>
+@interface DropboxAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) ICTextView *noteTextView;
@@ -834,7 +834,7 @@
                  self.htmlString = nil;
                  [self setDefaultBodyText];
                  [self createHTMLString];
-                 [self sendEmailWithTitle:self.noteTitleLabel.text andHtmlString:self.htmlString];
+                 [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlString:self.htmlString];
              }
                  break;
              case 2:
@@ -883,9 +883,7 @@
                  break;
              case 7:
              {
-                 [self saveMethodInvoked];
-                 [self.managedObjectContext deleteObject:self.currentNote];
-                 [self performSelector:@selector(popViewController:) withObject:nil afterDelay:0.3];
+                 [self showAlertView];
              }
                  break;
          }
@@ -908,6 +906,47 @@
 - (void)popViewController:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+#pragma mark show Alert 뷰
+
+- (void)showAlertView
+{
+    UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Delete"
+                                                     message:@"do you really want to delete this note?"
+                                                    delegate:self
+                                           cancelButtonTitle:@"Cancel"
+                                           otherButtonTitles: nil];
+    [alert addButtonWithTitle:@"YES"];
+    [alert show];
+}
+
+
+#pragma mark Alert 뷰 Delegate Method
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        //NSLog(@"You have clicked Cancel");
+    } else if(buttonIndex == 1) {
+        [self deleteNote];
+    }
+}
+
+
+#pragma mark Delete 노트
+
+- (void)deleteNote
+{
+    [self saveMethodInvoked];
+    [self.managedObjectContext deleteObject:self.currentNote];
+    if (iPad) {
+        [self.layeredNavigationController popViewControllerAnimated:YES];
+        [self showBlankView];
+    } else {
+        [self performSelector:@selector(popViewController:) withObject:nil afterDelay:0.3];
+    }
 }
 
 
@@ -973,7 +1012,7 @@
 
 #pragma mark 이메일 공유 (attach HTML file)
 
-- (void)sendEmailWithTitle:(NSString *)title andHtmlString:(NSString *)htmlString
+- (void)sendEmailWithTitle:(NSString *)title withHtmlString:(NSString *)htmlString
 {
     if (![MFMailComposeViewController canSendMail]) {
         return;
@@ -1131,7 +1170,7 @@
                     self.htmlString = nil;
                     [self setDefaultBodyText];
                     [self createHTMLString];
-                    [self sendEmailWithTitle:self.noteTitleLabel.text andHtmlString:self.htmlString];
+                    [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlString:self.htmlString];
                 }
                     break;
                 case 2:
@@ -1160,11 +1199,7 @@
                     break;
                 case 5:
                 {
-                    self.htmlString = nil;
-                    [self saveMethodInvoked];
-                    [self.managedObjectContext deleteObject:self.currentNote];
-                    [self.layeredNavigationController popViewControllerAnimated:YES];
-                    [self showBlankView];
+                    [self showAlertView];
                 }
                     break;
                 case 6:
