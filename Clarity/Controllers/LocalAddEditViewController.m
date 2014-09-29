@@ -26,9 +26,10 @@
 #import "UIImage+ResizeMagick.h"
 #import "JGActionSheet.h"
 #import "BlankViewController.h"
+#import "FCFileManager.h"
 
 
-@interface LocalAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate>
+@interface LocalAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) ICTextView *noteTextView;
@@ -809,13 +810,13 @@
     [vActionSheet setStyle];
     vActionSheet.dRound = 7;
     vActionSheet.dButtonRound = 3;
-    vActionSheet.nAnimationType = 2; //0 > Default, 2 > POP
+    vActionSheet.nAnimationType = 2; //2 > POP
     vActionSheet.doDimmedColor = [UIColor colorWithWhite:0.000 alpha:0.500];
-    vActionSheet.nDestructiveIndex = 5;
+    vActionSheet.nDestructiveIndex = 7;
     
     [vActionSheet showC:@""
                  cancel:@"Cancel"
-                buttons:@[@"Email as HTML", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"More actions as Plain Text...", @"Print Note"]
+                buttons:@[@"Email as HTML", @"Email as HTML Attachment", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"More actions as Plain Text...", @"Print Note", @"Delete Note"]
                  result:^(int nResult)
      {
          switch (nResult)
@@ -823,10 +824,7 @@
              case 0:
              {
                  self.htmlString = nil;
-                 if ([self.noteTextView.text length] == 0) {
-                     self.noteTextView.text = @"> No Contents";
-                 } else {
-                 }
+                 [self setDefaultBodyText];
                  [self createHTMLString];
                  [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];
              }
@@ -834,43 +832,39 @@
              case 1:
              {
                  self.htmlString = nil;
-                 if ([self.noteTextView.text length] == 0) {
-                     self.noteTextView.text = @"> No Contents";
-                 } else {
-                 }
+                 [self setDefaultBodyText];
                  [self createHTMLString];
-                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                 pasteboard.string = self.htmlString;
+                 [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlString:self.htmlString];
              }
                  break;
              case 2:
              {
                  self.htmlString = nil;
-                 if ([self.noteTextView.text length] == 0) {
-                     self.noteTextView.text = @"No Contents";
-                 } else {
-                 }
-                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
+                 [self setDefaultBodyText];
+                 [self createHTMLString];
+                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                 pasteboard.string = self.htmlString;
              }
                  break;
              case 3:
              {
                  self.htmlString = nil;
-                 if ([self.noteTextView.text length] == 0) {
-                     self.noteTextView.text = @"> No Contents";
-                 } else {
-                 }
-                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                 pasteboard.string = self.noteTextView.text;
+                 [self setDefaultBodyText];
+                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
              }
                  break;
              case 4:
              {
                  self.htmlString = nil;
-                 if ([self.noteTextView.text length] == 0) {
-                     self.noteTextView.text = @"> No Contents";
-                 } else {
-                 }
+                 [self setDefaultBodyText];
+                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                 pasteboard.string = self.noteTextView.text;
+             }
+                 break;
+             case 5:
+             {
+                 self.htmlString = nil;
+                 [self setDefaultBodyText];
                  NSArray *itemsToShare = @[self.noteTextView.text];
                  UIActivityViewController *activityViewController;
                  activityViewController = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
@@ -878,20 +872,82 @@
                  }];
              }
                  break;
-             case 5:
+             case 6:
              {
                  self.htmlString = nil;
-                 if ([self.noteTextView.text length] == 0) {
-                     self.noteTextView.text = @"> No Contents";
-                 } else {
-                 }
+                 [self setDefaultBodyText];
                  [self createHTMLString];
                  NSString *noteStringForPrint = self.htmlString;
                  [self printNoteAsHTML:noteStringForPrint];
              }
                  break;
+             case 7:
+             {
+                 [self showAlertView];
+             }
+                 break;
          }
      }];
+}
+
+
+#pragma mark 디폴트 바디 텍스트
+
+- (void)setDefaultBodyText
+{
+    NSString *noContents = @"*No Contents*";
+    if ([self.noteTextView.text length] == 0) {
+        self.noteTextView.text = noContents;
+    }
+}
+
+
+#pragma mark 팝 뷰 컨트롤러
+
+- (void)popViewController:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+#pragma mark show Alert 뷰
+
+- (void)showAlertView
+{
+    UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Delete"
+                                                     message:@"do you really want to delete this note?"
+                                                    delegate:self
+                                           cancelButtonTitle:@"Cancel"
+                                           otherButtonTitles: nil];
+    [alert addButtonWithTitle:@"YES"];
+    [alert show];
+}
+
+
+#pragma mark Alert 뷰 Delegate Method
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        //NSLog(@"You have clicked Cancel");
+    } else if(buttonIndex == 1) {
+        [self deleteNote];
+    }
+}
+
+
+#pragma mark Delete 노트
+
+- (void)deleteNote
+{
+    [self saveMethodInvoked];
+    [self.managedObjectContext deleteObject:self.currentNote];
+    if (iPad) {
+        [self.layeredNavigationController popViewControllerAnimated:YES];
+        [self showBlankView];
+    } else {
+        [self performSelector:@selector(popViewController:) withObject:nil afterDelay:0.3];
+    }
 }
 
 
@@ -945,7 +1001,57 @@
 }
 
 
-#pragma mark 이메일 공유 (메일 컴포즈 컨트롤러)
+#pragma mark 이메일 공유 (Mail ComposeView Modal Transition Style)
+
+- (void)setupMailComposeViewModalTransitionStyle:(MFMailComposeViewController *)mailViewController
+{
+    if (iPad) {
+        mailViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+    } else {
+        mailViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+    }
+}
+
+
+#pragma mark 이메일 공유 (attach HTML file)
+
+- (void)sendEmailWithTitle:(NSString *)title withHtmlString:(NSString *)htmlString
+{
+    if (![MFMailComposeViewController canSendMail]) {
+        return;
+    }
+    NSString *fileNameWithExtension = [NSString stringWithFormat:@"%@.html", title];
+    NSString *tempPath = [FCFileManager pathForTemporaryDirectoryWithPath:fileNameWithExtension];
+    
+    BOOL fileExists = [FCFileManager existsItemAtPath:tempPath];
+    if (fileExists) {
+        [FCFileManager removeItemAtPath:tempPath];
+    }
+    
+    [FCFileManager createFileAtPath:tempPath withContent:htmlString];
+    NSData *htmlFileData = [NSData dataWithContentsOfFile:tempPath];
+    
+    if (![MFMailComposeViewController canSendMail]) {
+        return;
+    }
+    MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+    mailViewController.mailComposeDelegate = self;
+    
+    [mailViewController setSubject:self.noteTitleLabel.text];
+    [mailViewController setMessageBody:@"" isHTML:YES];
+    NSString *mimeType = @"text/html";
+    [mailViewController addAttachmentData:htmlFileData mimeType:mimeType fileName:fileNameWithExtension];
+    
+    [self setupMailComposeViewModalTransitionStyle:mailViewController];
+    mailViewController.modalPresentationCapturesStatusBarAppearance = YES;
+    
+    [self presentViewController:mailViewController animated:YES completion:^ {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }];
+}
+
+
+#pragma mark 이메일 공유 (send HTML mail)
 
 - (void)sendEmailWithTitle:(NSString *)title andBody:(NSString *)body
 {
@@ -954,6 +1060,8 @@
     }
     
     MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+    mailViewController.mailComposeDelegate = self;
+    
     [mailViewController setSubject:title];
     
     if (self.htmlString) {
@@ -962,7 +1070,8 @@
         [mailViewController setMessageBody:body isHTML:NO];
     }
     
-    mailViewController.mailComposeDelegate = self;
+    [self setupMailComposeViewModalTransitionStyle:mailViewController];
+    mailViewController.modalPresentationCapturesStatusBarAppearance = YES;
     
     [self presentViewController:mailViewController animated:YES completion:^ {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -974,21 +1083,17 @@
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 {
-	switch (result)
-	{
-		case MFMailComposeResultCancelled:
-//			NSLog(@"mail composer cancelled");
-			break;
-		case MFMailComposeResultSaved:
-//			NSLog(@"mail composer saved");
-			break;
-		case MFMailComposeResultSent:
-//			NSLog(@"mail composer sent");
-			break;
-		case MFMailComposeResultFailed:
-//			NSLog(@"mail composer failed");
-			break;
-	}
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            break;
+        case MFMailComposeResultSaved:
+            break;
+        case MFMailComposeResultSent:
+            break;
+        case MFMailComposeResultFailed:
+            break;
+    }
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -1037,31 +1142,28 @@
 - (void)displayJGActionSheet:(UIBarButtonItem *)barButtonItem withEvent:(UIEvent *)event {
     UIView *view = [event.allTouches.anyObject view];
     
-    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as HTML", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"Delete Note", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
+    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as HTML", @"Email as HTML Attachment", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"Delete Note", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
     
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:0];
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:1];
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:2];
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:3];
-    [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:4];
+    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:4];
+    [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:5];
     
     NSArray *sections = (iPad ? @[section] : @[section, [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"Cancel"] buttonStyle:JGActionSheetButtonStyleCancel]]);
     
     JGActionSheet *sheet = [[JGActionSheet alloc] initWithSections:sections];
-    
     sheet.delegate = self;
     
-    [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath) {
-        
+    [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath)
+    {
         if (indexPath.section == 0) {
             switch (indexPath.row) {
                 case 0:
                 {
                     self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"*No Contents*";
-                    } else {
-                    }
+                    [self setDefaultBodyText];
                     [self createHTMLString];
                     [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];
                 }
@@ -1069,45 +1171,41 @@
                 case 1:
                 {
                     self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"*No Contents*";
-                    } else {
-                    }
+                    [self setDefaultBodyText];
                     [self createHTMLString];
-                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                    pasteboard.string = self.htmlString;
+                    [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlString:self.htmlString];
                 }
                     break;
                 case 2:
                 {
                     self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"*No Contents*";
-                    } else {
-                    }
-                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
+                    [self setDefaultBodyText];
+                    [self createHTMLString];
+                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                    pasteboard.string = self.htmlString;
                 }
                     break;
                 case 3:
                 {
                     self.htmlString = nil;
-                    if ([self.noteTextView.text length] == 0) {
-                        self.noteTextView.text = @"*No Contents*";
-                    } else {
-                    }
-                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                    pasteboard.string = self.noteTextView.text;
+                    [self setDefaultBodyText];
+                    [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
                 }
                     break;
                 case 4:
                 {
-                    [self.managedObjectContext deleteObject:self.currentNote];
-                    [self saveMethodInvoked];
-                    [self.layeredNavigationController popViewControllerAnimated:YES];
-                    [self showBlankView];
+                    self.htmlString = nil;
+                    [self setDefaultBodyText];
+                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                    pasteboard.string = self.noteTextView.text;
                 }
                     break;
                 case 5:
+                {
+                    [self showAlertView];
+                }
+                    break;
+                case 6:
                     break;
                 default:
                     break;
@@ -1139,8 +1237,7 @@
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     if (!iOS7) {
-        //Use this on iOS < 7 to prevent the UINavigationBar from overlapping your action sheet!
-        [self.navigationController.view.superview bringSubviewToFront:self.navigationController.view];
+        [self.navigationController.view.superview bringSubviewToFront:self.navigationController.view]; //Use this on iOS < 7 to prevent the UINavigationBar from overlapping your action sheet!
     }
     
     if (_currentAnchoredActionSheet) {

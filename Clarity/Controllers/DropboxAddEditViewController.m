@@ -890,6 +890,7 @@
      }];
 }
 
+
 #pragma mark 디폴트 바디 텍스트
 
 - (void)setDefaultBodyText
@@ -999,6 +1000,8 @@
     NSLog(@"pdf error");
 }
 
+
+#pragma mark 이메일 공유 (Mail ComposeView Modal Transition Style)
 
 - (void)setupMailComposeViewModalTransitionStyle:(MFMailComposeViewController *)mailViewController
 {
