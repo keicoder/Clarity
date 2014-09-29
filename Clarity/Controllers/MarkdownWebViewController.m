@@ -70,7 +70,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self assignAttributeToMarkdownWebView];
     [self makeMarkdownString];
-    [self addNavigationBarButtonItems];
+//    [self addNavigationBarButtonItems];
 }
 
 

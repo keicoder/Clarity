@@ -86,6 +86,7 @@
 		C173259119D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html in Resources */ = {isa = PBXBuildFile; fileRef = C173258E19D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html */; };
 		C173259319D24F29001ED5D5 /* jMarkdown_iPad.css in Resources */ = {isa = PBXBuildFile; fileRef = C173259219D24F29001ED5D5 /* jMarkdown_iPad.css */; };
 		C173259519D25D84001ED5D5 /* NoteTitlePopinViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = C173259419D25D84001ED5D5 /* NoteTitlePopinViewController_iPad.xib */; };
+		C1734D2D19D8F22600813FA1 /* FCFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C1734D2C19D8F22600813FA1 /* FCFileManager.m */; };
 		C1ABF0C519985B7A00E622CA /* MainSidePanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */; };
 		C1ABF0CD19985CF400E622CA /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0C819985CF400E622CA /* JASidePanelController.m */; };
 		C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0CA19985CF400E622CA /* LogViewController.m */; };
@@ -243,6 +244,8 @@
 		C173258E19D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ClarityMarkdownSyntaxGuide_iPad.html; sourceTree = "<group>"; };
 		C173259219D24F29001ED5D5 /* jMarkdown_iPad.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = jMarkdown_iPad.css; sourceTree = "<group>"; };
 		C173259419D25D84001ED5D5 /* NoteTitlePopinViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteTitlePopinViewController_iPad.xib; sourceTree = "<group>"; };
+		C1734D2B19D8F22600813FA1 /* FCFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCFileManager.h; sourceTree = "<group>"; };
+		C1734D2C19D8F22600813FA1 /* FCFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCFileManager.m; sourceTree = "<group>"; };
 		C1ABF0C319985B7A00E622CA /* MainSidePanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainSidePanelViewController.h; sourceTree = "<group>"; };
 		C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainSidePanelViewController.m; sourceTree = "<group>"; };
 		C1ABF0C719985CF400E622CA /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
@@ -353,6 +356,7 @@
 		C122903619973A2B00460667 /* Clarity */ = {
 			isa = PBXGroup;
 			children = (
+				C1734D2919D8F21400813FA1 /* File */,
 				C122906319973A6400460667 /* 3rdParties */,
 				C12290DF19973B6000460667 /* HTML */,
 				C12290E619973B6C00460667 /* MarkdownData */,
@@ -655,6 +659,23 @@
 			path = JGActionSheet;
 			sourceTree = "<group>";
 		};
+		C1734D2919D8F21400813FA1 /* File */ = {
+			isa = PBXGroup;
+			children = (
+				C1734D2A19D8F22600813FA1 /* FCFileManager */,
+			);
+			name = File;
+			sourceTree = "<group>";
+		};
+		C1734D2A19D8F22600813FA1 /* FCFileManager */ = {
+			isa = PBXGroup;
+			children = (
+				C1734D2B19D8F22600813FA1 /* FCFileManager.h */,
+				C1734D2C19D8F22600813FA1 /* FCFileManager.m */,
+			);
+			path = FCFileManager;
+			sourceTree = "<group>";
+		};
 		C1ABF0C619985CF400E622CA /* JASidePanels */ = {
 			isa = PBXGroup;
 			children = (
@@ -931,6 +952,7 @@
 				C12290A619973A7200460667 /* UIImage+ChangeColor.m in Sources */,
 				C12290DD19973A7E00460667 /* WelcomePageViewController.m in Sources */,
 				C125D34719AEDA1D00D9E892 /* MTZWhatsNewViewController.m in Sources */,
+				C1734D2D19D8F22600813FA1 /* FCFileManager.m in Sources */,
 				C1ABF0CE19985CF400E622CA /* LogViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

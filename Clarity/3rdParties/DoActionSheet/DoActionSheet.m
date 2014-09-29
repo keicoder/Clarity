@@ -75,7 +75,7 @@
     self.doTitleInset = UIEdgeInsetsMake(10, 20, 10, 20);
     self.doButtonInset = UIEdgeInsetsMake(5, 20, 5, 20);
     
-    self.doButtonHeight = 48.0f;
+    self.doButtonHeight = 40.0f;
 }
 
 
