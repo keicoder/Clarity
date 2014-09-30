@@ -48,7 +48,15 @@
 			<key>detail</key>
 			<string>Support both iPhone and iPad</string>
 			<key>icon</key>
-			<string>tablet</string>
+			<string>iPad</string>
+		</dict>
+		<dict>
+			<key>title</key>
+			<string>Export</string>
+			<key>detail</key>
+			<string>Email as HTML Attachment</string>
+			<key>icon</key>
+			<string>memo</string>
 		</dict>
 	</array>
 </dict>
