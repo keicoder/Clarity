@@ -1527,9 +1527,9 @@
 #define kButtonHighlightedColor [UIColor blackColor]
 #define kTextNormalColor        [UIColor grayColor]
 #define kTextHighlightedColor   [UIColor blackColor]
-#define kOneImage               @"arrowLeft"
+#define kOneImage               @"left"
 #define kOneAction              previousCharacterButtonPressed
-#define kTwoImage               @"arrowRight"
+#define kTwoImage               @"right"
 #define kTwoAction              nextCharacterButtonPressed
 #define kThreeImage             @"keyboard_hide"
 #define kThreeAction            hideKeyboardButtonPressed
@@ -1566,7 +1566,7 @@
     [buttonOne setImage:oneImageHighlighted forState:UIControlStateSelected];
     [buttonOne setImage:oneImageHighlighted forState:UIControlStateHighlighted];
     CGFloat oneTopBottom_iPad = 20.0;
-    CGFloat oneLeftRight_iPad = 18.0;
+    CGFloat oneLeftRight_iPad = 20.0;
     CGFloat oneTopBottom_iPhone = 12.0;
     CGFloat oneLeftRight_iPhone = 10.0;
     if (iPad) {
@@ -1588,7 +1588,7 @@
     [buttonTwo setImage:twoImageHighlighted forState:UIControlStateSelected];
     [buttonTwo setImage:twoImageHighlighted forState:UIControlStateHighlighted];
     CGFloat twoTopBottom_iPad = 20.0;
-    CGFloat twoLeftRight_iPad = 18.0;
+    CGFloat twoLeftRight_iPad = 20.0;
     CGFloat twoTopBottom_iPhone = 12.0;
     CGFloat twoLeftRight_iPhone = 10.0;
     if (iPad) {
