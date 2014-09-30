@@ -1514,18 +1514,18 @@
 #define kInset_iPhone           10.0
 #define kInset_iPad             18.0
 #define kFont                   @"AvenirNext-Bold"
-#define kFontSize_Medium_iPhone 26.0    //
+#define kFontSize_Medium_iPhone 26.0    //8
 #define kFontSize_Medium_iPad   26.0
 #define kFontSize_Large_iPhone  36.0    //5
 #define kFontSize_Large_iPad    36.0
-#define kFontSize_Small_iPhone  24.0    //4, 7
+#define kFontSize_Small_iPhone  24.0    //4, 7, 9
 #define kFontSize_Small_iPad    24.0
 #define kFontInset_iPhone       4.0
 #define kFontInset_iPad         4.0
 #define kButtonBackgroundColor  [UIColor clearColor]
-#define kButtonNormalColor      [UIColor darkGrayColor]
+#define kButtonNormalColor      [UIColor grayColor]
 #define kButtonHighlightedColor [UIColor blackColor]
-#define kTextNormalColor        [UIColor darkGrayColor]
+#define kTextNormalColor        [UIColor grayColor]
 #define kTextHighlightedColor   [UIColor blackColor]
 #define kOneImage               @"arrowLeft"
 #define kOneAction              previousCharacterButtonPressed
