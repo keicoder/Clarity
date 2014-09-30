@@ -1505,29 +1505,33 @@
 
 #pragma mark - 키보드 액세서리 뷰
 
-- (void)addKeyboardAccessoryToolBar {
-    
-#define kToolBarHeight_iPhone   44.0
+- (void)addKeyboardAccessoryToolBar
+{
 #define kToolBarHeight_iPad     60.0
+#define kToolBarHeight_iPhone   44.0
+#define kToolBarFrame_iPad      CGRectMake(0 ,0, 60.0, kToolBarHeight_iPad)
+#define kToolBarFrame_iPhone    CGRectMake(0 ,0, 44.0, kToolBarHeight_iPhone)
 #define kInset_iPhone           10.0
 #define kInset_iPad             18.0
-#define kFontSize_iPhone        30.0
-#define kFontSize_iPad          30.0
-#define kFontSize_Small_iPhone  24.0
+#define kFont                   @"AvenirNext-Bold"
+#define kFontSize_Medium_iPhone 26.0    //
+#define kFontSize_Medium_iPad   26.0
+#define kFontSize_Large_iPhone  36.0    //5
+#define kFontSize_Large_iPad    36.0
+#define kFontSize_Small_iPhone  24.0    //4, 7
 #define kFontSize_Small_iPad    24.0
-#define kFontSize_Large_iPhone  38.0
-#define kFontSize_Large_iPad    38.0
 #define kFontInset_iPhone       4.0
 #define kFontInset_iPad         4.0
-#define kButtonBackgroundColor  [UIColor clearColor] //[UIColor colorWithRed:0.153 green:0.520 blue:1.000 alpha:0.500]
-#define kButtonNormalColor      [UIColor grayColor]
-#define kButtonHighlightedColor [UIColor redColor]
+#define kButtonBackgroundColor  [UIColor clearColor]
+#define kButtonNormalColor      [UIColor darkGrayColor]
+#define kButtonHighlightedColor [UIColor blackColor]
 #define kTextNormalColor        [UIColor darkGrayColor]
+#define kTextHighlightedColor   [UIColor blackColor]
 #define kOneImage               @"arrowLeft"
 #define kOneAction              previousCharacterButtonPressed
 #define kTwoImage               @"arrowRight"
 #define kTwoAction              nextCharacterButtonPressed
-#define kThree                  @"▼"
+#define kThreeImage             @"keyboard_hide"
 #define kThreeAction            hideKeyboardButtonPressed
 #define kFour                   @"#"
 #define kFourAction             hashButtonPressed
@@ -1535,10 +1539,14 @@
 #define kFiveAction             asteriskButtonPressed
 #define kFiveFontInset_iPhone   16.0
 #define kFiveFontInset_iPad     16.0
-#define kSix                    @"⍈"
+#define kSixImage               @"tab"
 #define kSixAction              tabButtonPressed
 #define kSeven                  @"{}"
 #define kSevenAction            selectWordButonPressed
+#define kEight                  @">"
+#define kEightAction            angleBracketButtonPressed
+#define kNine                   @"!"
+#define kNineAction             exclamationMarkButtonPressed
     
     if (iPad) {
         self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, kToolBarHeight_iPad)];
@@ -1547,7 +1555,8 @@
     }
     
     UIBarButtonItem *f = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
+    UIBarButtonItem *fixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    fixed.width = 24.0f;
     
     UIImage *oneImageNormal = [UIImage imageNameForChangingColor:kOneImage color:kButtonNormalColor];
     UIImage *oneImageHighlighted = [UIImage imageNameForChangingColor:kOneImage color:kButtonHighlightedColor];
@@ -1556,12 +1565,16 @@
     [buttonOne setImage:oneImageNormal forState:UIControlStateNormal];
     [buttonOne setImage:oneImageHighlighted forState:UIControlStateSelected];
     [buttonOne setImage:oneImageHighlighted forState:UIControlStateHighlighted];
+    CGFloat oneTopBottom_iPad = 20.0;
+    CGFloat oneLeftRight_iPad = 18.0;
+    CGFloat oneTopBottom_iPhone = 12.0;
+    CGFloat oneLeftRight_iPhone = 10.0;
     if (iPad) {
-        buttonOne.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
-        [buttonOne setImageEdgeInsets:UIEdgeInsetsMake(kInset_iPad, kInset_iPad, kInset_iPad, kInset_iPad)];
+        buttonOne.frame = kToolBarFrame_iPad;
+        [buttonOne setImageEdgeInsets:UIEdgeInsetsMake(oneTopBottom_iPad, oneLeftRight_iPad, oneTopBottom_iPad, oneLeftRight_iPad)];
     } else {
-        buttonOne.frame = CGRectMake(0 ,0, kToolBarHeight_iPhone, kToolBarHeight_iPhone);
-        [buttonOne setImageEdgeInsets:UIEdgeInsetsMake(kInset_iPhone, kInset_iPhone, kInset_iPhone, kInset_iPhone)];
+        buttonOne.frame = kToolBarFrame_iPhone;
+        [buttonOne setImageEdgeInsets:UIEdgeInsetsMake(oneTopBottom_iPhone, oneLeftRight_iPhone, oneTopBottom_iPhone, oneLeftRight_iPhone)];
     }
     UIBarButtonItem *barButtonItemOne = [[UIBarButtonItem alloc] initWithCustomView:buttonOne];
     buttonOne.backgroundColor = kButtonBackgroundColor;
@@ -1574,46 +1587,56 @@
     [buttonTwo setImage:twoImageNormal forState:UIControlStateNormal];
     [buttonTwo setImage:twoImageHighlighted forState:UIControlStateSelected];
     [buttonTwo setImage:twoImageHighlighted forState:UIControlStateHighlighted];
+    CGFloat twoTopBottom_iPad = 20.0;
+    CGFloat twoLeftRight_iPad = 18.0;
+    CGFloat twoTopBottom_iPhone = 12.0;
+    CGFloat twoLeftRight_iPhone = 10.0;
     if (iPad) {
-        buttonTwo.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
-        [buttonTwo setImageEdgeInsets:UIEdgeInsetsMake(kInset_iPad, kInset_iPad, kInset_iPad, kInset_iPad)];
+        buttonTwo.frame = kToolBarFrame_iPad;
+        [buttonTwo setImageEdgeInsets:UIEdgeInsetsMake(twoTopBottom_iPad, twoLeftRight_iPad, twoTopBottom_iPad, twoLeftRight_iPad)];
     } else {
-        buttonTwo.frame = CGRectMake(0 ,0, kToolBarHeight_iPhone, kToolBarHeight_iPhone);
-        [buttonTwo setImageEdgeInsets:UIEdgeInsetsMake(kInset_iPhone, kInset_iPhone, kInset_iPhone, kInset_iPhone)];
+        buttonTwo.frame = kToolBarFrame_iPhone;
+        [buttonTwo setImageEdgeInsets:UIEdgeInsetsMake(twoTopBottom_iPhone, twoLeftRight_iPhone, twoTopBottom_iPhone, twoLeftRight_iPhone)];
     }
     UIBarButtonItem *barButtonItemTwo = [[UIBarButtonItem alloc] initWithCustomView:buttonTwo];
     buttonTwo.backgroundColor = kButtonBackgroundColor;
     
     
-    UIButton *buttonThree = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [buttonThree setTitle:kThree forState:UIControlStateNormal];
-    [buttonThree setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+    UIImage *threeImageNormal = [UIImage imageNameForChangingColor:kThreeImage color:kButtonNormalColor];
+    UIImage *threeImageHighlighted = [UIImage imageNameForChangingColor:kThreeImage color:kButtonHighlightedColor];
+    UIButton *buttonThree = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonThree addTarget:self action:@selector(kThreeAction:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonThree setImage:threeImageNormal forState:UIControlStateNormal];
+    [buttonThree setImage:threeImageHighlighted forState:UIControlStateSelected];
+    [buttonThree setImage:threeImageHighlighted forState:UIControlStateHighlighted];
+    CGFloat threeTopBottom_iPad = 20.0;
+    CGFloat threeLeftRight_iPad = 18.0;
+    CGFloat threeTopBottom_iPhone = 12.0;
+    CGFloat threeLeftRight_iPhone = 10.0;
     if (iPad) {
-        buttonThree.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_iPad];
-        [buttonThree setContentEdgeInsets:UIEdgeInsetsMake(kFontInset_iPad, 0, 0, 0)];
-        buttonThree.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
+        buttonThree.frame = kToolBarFrame_iPad;
+        [buttonThree setImageEdgeInsets:UIEdgeInsetsMake(threeTopBottom_iPad, threeLeftRight_iPad, threeTopBottom_iPad, threeLeftRight_iPad)];
     } else {
-        buttonThree.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_iPhone];
-        [buttonThree setContentEdgeInsets:UIEdgeInsetsMake(kFontInset_iPhone, 0, 0, 0)];
-        buttonThree.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPhone);
+        buttonThree.frame = kToolBarFrame_iPhone;
+        [buttonThree setImageEdgeInsets:UIEdgeInsetsMake(threeTopBottom_iPhone, threeLeftRight_iPhone, threeTopBottom_iPhone, threeLeftRight_iPhone)];
     }
-    [buttonThree addTarget:self action:@selector(kThreeAction:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *barButtonItemThree = [[UIBarButtonItem alloc] initWithCustomView: buttonThree];
+    UIBarButtonItem *barButtonItemThree = [[UIBarButtonItem alloc] initWithCustomView:buttonThree];
     buttonThree.backgroundColor = kButtonBackgroundColor;
-    //[buttonThree sizeToFit];
     
     
     UIButton *buttonFour = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [buttonFour setTitle:kFour forState:UIControlStateNormal];
     [buttonFour setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+    [buttonFour setTitleColor:kTextHighlightedColor forState:UIControlStateSelected];
+    [buttonFour setTitleColor:kTextHighlightedColor forState:UIControlStateHighlighted];
     if (iPad) {
-        buttonFour.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_Small_iPad];
+        buttonFour.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Small_iPad];
         [buttonFour setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
-        buttonFour.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
+        buttonFour.frame = kToolBarFrame_iPad;
     } else {
-        buttonFour.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_Small_iPhone];
+        buttonFour.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Small_iPhone];
         [buttonFour setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
-        buttonFour.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPhone);
+        buttonFour.frame = kToolBarFrame_iPhone;
     }
     [buttonFour addTarget:self action:@selector(kFourAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *barButtonItemFour = [[UIBarButtonItem alloc] initWithCustomView: buttonFour];
@@ -1623,56 +1646,107 @@
     UIButton *buttonFive = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [buttonFive setTitle:kFive forState:UIControlStateNormal];
     [buttonFive setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+    [buttonFive setTitleColor:kTextHighlightedColor forState:UIControlStateSelected];
+    [buttonFive setTitleColor:kTextHighlightedColor forState:UIControlStateHighlighted];
     if (iPad) {
-        buttonFive.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_Large_iPad];
+        buttonFive.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Large_iPad];
         [buttonFive setContentEdgeInsets:UIEdgeInsetsMake(kFiveFontInset_iPad, 0, 0, 0)];
-        buttonFive.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
+        buttonFive.frame = kToolBarFrame_iPad;
     } else {
-        buttonFive.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_Large_iPhone];
+        buttonFive.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Large_iPhone];
         [buttonFive setContentEdgeInsets:UIEdgeInsetsMake(kFiveFontInset_iPhone, 0, 0, 0)];
-        buttonFive.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPhone);
+        buttonFive.frame = kToolBarFrame_iPhone;
     }
     [buttonFive addTarget:self action:@selector(kFiveAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *barButtonItemFive = [[UIBarButtonItem alloc] initWithCustomView: buttonFive];
     buttonFive.backgroundColor = kButtonBackgroundColor;
     
     
-    UIButton *buttonSix = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [buttonSix setTitle:kSix forState:UIControlStateNormal];
-    [buttonSix setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+    UIImage *sixImageNormal = [UIImage imageNameForChangingColor:kSixImage color:kButtonNormalColor];
+    UIImage *sixImageHighlighted = [UIImage imageNameForChangingColor:kSixImage color:kButtonHighlightedColor];
+    UIButton *buttonSix = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonSix addTarget:self action:@selector(kSixAction:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonSix setImage:sixImageNormal forState:UIControlStateNormal];
+    [buttonSix setImage:sixImageHighlighted forState:UIControlStateSelected];
+    [buttonSix setImage:sixImageHighlighted forState:UIControlStateHighlighted];
+    CGFloat sixTopBottom_iPad = 22.0;
+    CGFloat sixLeftRight_iPad = 18.0;
+    CGFloat sixTopBottom_iPhone = 15.0;
+    CGFloat sixLeftRight_iPhone = 10.0;
     if (iPad) {
-        buttonSix.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_iPad];
-        [buttonSix setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
-        buttonSix.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
+        buttonSix.frame = kToolBarFrame_iPad;
+        [buttonSix setImageEdgeInsets:UIEdgeInsetsMake(sixTopBottom_iPad, sixLeftRight_iPad, sixTopBottom_iPad, sixLeftRight_iPad)];
     } else {
-        buttonSix.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_iPhone];
-        [buttonSix setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
-        buttonSix.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPhone);
+        buttonSix.frame = kToolBarFrame_iPhone;
+        [buttonSix setImageEdgeInsets:UIEdgeInsetsMake(sixTopBottom_iPhone, sixLeftRight_iPhone, sixTopBottom_iPhone, sixLeftRight_iPhone)];
     }
-    [buttonSix addTarget:self action:@selector(kSixAction:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *barButtonItemSix = [[UIBarButtonItem alloc] initWithCustomView: buttonSix];
+    UIBarButtonItem *barButtonItemSix = [[UIBarButtonItem alloc] initWithCustomView:buttonSix];
     buttonSix.backgroundColor = kButtonBackgroundColor;
     
     
     UIButton *buttonSeven = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [buttonSeven setTitle:kSeven forState:UIControlStateNormal];
     [buttonSeven setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+    [buttonSeven setTitleColor:kTextHighlightedColor forState:UIControlStateSelected];
+    [buttonSeven setTitleColor:kTextHighlightedColor forState:UIControlStateHighlighted];
     if (iPad) {
-        buttonSeven.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_Small_iPad];
+        buttonSeven.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Small_iPad];
         [buttonSeven setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
-        buttonSeven.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPad);
+        buttonSeven.frame = kToolBarFrame_iPad;
     } else {
-        buttonSeven.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:kFontSize_Small_iPhone];
+        buttonSeven.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Small_iPhone];
         [buttonSeven setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
-        buttonSeven.frame = CGRectMake(0 ,0, kToolBarHeight_iPad, kToolBarHeight_iPhone);
+        buttonSeven.frame = kToolBarFrame_iPhone;
     }
     [buttonSeven addTarget:self action:@selector(kSevenAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *barButtonItemSeven = [[UIBarButtonItem alloc] initWithCustomView: buttonSeven];
     buttonSeven.backgroundColor = kButtonBackgroundColor;
     
     
-    NSArray *navigationBarItems = @[f, barButtonItemOne, f,  barButtonItemFour, f, barButtonItemFive, f, barButtonItemThree, f, barButtonItemSix, f, barButtonItemSeven, f, barButtonItemTwo, f];
-    self.self.keyboardAccessoryToolBar.items = navigationBarItems;
+    if (iPad) {
+        UIButton *buttonEight = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [buttonEight setTitle:kEight forState:UIControlStateNormal];
+        [buttonEight setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+        [buttonEight setTitleColor:kTextHighlightedColor forState:UIControlStateSelected];
+        [buttonEight setTitleColor:kTextHighlightedColor forState:UIControlStateHighlighted];
+        if (iPad) {
+            buttonEight.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Medium_iPad];
+            [buttonEight setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+            buttonEight.frame = kToolBarFrame_iPad;
+        } else {
+            buttonEight.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Medium_iPhone];
+            [buttonEight setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+            buttonEight.frame = kToolBarFrame_iPhone;
+        }
+        [buttonEight addTarget:self action:@selector(kEightAction:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *barButtonItemEight = [[UIBarButtonItem alloc] initWithCustomView: buttonEight];
+        buttonEight.backgroundColor = kButtonBackgroundColor;
+        
+        
+        UIButton *buttonNine = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [buttonNine setTitle:kNine forState:UIControlStateNormal];
+        [buttonNine setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+        [buttonNine setTitleColor:kTextHighlightedColor forState:UIControlStateSelected];
+        [buttonNine setTitleColor:kTextHighlightedColor forState:UIControlStateHighlighted];
+        if (iPad) {
+            buttonNine.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Small_iPad];
+            [buttonNine setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
+            buttonNine.frame = kToolBarFrame_iPad;
+        } else {
+            buttonNine.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Small_iPhone];
+            [buttonNine setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
+            buttonNine.frame = kToolBarFrame_iPhone;
+        }
+        [buttonNine addTarget:self action:@selector(kNineAction:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *barButtonItemNine = [[UIBarButtonItem alloc] initWithCustomView: buttonNine];
+        buttonNine.backgroundColor = kButtonBackgroundColor;
+        
+        NSArray *navigationBarItems = @[f, barButtonItemOne, fixed, f, barButtonItemSix, f, barButtonItemFour, f, barButtonItemFive, f, barButtonItemThree, f, barButtonItemEight, f, barButtonItemNine, f, barButtonItemSeven, f, fixed, barButtonItemTwo, f];
+        self.keyboardAccessoryToolBar.items = navigationBarItems;
+    } else {
+        NSArray *navigationBarItems = @[f, barButtonItemOne, f, barButtonItemFour, f, barButtonItemFive, f, barButtonItemThree, f, barButtonItemSix, f, barButtonItemSeven, f, barButtonItemTwo, f];
+        self.keyboardAccessoryToolBar.items = navigationBarItems;
+    }
     
     self.noteTextView.inputAccessoryView = self.keyboardAccessoryToolBar;
 }
@@ -1800,7 +1874,46 @@
         selectedRange.length = 0;
         self.noteTextView.selectedRange = selectedRange;
     }
-    //[self cursorPosition];
+}
+
+
+#pragma mark angleBracketButtonPressed
+
+- (void)angleBracketButtonPressed:(id)sender
+{
+    NSRange range = self.noteTextView.selectedRange;
+    
+    NSString *firstHalfString = [self.noteTextView.text substringToIndex:range.location];
+    NSString *insertingString = @">";
+    NSString *secondHalfString = [self.noteTextView.text substringFromIndex:range.location+range.length];
+    
+    self.noteTextView.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
+    
+    range.location += insertingString.length;
+    range.length = 0;
+    self.noteTextView.selectedRange = range;
+    
+    [self.noteTextView textViewDidChange:self.noteTextView];
+}
+
+
+#pragma mark exclamationMarkButtonPressed
+
+- (void)exclamationMarkButtonPressed:(id)sender
+{
+    NSRange range = self.noteTextView.selectedRange;
+    
+    NSString *firstHalfString = [self.noteTextView.text substringToIndex:range.location];
+    NSString *insertingString = @"!";
+    NSString *secondHalfString = [self.noteTextView.text substringFromIndex:range.location+range.length];
+    
+    self.noteTextView.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
+    
+    range.location += insertingString.length;
+    range.length = 0;
+    self.noteTextView.selectedRange = range;
+    
+    [self.noteTextView textViewDidChange:self.noteTextView];
 }
 
 
