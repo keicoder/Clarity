@@ -315,18 +315,19 @@
     [buttonFullScreen setImage:fullScreenH forState:UIControlStateHighlighted];
     buttonFullScreen.frame = buttonFrame;
     float fImageInset = 10.0;
-    [buttonFullScreen setImageEdgeInsets:UIEdgeInsetsMake(fImageInset, fImageInset, fImageInset, fImageInset)];
+    [buttonFullScreen setImageEdgeInsets:UIEdgeInsetsMake(12.0, fImageInset, 8.0, fImageInset)];
     UIBarButtonItem *barButtonItemFullScreen = [[UIBarButtonItem alloc] initWithCustomView:buttonFullScreen];
     buttonFullScreen.backgroundColor = tmpColor;
     
     
-    float sImageSize = 34.0;
+    float sImageSize = 32.0;
     UIImage *star = [UIImage imageNameForChangingColor:@"star-256-white" color:kWHITE_COLOR];
     [star resizedImageByHeight:sImageSize];
     self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
     [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
     self.buttonStar.frame = CGRectMake(0 ,0, sImageSize, sImageSize);
+    [self.buttonStar setContentEdgeInsets:UIEdgeInsetsMake(2, 0, 0, 0)];
     self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
     self.buttonStar.backgroundColor = tmpColor;
     
@@ -348,9 +349,9 @@
     
     UIButton *buttonMarkdown = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [buttonMarkdown setTitle:@"M" forState:UIControlStateNormal];
-    buttonMarkdown.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:28.0];
+    buttonMarkdown.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:28.0];
     [buttonMarkdown setTitleColor:kTOOLBAR_TEXT_COLOR forState:UIControlStateNormal];
-    [buttonMarkdown setContentEdgeInsets:UIEdgeInsetsMake(3, 0, 0, 0)];
+    [buttonMarkdown setContentEdgeInsets:UIEdgeInsetsMake(8, 0, 0, 0)];
     buttonMarkdown.frame = buttonFrame;
     [buttonMarkdown addTarget:self action:@selector(barButtonItemMarkdownPressed:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *barButtonItemMarkdown = [[UIBarButtonItem alloc] initWithCustomView: buttonMarkdown];
@@ -371,8 +372,8 @@
     [buttonShare setImage:shareH forState:UIControlStateSelected];
     [buttonShare setImage:shareH forState:UIControlStateHighlighted];
     buttonShare.frame = buttonFrame;
-    float sImageInset = 11.0;
-    [buttonShare setImageEdgeInsets:UIEdgeInsetsMake(8.0, sImageInset, 8.0, sImageInset)];
+    float sImageInset = 10.0;
+    [buttonShare setImageEdgeInsets:UIEdgeInsetsMake(9.0, sImageInset, 7.0, sImageInset)];
     UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithCustomView:buttonShare];
     buttonShare.backgroundColor = tmpColor;
     
