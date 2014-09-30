@@ -295,7 +295,7 @@
 
 - (void)addBarButtonItems
 {
-    UIColor *tmpColor = [UIColor blueColor];
+    UIColor *tmpColor = [UIColor clearColor];
     UIColor *buttonHighlightedColor = [UIColor orangeColor];
     CGRect buttonFrame = CGRectMake(0 ,0, 40, 40);
     
@@ -416,7 +416,6 @@
     if (_didHideNavigationBar == NO) {
         [self hideStatusBar];
         [self hideNavigationBar];
-        [self addButtonForFullscreen];
         [self showButtonForFullscreenWithAnimation];
         _didHideNavigationBar = YES;
     }
