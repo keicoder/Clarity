@@ -295,70 +295,93 @@
 
 - (void)addBarButtonItems
 {
+    UIColor *tmpColor = [UIColor blueColor];
+    UIColor *buttonHighlightedColor = [UIColor orangeColor];
+    CGRect buttonFrame = CGRectMake(0 ,0, 40, 40);
+    
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixed.width = 40.0f;
+    barButtonItemFixed.width = 24.0f;
     
     UIBarButtonItem *barButtonItemFlexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    UIImage *fullScreen = [UIImage imageNamed:@"expand-256"];
-    [fullScreen resizedImageByHeight:20];
+    
+    NSString *fs = @"expand-256";
+    UIImage *fullScreen = [UIImage imageNamed:fs];
+    UIImage *fullScreenH = [UIImage imageNameForChangingColor:fs color:buttonHighlightedColor];
     UIButton *buttonFullScreen = [UIButton buttonWithType:UIButtonTypeCustom];
     [buttonFullScreen addTarget:self action:@selector(barButtonItemFullScreenPressed:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonFullScreen setBackgroundImage:fullScreen forState:UIControlStateNormal];
-    buttonFullScreen.frame = CGRectMake(0 ,0, 17, 18);
+    [buttonFullScreen setImage:fullScreen forState:UIControlStateNormal];
+    [buttonFullScreen setImage:fullScreenH forState:UIControlStateSelected];
+    [buttonFullScreen setImage:fullScreenH forState:UIControlStateHighlighted];
+    buttonFullScreen.frame = buttonFrame;
+    float fImageInset = 10.0;
+    [buttonFullScreen setImageEdgeInsets:UIEdgeInsetsMake(fImageInset, fImageInset, fImageInset, fImageInset)];
     UIBarButtonItem *barButtonItemFullScreen = [[UIBarButtonItem alloc] initWithCustomView:buttonFullScreen];
+    buttonFullScreen.backgroundColor = tmpColor;
     
     
+    float sImageSize = 34.0;
     UIImage *star = [UIImage imageNameForChangingColor:@"star-256-white" color:kWHITE_COLOR];
-    [star resizedImageByHeight:27];
+    [star resizedImageByHeight:sImageSize];
     self.buttonStar = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
     [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
-    self.buttonStar.frame = CGRectMake(0 ,0, 27, 27);
+    self.buttonStar.frame = CGRectMake(0 ,0, sImageSize, sImageSize);
     self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
+    self.buttonStar.backgroundColor = tmpColor;
     
     
-    UIImage *add = [UIImage imageNamed:@"plus-256"];
+    NSString *as = @"plus-256";
+    UIImage *add = [UIImage imageNamed:as];
+    UIImage *addH = [UIImage imageNameForChangingColor:as color:buttonHighlightedColor];
     UIButton *buttonAdd = [UIButton buttonWithType:UIButtonTypeCustom];
     [buttonAdd addTarget:self action:@selector(barButtonItemAddPressed:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonAdd setBackgroundImage:add forState:UIControlStateNormal];
-    buttonAdd.frame = CGRectMake(0 ,0, 28, 28);
+    [buttonAdd setImage:add forState:UIControlStateNormal];
+    [buttonAdd setImage:addH forState:UIControlStateSelected];
+    [buttonAdd setImage:addH forState:UIControlStateHighlighted];
+    buttonAdd.frame = buttonFrame;
+    float aImageInset = 2.0;
+    [buttonAdd setImageEdgeInsets:UIEdgeInsetsMake(aImageInset, aImageInset, aImageInset, aImageInset)];
     UIBarButtonItem *barButtonItemAdd = [[UIBarButtonItem alloc] initWithCustomView:buttonAdd];
+    buttonAdd.backgroundColor = tmpColor;
     
     
     UIButton *buttonMarkdown = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [buttonMarkdown setTitle:@"M" forState:UIControlStateNormal];
-    buttonMarkdown.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:24.0];
+    buttonMarkdown.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:28.0];
     [buttonMarkdown setTitleColor:kTOOLBAR_TEXT_COLOR forState:UIControlStateNormal];
     [buttonMarkdown setContentEdgeInsets:UIEdgeInsetsMake(3, 0, 0, 0)];
-    [buttonMarkdown sizeToFit];
+    buttonMarkdown.frame = buttonFrame;
     [buttonMarkdown addTarget:self action:@selector(barButtonItemMarkdownPressed:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *barButtonItemMarkdown = [[UIBarButtonItem alloc] initWithCustomView: buttonMarkdown];
     [barButtonItemMarkdown setTitleTextAttributes:@{NSForegroundColorAttributeName:kGOLD_COLOR} forState:UIControlStateNormal];
+    buttonMarkdown.backgroundColor = tmpColor;
     
     
-    UIImage *share_iPhone = [UIImage imageNameForChangingColor:@"upload" color:kWHITE_COLOR];
-    [share_iPhone resizedImageByHeight:21];
-    UIButton *buttonShare_iPhone = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttonShare_iPhone addTarget:self action:@selector(displayDoActionSheet:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonShare_iPhone setBackgroundImage:share_iPhone forState:UIControlStateNormal];
-    buttonShare_iPhone.frame = CGRectMake(0 ,0, 16, 21);
-    UIBarButtonItem *barButtonItemShare_iPhone = [[UIBarButtonItem alloc] initWithCustomView:buttonShare_iPhone];
+    NSString *ss = @"upload";
+    UIImage *share = [UIImage imageNameForChangingColor:ss color:kWHITE_COLOR];
+    UIImage *shareH = [UIImage imageNameForChangingColor:ss color:buttonHighlightedColor];
+    UIButton *buttonShare = [UIButton buttonWithType:UIButtonTypeCustom];
+    if (iPad) {
+        [buttonShare addTarget:self action:@selector(displayJGActionSheet:withEvent:)forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        [buttonShare addTarget:self action:@selector(displayDoActionSheet:)forControlEvents:UIControlEventTouchUpInside];
+    }
+    [buttonShare setImage:share forState:UIControlStateNormal];
+    [buttonShare setImage:shareH forState:UIControlStateSelected];
+    [buttonShare setImage:shareH forState:UIControlStateHighlighted];
+    buttonShare.frame = buttonFrame;
+    float sImageInset = 11.0;
+    [buttonShare setImageEdgeInsets:UIEdgeInsetsMake(8.0, sImageInset, 8.0, sImageInset)];
+    UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithCustomView:buttonShare];
+    buttonShare.backgroundColor = tmpColor;
     
-    
-    UIImage *share_iPad = [UIImage imageNameForChangingColor:@"upload" color:kWHITE_COLOR];
-    [share_iPad resizedImageByHeight:21];
-    UIButton *buttonShare_iPad = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttonShare_iPad addTarget:self action:@selector(displayJGActionSheet:withEvent:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonShare_iPad setBackgroundImage:share_iPad forState:UIControlStateNormal];
-    buttonShare_iPad.frame = CGRectMake(0 ,0, 16, 21);
-    UIBarButtonItem *barButtonItemShare_iPad = [[UIBarButtonItem alloc] initWithCustomView:buttonShare_iPad];
     
     if (iPad) {
-        NSArray *navigationBarItems = @[barButtonItemFlexible, barButtonItemShare_iPad, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemAdd, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible];
+        NSArray *navigationBarItems = @[barButtonItemFlexible, barButtonItemFullScreen, barButtonItemFlexible, self.barButtonItemStarred, barButtonItemFlexible, barButtonItemAdd, barButtonItemFlexible, barButtonItemShare, barButtonItemFlexible, barButtonItemMarkdown, barButtonItemFlexible];
         self.navigationItem.rightBarButtonItems = navigationBarItems;
     } else {
-        NSArray *navigationBarItems = @[barButtonItemFullScreen, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFixed, barButtonItemShare_iPhone, barButtonItemFixed, barButtonItemMarkdown];
+        NSArray *navigationBarItems = @[barButtonItemFullScreen, barButtonItemFixed, self.barButtonItemStarred, barButtonItemFixed, barButtonItemShare, barButtonItemFixed, barButtonItemMarkdown];
         self.navigationItem.rightBarButtonItems = navigationBarItems;
     }
 }
@@ -393,6 +416,7 @@
     if (_didHideNavigationBar == NO) {
         [self hideStatusBar];
         [self hideNavigationBar];
+        [self addButtonForFullscreen];
         [self showButtonForFullscreenWithAnimation];
         _didHideNavigationBar = YES;
     }
@@ -401,14 +425,12 @@
 
 - (void)addButtonForFullscreen
 {
+#define kFullScreenButton_OriginX   CGRectGetWidth(self.view.bounds) - 44
+    
     UIImage *image = [UIImage imageNamed:@"collapse-black-256"];
     UIImage *imageThumb = [image makeThumbnailOfSize:CGSizeMake(24, 24)];
     self.buttonForFullscreen = [UIButton buttonWithType:UIButtonTypeSystem];
-    if (iPad) {
-        self.buttonForFullscreen.frame = CGRectMake(0, -44, 44, 44);
-    } else {
-        self.buttonForFullscreen.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, -44, 44, 44);
-    }
+    self.buttonForFullscreen.frame = CGRectMake(kFullScreenButton_OriginX, -44, 44, 44);
     [self.buttonForFullscreen setImage:imageThumb forState:UIControlStateNormal];
     self.buttonForFullscreen.tintColor = [UIColor colorWithRed:0.094 green:0.071 blue:0.188 alpha:1];
     [self.view addSubview:self.buttonForFullscreen];
@@ -421,11 +443,7 @@
 {
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         if (iPad) {
-                             self.buttonForFullscreen.frame = CGRectMake(0, 0, 44, 44);
-                         } else {
-                             self.buttonForFullscreen.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, 0, 44, 44);
-                         }
+                         self.buttonForFullscreen.frame = CGRectMake(kFullScreenButton_OriginX, 0, 44, 44);
                          self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.5, 1.5);
                          self.buttonForFullscreen.alpha = 0.5;}
                      completion:^(BOOL finished) {
@@ -443,11 +461,7 @@
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         if (iPad) {
-                             self.buttonForFullscreen.frame = CGRectMake(0, -44, 44, 44);
-                         } else {
-                             self.buttonForFullscreen.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, -44, 44, 44);
-                         }
+                         self.buttonForFullscreen.frame = CGRectMake(kFullScreenButton_OriginX, -44, 44, 44);
                          self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.5, 1.5);
                          self.buttonForFullscreen.alpha = 0.6;}
                      completion:^(BOOL finished) {
