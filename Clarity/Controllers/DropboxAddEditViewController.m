@@ -1514,12 +1514,12 @@
 #define kInset_iPhone           10.0
 #define kInset_iPad             18.0
 #define kFont                   @"AvenirNext-Bold"
-#define kFontSize_Medium_iPhone 26.0    //8
-#define kFontSize_Medium_iPad   26.0
-#define kFontSize_Large_iPhone  36.0    //5
-#define kFontSize_Large_iPad    36.0
-#define kFontSize_Small_iPhone  24.0    //4, 7, 9
-#define kFontSize_Small_iPad    24.0
+#define kFontSize_Medium_iPhone 24.0    //4, 8, 9
+#define kFontSize_Medium_iPad   26.0    //8
+#define kFontSize_Large_iPhone  34.0    //5
+#define kFontSize_Large_iPad    36.0    //5
+#define kFontSize_Small_iPhone  20.0    //7
+#define kFontSize_Small_iPad    24.0    //4, 7, 9
 #define kFontInset_iPhone       4.0
 #define kFontInset_iPad         4.0
 #define kButtonBackgroundColor  [UIColor clearColor]
@@ -1568,7 +1568,7 @@
     CGFloat oneTopBottom_iPad = 20.0;
     CGFloat oneLeftRight_iPad = 20.0;
     CGFloat oneTopBottom_iPhone = 12.0;
-    CGFloat oneLeftRight_iPhone = 10.0;
+    CGFloat oneLeftRight_iPhone = 14.0;
     if (iPad) {
         buttonOne.frame = kToolBarFrame_iPad;
         [buttonOne setImageEdgeInsets:UIEdgeInsetsMake(oneTopBottom_iPad, oneLeftRight_iPad, oneTopBottom_iPad, oneLeftRight_iPad)];
@@ -1590,7 +1590,7 @@
     CGFloat twoTopBottom_iPad = 20.0;
     CGFloat twoLeftRight_iPad = 20.0;
     CGFloat twoTopBottom_iPhone = 12.0;
-    CGFloat twoLeftRight_iPhone = 10.0;
+    CGFloat twoLeftRight_iPhone = 14.0;
     if (iPad) {
         buttonTwo.frame = kToolBarFrame_iPad;
         [buttonTwo setImageEdgeInsets:UIEdgeInsetsMake(twoTopBottom_iPad, twoLeftRight_iPad, twoTopBottom_iPad, twoLeftRight_iPad)];
@@ -1634,7 +1634,7 @@
         [buttonFour setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
         buttonFour.frame = kToolBarFrame_iPad;
     } else {
-        buttonFour.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Small_iPhone];
+        buttonFour.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Medium_iPhone];
         [buttonFour setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
         buttonFour.frame = kToolBarFrame_iPhone;
     }
@@ -1672,7 +1672,7 @@
     CGFloat sixTopBottom_iPad = 22.0;
     CGFloat sixLeftRight_iPad = 18.0;
     CGFloat sixTopBottom_iPhone = 15.0;
-    CGFloat sixLeftRight_iPhone = 10.0;
+    CGFloat sixLeftRight_iPhone = 11.0;
     if (iPad) {
         buttonSix.frame = kToolBarFrame_iPad;
         [buttonSix setImageEdgeInsets:UIEdgeInsetsMake(sixTopBottom_iPad, sixLeftRight_iPad, sixTopBottom_iPad, sixLeftRight_iPad)];
@@ -1733,7 +1733,7 @@
             [buttonNine setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
             buttonNine.frame = kToolBarFrame_iPad;
         } else {
-            buttonNine.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Small_iPhone];
+            buttonNine.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Medium_iPhone];
             [buttonNine setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
             buttonNine.frame = kToolBarFrame_iPhone;
         }
