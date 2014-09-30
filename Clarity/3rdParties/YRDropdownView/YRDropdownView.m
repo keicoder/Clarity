@@ -23,7 +23,7 @@
 #define kTITLELABEL_FONT_SIZE   20
 //#define kTITLELABEL_ORIGIN_Y    10
 
-#define kANIMATION_DURATION     0.5f
+#define kANIMATION_DURATION     0.3f
 
 
 @interface YRDropdownView ()
