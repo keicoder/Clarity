@@ -327,7 +327,7 @@
     [self.buttonStar addTarget:self action:@selector(barButtonItemStarredPressed:)forControlEvents:UIControlEventTouchUpInside];
     [self.buttonStar setBackgroundImage:star forState:UIControlStateNormal];
     self.buttonStar.frame = CGRectMake(0 ,0, sImageSize, sImageSize);
-    [self.buttonStar setContentEdgeInsets:UIEdgeInsetsMake(2, 0, 0, 0)];
+    [self.buttonStar setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
     self.barButtonItemStarred = [[UIBarButtonItem alloc] initWithCustomView:self.buttonStar];
     self.buttonStar.backgroundColor = tmpColor;
     
@@ -349,7 +349,7 @@
     
     UIButton *buttonMarkdown = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [buttonMarkdown setTitle:@"M" forState:UIControlStateNormal];
-    buttonMarkdown.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:28.0];
+    buttonMarkdown.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:28.0];
     [buttonMarkdown setTitleColor:kTOOLBAR_TEXT_COLOR forState:UIControlStateNormal];
     [buttonMarkdown setContentEdgeInsets:UIEdgeInsetsMake(8, 0, 0, 0)];
     buttonMarkdown.frame = buttonFrame;
