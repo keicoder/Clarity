@@ -96,7 +96,7 @@
     } else {
         [self addKeyboardAccessoryToolBar];
     }
-    [self showNoteDataToLogConsole];
+    //[self showNoteDataToLogConsole];
 }
 
 
@@ -526,7 +526,7 @@
              NSLog(@"Error saving context: %@", error);
          }
      }];
-    [self showNoteDataToLogConsole];
+    //[self showNoteDataToLogConsole];
 }
 
 
