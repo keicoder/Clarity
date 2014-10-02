@@ -47,7 +47,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     self.title = @"Starred";
     [self configureViewAndTableView];
     [self addBarButtonItem];
@@ -689,12 +688,12 @@
 {
     if ([[notification name] isEqualToString:@"StarListViewWillShowNotification"])
     {
-        [self executePerformFetch];                                                     //패치 코어데이터 아이템
-        [self initializeSearchResultNotes];                                             //서치 results 초기화
-        [self.tableView reloadData];                                                    //테이블 뷰 업데이트
-        [self performUpdateInfoButton];                                                 //업데이트 인포
-        [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
-        [self saveCurrentView];                                                         //현재 뷰 > 유저 디폴트 저장
+        [self executePerformFetch];
+        [self initializeSearchResultNotes];
+        [self.tableView reloadData];
+        [self performUpdateInfoButton];
+        [self performCheckNoNote];
+        [self saveCurrentView];
     }
 }
 
