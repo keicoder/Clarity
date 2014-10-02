@@ -96,6 +96,7 @@
     } else {
         [self addKeyboardAccessoryToolBar];
     }
+    [self showNoteDataToLogConsole];
 }
 
 
@@ -525,6 +526,7 @@
             NSLog(@"Error saving context: %@", error);
         }
     }];
+    [self showNoteDataToLogConsole];
 }
 
 
@@ -1433,12 +1435,13 @@
     NSLog (@"NSString > dayString: %@\n", self.currentNote.dayString);
     NSLog (@"NSString > monthString: %@\n", self.currentNote.monthString);
     NSLog (@"NSString > yearString: %@\n", self.currentNote.yearString);
+    NSLog (@"NSString > monthAndYearString: %@\n", self.currentNote.monthAndYearString);
     
     NSLog (@"NSString > uniqueNoteIDString: %@\n", self.currentNote.uniqueNoteIDString);
     NSLog (@"NSString > sectionName: %@\n", self.currentNote.sectionName);
     NSLog (@"NSString > noteTitle: %@\n", self.currentNote.noteTitle);
-    NSLog (@"NSString > noteBody: %@\n", self.currentNote.noteBody);
-    NSLog (@"NSString > noteAll: %@\n", self.currentNote.noteAll);
+    //NSLog (@"NSString > noteBody: %@\n", self.currentNote.noteBody);
+    //NSLog (@"NSString > noteAll: %@\n", self.currentNote.noteAll);
     NSLog (@"\n");
 }
 
