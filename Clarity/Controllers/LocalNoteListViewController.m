@@ -202,6 +202,7 @@
         cell.noteSubtitleLabel.text = note.noteBody;
         cell.dateLabel.text = note.dateString;
         cell.dayLabel.text = note.dayString;
+        cell.monthAndYearLabel.text = note.monthAndYearString;
         
         [self configureCell:cell atIndexPath:indexPath];
         [self configureImages:note cell:cell];
@@ -212,6 +213,7 @@
         cell.noteSubtitleLabel.text = note.noteBody;
         cell.dateLabel.text = note.dateString;
         cell.dayLabel.text = note.dayString;
+        cell.monthAndYearLabel.text = note.monthAndYearString;
         
         [self configureCell:cell atIndexPath:indexPath];
         [self configureImages:note cell:cell];
@@ -232,6 +234,13 @@
     cell.noteTitleLabel.textColor = kTABLE_VIEW_CELL_TEXTLABEL_TEXTCOLOR;
     cell.noteSubtitleLabel.font = kTABLE_VIEW_CELL_DETAILTEXTLABEL_FONT;
     cell.noteSubtitleLabel.textColor = kTABLE_VIEW_CELL_DETAILTEXTLABEL_TEXTCOLOR;
+    cell.monthAndYearLabel.font = kTABLE_VIEW_CELL_DETAILTEXTLABEL_FONT;
+    cell.monthAndYearLabel.textColor = kTABLE_VIEW_CELL_DETAILTEXTLABEL_TEXTCOLOR;
+    
+    cell.dayLabel.font = kTABLE_VIEW_CELL_DAYLABEL_FONT;
+    cell.dateLabel.font = kTABLE_VIEW_CELL_DATELABEL_FONT;
+    
+    cell.dateLabel.textColor = kTABLE_VIEW_CELL_DATELABEL_TEXTCOLOR_DEFAULT;
     
     if ([cell.dateLabel.text isEqualToString:@"SAT"])
     {
@@ -243,9 +252,6 @@
     else {
         cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT;
     }
-    cell.dateLabel.textColor = kTABLE_VIEW_CELL_DATELABEL_TEXTCOLOR_DEFAULT;
-    cell.dayLabel.font = kTABLE_VIEW_CELL_DAYLABEL_FONT;
-    cell.dateLabel.font = kTABLE_VIEW_CELL_DATELABEL_FONT;
 }
 
 
@@ -265,33 +271,6 @@
 
 
 #pragma mark 델리게이트 메소드
-#pragma mark 섹션 헤더 속성
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    header.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13];
-    [header.textLabel setTextColor:[UIColor colorWithRed:0.467 green:0.482 blue:0.482 alpha:1]];
-    header.contentView.backgroundColor = [UIColor colorWithWhite:0.904 alpha:1.000];
-}
-
-
-#pragma mark 섹션 헤더 타이틀
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
-    return [sectionInfo name];
-}
-
-
-#pragma mark 섹션 헤더 높이
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return kTABLE_CELL_SECTION_HEADER_HEIGHT;
-}
-
 
 #pragma mark 셀 높이
 
@@ -511,11 +490,14 @@
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isLocalNote == %@", [NSNumber numberWithBool: YES]];
         [fetchRequest setPredicate:predicate];
-        [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO]]];
+        
+        NSSortDescriptor *noteModifiedDateSort = [[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO];
+        [fetchRequest setSortDescriptors: @[noteModifiedDateSort]];
+        
         _fetchedResultsController = [[NSFetchedResultsController alloc]
                                      initWithFetchRequest:fetchRequest 
                                      managedObjectContext:[NoteDataManager sharedNoteDataManager].managedObjectContext 
-                                     sectionNameKeyPath:@"sectionName" cacheName:nil];
+                                     sectionNameKeyPath:nil cacheName:nil];
         [fetchRequest setFetchBatchSize:20];
         _fetchedResultsController.delegate = self;
     }

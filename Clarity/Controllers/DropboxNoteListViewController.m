@@ -252,7 +252,6 @@
     else {
         cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT;
     }
-    
 }
 
 
