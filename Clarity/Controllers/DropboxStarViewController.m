@@ -2,8 +2,8 @@
 //  DropboxStarViewController.m
 //  Clarity
 //
-//  Created by jun on 5/15/14.
-//  Copyright (c) 2014 jun. All rights reserved.
+//  Created by jun on 2014. 7. 19..
+//  Copyright (c) 2014년 lovejunsoft. All rights reserved.
 //
 /*
  indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
@@ -47,14 +47,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.title = @"Starred";
+    [self configureViewAndTableView];
+    [self addBarButtonItem];
+    [self saveCurrentView];
+    [self hideSearchBar];
+    [self addObserverForStarListViewWillShow];
     if (iPad) {
         self.layeredNavigationController.delegate = self;
     }
-    self.title = @"Starred";
-    [self configureViewAndTableView];
-    [self addNavigationBarButtonItem];
-    [self hideSearchBar];
-    [self addObserverForStarListViewWillShow];
 }
 
 
@@ -68,7 +70,6 @@
     [self.tableView reloadData];
     [self performUpdateInfoButton];
     [self performCheckNoNote];
-    [self saveCurrentView];
 }
 
 
@@ -84,10 +85,10 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:YES];
-    self.title = @"";
     [self cancelCurrentView];
     [self deActivateSearchDisplayController];
     _fetchedResultsController = nil;
+    self.title = @"";
 }
 
 
@@ -131,10 +132,12 @@
     {
         if ([[self.fetchedResultsController fetchedObjects] count] == 0) {
             return 0;
-        } else {
+        }
+        else {
             return 1;
         }
-    } else {
+    }
+    else {
         return [[self.fetchedResultsController sections] count];
     }
 }
@@ -144,9 +147,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
         return self.searchResultNotes.count;
-    } else {
+    }
+    else
+    {
         return [[self.fetchedResultsController sections][section] numberOfObjects];
     }
 }
@@ -165,7 +171,6 @@
     }
     
     if (tableView == self.searchDisplayController.searchResultsTableView) {
-        //테이블 뷰 속성
         tableView.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;
         tableView.separatorColor = kTABLE_VIEW_SEPARATOR_COLOR;
         
@@ -174,6 +179,7 @@
         cell.noteSubtitleLabel.text = note.noteBody;
         cell.dateLabel.text = note.dateString;
         cell.dayLabel.text = note.dayString;
+        cell.monthAndYearLabel.text = note.monthAndYearString;
         
         [self configureCell:cell atIndexPath:indexPath];
         [self configureImages:note cell:cell];
@@ -184,6 +190,7 @@
         cell.noteSubtitleLabel.text = note.noteBody;
         cell.dateLabel.text = note.dateString;
         cell.dayLabel.text = note.dayString;
+        cell.monthAndYearLabel.text = note.monthAndYearString;
         
         [self configureCell:cell atIndexPath:indexPath];
         [self configureImages:note cell:cell];
@@ -196,7 +203,6 @@
 
 - (void)configureCell:(NoteTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    //셀 속성
     if ([cell respondsToSelector:@selector(setSeparatorInset:)]) { cell.separatorInset = UIEdgeInsetsZero; }
     cell.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;
     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -205,6 +211,13 @@
     cell.noteTitleLabel.textColor = kTABLE_VIEW_CELL_TEXTLABEL_TEXTCOLOR;
     cell.noteSubtitleLabel.font = kTABLE_VIEW_CELL_DETAILTEXTLABEL_FONT;
     cell.noteSubtitleLabel.textColor = kTABLE_VIEW_CELL_DETAILTEXTLABEL_TEXTCOLOR;
+    cell.monthAndYearLabel.font = kTABLE_VIEW_CELL_DETAILTEXTLABEL_FONT;
+    cell.monthAndYearLabel.textColor = kTABLE_VIEW_CELL_DETAILTEXTLABEL_TEXTCOLOR;
+    
+    cell.dayLabel.font = kTABLE_VIEW_CELL_DAYLABEL_FONT;
+    cell.dateLabel.font = kTABLE_VIEW_CELL_DATELABEL_FONT;
+    
+    cell.dateLabel.textColor = kTABLE_VIEW_CELL_DATELABEL_TEXTCOLOR_DEFAULT;
     
     if ([cell.dateLabel.text isEqualToString:@"SAT"])
     {
@@ -216,9 +229,6 @@
     else {
         cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT;
     }
-    cell.dateLabel.textColor = kTABLE_VIEW_CELL_DATELABEL_TEXTCOLOR_DEFAULT;
-    cell.dayLabel.font = kTABLE_VIEW_CELL_DAYLABEL_FONT;
-    cell.dateLabel.font = kTABLE_VIEW_CELL_DATELABEL_FONT;
 }
 
 
@@ -227,7 +237,7 @@
 - (void)configureImages:(Note *)note cell:(NoteTableViewCell *)cell
 {
     UIImage *starredImage = [UIImage imageNameForChangingColor:@"star-256-white" color:kGOLD_COLOR];
-    BOOL hasNoteStarCurrentState = [note.hasNoteStar boolValue];    //불리언 값, kLOGBOOL(hasNoteStarCurrentState);
+    BOOL hasNoteStarCurrentState = [note.hasNoteStar boolValue];
     
     if (hasNoteStarCurrentState) {
         cell.starImageView.image = starredImage;
@@ -238,34 +248,6 @@
 
 
 #pragma mark 델리게이트 메소드
-#pragma mark 섹션 헤더 속성
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    header.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13];
-    [header.textLabel setTextColor:[UIColor colorWithRed:0.467 green:0.482 blue:0.482 alpha:1]];
-    header.contentView.backgroundColor = [UIColor colorWithWhite:0.904 alpha:1.000];                //데이 모드
-    //header.contentView.backgroundColor = [UIColor colorWithWhite:0.379 alpha:1.000];              //나이트 모드
-}
-
-
-#pragma mark 섹션 헤더 타이틀
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
-    return [sectionInfo name];
-}
-
-
-#pragma mark 섹션 헤더 높이
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return kTABLE_CELL_SECTION_HEADER_HEIGHT;
-}
-
 
 #pragma mark 셀 높이
 
@@ -316,11 +298,11 @@
     NSManagedObject *managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
     NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
     
-    Note *noteForDelete = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    
-    if (managedObject.objectID == self.receivedNote.objectID || noteForDelete.uniqueNoteIDString == self.receivedNote.uniqueNoteIDString) {
-        if (iPad) {
+    if (iPad) {
+        Note *noteForDelete = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        if (managedObject.objectID == self.receivedNote.objectID || noteForDelete.uniqueNoteIDString == self.receivedNote.uniqueNoteIDString) {
             [self.layeredNavigationController popViewControllerAnimated:YES];
+            [self showBlankView];
         }
     }
     
@@ -344,8 +326,7 @@
 {
     DropboxAddEditViewController *controller = (DropboxAddEditViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"DropboxAddEditViewController"];
     
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-    {
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
         NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
         self.selectedNote = (Note *)[self.searchResultNotes objectAtIndex:indexPath.row];
         
@@ -354,9 +335,7 @@
         [self.searchDisplayController.searchBar setText:self.searchDisplayController.searchBar.text];
         [self.searchDisplayController.searchBar resignFirstResponder];
         [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
-    else
-    {
+    } else {
 //        NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
         NSManagedObjectContext *managedObjectContext = [[NSManagedObjectContext alloc]
                                                         initWithConcurrencyType:NSPrivateQueueConcurrencyType];
@@ -386,26 +365,6 @@
 }
 
 
-#pragma mark - 유저 디폴트
-
-#pragma mark 유저 디폴트 > 현재 뷰 저장
-
-- (void)saveCurrentView
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];
-    [standardUserDefaults synchronize];
-}
-
-
-- (void)cancelCurrentView
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_DROPBOX];
-    [standardUserDefaults synchronize];
-}
-
-
 #pragma mark - Fetched results controller
 
 - (NSFetchedResultsController *)fetchedResultsController
@@ -418,16 +377,17 @@
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isDropboxNote == %@", [NSNumber numberWithBool: YES] ];
         NSPredicate *predicateHasNoteStar = [NSPredicate predicateWithFormat:@"hasNoteStar == %@", [NSNumber numberWithBool: YES] ];
-        
         NSArray *predicatesArray = [NSArray arrayWithObjects:predicate, predicateHasNoteStar, nil];
         NSPredicate * compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicatesArray];
         [fetchRequest setPredicate:compoundPredicate];
         
-        [fetchRequest setSortDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO]]];
+        NSSortDescriptor *noteModifiedDateSort = [[NSSortDescriptor alloc] initWithKey:@"noteModifiedDate" ascending:NO];
+        [fetchRequest setSortDescriptors: @[noteModifiedDateSort]];
+        
         _fetchedResultsController = [[NSFetchedResultsController alloc] 
                                      initWithFetchRequest:fetchRequest 
                                      managedObjectContext:[NoteDataManager sharedNoteDataManager].managedObjectContext
-                                     sectionNameKeyPath:@"sectionName" cacheName:nil];
+                                     sectionNameKeyPath:nil cacheName:nil];
         [fetchRequest setFetchBatchSize:20];
         _fetchedResultsController.delegate = self;
     }
@@ -477,8 +437,8 @@
         case NSFetchedResultsChangeMove:
             break;
     }
-    [self performUpdateInfoButton];                                                 //업데이트 인포
-    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
+    [self performUpdateInfoButton];
+    [self performCheckNoNote];
 }
 
 
@@ -498,8 +458,8 @@
             break;
             
         case NSFetchedResultsChangeUpdate:
-            [tableView reloadData];                 //테이블 뷰 업데이트
-            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
+            [tableView reloadData];
+            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
             
         case NSFetchedResultsChangeMove:
@@ -509,8 +469,8 @@
                              withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
     }
-    [self performUpdateInfoButton];                                                 //업데이트 인포
-    [self performCheckNoNote];                                                      //노트 없으면 헬프 레이블 보여줄 것
+    [self performUpdateInfoButton];
+    [self performCheckNoNote];
 }
 
 
@@ -522,11 +482,10 @@
 
 #pragma mark - 바 버튼 및 메소드
 
-- (void)addNavigationBarButtonItem
+- (void)addBarButtonItem
 {
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixed.width = 20.0f;
-    
+    barButtonItemFixed.width = 22.0f;
     
     UIView* infoButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 130, 40)];
     self.infoButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -558,13 +517,13 @@
 
 - (void)performUpdateInfoButton
 {
-    [self performSelector:@selector(updateInfoButton) withObject:self.infoButton afterDelay:0.5];
+    [self performSelector:@selector(updateInfoButton) withObject:self.infoButton afterDelay:0.3];
 }
 
 
 - (void)updateInfoButton
 {
-    _totalNotes = (int)[[_fetchedResultsController fetchedObjects] count];        //노트 갯수
+    _totalNotes = (int)[[_fetchedResultsController fetchedObjects] count];
     
     if (_totalNotes == 0) {
         [self.infoButton setTitle:@"" forState:UIControlStateNormal];
@@ -699,15 +658,19 @@
     if ([[_fetchedResultsController fetchedObjects] count] == 0)
     {
         self.helpLabel.alpha = 1.0;
+        self.helpLabel.textColor = [UIColor lightGrayColor];
         self.tableView.separatorColor = kCLEAR_COLOR;
     }
     else
     {
         self.helpLabel.alpha = 0.0;
-        self.tableView.separatorColor = kCLEAR_COLOR; //kTEXTVIEW_BACKGROUND_COLOR;
+        self.helpLabel.textColor = [UIColor clearColor];
+        self.tableView.separatorColor = kCLEAR_COLOR;
     }
 }
 
+
+#pragma mark - Notification
 
 #pragma mark - StarListViewWillShow Notification 옵저버 등록
 
@@ -736,6 +699,54 @@
 }
 
 
+#pragma mark 옵저버 해제
+
+- (void)deregisterForNotifications
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self name:@"StarListViewWillShowNotification" object:nil];
+    [center removeObserver:self];
+}
+
+
+#pragma mark - 유저 디폴트
+#pragma mark 유저 디폴트 > 현재 뷰 저장
+
+- (void)saveCurrentView
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_DROPBOX];
+    [standardUserDefaults synchronize];
+}
+
+
+- (void)cancelCurrentView
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_DROPBOX];
+    [standardUserDefaults synchronize];
+}
+
+
+#pragma mark - Dealloc
+
+- (void)dealloc
+{
+    [self deregisterForNotifications];
+    _fetchedResultsController = nil;
+    self.searchResultNotes = nil;
+    NSLog(@"dealloc %@", self);
+}
+
+
+#pragma mark - 메모리 경고
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+}
+
+
 #pragma mark - 블랭크 뷰 보여줌
 
 - (void)showBlankView
@@ -749,7 +760,7 @@
         UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
         
         if(orientation == 0) {
-            layeredNavigationItem.width = 768-320; //Default
+            layeredNavigationItem.width = 768-320;
         }
         else if(orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
         {
@@ -759,30 +770,11 @@
         {
             layeredNavigationItem.width = 1024-320;
         }
-        layeredNavigationItem.nextItemDistance = 320;                 //레이어가 가려질 거리;
+        layeredNavigationItem.nextItemDistance = 320;
         layeredNavigationItem.hasChrome = NO;
         layeredNavigationItem.hasBorder = NO;
         layeredNavigationItem.displayShadow = YES;
     }];
-}
-
-
-#pragma mark - Dealloc
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];     //Remove 옵저버
-    _fetchedResultsController = nil;                                //fetchedResultsController
-    self.searchResultNotes = nil;                                   //검색결과를 담을 뮤터블 배열
-    NSLog(@"dealloc %@", self);
-}
-
-
-#pragma mark - 메모리 경고
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
 }
 
 
