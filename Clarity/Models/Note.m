@@ -93,7 +93,7 @@
     self.dayString = stringDay;
     self.dateString = stringdaysOfTheWeek;
     
-    [self.formatter setDateFormat:@"MMM yyyy"];
+    [self.formatter setDateFormat:@"MMMM yyyy"]; //@"MMM yyyy"
     NSString *sectionName = [self.formatter stringFromDate:now];
     self.sectionName = sectionName;
 }
