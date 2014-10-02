@@ -237,6 +237,11 @@
     cell.monthAndYearLabel.font = kTABLE_VIEW_CELL_DETAILTEXTLABEL_FONT;
     cell.monthAndYearLabel.textColor = kTABLE_VIEW_CELL_DETAILTEXTLABEL_TEXTCOLOR;
     
+    cell.dayLabel.font = kTABLE_VIEW_CELL_DAYLABEL_FONT;
+    cell.dateLabel.font = kTABLE_VIEW_CELL_DATELABEL_FONT;
+    
+    cell.dateLabel.textColor = kTABLE_VIEW_CELL_DATELABEL_TEXTCOLOR_DEFAULT;
+    
     if ([cell.dateLabel.text isEqualToString:@"SAT"])
     {
         cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SATURDAY;
@@ -247,9 +252,7 @@
     else {
         cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT;
     }
-    cell.dateLabel.textColor = kTABLE_VIEW_CELL_DATELABEL_TEXTCOLOR_DEFAULT;
-    cell.dayLabel.font = kTABLE_VIEW_CELL_DAYLABEL_FONT;
-    cell.dateLabel.font = kTABLE_VIEW_CELL_DATELABEL_FONT;
+    
 }
 
 

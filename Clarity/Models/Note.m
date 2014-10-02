@@ -79,7 +79,7 @@
     [self.formatter setDateFormat:@"yyyy"];
     NSString *stringYear = [self.formatter stringFromDate:now];
     
-    [self.formatter setDateFormat:@"MMMM"];
+    [self.formatter setDateFormat:@"MMM"];
     NSString *stringMonth = [self.formatter stringFromDate:now];
     
     [self.formatter setDateFormat:@"dd"];
@@ -94,7 +94,7 @@
     self.dayString = stringDay;
     self.dateString = stringdaysOfTheWeek;
     
-    [self.formatter setDateFormat:@"MMMM yyyy"]; //@"MMM yyyy"
+    [self.formatter setDateFormat:@"MMM yyyy"]; //@"MMM yyyy"
     NSString *monthAndYearString = [self.formatter stringFromDate:now];
     self.monthAndYearString = monthAndYearString;
     self.sectionName = monthAndYearString;

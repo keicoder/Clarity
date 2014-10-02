@@ -89,7 +89,7 @@ extern NSString * const kIS_FIRST_TIME;
 #define kTABLE_VIEW_CELL_TEXTLABEL_TEXTCOLOR                [UIColor colorWithRed:0.117 green:0.121 blue:0.132 alpha:1.000]
 #define kTABLE_VIEW_CELL_DETAILTEXTLABEL_TEXTCOLOR          [UIColor colorWithRed:0.565 green:0.559 blue:0.559 alpha:1.000]
 
-#define kTABLE_VIEW_CELL_DAYLABEL_FONT                      [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:33]
+#define kTABLE_VIEW_CELL_DAYLABEL_FONT                      [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:38]
 #define kTABLE_VIEW_CELL_DATELABEL_FONT                     [UIFont fontWithName:@"Avenir-Light" size:14.0]
 #define kTABLE_VIEW_CELL_TEXTLABEL_FONT                     [UIFont fontWithName:@"AvenirNext-Regular" size:18.0]
 #define kTABLE_VIEW_CELL_DETAILTEXTLABEL_FONT               [UIFont fontWithName:@"AvenirNext-Regular" size:14.0]

@@ -15,6 +15,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *noteSubtitleLabel;
 @property (nonatomic, weak) IBOutlet UILabel *dateLabel;
 @property (nonatomic, weak) IBOutlet UILabel *dayLabel;
+@property (nonatomic, weak) IBOutlet UILabel *monthLabel;
+@property (nonatomic, weak) IBOutlet UILabel *yearLabel;
 @property (nonatomic, weak) IBOutlet UILabel *monthAndYearLabel;
-
 @end
