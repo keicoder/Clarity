@@ -246,6 +246,7 @@
 		C173259419D25D84001ED5D5 /* NoteTitlePopinViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteTitlePopinViewController_iPad.xib; sourceTree = "<group>"; };
 		C1734D2B19D8F22600813FA1 /* FCFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCFileManager.h; sourceTree = "<group>"; };
 		C1734D2C19D8F22600813FA1 /* FCFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCFileManager.m; sourceTree = "<group>"; };
+		C187AFAC19DCE89C00594616 /* ClarityHD 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ClarityHD 5.xcdatamodel"; sourceTree = "<group>"; };
 		C1ABF0C319985B7A00E622CA /* MainSidePanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainSidePanelViewController.h; sourceTree = "<group>"; };
 		C1ABF0C419985B7A00E622CA /* MainSidePanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainSidePanelViewController.m; sourceTree = "<group>"; };
 		C1ABF0C719985CF400E622CA /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JASidePanelController.h; sourceTree = "<group>"; };
@@ -1320,11 +1321,12 @@
 			isa = XCVersionGroup;
 			children = (
 				C12FE79419D1110E001209B2 /* ClarityHD 4.xcdatamodel */,
+				C187AFAC19DCE89C00594616 /* ClarityHD 5.xcdatamodel */,
 				C1ADEA9619CD67E800C4DDE0 /* ClarityHD 3.xcdatamodel */,
 				C121D4E619C93AB30098BC94 /* ClarityHD 2.xcdatamodel */,
 				C122910B19973CE100460667 /* ClarityHD.xcdatamodel */,
 			);
-			currentVersion = C12FE79419D1110E001209B2 /* ClarityHD 4.xcdatamodel */;
+			currentVersion = C187AFAC19DCE89C00594616 /* ClarityHD 5.xcdatamodel */;
 			path = Clarity.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

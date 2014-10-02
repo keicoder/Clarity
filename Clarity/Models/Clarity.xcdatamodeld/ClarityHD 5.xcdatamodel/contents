@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6251" systemVersion="14A379a" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Note" representedClassName="Note" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dayString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasImage" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hasNoteAnnotate" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hasNoteStar" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="imageCreatedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="imageName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageUniqueId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="isDropboxNote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isiCloudNote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isLocalNote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isNewNote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isOtherCloudNote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="monthAndYearString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="monthString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteAll" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteAnnotate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteBody" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteCreatedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="noteModifiedDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="noteSection" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="noteTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="sectionName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="syncID" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="uniqueNoteIDString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="yearString" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Note" positionX="0" positionY="153" width="128" height="510"/>
+    </elements>
+</model>

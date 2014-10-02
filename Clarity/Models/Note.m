@@ -47,6 +47,7 @@
 @dynamic syncID;
 @dynamic yearString;
 @dynamic uniqueNoteIDString;
+@dynamic monthAndYearString;
 
 @synthesize formatter = _formatter;
 
@@ -78,7 +79,7 @@
     [self.formatter setDateFormat:@"yyyy"];
     NSString *stringYear = [self.formatter stringFromDate:now];
     
-    [self.formatter setDateFormat:@"M"];
+    [self.formatter setDateFormat:@"MMMM"];
     NSString *stringMonth = [self.formatter stringFromDate:now];
     
     [self.formatter setDateFormat:@"dd"];
@@ -94,8 +95,9 @@
     self.dateString = stringdaysOfTheWeek;
     
     [self.formatter setDateFormat:@"MMMM yyyy"]; //@"MMM yyyy"
-    NSString *sectionName = [self.formatter stringFromDate:now];
-    self.sectionName = sectionName;
+    NSString *monthAndYearString = [self.formatter stringFromDate:now];
+    self.monthAndYearString = monthAndYearString;
+    self.sectionName = monthAndYearString;
 }
 
 
