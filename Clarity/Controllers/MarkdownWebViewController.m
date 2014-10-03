@@ -34,6 +34,7 @@
 #import "LocalNote.h"
 #import "UIImage+MakeThumbnail.h"
 #import "TOWebViewController.h"
+#import "UIImage+ChangeColor.h"
 
 
 @interface MarkdownWebViewController () <UIWebViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIScrollViewDelegate>
@@ -43,13 +44,14 @@
 @property (weak, nonatomic) IBOutlet UIWebView *markdownWebView;
 @property (strong, nonatomic) NSMutableString *htmlString;
 @property (assign) CGPoint tapPoint;
+@property (nonatomic, strong) UIButton *buttonForFullscreen;
 
 @end
 
 
 @implementation MarkdownWebViewController
 {
-    BOOL _didTapped;
+    BOOL _didHideNavigationBar;
 }
 
 #pragma mark - 뷰 life cycle
@@ -58,8 +60,10 @@
 {
     if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
     [super viewDidLoad];
-    _didTapped = NO;
+    _didHideNavigationBar = NO;
     [self addTapGestureRecognizer];
+    [self addButtonForFullscreen];
+    [self addBarButtonItems];
 }
 
 
@@ -71,7 +75,6 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self assignAttributeToMarkdownWebView];
     [self makeMarkdownString];
-//    [self addNavigationBarButtonItems];
 }
 
 
@@ -199,17 +202,19 @@
 
 - (void)handleTap:(UITapGestureRecognizer *)gesture
 {
-    if ( _didTapped == NO)
+    if ( _didHideNavigationBar == NO)
     {
-        _didTapped = YES;
+        _didHideNavigationBar = YES;
         [self hideStatusBar];
         [self hideNavigationBar];
+        [self showButtonForFullscreenWithAnimation];
     }
     else
     {
-        _didTapped = NO;
+        _didHideNavigationBar = NO;
         [self showStatusBar];
         [self showNavigationBar];
+        [self hideButtonForFullscreenWithAnimation];
     }
 }
 
@@ -248,35 +253,114 @@
 }
 
 
-#pragma mark - 내비게이션 바 버튼
+#pragma mark - 바 버튼
 
-- (void)addNavigationBarButtonItems
+- (void)addBarButtonItems
 {
+    UIColor *tmpColor = [UIColor clearColor];
+    UIColor *buttonHighlightedColor = [UIColor orangeColor];
+    CGRect buttonFrame = CGRectMake(0 ,0, 40, 40);
+    
+    UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    barButtonItemFixed.width = 24.0f;
+    
+    
+    NSString *fs = @"expand-256";
+    UIImage *fullScreen = [UIImage imageNamed:fs];
+    UIImage *fullScreenH = [UIImage imageNameForChangingColor:fs color:buttonHighlightedColor];
+    UIButton *buttonFullScreen = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonFullScreen addTarget:self action:@selector(barButtonItemFullScreenPressed:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonFullScreen setImage:fullScreen forState:UIControlStateNormal];
+    [buttonFullScreen setImage:fullScreenH forState:UIControlStateSelected];
+    [buttonFullScreen setImage:fullScreenH forState:UIControlStateHighlighted];
+    buttonFullScreen.frame = buttonFrame;
+    float fImageInset = 10.0;
+    [buttonFullScreen setImageEdgeInsets:UIEdgeInsetsMake(12.0, fImageInset, 8.0, fImageInset)];
+    UIBarButtonItem *barButtonItemFullScreen = [[UIBarButtonItem alloc] initWithCustomView:buttonFullScreen];
+    buttonFullScreen.backgroundColor = tmpColor;
+    
+    
     if (iPad) {
-        
+        NSArray *navigationBarItems = @[barButtonItemFullScreen];
+        self.navigationItem.rightBarButtonItems = navigationBarItems;
     } else {
-        UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithTitle:@"Share" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemSharePressed:)];
-        
-        self.navigationItem.rightBarButtonItem = barButtonItemShare;
+        NSArray *navigationBarItems = @[barButtonItemFullScreen];
+        self.navigationItem.rightBarButtonItems = navigationBarItems;
     }
 }
 
 
-- (void)barButtonItemSharePressed:(id)sender
+#pragma mark FullScreen 버튼
+
+- (void)barButtonItemFullScreenPressed:(id)sender
 {
-    [UIView animateWithDuration:0.1 delay: 0.0 options: UIViewAnimationOptionCurveEaseInOut
-                     animations:^{ }
+    if (_didHideNavigationBar == NO) {
+        [self hideStatusBar];
+        [self hideNavigationBar];
+        [self showButtonForFullscreenWithAnimation];
+        _didHideNavigationBar = YES;
+    }
+}
+
+
+- (void)addButtonForFullscreen
+{
+#define kFullScreenButton_OriginX   CGRectGetWidth(self.view.bounds) - 44
+    
+    UIImage *image = [UIImage imageNamed:@"collapse-black-256"];
+    UIImage *imageThumb = [image makeThumbnailOfSize:CGSizeMake(24, 24)];
+    self.buttonForFullscreen = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.buttonForFullscreen.frame = CGRectMake(kFullScreenButton_OriginX, -44, 44, 44);
+    [self.buttonForFullscreen setImage:imageThumb forState:UIControlStateNormal];
+    self.buttonForFullscreen.tintColor = [UIColor colorWithRed:0.094 green:0.071 blue:0.188 alpha:1];
+    [self.view addSubview:self.buttonForFullscreen];
+    
+    [self.buttonForFullscreen addTarget:self action:@selector(showStatbarNavbarAndHideFullScreenButton) forControlEvents:UIControlEventTouchUpInside];
+}
+
+
+- (void)showButtonForFullscreenWithAnimation
+{
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.buttonForFullscreen.frame = CGRectMake(kFullScreenButton_OriginX, 0, 44, 44);
+                         self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.5, 1.5);
+                         self.buttonForFullscreen.alpha = 0.5;}
                      completion:^(BOOL finished) {
-                         NSString *noteStringForshare = self.htmlString;
-                         NSArray *itemsToShare = @[noteStringForshare];
-                         UIActivityViewController *activityViewController;
-                         activityViewController = [[UIActivityViewController alloc]
-                                                   initWithActivityItems:itemsToShare
-                                                   applicationActivities:nil];
-                         [self presentViewController:activityViewController
-                                            animated:YES
-                                          completion:nil];
+                         [UIView animateWithDuration:0.2 delay: 0.0 options: UIViewAnimationOptionCurveEaseInOut
+                                          animations:^{
+                                              self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.0, 1.0);}
+                                          completion:^(BOOL finished) { }];
                      }];
+}
+
+
+- (void)hideButtonForFullscreenWithAnimation
+{
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.buttonForFullscreen.frame = CGRectMake(kFullScreenButton_OriginX, -44, 44, 44);
+                         self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.5, 1.5);
+                         self.buttonForFullscreen.alpha = 0.6;}
+                     completion:^(BOOL finished) {
+                         [UIView animateWithDuration:0.2 delay: 0.0 options: UIViewAnimationOptionCurveEaseInOut
+                                          animations:^{
+                                              self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.0, 1.0);}
+                                          completion:^(BOOL finished) { }];
+                     }];
+}
+
+
+- (void)showStatbarNavbarAndHideFullScreenButton
+{
+    if (_didHideNavigationBar == YES) {
+        [self showStatusBar];
+        [self showNavigationBar];
+        [self hideButtonForFullscreenWithAnimation];
+        _didHideNavigationBar = NO;
+    }
 }
 
 
