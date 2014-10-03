@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @class Note;
+@class LocalNote;
 
 @interface MarkdownWebViewController : UIViewController
 
 @property (nonatomic, strong) Note *currentNote;
+@property (nonatomic, strong) LocalNote *currentLocalNote;
 
 @end

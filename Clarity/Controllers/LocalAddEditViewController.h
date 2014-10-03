@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Note.h"
+#import "LocalNote.h"
 
 
 @interface LocalAddEditViewController : UIViewController
 
-@property (strong, nonatomic) Note *currentNote;
+@property (strong, nonatomic) LocalNote *currentNote;
 
-- (void)note:(Note *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (void)note:(LocalNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 
 @end

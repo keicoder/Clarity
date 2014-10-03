@@ -15,7 +15,7 @@
 #import "FRLayeredNavigationController/FRLayeredNavigation.h"
 #import "AppDelegate.h"
 #import "NoteDataManager.h"
-#import "Note.h"
+#import "LocalNote.h"
 #import "LocalAddEditViewController.h"
 #import "LocalStarViewController.h"
 #import "NoteTableViewCell.h"
@@ -34,9 +34,9 @@
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) UIViewController *starViewController;
 @property (nonatomic, strong) NSMutableArray *searchResultNotes;
-@property (nonatomic, strong) Note *selectedNote;
-@property (nonatomic, strong) Note *receivedNote;
-@property (nonatomic, strong) Note *beDeletingNote;
+@property (nonatomic, strong) LocalNote *selectedNote;
+@property (nonatomic, strong) LocalNote *receivedNote;
+@property (nonatomic, strong) LocalNote *beDeletingNote;
 @property (nonatomic, strong) NSDateFormatter *formatter;
 @property (nonatomic, strong) UIBarButtonItem *barButtonItemStarred;
 @property (nonatomic, strong) UIButton *buttonStar;
@@ -197,7 +197,7 @@
         tableView.backgroundColor = kTABLE_VIEW_BACKGROUND_COLOR;
         tableView.separatorColor = kTABLE_VIEW_SEPARATOR_COLOR;
         
-        Note *note = self.searchResultNotes[indexPath.row];
+        LocalNote *note = self.searchResultNotes[indexPath.row];
         cell.noteTitleLabel.text = note.noteTitle;
         cell.noteSubtitleLabel.text = note.noteBody;
         cell.dateLabel.text = note.dateString;
@@ -208,7 +208,7 @@
         [self configureImages:note cell:cell];
     }
     else {
-        Note *note = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        LocalNote *note = [self.fetchedResultsController objectAtIndexPath:indexPath];
         cell.noteTitleLabel.text = note.noteTitle;
         cell.noteSubtitleLabel.text = note.noteBody;
         cell.dateLabel.text = note.dateString;
@@ -257,7 +257,7 @@
 
 #pragma mark 셀 이미지
 
-- (void)configureImages:(Note *)note cell:(NoteTableViewCell *)cell
+- (void)configureImages:(LocalNote *)note cell:(NoteTableViewCell *)cell
 {
     UIImage *starredImage = [UIImage imageNameForChangingColor:@"star-256-white" color:kGOLD_COLOR];
     BOOL hasNoteStarCurrentState = [note.hasNoteStar boolValue];
@@ -322,7 +322,7 @@
     NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
     
     if (iPad) {
-        Note *noteForDelete = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        LocalNote *noteForDelete = [self.fetchedResultsController objectAtIndexPath:indexPath];
         if (managedObject.objectID == self.receivedNote.objectID || noteForDelete.uniqueNoteIDString == self.receivedNote.uniqueNoteIDString) {
             [self.layeredNavigationController popViewControllerAnimated:YES];
             [self showBlankView];
@@ -351,7 +351,7 @@
     
     if (tableView == self.searchDisplayController.searchResultsTableView) {
         NSIndexPath *indexPath = [self.searchDisplayController.searchResultsTableView indexPathForSelectedRow];
-        self.selectedNote = (Note *)[self.searchResultNotes objectAtIndex:indexPath.row];
+        self.selectedNote = (LocalNote *)[self.searchResultNotes objectAtIndex:indexPath.row];
         
         controller.currentNote = self.selectedNote;
         
@@ -366,7 +366,7 @@
         
         [self saveIndexPath:indexPath];
         
-        self.selectedNote = (Note *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]]; //self.selectedNote = (Note *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
+        self.selectedNote = (LocalNote *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]]; //self.selectedNote = (LocalNote *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         
         controller.currentNote = self.selectedNote;
@@ -399,7 +399,7 @@
 //    [managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
     NSManagedObjectContext *managedObjectContext = [NoteDataManager sharedNoteDataManager].managedObjectContext;
   
-    Note *note = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:managedObjectContext];
+    LocalNote *note = [NSEntityDescription insertNewObjectForEntityForName:@"LocalNote" inManagedObjectContext:managedObjectContext];
     
     NSString *uniqueNoteIDString = [NSString stringWithFormat:@"%lli", arc4random() % 999999999999999999];
     note.uniqueNoteIDString = uniqueNoteIDString;
@@ -487,7 +487,7 @@
     }
     else if (_fetchedResultsController == nil)
     {
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"LocalNote"];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"isLocalNote == %@", [NSNumber numberWithBool: YES]];
         [fetchRequest setPredicate:predicate];
         
@@ -839,7 +839,7 @@
     if ([[notification name] isEqualToString:@"CurrentNoteObjectIDKeyNotification"])
     {
         NSDictionary *userInfo = notification.userInfo;
-        Note *receivedNote = [userInfo objectForKey:@"currentNoteObjectIDKey"];
+        LocalNote *receivedNote = [userInfo objectForKey:@"currentNoteObjectIDKey"];
         self.receivedNote = receivedNote;
     }
 }
@@ -1092,7 +1092,7 @@
         //                                                initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         //[managedObjectContext setParentContext:[NoteDataManager sharedNoteDataManager].managedObjectContext];
         
-        self.selectedNote = (Note *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]]; //self.selectedNote = (Note *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
+        self.selectedNote = (LocalNote *)[managedObjectContext objectWithID:[[self.fetchedResultsController objectAtIndexPath:indexPath] objectID]]; //self.selectedNote = (LocalNote *)[self.fetchedResultsController objectAtIndexPath:indexPath]; //위 코드와 결과 동일
         
         [controller note:self.selectedNote inManagedObjectContext:managedObjectContext];
         

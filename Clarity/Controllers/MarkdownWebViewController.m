@@ -31,6 +31,7 @@
 #import "MarkdownWebViewController.h"
 #import "MMMarkdown.h"
 #import "Note.h"
+#import "LocalNote.h"
 #import "UIImage+MakeThumbnail.h"
 #import "TOWebViewController.h"
 
@@ -148,11 +149,14 @@
 {
     NSError *error = nil;
     NSString *markdownString = @"";
-    if ([self.currentNote.noteBody length] == 0) {
+    if ([self.currentNote.noteBody length] == 0 && [self.currentLocalNote.noteBody length] == 0) {
         markdownString = @"*No content*";
     }
-    else if ([self.currentNote.noteBody length] > 0) {
+    else if ([self.currentNote.noteBody length] > 0 && [self.currentLocalNote.noteBody length] == 0) {
         markdownString = self.currentNote.noteBody;
+    }
+    else if ([self.currentNote.noteBody length] == 0 && [self.currentLocalNote.noteBody length] > 0) {
+        markdownString = self.currentLocalNote.noteBody;
     }
     if (error != nil)
     {

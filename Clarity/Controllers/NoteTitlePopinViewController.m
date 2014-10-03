@@ -35,6 +35,13 @@
 }
 
 
+- (void)localNote:(LocalNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+{
+    _currentLocalNote = note;
+    _managedObjectContext = managedObjectContext;
+}
+
+
 #pragma mark - init
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -64,6 +71,10 @@
     
     if (self.currentNote) {
         self.titleTextField.text = self.currentNote.noteTitle;
+    }
+    else if (self.currentLocalNote.isLocalNote)
+    {
+        self.titleTextField.text = self.currentLocalNote.noteTitle;
     }
     
 //    [self.titleTextField performSelector:@selector(selectAll:) withObject:self.titleTextField afterDelay:0.f];
@@ -111,6 +122,16 @@
         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentNote forKey:@"didChangeNoteTitleKey"];
         [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeNoteTitleNotification" object:nil userInfo:userInfo];
     }
+    else if (self.currentLocalNote.isLocalNote)
+    {
+        if ([self.titleTextField.text length] == 0) {
+            self.currentLocalNote.noteTitle = @"Untitled";
+        } else if ([self.titleTextField.text length] > 0) {
+            self.currentLocalNote.noteTitle = self.titleTextField.text;
+        }
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentLocalNote forKey:@"didChangeNoteTitleKey"];
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeNoteTitleNotification" object:nil userInfo:userInfo];
+    }
     
     [self performSelector:@selector(dismissView:) withObject:self afterDelay:0.1];
 }
@@ -131,12 +152,14 @@
 }
 
 
-#pragma mark - 메모리 경고
+#pragma mark - deregisterForNotifications
 
-- (void)didReceiveMemoryWarning
+- (void)deregisterForNotifications
 {
-    [super didReceiveMemoryWarning];
-    NSLog(@"Memory Warning Invoked");
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self name:@"DidChangeNoteTitleNotification" object:nil];
+    [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
+    [center removeObserver:self];
 }
 
 
@@ -144,7 +167,17 @@
 
 - (void)dealloc
 {
+    [self deregisterForNotifications];
     NSLog(@"dealloc %@", self);
+}
+
+
+#pragma mark - 메모리 경고
+
+- (void)didReceiveMemoryWarning
+{
+    [self saveMethodInvoked];
+    [super didReceiveMemoryWarning];
 }
 
 

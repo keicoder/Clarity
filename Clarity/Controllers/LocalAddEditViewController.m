@@ -62,7 +62,7 @@
 
 #pragma mark - 노트 in Managed Object Context
 
-- (void)note:(Note *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (void)note:(LocalNote *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
 {
     self.currentNote = note;
     self.managedObjectContext = managedObjectContext;
@@ -571,7 +571,7 @@
 {
     MarkdownWebViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"MarkdownWebViewController"];
     self.currentNote.noteBody = self.noteTextView.text;
-    controller.currentNote = self.currentNote;
+    controller.currentLocalNote = self.currentNote;
     [self.navigationController pushViewController:controller animated:YES];
 }
 
@@ -703,7 +703,7 @@
     
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
 //    NSManagedObjectContext *mainManagedObjectContext = [managedObjectContext parentContext];
-    [controller note:self.currentNote inManagedObjectContext:managedObjectContext];
+    [controller localNote:self.currentNote inManagedObjectContext:managedObjectContext];
     
     [controller setPopinTransitionStyle:BKTPopinTransitionStyleSlide];
     [controller setPopinOptions:BKTPopinDefault]; //BKTPopinDefault > Dismissable
@@ -735,7 +735,7 @@
     if ([[notification name] isEqualToString:@"DidChangeNoteTitleNotification"])
     {
         NSDictionary *userInfo = notification.userInfo;
-        Note *receivedNote = [userInfo objectForKey:@"didChangeNoteTitleKey"];
+        LocalNote *receivedNote = [userInfo objectForKey:@"didChangeNoteTitleKey"];
         self.currentNote = receivedNote;
         
         if (self.currentNote.noteTitle.length > 0) {
