@@ -102,6 +102,8 @@
 		C1EF467519D80AEA00CD7E32 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1EF467419D80AEA00CD7E32 /* MessageUI.framework */; };
 		C1EF467719D80AF900CD7E32 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1EF467619D80AF900CD7E32 /* QuartzCore.framework */; };
 		C1F0580C19C961BA0073530A /* UIViewController+MaryPopin.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F0580B19C961BA0073530A /* UIViewController+MaryPopin.m */; };
+		C1F1CC8519DE522600E916AA /* LocalNote.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F1CC8419DE522600E916AA /* LocalNote.m */; };
+		C1F1CC8819DE541300E916AA /* DropboxNote.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F1CC8719DE541300E916AA /* DropboxNote.m */; };
 		C331FC139151431BB224E126 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D6E8D91E9C764F1DBB2C6C0E /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -282,6 +284,11 @@
 		C1EF467619D80AF900CD7E32 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C1F0580A19C961BA0073530A /* UIViewController+MaryPopin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MaryPopin.h"; sourceTree = "<group>"; };
 		C1F0580B19C961BA0073530A /* UIViewController+MaryPopin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+MaryPopin.m"; sourceTree = "<group>"; };
+		C1F1CC8219DE515700E916AA /* ClarityHD 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ClarityHD 6.xcdatamodel"; sourceTree = "<group>"; };
+		C1F1CC8319DE522600E916AA /* LocalNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNote.h; sourceTree = "<group>"; };
+		C1F1CC8419DE522600E916AA /* LocalNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalNote.m; sourceTree = "<group>"; };
+		C1F1CC8619DE541300E916AA /* DropboxNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxNote.h; sourceTree = "<group>"; };
+		C1F1CC8719DE541300E916AA /* DropboxNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxNote.m; sourceTree = "<group>"; };
 		D6E8D91E9C764F1DBB2C6C0E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -563,6 +570,10 @@
 		C12290FE19973BE100460667 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C1F1CC8619DE541300E916AA /* DropboxNote.h */,
+				C1F1CC8719DE541300E916AA /* DropboxNote.m */,
+				C1F1CC8319DE522600E916AA /* LocalNote.h */,
+				C1F1CC8419DE522600E916AA /* LocalNote.m */,
 				C121D4EA19C93BCE0098BC94 /* Note.h */,
 				C121D4EB19C93BCE0098BC94 /* Note.m */,
 				C122910319973BE100460667 /* NoteDataManager.h */,
@@ -923,6 +934,7 @@
 				C125D34419AEDA1D00D9E892 /* MTZCollectionView.m in Sources */,
 				C1ABF0CD19985CF400E622CA /* JASidePanelController.m in Sources */,
 				C12290DB19973A7E00460667 /* OpenSourceLicencesViewController.m in Sources */,
+				C1F1CC8519DE522600E916AA /* LocalNote.m in Sources */,
 				C122904119973A2B00460667 /* AppDelegate.m in Sources */,
 				C12290EC19973BA100460667 /* WelcomePage.m in Sources */,
 				C12290D219973A7E00460667 /* DropboxStarViewController.m in Sources */,
@@ -938,6 +950,7 @@
 				C12290CD19973A7E00460667 /* ClarityConstants.m in Sources */,
 				C12290D119973A7E00460667 /* DropboxSettingsTableViewController.m in Sources */,
 				C1EF467119D7F9C200CD7E32 /* UIImage+TOWebViewControllerIcons.m in Sources */,
+				C1F1CC8819DE541300E916AA /* DropboxNote.m in Sources */,
 				C12290D819973A7E00460667 /* MarkdownWebViewController.m in Sources */,
 				C12290CF19973A7E00460667 /* DropboxAddEditViewController.m in Sources */,
 				C1F0580C19C961BA0073530A /* UIViewController+MaryPopin.m in Sources */,
@@ -1322,11 +1335,12 @@
 			children = (
 				C12FE79419D1110E001209B2 /* ClarityHD 4.xcdatamodel */,
 				C187AFAC19DCE89C00594616 /* ClarityHD 5.xcdatamodel */,
+				C1F1CC8219DE515700E916AA /* ClarityHD 6.xcdatamodel */,
 				C1ADEA9619CD67E800C4DDE0 /* ClarityHD 3.xcdatamodel */,
 				C121D4E619C93AB30098BC94 /* ClarityHD 2.xcdatamodel */,
 				C122910B19973CE100460667 /* ClarityHD.xcdatamodel */,
 			);
-			currentVersion = C187AFAC19DCE89C00594616 /* ClarityHD 5.xcdatamodel */;
+			currentVersion = C1F1CC8219DE515700E916AA /* ClarityHD 6.xcdatamodel */;
 			path = Clarity.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

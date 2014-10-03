@@ -1,8 +1,8 @@
 //
-//  Note.h
+//  DropboxNote.h
 //  Clarity
 //
-//  Created by jun on 9/17/14.
+//  Created by jun on 10/3/14.
 //  Copyright (c) 2014 lovejunsoft. All rights reserved.
 //
 
@@ -10,9 +10,8 @@
 #import <CoreData/CoreData.h>
 
 
-@interface Note : NSManagedObject
+@interface DropboxNote : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * isOtherCloudNote;
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) NSString * dateString;
 @property (nonatomic, retain) NSString * dayString;
@@ -28,7 +27,9 @@
 @property (nonatomic, retain) NSNumber * isiCloudNote;
 @property (nonatomic, retain) NSNumber * isLocalNote;
 @property (nonatomic, retain) NSNumber * isNewNote;
+@property (nonatomic, retain) NSNumber * isOtherCloudNote;
 @property (nonatomic, retain) NSString * location;
+@property (nonatomic, retain) NSString * monthAndYearString;
 @property (nonatomic, retain) NSString * monthString;
 @property (nonatomic, retain) NSString * noteAll;
 @property (nonatomic, retain) NSString * noteAnnotate;
@@ -40,9 +41,8 @@
 @property (nonatomic, retain) NSNumber * position;
 @property (nonatomic, retain) NSString * sectionName;
 @property (nonatomic, retain) NSString * syncID;
-@property (nonatomic, retain) NSString * yearString;
 @property (nonatomic, retain) NSString * uniqueNoteIDString;
-@property (nonatomic, retain) NSString * monthAndYearString;
+@property (nonatomic, retain) NSString * yearString;
 
 - (void)updateTableCellDateValue;
 

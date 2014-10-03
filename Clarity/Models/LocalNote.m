@@ -1,23 +1,22 @@
 //
-//  Note.m
+//  LocalNote.m
 //  Clarity
 //
-//  Created by jun on 9/17/14.
+//  Created by jun on 10/3/14.
 //  Copyright (c) 2014 lovejunsoft. All rights reserved.
 //
 
-#import "Note.h"
+#import "LocalNote.h"
 
-@interface Note ()
+@interface LocalNote ()
 
 @property (nonatomic, strong) NSDateFormatter *formatter;
 
 @end
 
 
-@implementation Note
+@implementation LocalNote
 
-@dynamic isOtherCloudNote;
 @dynamic date;
 @dynamic dateString;
 @dynamic dayString;
@@ -33,7 +32,9 @@
 @dynamic isiCloudNote;
 @dynamic isLocalNote;
 @dynamic isNewNote;
+@dynamic isOtherCloudNote;
 @dynamic location;
+@dynamic monthAndYearString;
 @dynamic monthString;
 @dynamic noteAll;
 @dynamic noteAnnotate;
@@ -45,9 +46,8 @@
 @dynamic position;
 @dynamic sectionName;
 @dynamic syncID;
-@dynamic yearString;
 @dynamic uniqueNoteIDString;
-@dynamic monthAndYearString;
+@dynamic yearString;
 
 @synthesize formatter = _formatter;
 
