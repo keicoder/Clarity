@@ -176,8 +176,9 @@
 {
     if ( navigationType == UIWebViewNavigationTypeLinkClicked ) {
         if (self.navigationController.navigationBarHidden == YES) {
+            _didHideNavigationBar = NO;
             [self showStatusBar];
-            [self showNavigationBar];
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
         }
         NSURL *url = nil;
         url = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [request URL]]];
@@ -268,7 +269,7 @@
     CGRect buttonFrame = CGRectMake(0 ,0, 40, 40);
     
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixed.width = 24.0f;
+    barButtonItemFixed.width = 4.0f;
     
     
     NSString *fs = @"expand-256";
@@ -287,7 +288,7 @@
     
     
     if (iPad) {
-        NSArray *navigationBarItems = @[barButtonItemFullScreen];
+        NSArray *navigationBarItems = @[barButtonItemFixed, barButtonItemFullScreen];
         self.navigationItem.rightBarButtonItems = navigationBarItems;
     } else {
         NSArray *navigationBarItems = @[barButtonItemFullScreen];
