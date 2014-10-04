@@ -874,116 +874,14 @@
             
         }
         else {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kHasLaunchedOnce"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
             [self performSelector:@selector(showWhatsNewView) withObject:nil afterDelay:1.0];
             [[NSUserDefaults standardUserDefaults] setObject:versionString forKey:@"currentVersion"];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
     }
-}
-
-
-#pragma mark 옵저버 해제
-
-- (void)deregisterForNotifications
-{
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center removeObserver:self name:@"CurrentNoteObjectIDKeyNotification" object:nil];
-    [center removeObserver:self name:@"WelcomeViewControllerDismissedNotification" object:nil];
-    [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
-    [center removeObserver:self];
-}
-
-
-#pragma mark - 유저 디폴트
-#pragma mark 유저 디폴트 > 현재 인덱스패스 저장
-
-- (void)saveIndexPath:(NSIndexPath *)indexPath
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setInteger:indexPath.row forKey:kSELECTED_LOCAL_NOTE_INDEX];
-    [standardUserDefaults setIndexPath:indexPath forKey:kSELECTED_LOCAL_NOTE_INDEXPATH];
-    [standardUserDefaults synchronize];
-}
-
-
-#pragma mark 유저 디폴트 > 현재 뷰 저장
-
-- (void)saveCurrentView
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_LOCAL];
-    [standardUserDefaults synchronize];
-}
-
-
-- (void)cancelCurrentView
-{
-    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
-    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_LOCAL];
-    [standardUserDefaults synchronize];
-}
-
-
-#pragma mark - 내비게이션 컨트롤러 델리게이트
-
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
-{
-    if (viewController == self)
-    {
-        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_LOCAL_NOTE_INDEX];
-    }
-}
-
-
-#pragma mark - Dealloc
-
-- (void)dealloc
-{
-    [self deregisterForNotifications];
-    _fetchedResultsController = nil;
-    self.searchResultNotes = nil;
-    NSLog(@"dealloc %@", self);
-}
-
-
-#pragma mark - 메모리 경고
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
-
-
-#pragma mark - 블랭크 뷰 보여줌
-
-- (void)showBlankView
-{
-    BlankViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"BlankViewController"];
-    
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-    
-    [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-        
-        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-        
-        if(orientation == 0) {
-            layeredNavigationItem.width = 768-320;
-        }
-        else if(orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
-        {
-            layeredNavigationItem.width = 768-320;
-        }
-        else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
-        {
-            layeredNavigationItem.width = 1024-320;
-        }
-        layeredNavigationItem.nextItemDistance = 320;
-        layeredNavigationItem.hasChrome = NO;
-        layeredNavigationItem.hasBorder = NO;
-        layeredNavigationItem.displayShadow = YES;
-    }];
-    
-    [self performSelector:@selector(checkWhetherShowWelcomeView) withObject:nil afterDelay:0.3];
 }
 
 
@@ -995,8 +893,6 @@
         
     }
     else {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kHasLaunchedOnce"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
         [self showWelcomeView];
     }
 }
@@ -1043,29 +939,108 @@
 }
 
 
-#pragma mark - 테이블 푸터 뷰
+#pragma mark - 블랭크 뷰 보여줌
 
-- (void)addFooterViewToTableView
+- (void)showBlankView
 {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), CGRectGetHeight(self.tableView.frame))];
-    [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [view setBackgroundColor:kCLEAR_COLOR];
-    UIImage *image = [UIImage imageNamed:@"swiftNoteWideLogo102by38"];
-    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:image];
-    [logoImageView setFrame:({
-        CGRect frame = logoImageView.frame;
-        frame.origin.x = 70;
-        frame.origin.y = 20;
-        CGRectIntegral(frame);
-    })];
+    BlankViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"BlankViewController"];
     
-    [logoImageView setAlpha:1.0];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     
-    [view addSubview:logoImageView];
+    [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+        
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        
+        if(orientation == 0) {
+            layeredNavigationItem.width = 768-320;
+        }
+        else if(orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+        {
+            layeredNavigationItem.width = 768-320;
+        }
+        else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+        {
+            layeredNavigationItem.width = 1024-320;
+        }
+        layeredNavigationItem.nextItemDistance = 320;
+        layeredNavigationItem.hasChrome = NO;
+        layeredNavigationItem.hasBorder = NO;
+        layeredNavigationItem.displayShadow = YES;
+    }];
     
-    self.tableView.tableFooterView = view;
-    
-    self.tableView.contentInset = self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, - CGRectGetHeight(view.bounds), 0);
+    [self performSelector:@selector(checkWhetherShowWelcomeView) withObject:nil afterDelay:0.3];
+}
+
+
+#pragma mark - 유저 디폴트
+#pragma mark 유저 디폴트 > 현재 인덱스패스 저장
+
+- (void)saveIndexPath:(NSIndexPath *)indexPath
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setInteger:indexPath.row forKey:kSELECTED_LOCAL_NOTE_INDEX];
+    [standardUserDefaults setIndexPath:indexPath forKey:kSELECTED_LOCAL_NOTE_INDEXPATH];
+    [standardUserDefaults synchronize];
+}
+
+
+#pragma mark 유저 디폴트 > 현재 뷰 저장
+
+- (void)saveCurrentView
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:YES forKey:kCURRENT_VIEW_IS_LOCAL];
+    [standardUserDefaults synchronize];
+}
+
+
+- (void)cancelCurrentView
+{
+    NSUserDefaults *standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setBool:NO forKey:kCURRENT_VIEW_IS_LOCAL];
+    [standardUserDefaults synchronize];
+}
+
+
+#pragma mark - 내비게이션 컨트롤러 델리게이트
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (viewController == self)
+    {
+        [[NSUserDefaults standardUserDefaults] setInteger:-1 forKey:kSELECTED_LOCAL_NOTE_INDEX];
+    }
+}
+
+
+#pragma mark 옵저버 해제
+
+- (void)deregisterForNotifications
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self name:@"CurrentNoteObjectIDKeyNotification" object:nil];
+    [center removeObserver:self name:@"WelcomeViewControllerDismissedNotification" object:nil];
+    [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
+    [center removeObserver:self];
+}
+
+
+#pragma mark - Dealloc
+
+- (void)dealloc
+{
+    [self deregisterForNotifications];
+    _fetchedResultsController = nil;
+    self.searchResultNotes = nil;
+    NSLog(@"dealloc %@", self);
+}
+
+
+#pragma mark - 메모리 경고
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
 }
 
 
@@ -1112,6 +1087,32 @@
             [self.navigationController pushViewController:controller animated:YES];
         }
     }
+}
+
+
+#pragma mark - 테이블 푸터 뷰
+
+- (void)addFooterViewToTableView
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), CGRectGetHeight(self.tableView.frame))];
+    [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    [view setBackgroundColor:kCLEAR_COLOR];
+    UIImage *image = [UIImage imageNamed:@"swiftNoteWideLogo102by38"];
+    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:image];
+    [logoImageView setFrame:({
+        CGRect frame = logoImageView.frame;
+        frame.origin.x = 70;
+        frame.origin.y = 20;
+        CGRectIntegral(frame);
+    })];
+    
+    [logoImageView setAlpha:1.0];
+    
+    [view addSubview:logoImageView];
+    
+    self.tableView.tableFooterView = view;
+    
+    self.tableView.contentInset = self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, - CGRectGetHeight(view.bounds), 0);
 }
 
 
