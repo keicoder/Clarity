@@ -874,6 +874,9 @@
             
         }
         else {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kHasLaunchedOnce"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
             [self performSelector:@selector(showWhatsNewView) withObject:nil afterDelay:1.0];
             [[NSUserDefaults standardUserDefaults] setObject:versionString forKey:@"currentVersion"];
             [[NSUserDefaults standardUserDefaults] synchronize];
@@ -882,15 +885,90 @@
 }
 
 
-#pragma mark 옵저버 해제
+#pragma mark - 앱 처음 실행인지 체크 > Welcome 뷰 보여줌
 
-- (void)deregisterForNotifications
+- (void)checkWhetherShowWelcomeView
 {
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center removeObserver:self name:@"CurrentNoteObjectIDKeyNotification" object:nil];
-    [center removeObserver:self name:@"WelcomeViewControllerDismissedNotification" object:nil];
-    [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
-    [center removeObserver:self];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES) {
+        
+    }
+    else {
+        [self showWelcomeView];
+    }
+}
+
+
+- (void)showWelcomeView
+{
+    WelcomePageViewController *controller = (WelcomePageViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
+    if (iPad) {
+        [self.navigationController presentViewController:controller animated:YES completion:nil];
+    } else {
+        [self.navigationController pushViewController:controller animated:YES];
+    }
+}
+
+
+#pragma mark - checkToShowWhatsNewView
+
+- (void)checkToShowWhatsNewView
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES) {
+        NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
+        NSString *lastVersionString = [[NSUserDefaults standardUserDefaults] stringForKey:@"currentVersion"];
+        if (![versionString isEqualToString:lastVersionString]) {
+            [self performSelector:@selector(showWhatsNewView) withObject:nil afterDelay:0.3];
+            [[NSUserDefaults standardUserDefaults] setObject:versionString forKey:@"currentVersion"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+}
+
+
+#pragma mark Show What's New View
+
+- (void)showWhatsNewView
+{
+    [MTZWhatsNew handleWhatsNew:^(NSDictionary *whatsNew) {
+        MTZWhatsNewGridViewController *vc = [[MTZWhatsNewGridViewController alloc] initWithFeatures:whatsNew];
+        vc.backgroundGradientTopColor = kWHITE_COLOR;
+        vc.backgroundGradientBottomColor = kWHITE_COLOR;
+        [self.navigationController presentViewController:vc animated:YES completion:nil];
+        vc.dismissButtonTitle = @"Dismiss";
+    } sinceVersion:@"1.0"];
+}
+
+
+#pragma mark - 블랭크 뷰 보여줌
+
+- (void)showBlankView
+{
+    BlankViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"BlankViewController"];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    
+    [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
+        
+        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+        
+        if(orientation == 0) {
+            layeredNavigationItem.width = 768-320;
+        }
+        else if(orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
+        {
+            layeredNavigationItem.width = 768-320;
+        }
+        else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
+        {
+            layeredNavigationItem.width = 1024-320;
+        }
+        layeredNavigationItem.nextItemDistance = 320;
+        layeredNavigationItem.hasChrome = NO;
+        layeredNavigationItem.hasBorder = NO;
+        layeredNavigationItem.displayShadow = YES;
+    }];
+    
+    [self performSelector:@selector(checkWhetherShowWelcomeView) withObject:nil afterDelay:0.3];
 }
 
 
@@ -935,6 +1013,18 @@
 }
 
 
+#pragma mark 옵저버 해제
+
+- (void)deregisterForNotifications
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self name:@"CurrentNoteObjectIDKeyNotification" object:nil];
+    [center removeObserver:self name:@"WelcomeViewControllerDismissedNotification" object:nil];
+    [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
+    [center removeObserver:self];
+}
+
+
 #pragma mark - Dealloc
 
 - (void)dealloc
@@ -951,121 +1041,6 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-}
-
-
-#pragma mark - 블랭크 뷰 보여줌
-
-- (void)showBlankView
-{
-    BlankViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"BlankViewController"];
-    
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-    
-    [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:NO animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-        
-        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-        
-        if(orientation == 0) {
-            layeredNavigationItem.width = 768-320;
-        }
-        else if(orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
-        {
-            layeredNavigationItem.width = 768-320;
-        }
-        else if(orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
-        {
-            layeredNavigationItem.width = 1024-320;
-        }
-        layeredNavigationItem.nextItemDistance = 320;
-        layeredNavigationItem.hasChrome = NO;
-        layeredNavigationItem.hasBorder = NO;
-        layeredNavigationItem.displayShadow = YES;
-    }];
-    
-    [self performSelector:@selector(checkWhetherShowWelcomeView) withObject:nil afterDelay:0.3];
-}
-
-
-#pragma mark - 앱 처음 실행인지 체크 > Welcome 뷰 보여줌
-
-- (void)checkWhetherShowWelcomeView
-{
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES) {
-        
-    }
-    else {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kHasLaunchedOnce"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [self showWelcomeView];
-    }
-}
-
-
-- (void)showWelcomeView
-{
-    WelcomePageViewController *controller = (WelcomePageViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-    if (iPad) {
-        [self.navigationController presentViewController:controller animated:YES completion:nil];
-    } else {
-        [self.navigationController pushViewController:controller animated:YES];
-    }
-}
-
-
-#pragma mark - checkToShowWhatsNewView
-
-- (void)checkToShowWhatsNewView
-{
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHasLaunchedOnce"] == YES) {
-        NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
-        NSString *lastVersionString = [[NSUserDefaults standardUserDefaults] stringForKey:@"currentVersion"];
-        if (![versionString isEqualToString:lastVersionString]) {
-            [self performSelector:@selector(showWhatsNewView) withObject:nil afterDelay:0.3];
-            [[NSUserDefaults standardUserDefaults] setObject:versionString forKey:@"currentVersion"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-    }
-}
-
-
-#pragma mark Show What's New View
-
-- (void)showWhatsNewView
-{
-    [MTZWhatsNew handleWhatsNew:^(NSDictionary *whatsNew) {
-         MTZWhatsNewGridViewController *vc = [[MTZWhatsNewGridViewController alloc] initWithFeatures:whatsNew];
-         vc.backgroundGradientTopColor = kWHITE_COLOR;
-         vc.backgroundGradientBottomColor = kWHITE_COLOR;
-         [self.navigationController presentViewController:vc animated:YES completion:nil];
-         vc.dismissButtonTitle = @"Dismiss";
-     } sinceVersion:@"1.0"];
-}
-
-
-#pragma mark - 테이블 푸터 뷰
-
-- (void)addFooterViewToTableView
-{
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), CGRectGetHeight(self.tableView.frame))];
-    [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [view setBackgroundColor:kCLEAR_COLOR];
-    UIImage *image = [UIImage imageNamed:@"swiftNoteWideLogo102by38"];
-    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:image];
-    [logoImageView setFrame:({
-        CGRect frame = logoImageView.frame;
-        frame.origin.x = 70;
-        frame.origin.y = 20;
-        CGRectIntegral(frame);
-    })];
-    
-    [logoImageView setAlpha:1.0];
-    
-    [view addSubview:logoImageView];
-    
-    self.tableView.tableFooterView = view;
-    
-    self.tableView.contentInset = self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, - CGRectGetHeight(view.bounds), 0);
 }
 
 
@@ -1112,6 +1087,32 @@
             [self.navigationController pushViewController:controller animated:YES];
         }
     }
+}
+
+
+#pragma mark - 테이블 푸터 뷰
+
+- (void)addFooterViewToTableView
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame), CGRectGetHeight(self.tableView.frame))];
+    [view setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    [view setBackgroundColor:kCLEAR_COLOR];
+    UIImage *image = [UIImage imageNamed:@"swiftNoteWideLogo102by38"];
+    UIImageView *logoImageView = [[UIImageView alloc] initWithImage:image];
+    [logoImageView setFrame:({
+        CGRect frame = logoImageView.frame;
+        frame.origin.x = 70;
+        frame.origin.y = 20;
+        CGRectIntegral(frame);
+    })];
+    
+    [logoImageView setAlpha:1.0];
+    
+    [view addSubview:logoImageView];
+    
+    self.tableView.tableFooterView = view;
+    
+    self.tableView.contentInset = self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, - CGRectGetHeight(view.bounds), 0);
 }
 
 
