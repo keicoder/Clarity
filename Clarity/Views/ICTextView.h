@@ -57,38 +57,29 @@
 
 #pragma mark - When keyboard pops up
 - (void)keyboardWillShow:(NSNotification *)notification;
-- (void)keyboardDidShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification*)notification;
-- (void)keyboardDidHide:(NSNotification*)notification;
 
-#pragma mark - UITextView delegate method (optional)
-- (void)textViewDidChange:(UITextView *)textView;
-- (void)textViewDidBeginEditing:(UITextView *)textView;
-- (BOOL)textViewShouldEndEditing:(UITextView *)textView;
-- (void)textViewDidEndEditing:(UITextView *)textView;
-
-#pragma mark - UITextView change selection, text
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
-- (void)textViewDidChangeSelection:(UITextView *)textView;
+#pragma mark - Caret 이동
+- (void)scrollToVisibleCaretAnimated;
 
 #pragma mark - 스트링 메소드
 - (void)goToPreviousWord:(UITextView *)textView;
-- (void)goToPreviousChar:(UITextView *)textView;
-- (void)tagHash:(UITextView *)textView;
-- (void)tagAsterisk:(UITextView *)textView;
-- (void)tagGreaterThan:(UITextView *)textView;
-- (void)selectWord:(UITextView *)textView;
 - (void)selectParagraph:(UITextView *)textView;
-- (void)keyboardDown:(UITextView *)textView;
-- (void)goToNextChar:(UITextView *)textView;
 - (void)goToNextWord:(UITextView *)textView;
-
-#pragma mark - Undo Redo
-- (void)undoButtonPressed:(id)sender;
-- (void)redoButtonPressed:(id)sender;
 
 #pragma mark - Move text caret position
 - (void)moveTextPositionAboveKeyboard:(UITextView *)textView withAnimation:(BOOL)shouldAnimate;
+
+#pragma mark - 키보드 액세서리 뷰 액션 메소드
+- (void)previousCharacterButtonPressed:(id)sender;
+- (void)nextCharacterButtonPressed:(id)sender;
+- (void)hideKeyboardButtonPressed:(id)sender;
+- (void)hashButtonPressed:(id)sender;
+- (void)asteriskButtonPressed:(id)sender;
+- (void)tabButtonPressed:(id)sender;
+- (void)selectWordButonPressed:(id)sender;
+- (void)angleBracketButtonPressed:(id)sender;
+- (void)exclamationMarkButtonPressed:(id)sender;
 
 
 @end

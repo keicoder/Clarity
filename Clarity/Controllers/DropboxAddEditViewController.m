@@ -220,14 +220,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification object:self.view.window];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:)
-                                                 name:UIKeyboardDidShowNotification object:self.view.window];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification object:self.view.window];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:)
-                                                 name:UIKeyboardDidHideNotification object:self.view.window];
 }
 
 
@@ -237,21 +231,9 @@
 }
 
 
-- (void)keyboardDidShow:(NSNotification *)notification
-{
-    [self.noteTextView keyboardDidShow:notification];
-}
-
-
 - (void)keyboardWillHide:(NSNotification*)notification
 {
     [self.noteTextView keyboardWillHide:notification];
-}
-
-
-- (void)keyboardDidHide:(NSNotification*)notification
-{
-    [self.noteTextView keyboardDidHide:notification];
 }
 
 
@@ -275,7 +257,7 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    [self.noteTextView textViewDidChange:self.noteTextView];
+    [self.noteTextView scrollToVisibleCaretAnimated];
 }
 
 
@@ -1758,175 +1740,59 @@
 
 #pragma mark 키보드 액세서리 뷰 액션 메소드
 
-#pragma mark previousCharacterButtonPressed
-
 - (void)previousCharacterButtonPressed:(id)sender
 {
-    UITextRange *selectedRange = [self.noteTextView selectedTextRange];
-    
-    if (self.noteTextView.selectedRange.location > 0)
-    {
-        UITextPosition *newPosition = [self.noteTextView positionFromPosition:selectedRange.start offset:-1];
-        UITextRange *newRange = [self.noteTextView textRangeFromPosition:newPosition toPosition:newPosition];
-        [self.noteTextView setSelectedTextRange:newRange];
-    }
-    [self.noteTextView textViewDidChange:self.noteTextView];
+    [self.noteTextView previousCharacterButtonPressed:sender];
+    [self.noteTextView scrollToVisibleCaretAnimated];
 }
 
-
-#pragma mark nextCharacterButtonPressed
 
 - (void)nextCharacterButtonPressed:(id)sender
 {
-    UITextRange *selectedRange = [self.noteTextView selectedTextRange];
-    
-    if (self.noteTextView.selectedRange.location < self.noteTextView.text.length)
-    {
-        UITextPosition *newPosition = [self.noteTextView positionFromPosition:selectedRange.start offset:1];
-        UITextRange *newRange = [self.noteTextView textRangeFromPosition:newPosition toPosition:newPosition];
-        [self.noteTextView setSelectedTextRange:newRange];
-    }
-    [self.noteTextView textViewDidChange:self.noteTextView];
+    [self.noteTextView nextCharacterButtonPressed:sender];
+    [self.noteTextView scrollToVisibleCaretAnimated];
 }
 
-
-#pragma mark hideKeyboardButtonPressed
 
 - (void)hideKeyboardButtonPressed:(id)sender
 {
-    [self.noteTextView resignFirstResponder];
+    [self.noteTextView hideKeyboardButtonPressed:sender];
 }
 
-
-#pragma mark hashButtonPressed
 
 - (void)hashButtonPressed:(id)sender
 {
-    NSRange range = self.noteTextView.selectedRange;
-    
-    NSString *firstHalfString = [self.noteTextView.text substringToIndex:range.location];
-    NSString *insertingString = @"#";
-    NSString *secondHalfString = [self.noteTextView.text substringFromIndex:range.location+range.length];
-    
-    self.noteTextView.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
-    
-    range.location += insertingString.length;
-    range.length = 0;
-    self.noteTextView.selectedRange = range;
-    
-    [self.noteTextView textViewDidChange:self.noteTextView];
+    [self.noteTextView hashButtonPressed:sender];
 }
 
-
-#pragma mark asteriskButtonPressed
 
 - (void)asteriskButtonPressed:(id)sender
 {
-    NSRange range = self.noteTextView.selectedRange;
-    
-    NSString *firstHalfString = [self.noteTextView.text substringToIndex:range.location];
-    NSString *insertingString = @"*";
-    NSString *secondHalfString = [self.noteTextView.text substringFromIndex:range.location+range.length];
-    
-    self.noteTextView.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
-    
-    range.location += insertingString.length;
-    range.length = 0;
-    self.noteTextView.selectedRange = range;
-    
-    [self.noteTextView textViewDidChange:self.noteTextView];
+    [self.noteTextView asteriskButtonPressed:sender];
 }
 
-
-#pragma mark tabButtonPressed
 
 - (void)tabButtonPressed:(id)sender
 {
-    NSRange range = self.noteTextView.selectedRange;
-    
-    NSString *firstHalfString = [self.noteTextView.text substringToIndex:range.location];
-    NSString *insertingString = @"\t";
-    NSString *secondHalfString = [self.noteTextView.text substringFromIndex:range.location+range.length];
-    
-    self.noteTextView.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
-    
-    range.location += insertingString.length;
-    range.length = 0;
-    self.noteTextView.selectedRange = range;
-    
-    [self.noteTextView textViewDidChange:self.noteTextView];
+    [self.noteTextView tabButtonPressed:sender];
 }
 
-
-#pragma mark selectWordButonPressed
 
 - (void)selectWordButonPressed:(id)sender
 {
-    NSRange selectedRange = self.noteTextView.selectedRange;
-    
-    if (![self.noteTextView hasText])
-    {
-        [self.noteTextView select:self];
-    }
-    else if ([self.noteTextView hasText] && selectedRange.length == 0)
-    {
-        [self.noteTextView select:self];
-    }
-    else if ([self.noteTextView hasText] && selectedRange.length > 0)
-    {
-        selectedRange.location = selectedRange.location + selectedRange.length;
-        selectedRange.length = 0;
-        self.noteTextView.selectedRange = selectedRange;
-    }
+    [self.noteTextView selectWordButonPressed:sender];
 }
 
-
-#pragma mark angleBracketButtonPressed
 
 - (void)angleBracketButtonPressed:(id)sender
 {
-    NSRange range = self.noteTextView.selectedRange;
-    
-    NSString *firstHalfString = [self.noteTextView.text substringToIndex:range.location];
-    NSString *insertingString = @">";
-    NSString *secondHalfString = [self.noteTextView.text substringFromIndex:range.location+range.length];
-    
-    self.noteTextView.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
-    
-    range.location += insertingString.length;
-    range.length = 0;
-    self.noteTextView.selectedRange = range;
-    
-    [self.noteTextView textViewDidChange:self.noteTextView];
+    [self.noteTextView angleBracketButtonPressed:sender];
 }
 
-
-#pragma mark exclamationMarkButtonPressed
 
 - (void)exclamationMarkButtonPressed:(id)sender
 {
-    NSRange range = self.noteTextView.selectedRange;
-    
-    NSString *firstHalfString = [self.noteTextView.text substringToIndex:range.location];
-    NSString *insertingString = @"!";
-    NSString *secondHalfString = [self.noteTextView.text substringFromIndex:range.location+range.length];
-    
-    self.noteTextView.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
-    
-    range.location += insertingString.length;
-    range.length = 0;
-    self.noteTextView.selectedRange = range;
-    
-    [self.noteTextView textViewDidChange:self.noteTextView];
-}
-
-
-#pragma mark cursorPosition
-
-- (CGPoint)cursorPosition;
-{
-    CGPoint cursorPosition = [self.noteTextView caretRectForPosition:self.noteTextView.selectedTextRange.start].origin;
-    return cursorPosition;
+    [self.noteTextView exclamationMarkButtonPressed:sender];
 }
 
 

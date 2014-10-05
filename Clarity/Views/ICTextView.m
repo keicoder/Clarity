@@ -146,12 +146,6 @@ static BOOL _highlightingSupported;
 }
 
 
-- (void)keyboardDidShow:(NSNotification *)notification
-{
-    
-}
-
-
 - (void)keyboardWillHide:(NSNotification*)notification
 {
     NSDictionary *userInfoDictionary = notification.userInfo;
@@ -165,12 +159,6 @@ static BOOL _highlightingSupported;
         [self updateNoteTextViewInsetWithoutKeyboard];      //텍스트 뷰 인셋 조정
     } 
     completion:^(BOOL finished) { }];
-}
-
-
-- (void)keyboardDidHide:(NSNotification *)notification
-{
-    
 }
 
 
@@ -222,279 +210,6 @@ static BOOL _highlightingSupported;
         }
         [self setContentOffset:contentOffset animated:animated];
     }
-}
-
-
-#pragma mark -
-#pragma mark JTextiew
-
-#pragma mark - delegate method (change text, editing)
-
-- (void)textViewDidChange:(UITextView *)textView
-{
-    //[self moveTextPositionAboveKeyboard:self withAnimation:YES];    //캐럿 위치 조정
-    [self scrollToVisibleCaretAnimated];                            //PSPDFTextView 캐럿 위치 이동
-}
-
-
-#pragma mark 
-
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
-{
-    return YES;
-}
-
-
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    //self.selectedRange = self.curSelectedRange;
-}
-
-
-- (BOOL)textViewShouldEndEditing:(UITextView *)textView
-{
-    //self.curSelectedRange = self.selectedRange;
-    [textView resignFirstResponder];
-    return YES;
-}
-
-
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
-    
-}
-
-
-#pragma mark delegate method (change selection, text)
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    return YES;
-}
-
-
-- (void)textViewDidChangeSelection:(UITextView *)textView
-{ 
-    
-}
-
-
-#pragma mark - Undo Redo
-
-- (void)undoButtonPressed:(id)sender {
-    [[self undoManager] undo];
-}
-
-
-- (void)redoButtonPressed:(id)sender {
-    [[self undoManager] redo];
-}
-
-
-#pragma mark - 스트링 메소드
-
-- (void)goToPreviousWord:(UITextView *)textView
-{
-    NSRange selectedRange = textView.selectedRange;
-    NSInteger currentLocation = selectedRange.location;
-    
-    if ( currentLocation == 0 ) {
-        return;
-    }
-    
-    NSRange newRange = [textView.text
-                        rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]
-                        options:NSBackwardsSearch
-                        range:NSMakeRange(0, (currentLocation - 1))];
-    
-    if ( newRange.location != NSNotFound ) {
-        
-        textView.selectedRange = NSMakeRange((newRange.location + 1), 0);
-        
-    } else {
-        
-        textView.selectedRange = NSMakeRange(0, 0);
-    }
-}
-
-
-
-- (void)goToPreviousChar:(UITextView *)textView
-{
-    UITextRange *selectedRange = [textView selectedTextRange];
-    //Calculate the new position, - for left and + for right
-    
-    if (textView.selectedRange.location > 0) {
-        UITextPosition *newPosition = [textView positionFromPosition:selectedRange.start offset:-1];
-        
-        UITextRange *newRange = [textView textRangeFromPosition:newPosition toPosition:newPosition];
-        
-        //Set new range
-        [textView setSelectedTextRange:newRange];
-    }
-}
-
-
-- (void)tagHash:(UITextView *)textView
-{
-//    //기존 메소드
-//    UITextRange *selectedRange = [self selectedTextRange];
-//    
-//    //if (selectedRange == nil) { } //no selection or insertion point
-//    if (selectedRange.empty) { [self addTextOnSelectedRange:@"#"]; }
-//    else { [self addTextOnSelectedRange:@"#"]; }
-    
-    //대체 메소드
-    // Find the range of the selected text
-	NSRange range = self.selectedRange;
-	
-	// Get the relevant strings
-	NSString *firstHalfString = [self.text substringToIndex:range.location];
-	NSString *insertingString = @"#";
-	NSString *secondHalfString = [self.text substringFromIndex:range.location+range.length];
-	
-	// Update the textView's text
-	self.scrollEnabled = NO;
-	self.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
-	self.scrollEnabled = YES;
-    
-	// More the selection to after our inserted text
-	range.location += insertingString.length;
-	range.length = 0;
-	self.selectedRange = range;
-}
-
-
-- (void)tagAsterisk:(UITextView *)textView
-{
-    UITextRange *selectedRange = [self selectedTextRange];
-    
-    //if (selectedRange == nil) { } //no selection or insertion point
-    if (selectedRange.empty) { [self addTextOnSelectedRange:@"*"]; }
-    else { [self addTextBothSidesOnSelectedRange:@"*"]; }
-}
-
-
-- (void)tagGreaterThan:(UITextView *)textView
-{
-    UITextRange *selectedRange = [self selectedTextRange];
-    
-    //if (selectedRange == nil) { } //no selection or insertion point
-    if (selectedRange.empty) { [self addTextOnSelectedRange:@">"]; }
-    else { [self addTextOnSelectedRange:@">"]; }
-}
-
-
-- (void)selectWord:(UITextView *)textView
-{
-    NSRange selectedRange = textView.selectedRange;
-
-    if (![self hasText])
-    {
-        [textView select:self];
-    }
-    
-    else if ([self hasText] && selectedRange.length == 0) 
-    {
-        [textView select:self];
-    } 
-    
-    else if ([self hasText] && selectedRange.length > 0)  
-    {
-        selectedRange.location = selectedRange.location + selectedRange.length;
-        selectedRange.length = 0;
-        textView.selectedRange = selectedRange;
-    }
-    
-    [self calculateSelectedTextRange];
-    
-    [self cursorPosition];
-}
-
-
-- (void)selectParagraph:(UITextView *)textView
-{
-    [self cursorPosition];
-    
-    NSRange selectedRange = textView.selectedRange;
-    
-    if (![self hasText])
-    {
-        [textView select:self];
-    }
-    
-    else if ([self hasText] && selectedRange.length == 0) 
-    {
-        [textView select:self];
-        NSRange selectedRange = [self firstParagraphRangeFromTextRange:self.selectedRange];
-        [self setSelectedRange:selectedRange];
-    }
-    
-    else if ([self hasText] && selectedRange.length > 0) 
-    {
-        selectedRange.location = selectedRange.location + selectedRange.length;
-        selectedRange.length = 0;
-        textView.selectedRange = selectedRange;
-    }
-    
-    [self calculateSelectedTextRange];
-}
-
-//
-//- (void)selectAll:(UITextView *)textView
-//{
-//    [self selectAll:self];
-//}
-
-
-- (void)keyboardDown:(UITextView *)textView
-{
-    [textView resignFirstResponder];
-}
-
-
-
-- (void)goToNextChar:(UITextView *)textView
-{
-    UITextRange *selectedRange = [textView selectedTextRange];
-    //Calculate the new position, - for left and + for right
-    
-    if (textView.selectedRange.location < textView.text.length) {
-        UITextPosition *newPosition = [textView positionFromPosition:selectedRange.start offset:1];
-        
-        UITextRange *newRange = [textView textRangeFromPosition:newPosition toPosition:newPosition];
-        
-        //Set new range
-        [textView setSelectedTextRange:newRange];
-    }
-    
-    [self moveTextPositionAboveKeyboard:textView withAnimation:YES];
-}
-
-
-
-- (void)goToNextWord:(UITextView *)textView
-{
-    NSRange selectedRange = textView.selectedRange;
-    NSInteger currentLocation = selectedRange.location + selectedRange.length;
-    NSInteger textLength = [textView.text length];
-    
-    if ( currentLocation == textLength ) {
-        return;
-    }
-    
-    NSRange newRange = [textView.text
-                        rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]
-                        options:NSCaseInsensitiveSearch
-                        range:NSMakeRange((currentLocation + 1), (textLength - 1 - currentLocation))];
-    
-    if ( newRange.location != NSNotFound ) {
-        textView.selectedRange = NSMakeRange(newRange.location, 0);
-    } else {
-        textView.selectedRange = NSMakeRange(textLength, 0);
-    }
-    
-    [self moveTextPositionAboveKeyboard:textView withAnimation:YES];
 }
 
 
@@ -1335,6 +1050,226 @@ static BOOL _highlightingSupported;
 //    NSLog(@"dealloc %@", self);
     NSLog(@"ICTextView dealloced");
 }
+
+
+
+
+
+
+
+#pragma mark 키보드 액세서리 뷰 액션 메소드
+
+- (void)previousCharacterButtonPressed:(id)sender
+{
+    UITextRange *selectedRange = [self selectedTextRange];
+    
+    if (self.selectedRange.location > 0)
+    {
+        UITextPosition *newPosition = [self positionFromPosition:selectedRange.start offset:-1];
+        UITextRange *newRange = [self textRangeFromPosition:newPosition toPosition:newPosition];
+        [self setSelectedTextRange:newRange];
+    }
+    [self scrollToVisibleCaretAnimated];
+}
+
+
+- (void)nextCharacterButtonPressed:(id)sender
+{
+    UITextRange *selectedRange = [self selectedTextRange];
+    
+    if (self.selectedRange.location < self.text.length)
+    {
+        UITextPosition *newPosition = [self positionFromPosition:selectedRange.start offset:1];
+        UITextRange *newRange = [self textRangeFromPosition:newPosition toPosition:newPosition];
+        [self setSelectedTextRange:newRange];
+    }
+    [self scrollToVisibleCaretAnimated];
+}
+
+
+- (void)hideKeyboardButtonPressed:(id)sender
+{
+    [self resignFirstResponder];
+}
+
+
+- (void)hashButtonPressed:(id)sender
+{
+    NSRange range = self.selectedRange;
+    
+    NSString *firstHalfString = [self.text substringToIndex:range.location];
+    NSString *insertingString = @"#";
+    NSString *secondHalfString = [self.text substringFromIndex:range.location+range.length];
+    
+    self.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
+    
+    range.location += insertingString.length;
+    range.length = 0;
+    self.selectedRange = range;
+}
+
+
+- (void)asteriskButtonPressed:(id)sender
+{
+    NSRange range = self.selectedRange;
+    
+    NSString *firstHalfString = [self.text substringToIndex:range.location];
+    NSString *insertingString = @"*";
+    NSString *secondHalfString = [self.text substringFromIndex:range.location+range.length];
+    
+    self.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
+    
+    range.location += insertingString.length;
+    range.length = 0;
+    self.selectedRange = range;
+}
+
+
+- (void)tabButtonPressed:(id)sender
+{
+    NSRange range = self.selectedRange;
+    
+    NSString *firstHalfString = [self.text substringToIndex:range.location];
+    NSString *insertingString = @"\t";
+    NSString *secondHalfString = [self.text substringFromIndex:range.location+range.length];
+    
+    self.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
+    
+    range.location += insertingString.length;
+    range.length = 0;
+    self.selectedRange = range;
+}
+
+
+- (void)selectWordButonPressed:(id)sender
+{
+    NSRange selectedRange = self.selectedRange;
+    
+    if (![self hasText])
+    {
+        [self select:self];
+    }
+    else if ([self hasText] && selectedRange.length == 0)
+    {
+        [self select:self];
+    }
+    else if ([self hasText] && selectedRange.length > 0)
+    {
+        selectedRange.location = selectedRange.location + selectedRange.length;
+        selectedRange.length = 0;
+        self.selectedRange = selectedRange;
+    }
+}
+
+
+- (void)angleBracketButtonPressed:(id)sender
+{
+    NSRange range = self.selectedRange;
+    
+    NSString *firstHalfString = [self.text substringToIndex:range.location];
+    NSString *insertingString = @">";
+    NSString *secondHalfString = [self.text substringFromIndex:range.location+range.length];
+    
+    self.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
+    
+    range.location += insertingString.length;
+    range.length = 0;
+    self.selectedRange = range;
+}
+
+
+- (void)exclamationMarkButtonPressed:(id)sender
+{
+    NSRange range = self.selectedRange;
+    
+    NSString *firstHalfString = [self.text substringToIndex:range.location];
+    NSString *insertingString = @"!";
+    NSString *secondHalfString = [self.text substringFromIndex:range.location+range.length];
+    
+    self.text = [NSString stringWithFormat: @"%@%@%@", firstHalfString, insertingString, secondHalfString];
+    
+    range.location += insertingString.length;
+    range.length = 0;
+    self.selectedRange = range;
+}
+
+
+- (void)goToPreviousWord:(UITextView *)textView
+{
+    NSRange selectedRange = textView.selectedRange;
+    NSInteger currentLocation = selectedRange.location;
+    
+    if ( currentLocation == 0 ) {
+        return;
+    }
+    
+    NSRange newRange = [textView.text
+                        rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]
+                        options:NSBackwardsSearch
+                        range:NSMakeRange(0, (currentLocation - 1))];
+    
+    if ( newRange.location != NSNotFound ) {
+        
+        textView.selectedRange = NSMakeRange((newRange.location + 1), 0);
+        
+    } else {
+        
+        textView.selectedRange = NSMakeRange(0, 0);
+    }
+}
+
+
+- (void)selectParagraph:(UITextView *)textView
+{
+    [self cursorPosition];
+    
+    NSRange selectedRange = textView.selectedRange;
+    
+    if (![self hasText])
+    {
+        [textView select:self];
+    }
+    
+    else if ([self hasText] && selectedRange.length == 0)
+    {
+        [textView select:self];
+        NSRange selectedRange = [self firstParagraphRangeFromTextRange:self.selectedRange];
+        [self setSelectedRange:selectedRange];
+    }
+    
+    else if ([self hasText] && selectedRange.length > 0)
+    {
+        selectedRange.location = selectedRange.location + selectedRange.length;
+        selectedRange.length = 0;
+        textView.selectedRange = selectedRange;
+    }
+}
+
+
+- (void)goToNextWord:(UITextView *)textView
+{
+    NSRange selectedRange = textView.selectedRange;
+    NSInteger currentLocation = selectedRange.location + selectedRange.length;
+    NSInteger textLength = [textView.text length];
+    
+    if ( currentLocation == textLength ) {
+        return;
+    }
+    
+    NSRange newRange = [textView.text
+                        rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]
+                        options:NSCaseInsensitiveSearch
+                        range:NSMakeRange((currentLocation + 1), (textLength - 1 - currentLocation))];
+    
+    if ( newRange.location != NSNotFound ) {
+        textView.selectedRange = NSMakeRange(newRange.location, 0);
+    } else {
+        textView.selectedRange = NSMakeRange(textLength, 0);
+    }
+    
+    [self moveTextPositionAboveKeyboard:textView withAnimation:YES];
+}
+
 
 
 @end
