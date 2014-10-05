@@ -27,6 +27,7 @@
 #import "JGActionSheet.h"
 #import "BlankViewController.h"
 #import "FCFileManager.h"
+#import "DropboxAddEditViewController.h"
 
 
 @interface LocalAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate,UIAlertViewDelegate>
@@ -67,6 +68,16 @@
     self.currentNote = note;
     self.managedObjectContext = managedObjectContext;
 }
+
+
+//- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+//{
+//    [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+//    if (self) {
+//        
+//    }
+//    return self;
+//}
 
 
 #pragma mark - 뷰 life cycle

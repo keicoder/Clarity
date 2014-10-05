@@ -15,5 +15,6 @@
 @property (strong, nonatomic) Note *currentNote;
 
 - (void)note:(Note *)note inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (void)addKeyboardAccessoryToolBar;
 
 @end
