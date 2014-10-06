@@ -1501,9 +1501,9 @@
 #define kTextNormalColor        [UIColor grayColor]
 #define kTextHighlightedColor   [UIColor blackColor]
 #define kOneImage               @"left"
-#define kOneAction              previousCharacter
+#define kOneAction              previousWord //previousCharacter
 #define kTwoImage               @"right"
-#define kTwoAction              nextCharacter
+#define kTwoAction              nextWord //nextCharacter
 #define kThreeImage             @"keyboard_hide"
 #define kThreeAction            hideKeyboard
 #define kFour                   @"#"

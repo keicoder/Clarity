@@ -135,8 +135,8 @@ extern NSString * const kIS_FIRST_TIME;
 #define kINSET_BOTTOM_IPAD                                  88.0     // 텍스트 뷰 인셋 bottom
 #define kINSET_RIGHT_IPAD                                    0.0     // 텍스트 뷰 인셋 right
 #define kTEXTVIEW_PADDING_IPAD                             100.0     // 텍스트 뷰 padding
-#define kMOVE_TEXT_POSITION_DURATION_IPAD                   0.40     // 캐럿 이동 시간
-//폰트
+#define kMOVE_TEXT_POSITION_DURATION_IPAD                   0.30     // 캐럿 이동 시간
+
 #define kTEXTVIEW_FONT_IPAD                                      [UIFont fontWithName:@"AvenirNext-Regular" size:22.f]
 #define kTEXTVIEW_LABEL_FONT_IPAD                                [UIFont fontWithName:@"Avenir-Black" size:24.f]
 
@@ -147,10 +147,10 @@ extern NSString * const kIS_FIRST_TIME;
 #define kINSET_RIGHT                                         0.0     // 텍스트 뷰 인셋 right
 #define kTEXTVIEW_PADDING                                   20.0     // 텍스트 뷰 padding
 #define kMOVE_TEXT_POSITION_DURATION                        0.40     // 캐럿 이동 시간
-//폰트
+
 #define kTEXTVIEW_FONT                                      [UIFont fontWithName:@"AvenirNext-Regular" size:20.f]
 #define kTEXTVIEW_LABEL_FONT                                [UIFont fontWithName:@"Avenir-Black" size:22.f]
-//배경 컬러 > 데이 모드
+
 #define kTEXTVIEW_BACKGROUND_COLOR                          [UIColor colorWithRed:0.953 green:0.957 blue:0.941 alpha:1]
 #define kNOTE_TITLELABEL_BACKGROUNDVIEW_BACKGROUND_COLOR    [UIColor colorWithWhite:0.890 alpha:1.000]
 #define kTEXTVIEW_TEXT_COLOR                                [UIColor colorWithRed:0.086 green:0.086 blue:0.086 alpha:1]
