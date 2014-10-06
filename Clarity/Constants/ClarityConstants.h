@@ -39,7 +39,7 @@ extern NSString * const kIS_FIRST_TIME;
 
 
 #pragma mark - WebView
-#define kWEBVIEW_SCROLLVIEW_CONTENTINSET                    60.0
+#define kWEBVIEW_SCROLLVIEW_CONTENTINSET                    10.0
 
 
 #define kCURRENT_VIEW_IS_LOCAL                              @"currentViewIsLocal"

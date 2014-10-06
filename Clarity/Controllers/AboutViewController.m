@@ -49,8 +49,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.automaticallyAdjustsScrollViewInsets = NO;
     [self assignWebViewAttribute];
     [self loadLocalFileIntoAWebView];
     [self addTapGestureRecognizer];

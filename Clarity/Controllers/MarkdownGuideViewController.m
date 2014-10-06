@@ -50,7 +50,6 @@
 {
     [super viewDidLoad];
     self.title = @"Guide";
-    self.automaticallyAdjustsScrollViewInsets = NO;
     [self assignWebViewAttribute];
     [self loadLocalFileIntoAWebView];
     [self addTapGestureRecognizer];

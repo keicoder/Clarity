@@ -76,6 +76,7 @@
     [[UITextView appearance] setTintColor:[UIColor colorWithRed:0.949 green:0.427 blue:0.188 alpha:1]];
     self.alwaysBounceVertical = YES;
     self.alwaysBounceHorizontal = NO;
+    self.scrollsToTop = YES;
     self.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     self.autocapitalizationType = UITextAutocapitalizationTypeSentences;
     self.autocorrectionType = UITextAutocorrectionTypeYes;
@@ -84,12 +85,11 @@
     
     _scrollIndicatorInsetTop = 0.0f;
     _scrollIndicatorInsetBottom = 0.0f;
-    
+    self.scrollIndicatorInsets = UIEdgeInsetsMake(_scrollIndicatorInsetTop, kINSET_LEFT_IPAD, _scrollIndicatorInsetBottom, kINSET_RIGHT_IPAD);
     if (iPad) {
         UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP_IPAD, kINSET_LEFT_IPAD, kINSET_BOTTOM_IPAD, kINSET_RIGHT_IPAD);
         self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING_IPAD;
         self.contentInset = contentInset;
-        //self.scrollIndicatorInsets = UIEdgeInsetsMake(_scrollIndicatorInsetTop, kINSET_LEFT_IPAD, _scrollIndicatorInsetBottom, kINSET_RIGHT_IPAD);
     } else {
         self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING;
         UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
@@ -110,7 +110,7 @@
     [UIView animateWithDuration:duration delay:0.0 options:curve animations:^{
                          [self updateNoteTextViewInsetWithKeyboard:notification];
                      } completion:^(BOOL finished) {
-                         //[self scrollToVisibleCaretAnimated];
+                         [self scrollToVisibleCaretAnimated];
                      }];
 }
 
@@ -139,7 +139,7 @@
     int curve = [[userInfoDictionary objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
     _keyboardRect = [[userInfoDictionary objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    [UIView animateWithDuration:duration delay:0.0 options:curve animations:^{
+    [UIView animateWithDuration:duration delay:duration options:curve animations:^{
         [self updateNoteTextViewInsetWithoutKeyboard];
     } completion:^(BOOL finished) { }];
 }

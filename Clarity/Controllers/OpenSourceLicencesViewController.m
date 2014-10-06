@@ -50,7 +50,6 @@
 {
     [super viewDidLoad];
     self.title = @"Open Sources";
-    self.automaticallyAdjustsScrollViewInsets = NO;
     [self assignWebViewAttribute];
     [self loadLocalFileIntoAWebView];
     [self addTapGestureRecognizer];

@@ -96,7 +96,7 @@
     self.markdownWebView.delegate = self;
     self.markdownWebView.scrollView.delegate = self;
     self.markdownWebView.scrollView.scrollEnabled = YES;
-    self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(20.0, 0, 0, 0);
+    self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(10.0, 0, 0, 0);
 }
 
 
