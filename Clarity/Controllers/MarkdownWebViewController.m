@@ -72,7 +72,7 @@
     if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
     [super viewWillAppear:animated];
     self.title = @"Preview";
-    self.automaticallyAdjustsScrollViewInsets = NO;
+    //self.automaticallyAdjustsScrollViewInsets = NO;
     [self assignAttributeToMarkdownWebView];
     [self makeMarkdownString];
 }
@@ -96,7 +96,7 @@
     self.markdownWebView.delegate = self;
     self.markdownWebView.scrollView.delegate = self;
     self.markdownWebView.scrollView.scrollEnabled = YES;
-    self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(60.0, 0, 0, 0);
+    self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(20.0, 0, 0, 0);
 }
 
 
@@ -107,6 +107,14 @@
     aWebView = self.markdownWebView;
     aWebView.scrollView.maximumZoomScale = 20;
     aWebView.scrollView.minimumZoomScale = 1;
+}
+
+
+#pragma mark - UIScrollView Delegate Methods
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
+{
+    self.markdownWebView.scrollView.maximumZoomScale = 20;
 }
 
 

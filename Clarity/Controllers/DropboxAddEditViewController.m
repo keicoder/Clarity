@@ -128,7 +128,6 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [self deregisterForNotifications];
 }
 
 
@@ -176,9 +175,8 @@
 
 - (void)addNoteTextView
 {
-    self.noteTextView = [[JTextView alloc] initWithFrame:self.view.bounds];
+    self.noteTextView = [[JTextView alloc] initWithFrame:self.view.frame];
     self.noteTextView.delegate = self;
-    //[self.noteTextView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:self.noteTextView];
 }
 
@@ -1448,6 +1446,7 @@
 
 - (void)dealloc
 {
+    [self deregisterForNotifications];
     NSLog(@"dealloc %@", self);
 }
 

@@ -12,7 +12,7 @@
 #define kINSET_BOTTOM                                        0.0
 #define kINSET_RIGHT                                         0.0
 #define kTEXTVIEW_PADDING                                   20.0
-#define kMOVE_TEXT_POSITION_DURATION                        0.30
+#define kMOVE_TEXT_POSITION_DURATION                        0.40
 
 #define kTEXTVIEW_FONT_IPAD                                 [UIFont fontWithName:@"AvenirNext-Regular" size:22.f]
 #define kTEXTVIEW_FONT                                      [UIFont fontWithName:@"AvenirNext-Regular" size:20.f]
@@ -29,6 +29,36 @@
 
 
 @implementation JTextView
+
+
+#pragma mark - 초기화
+
+- (id)initWithFrame:(CGRect)frame
+{
+    return [self initWithFrame:frame textContainer:nil];
+}
+
+
+- (instancetype)initWithFrame:(CGRect)frame textContainer:(NSTextContainer *)textContainer
+{
+    NSTextStorage *textStorage = [[NSTextStorage alloc] init];
+    NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init];
+    
+    [textStorage addLayoutManager:layoutManager];
+    
+    if (!textContainer) {
+        textContainer = [[NSTextContainer alloc] initWithSize:frame.size];
+    }
+    
+    [layoutManager addTextContainer:textContainer];
+    
+    [self assignTextViewAttribute];
+    
+    self = [super initWithFrame:frame textContainer:textContainer];
+    
+    return self;
+}
+
 
 #pragma mark - 텍스트 뷰 속성
 
@@ -79,7 +109,9 @@
     
     [UIView animateWithDuration:duration delay:0.0 options:curve animations:^{
                          [self updateNoteTextViewInsetWithKeyboard:notification];
-                     } completion:^(BOOL finished) { }];
+                     } completion:^(BOOL finished) {
+                         //[self scrollToVisibleCaretAnimated];
+                     }];
 }
 
 
@@ -154,7 +186,15 @@
 }
 
 
-#pragma mark 키보드 액세서리 뷰 액션 메소드
+#pragma mark delegate method (change selection, text)
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    return YES;
+}
+
+
+#pragma mark - 키보드 액세서리 뷰 액션 메소드
 
 - (void)previousWord:(id)sender
 {
