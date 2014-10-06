@@ -214,7 +214,11 @@
     [self.noteTextView addSubview:self.noteTitleLabelBackgroundView];
     [self.noteTitleLabelBackgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     
-    self.noteTitleLabel.font = kTEXTVIEW_LABEL_FONT;
+    if (iPad) {
+        self.noteTitleLabel.font = kTEXTVIEW_LABEL_FONT_IPAD;
+    } else {
+        self.noteTitleLabel.font = kTEXTVIEW_LABEL_FONT;
+    }
     self.noteTitleLabel.textColor = kTEXTVIEW_LABEL_TEXT_COLOR;
     self.noteTitleLabel.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     self.noteTitleLabel.textAlignment = NSTextAlignmentCenter;

@@ -1,16 +1,34 @@
 
 
+#define kINSET_TOP_IPAD                                    150.0
+#define kINSET_LEFT_IPAD                                     0.0
+#define kINSET_BOTTOM_IPAD                                   0.0
+#define kINSET_RIGHT_IPAD                                    0.0
+#define kTEXTVIEW_PADDING_IPAD                             100.0
+#define kMOVE_TEXT_POSITION_DURATION_IPAD                   0.30
+
+#define kINSET_TOP                                         120.0
+#define kINSET_LEFT                                          0.0
+#define kINSET_BOTTOM                                        0.0
+#define kINSET_RIGHT                                         0.0
+#define kTEXTVIEW_PADDING                                   20.0
+#define kMOVE_TEXT_POSITION_DURATION                        0.40
+
+#define kTEXTVIEW_FONT_IPAD                                 [UIFont fontWithName:@"AvenirNext-Regular" size:22.f]
+#define kTEXTVIEW_FONT                                      [UIFont fontWithName:@"AvenirNext-Regular" size:20.f]
+
 #import "JTextView.h"
 
 @interface JTextView ()
 {
     CGRect _keyboardRect;
+    CGFloat _scrollIndicatorInsetTop;
+    CGFloat _scrollIndicatorInsetBottom;
 }
 @end
 
 
 @implementation JTextView
-
 
 #pragma mark - 텍스트 뷰 속성
 
@@ -29,13 +47,18 @@
     self.alwaysBounceVertical = YES;
     self.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     self.layer.cornerRadius = 0.0;
+    self.editable = YES;
     self.autocapitalizationType = UITextAutocapitalizationTypeSentences;
     self.autocorrectionType = UITextAutocorrectionTypeYes;
     
+    _scrollIndicatorInsetTop = 0.0f;
+    _scrollIndicatorInsetBottom = 0.0f;
+    
     if (iPad) {
-        self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING_IPAD;
         UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP_IPAD, kINSET_LEFT_IPAD, kINSET_BOTTOM_IPAD, kINSET_RIGHT_IPAD);
+        self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING_IPAD;
         self.contentInset = contentInset;
+        self.scrollIndicatorInsets = UIEdgeInsetsMake(_scrollIndicatorInsetTop, kINSET_LEFT_IPAD, _scrollIndicatorInsetBottom, kINSET_RIGHT_IPAD);
     } else {
         self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING;
         UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
@@ -48,39 +71,30 @@
 
 - (void)updateNoteTextViewInsetWithKeyboard
 {
-    CGFloat scrollIndicatorInsetTop = 0.f;
     CGFloat contentInsetBottom = 0.f;
-    
     if (iPad) {
         CGFloat contentInsetTop = kINSET_TOP_IPAD;
         contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
         UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT_IPAD, contentInsetBottom, kINSET_RIGHT_IPAD);
         self.contentInset = contentInset;
-        self.scrollIndicatorInsets = UIEdgeInsetsMake(scrollIndicatorInsetTop, kINSET_LEFT_IPAD, contentInsetBottom, kINSET_RIGHT_IPAD);
     } else {
         CGFloat contentInsetTop = kINSET_TOP;
         contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
         UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
         self.contentInset = contentInset;
-        self.scrollIndicatorInsets = UIEdgeInsetsMake(scrollIndicatorInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
     }
 }
 
 
 - (void)updateNoteTextViewInsetWithoutKeyboard
 {
-    CGFloat contentInsetTop = 0.f;
-    CGFloat scrollIndicatorInsetTop = contentInsetTop;
-    CGFloat contentInsetBottom = 0.f;
-    
     if (iPad) {
         UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP_IPAD, kINSET_LEFT_IPAD, kINSET_BOTTOM_IPAD, kINSET_RIGHT_IPAD);
         self.contentInset = contentInset;
-        self.scrollIndicatorInsets = UIEdgeInsetsMake(scrollIndicatorInsetTop, kINSET_LEFT_IPAD, contentInsetBottom, kINSET_RIGHT_IPAD);
     } else {
         UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
         self.contentInset = contentInset;
-        self.scrollIndicatorInsets = UIEdgeInsetsMake(scrollIndicatorInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
+        self.scrollIndicatorInsets = UIEdgeInsetsMake(_scrollIndicatorInsetTop, kINSET_LEFT, _scrollIndicatorInsetBottom, kINSET_RIGHT);
     }
 }
 
