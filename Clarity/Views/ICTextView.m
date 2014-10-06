@@ -1059,7 +1059,7 @@ static BOOL _highlightingSupported;
 
 #pragma mark 키보드 액세서리 뷰 액션 메소드
 
-- (void)previousCharacterButtonPressed:(id)sender
+- (void)previousCharacter:(id)sender
 {
     UITextRange *selectedRange = [self selectedTextRange];
     
@@ -1073,7 +1073,7 @@ static BOOL _highlightingSupported;
 }
 
 
-- (void)nextCharacterButtonPressed:(id)sender
+- (void)nextCharacter:(id)sender
 {
     UITextRange *selectedRange = [self selectedTextRange];
     
@@ -1087,13 +1087,13 @@ static BOOL _highlightingSupported;
 }
 
 
-- (void)hideKeyboardButtonPressed:(id)sender
+- (void)hideKeyboard:(id)sender
 {
     [self resignFirstResponder];
 }
 
 
-- (void)hashButtonPressed:(id)sender
+- (void)addHash:(id)sender
 {
     NSRange range = self.selectedRange;
     
@@ -1109,7 +1109,7 @@ static BOOL _highlightingSupported;
 }
 
 
-- (void)asteriskButtonPressed:(id)sender
+- (void)addAsterisk:(id)sender
 {
     NSRange range = self.selectedRange;
     
@@ -1125,7 +1125,7 @@ static BOOL _highlightingSupported;
 }
 
 
-- (void)tabButtonPressed:(id)sender
+- (void)addTab:(id)sender
 {
     NSRange range = self.selectedRange;
     
@@ -1141,7 +1141,7 @@ static BOOL _highlightingSupported;
 }
 
 
-- (void)selectWordButonPressed:(id)sender
+- (void)selectWord:(id)sender
 {
     NSRange selectedRange = self.selectedRange;
     
@@ -1162,7 +1162,7 @@ static BOOL _highlightingSupported;
 }
 
 
-- (void)angleBracketButtonPressed:(id)sender
+- (void)addAngleBracket:(id)sender
 {
     NSRange range = self.selectedRange;
     
@@ -1178,7 +1178,7 @@ static BOOL _highlightingSupported;
 }
 
 
-- (void)exclamationMarkButtonPressed:(id)sender
+- (void)addExclamationMark:(id)sender
 {
     NSRange range = self.selectedRange;
     
@@ -1194,45 +1194,45 @@ static BOOL _highlightingSupported;
 }
 
 
-- (void)goToPreviousWord:(UITextView *)textView
+- (void)previousWord:(id)sender
 {
-    NSRange selectedRange = textView.selectedRange;
+    NSRange selectedRange = self.selectedRange;
     NSInteger currentLocation = selectedRange.location;
     
     if ( currentLocation == 0 ) {
         return;
     }
     
-    NSRange newRange = [textView.text
+    NSRange newRange = [self.text
                         rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]
                         options:NSBackwardsSearch
                         range:NSMakeRange(0, (currentLocation - 1))];
     
     if ( newRange.location != NSNotFound ) {
         
-        textView.selectedRange = NSMakeRange((newRange.location + 1), 0);
+        self.selectedRange = NSMakeRange((newRange.location + 1), 0);
         
     } else {
         
-        textView.selectedRange = NSMakeRange(0, 0);
+        self.selectedRange = NSMakeRange(0, 0);
     }
 }
 
 
-- (void)selectParagraph:(UITextView *)textView
+- (void)selectParagraph:(id)sender
 {
     [self cursorPosition];
     
-    NSRange selectedRange = textView.selectedRange;
+    NSRange selectedRange = self.selectedRange;
     
     if (![self hasText])
     {
-        [textView select:self];
+        [self select:self];
     }
     
     else if ([self hasText] && selectedRange.length == 0)
     {
-        [textView select:self];
+        [self select:self];
         NSRange selectedRange = [self firstParagraphRangeFromTextRange:self.selectedRange];
         [self setSelectedRange:selectedRange];
     }
@@ -1241,33 +1241,33 @@ static BOOL _highlightingSupported;
     {
         selectedRange.location = selectedRange.location + selectedRange.length;
         selectedRange.length = 0;
-        textView.selectedRange = selectedRange;
+        self.selectedRange = selectedRange;
     }
 }
 
 
-- (void)goToNextWord:(UITextView *)textView
+- (void)nextWord:(id)sender
 {
-    NSRange selectedRange = textView.selectedRange;
+    NSRange selectedRange = self.selectedRange;
     NSInteger currentLocation = selectedRange.location + selectedRange.length;
-    NSInteger textLength = [textView.text length];
+    NSInteger textLength = [self.text length];
     
     if ( currentLocation == textLength ) {
         return;
     }
     
-    NSRange newRange = [textView.text
+    NSRange newRange = [self.text
                         rangeOfCharacterFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]
                         options:NSCaseInsensitiveSearch
                         range:NSMakeRange((currentLocation + 1), (textLength - 1 - currentLocation))];
     
     if ( newRange.location != NSNotFound ) {
-        textView.selectedRange = NSMakeRange(newRange.location, 0);
+        self.selectedRange = NSMakeRange(newRange.location, 0);
     } else {
-        textView.selectedRange = NSMakeRange(textLength, 0);
+        self.selectedRange = NSMakeRange(textLength, 0);
     }
     
-    [self moveTextPositionAboveKeyboard:textView withAnimation:YES];
+    [self moveTextPositionAboveKeyboard:self withAnimation:YES];
 }
 
 

@@ -1525,25 +1525,25 @@
 #define kTextNormalColor        [UIColor grayColor]
 #define kTextHighlightedColor   [UIColor blackColor]
 #define kOneImage               @"left"
-#define kOneAction              previousCharacterButtonPressed
+#define kOneAction              previousCharacter
 #define kTwoImage               @"right"
-#define kTwoAction              nextCharacterButtonPressed
+#define kTwoAction              nextCharacter
 #define kThreeImage             @"keyboard_hide"
-#define kThreeAction            hideKeyboardButtonPressed
+#define kThreeAction            hideKeyboard
 #define kFour                   @"#"
-#define kFourAction             hashButtonPressed
+#define kFourAction             addHash
 #define kFive                   @"*"
-#define kFiveAction             asteriskButtonPressed
+#define kFiveAction             addAsterisk
 #define kFiveFontInset_iPhone   16.0
 #define kFiveFontInset_iPad     16.0
 #define kSixImage               @"tab"
-#define kSixAction              tabButtonPressed
+#define kSixAction              addTab
 #define kSeven                  @"{}"
-#define kSevenAction            selectWordButonPressed
+#define kSevenAction            selectWord
 #define kEight                  @">"
-#define kEightAction            angleBracketButtonPressed
+#define kEightAction            addAngleBracket
 #define kNine                   @"!"
-#define kNineAction             exclamationMarkButtonPressed
+#define kNineAction             addExclamationMark
     
     if (iPad) {
         self.keyboardAccessoryToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, kToolBarHeight_iPad)];
@@ -1751,59 +1751,77 @@
 
 #pragma mark 키보드 액세서리 뷰 액션 메소드
 
-- (void)previousCharacterButtonPressed:(id)sender
+- (void)previousCharacter:(id)sender
 {
-    [self.noteTextView previousCharacterButtonPressed:sender];
+    [self.noteTextView previousCharacter:sender];
     [self.noteTextView scrollToVisibleCaretAnimated];
 }
 
 
-- (void)nextCharacterButtonPressed:(id)sender
+- (void)nextCharacter:(id)sender
 {
-    [self.noteTextView nextCharacterButtonPressed:sender];
+    [self.noteTextView nextCharacter:sender];
     [self.noteTextView scrollToVisibleCaretAnimated];
 }
 
 
-- (void)hideKeyboardButtonPressed:(id)sender
+- (void)hideKeyboard:(id)sender
 {
-    [self.noteTextView hideKeyboardButtonPressed:sender];
+    [self.noteTextView hideKeyboard:sender];
 }
 
 
-- (void)hashButtonPressed:(id)sender
+- (void)addHash:(id)sender
 {
-    [self.noteTextView hashButtonPressed:sender];
+    [self.noteTextView addHash:sender];
 }
 
 
-- (void)asteriskButtonPressed:(id)sender
+- (void)addAsterisk:(id)sender
 {
-    [self.noteTextView asteriskButtonPressed:sender];
+    [self.noteTextView addAsterisk:sender];
 }
 
 
-- (void)tabButtonPressed:(id)sender
+- (void)addTab:(id)sender
 {
-    [self.noteTextView tabButtonPressed:sender];
+    [self.noteTextView addTab:sender];
 }
 
 
-- (void)selectWordButonPressed:(id)sender
+- (void)selectWord:(id)sender
 {
-    [self.noteTextView selectWordButonPressed:sender];
+    [self.noteTextView selectWord:sender];
 }
 
 
-- (void)angleBracketButtonPressed:(id)sender
+- (void)addAngleBracket:(id)sender
 {
-    [self.noteTextView angleBracketButtonPressed:sender];
+    [self.noteTextView addAngleBracket:sender];
 }
 
 
-- (void)exclamationMarkButtonPressed:(id)sender
+- (void)addExclamationMark:(id)sender
 {
-    [self.noteTextView exclamationMarkButtonPressed:sender];
+    [self.noteTextView addExclamationMark:sender];
+}
+
+
+- (void)previousWord:(id)sender
+{
+    [self.noteTextView previousWord:sender];
+}
+
+
+- (void)nextWord:(id)sender
+{
+    [self.noteTextView nextWord:sender];
+}
+
+
+- (void)selectParagraph:(id)sender
+{
+    [self.noteTextView selectParagraph:sender];
 }
 
 

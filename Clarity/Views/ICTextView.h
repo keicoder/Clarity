@@ -59,27 +59,23 @@
 - (void)keyboardWillShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification*)notification;
 
-#pragma mark - Caret 이동
-- (void)scrollToVisibleCaretAnimated;
-
-#pragma mark - 스트링 메소드
-- (void)goToPreviousWord:(UITextView *)textView;
-- (void)selectParagraph:(UITextView *)textView;
-- (void)goToNextWord:(UITextView *)textView;
-
 #pragma mark - Move text caret position
+- (void)scrollToVisibleCaretAnimated;
 - (void)moveTextPositionAboveKeyboard:(UITextView *)textView withAnimation:(BOOL)shouldAnimate;
 
 #pragma mark - 키보드 액세서리 뷰 액션 메소드
-- (void)previousCharacterButtonPressed:(id)sender;
-- (void)nextCharacterButtonPressed:(id)sender;
-- (void)hideKeyboardButtonPressed:(id)sender;
-- (void)hashButtonPressed:(id)sender;
-- (void)asteriskButtonPressed:(id)sender;
-- (void)tabButtonPressed:(id)sender;
-- (void)selectWordButonPressed:(id)sender;
-- (void)angleBracketButtonPressed:(id)sender;
-- (void)exclamationMarkButtonPressed:(id)sender;
+- (void)hideKeyboard:(id)sender;
+- (void)previousCharacter:(id)sender;
+- (void)nextCharacter:(id)sender;
+- (void)previousWord:(id)sender;
+- (void)nextWord:(id)sender;
+- (void)selectParagraph:(id)sender;
+- (void)selectWord:(id)sender;
+- (void)addHash:(id)sender;
+- (void)addAsterisk:(id)sender;
+- (void)addTab:(id)sender;
+- (void)addAngleBracket:(id)sender;
+- (void)addExclamationMark:(id)sender;
 
 
 @end
