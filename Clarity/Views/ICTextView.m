@@ -186,7 +186,7 @@ static BOOL _highlightingSupported;
 
 - (void)scrollToVisibleCaretAnimated 
 {
-    [UIView animateWithDuration:0.2 animations:^
+    [UIView animateWithDuration:0.15 animations:^
     {
         [self scrollRectToVisibleConsideringInsets:[self caretRectForPosition:self.selectedTextRange.end] animated:NO];
     }];
@@ -331,27 +331,27 @@ static BOOL _highlightingSupported;
 }
 
 
-#pragma mark Range Of Paragraphs From TextRange
-
-- (NSArray *)rangeOfParagraphsFromTextRange:(NSRange)textRange
-{
-	NSMutableArray *paragraphRanges = [NSMutableArray array];
-	NSInteger rangeStartIndex = textRange.location;
-	
-	while (true)
-	{
-		NSRange range = [self firstParagraphRangeFromTextRange:NSMakeRange(rangeStartIndex, 0)];
-		rangeStartIndex = range.location + range.length + 1;
-		
-		[paragraphRanges addObject:[NSValue valueWithRange:range]];
-		
-		if (range.location + range.length >= textRange.location + textRange.length)
-			break;
-	}
-	
-    NSLog (@":paragraphRanges > %@\n", paragraphRanges);
-	return paragraphRanges;
-}
+//#pragma mark Range Of Paragraphs From TextRange
+//
+//- (NSArray *)rangeOfParagraphsFromTextRange:(NSRange)textRange
+//{
+//	NSMutableArray *paragraphRanges = [NSMutableArray array];
+//	NSInteger rangeStartIndex = textRange.location;
+//	
+//	while (true)
+//	{
+//		NSRange range = [self firstParagraphRangeFromTextRange:NSMakeRange(rangeStartIndex, 0)];
+//		rangeStartIndex = range.location + range.length + 1;
+//		
+//		[paragraphRanges addObject:[NSValue valueWithRange:range]];
+//		
+//		if (range.location + range.length >= textRange.location + textRange.length)
+//			break;
+//	}
+//	
+//    NSLog (@":paragraphRanges > %@\n", paragraphRanges);
+//	return paragraphRanges;
+//}
 
 
 #pragma mark -
@@ -372,38 +372,38 @@ static BOOL _highlightingSupported;
 // Convenience method used in init overrides
 - (void)initialize
 {
-    _highlightCornerRadius = -1.0;
-    _highlightsByRange = [[NSMutableDictionary alloc] init];
-    _highlightSearchResults = YES;
-    _maxHighlightedMatches = 100;
-    _scrollAutoRefreshDelay = 0.2;
-    _primaryHighlights = [[NSMutableArray alloc] init];
-    _primaryHighlightColor = [UIColor colorWithRed:150.0/255.0 green:200.0/255.0 blue:1.0 alpha:1.0];
-    _secondaryHighlights = [[NSMutableOrderedSet alloc] init];
-    _secondaryHighlightColor = [UIColor colorWithRed:215.0/255.0 green:240.0/255.0 blue:1.0 alpha:1.0];
+//    _highlightCornerRadius = -1.0;
+//    _highlightsByRange = [[NSMutableDictionary alloc] init];
+//    _highlightSearchResults = YES;
+//    _maxHighlightedMatches = 100;
+//    _scrollAutoRefreshDelay = 0.2;
+//    _primaryHighlights = [[NSMutableArray alloc] init];
+//    _primaryHighlightColor = [UIColor colorWithRed:150.0/255.0 green:200.0/255.0 blue:1.0 alpha:1.0];
+//    _secondaryHighlights = [[NSMutableOrderedSet alloc] init];
+//    _secondaryHighlightColor = [UIColor colorWithRed:215.0/255.0 green:240.0/255.0 blue:1.0 alpha:1.0];
     
     // Detects _UITextContainerView or UIWebDocumentView (subview with text) for highlight placement
-    for (UIView *view in self.subviews)
-    {
-        if ([view isKindOfClass:NSClassFromString(@"_UITextContainerView")] || [view isKindOfClass:NSClassFromString(@"UIWebDocumentView")])
-        {
-            view.tag = ICTagTextSubview;
-            break;
-        }
-    }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(textChanged)
-                                                 name:UITextViewTextDidChangeNotification
-                                               object:self];
+//    for (UIView *view in self.subviews)
+//    {
+//        if ([view isKindOfClass:NSClassFromString(@"_UITextContainerView")] || [view isKindOfClass:NSClassFromString(@"UIWebDocumentView")])
+//        {
+//            view.tag = ICTagTextSubview;
+//            break;
+//        }
+//    }
+//    
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(textChanged)
+//                                                 name:UITextViewTextDidChangeNotification
+//                                               object:self];
 }
 
 
 // Initializes highlights
 - (void)initializeHighlights
 {
-    [self initializePrimaryHighlights];
-    [self initializeSecondaryHighlights];
+//    [self initializePrimaryHighlights];
+//    [self initializeSecondaryHighlights];
 }
 
 
@@ -411,12 +411,12 @@ static BOOL _highlightingSupported;
 - (void)initializePrimaryHighlights
 {
     // Moves primary highlights to secondary highlights array
-    for (UIView *hl in _primaryHighlights)
-    {
-        hl.backgroundColor = _secondaryHighlightColor;
-        [_secondaryHighlights addObject:hl];
-    }
-    [_primaryHighlights removeAllObjects];
+//    for (UIView *hl in _primaryHighlights)
+//    {
+//        hl.backgroundColor = _secondaryHighlightColor;
+//        [_secondaryHighlights addObject:hl];
+//    }
+//    [_primaryHighlights removeAllObjects];
 }
 
 
@@ -424,23 +424,23 @@ static BOOL _highlightingSupported;
 - (void)initializeSecondaryHighlights
 {
     // Removes secondary highlights from their superview
-    for (UIView *hl in _secondaryHighlights)
-        [hl removeFromSuperview];
-    [_secondaryHighlights removeAllObjects];
-    
-    // Removes all objects in _highlightsByRange, eventually except _rangeOfFoundString (primary)
-    if (_primaryHighlights.count)
-    {
-        NSValue *rangeValue = [NSValue valueWithRange:_rangeOfFoundString];
-        NSMutableArray *primaryHighlights = [_highlightsByRange objectForKey:rangeValue];
-        [_highlightsByRange removeAllObjects];
-        [_highlightsByRange setObject:primaryHighlights forKey:rangeValue];
-    }
-    else
-        [_highlightsByRange removeAllObjects];
-    
-    // Sets _performedNewScroll status in order to refresh the highlights
-    _performedNewScroll = YES;
+//    for (UIView *hl in _secondaryHighlights)
+//        [hl removeFromSuperview];
+//    [_secondaryHighlights removeAllObjects];
+//    
+//    // Removes all objects in _highlightsByRange, eventually except _rangeOfFoundString (primary)
+//    if (_primaryHighlights.count)
+//    {
+//        NSValue *rangeValue = [NSValue valueWithRange:_rangeOfFoundString];
+//        NSMutableArray *primaryHighlights = [_highlightsByRange objectForKey:rangeValue];
+//        [_highlightsByRange removeAllObjects];
+//        [_highlightsByRange setObject:primaryHighlights forKey:rangeValue];
+//    }
+//    else
+//        [_highlightsByRange removeAllObjects];
+//    
+//    // Sets _performedNewScroll status in order to refresh the highlights
+//    _performedNewScroll = YES;
 }
 
 
@@ -470,16 +470,16 @@ static BOOL _highlightingSupported;
 // Sets primary highlight
 - (void)setPrimaryHighlightAtRange:(NSRange)range
 {
-    [self initializePrimaryHighlights];
-    NSValue *rangeValue = [NSValue valueWithRange:range];
-    NSMutableArray *highlightsForRange = [_highlightsByRange objectForKey:rangeValue];
-    
-    for (UIView *hl in highlightsForRange)
-    {
-        hl.backgroundColor = _primaryHighlightColor;
-        [_primaryHighlights addObject:hl];
-        [_secondaryHighlights removeObject:hl];
-    }
+//    [self initializePrimaryHighlights];
+//    NSValue *rangeValue = [NSValue valueWithRange:range];
+//    NSMutableArray *highlightsForRange = [_highlightsByRange objectForKey:rangeValue];
+//    
+//    for (UIView *hl in highlightsForRange)
+//    {
+//        hl.backgroundColor = _primaryHighlightColor;
+//        [_primaryHighlights addObject:hl];
+//        [_secondaryHighlights removeObject:hl];
+//    }
 }
 
 
@@ -514,8 +514,8 @@ static BOOL _highlightingSupported;
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
-    if (self && _highlightingSupported)
-        [self initialize];
+//    if (self && _highlightingSupported)
+//        [self initialize];
     return self;
 }
 
@@ -543,13 +543,6 @@ static BOOL _highlightingSupported;
     [layoutManager addTextContainer:textContainer];
     
     self = [super initWithFrame:frame textContainer:textContainer];
-    
-    if (self && _highlightingSupported)
-    {
-        [self initialize];
-    }
-    
-    [self assignTextViewAttribute];
     
     return self;
 }
@@ -583,19 +576,19 @@ static BOOL _highlightingSupported;
 
 
 // Resets highlights on frame change
-- (void)setFrame:(CGRect)frame
-{
-    if (_highlightingSupported && _highlightsByRange.count)
-        [self initializeHighlights];
-    [super setFrame:frame];
-}
+//- (void)setFrame:(CGRect)frame
+//{
+////    if (_highlightingSupported && _highlightsByRange.count)
+////        [self initializeHighlights];
+//    [super setFrame:frame];
+//}
 
 
 // Doesn't allow _scrollAutoRefreshDelay values between 0.0 and 0.1
-- (void)setScrollAutoRefreshDelay:(NSTimeInterval)scrollAutoRefreshDelay
-{
-    _scrollAutoRefreshDelay = (scrollAutoRefreshDelay > 0.0 && scrollAutoRefreshDelay < 0.1) ? 0.1 : scrollAutoRefreshDelay;
-}
+//- (void)setScrollAutoRefreshDelay:(NSTimeInterval)scrollAutoRefreshDelay
+//{
+//    _scrollAutoRefreshDelay = (scrollAutoRefreshDelay > 0.0 && scrollAutoRefreshDelay < 0.1) ? 0.1 : scrollAutoRefreshDelay;
+//}
 
 
 - (void)setSelectedTextRange:(UITextRange *)selectedTextRange
@@ -617,145 +610,145 @@ static BOOL _highlightingSupported;
 #pragma mark - Private methods
 
 // Adds highlight at rect (returns highlight UIView)
-- (UIView *)addHighlightAtRect:(CGRect)frame
-{
-    UIView *highlight = [[UIView alloc] initWithFrame:frame];
-    highlight.layer.cornerRadius = _highlightCornerRadius < 0.0 ? frame.size.height * 0.2 : _highlightCornerRadius;
-    highlight.backgroundColor = _secondaryHighlightColor;
-    [_secondaryHighlights addObject:highlight];
-    [self insertSubview:highlight belowSubview:[self viewWithTag:ICTagTextSubview]];
-    return highlight;
-}
+//- (UIView *)addHighlightAtRect:(CGRect)frame
+//{
+////    UIView *highlight = [[UIView alloc] initWithFrame:frame];
+////    highlight.layer.cornerRadius = _highlightCornerRadius < 0.0 ? frame.size.height * 0.2 : _highlightCornerRadius;
+////    highlight.backgroundColor = _secondaryHighlightColor;
+////    [_secondaryHighlights addObject:highlight];
+////    [self insertSubview:highlight belowSubview:[self viewWithTag:ICTagTextSubview]];
+////    return highlight;
+//}
 
 // Adds highlight at text range (returns array of highlights for text range)
-- (NSMutableArray *)addHighlightAtTextRange:(UITextRange *)textRange
-{
-    NSMutableArray *highlightsForRange = [[NSMutableArray alloc] init];
-    
-    CGRect previousRect = CGRectZero;
-    NSArray *highlightRects = [self selectionRectsForRange:textRange];
-    
-    // Merges adjacent rects
-    for (UITextSelectionRect *selectionRect in highlightRects)
-    {
-        CGRect currentRect = selectionRect.rect;
-        if ((currentRect.origin.y == previousRect.origin.y) && (currentRect.origin.x == CGRectGetMaxX(previousRect)) && (currentRect.size.height == previousRect.size.height))
-        {
-            // Adjacent, add to previous rect
-            previousRect = CGRectMake(previousRect.origin.x, previousRect.origin.y, previousRect.size.width + currentRect.size.width, previousRect.size.height);
-        }
-        else
-        {
-            // Not adjacent, add previous rect to highlights array
-            [highlightsForRange addObject:[self addHighlightAtRect:previousRect]];
-            previousRect = currentRect;
-        }
-    }
-    // Adds last highlight
-    [highlightsForRange addObject:[self addHighlightAtRect:previousRect]];
-    
-    return highlightsForRange;
-}
+//- (NSMutableArray *)addHighlightAtTextRange:(UITextRange *)textRange
+//{
+//    NSMutableArray *highlightsForRange = [[NSMutableArray alloc] init];
+//    
+//    CGRect previousRect = CGRectZero;
+//    NSArray *highlightRects = [self selectionRectsForRange:textRange];
+//    
+//    // Merges adjacent rects
+//    for (UITextSelectionRect *selectionRect in highlightRects)
+//    {
+//        CGRect currentRect = selectionRect.rect;
+//        if ((currentRect.origin.y == previousRect.origin.y) && (currentRect.origin.x == CGRectGetMaxX(previousRect)) && (currentRect.size.height == previousRect.size.height))
+//        {
+//            // Adjacent, add to previous rect
+//            previousRect = CGRectMake(previousRect.origin.x, previousRect.origin.y, previousRect.size.width + currentRect.size.width, previousRect.size.height);
+//        }
+//        else
+//        {
+//            // Not adjacent, add previous rect to highlights array
+//            [highlightsForRange addObject:[self addHighlightAtRect:previousRect]];
+//            previousRect = currentRect;
+//        }
+//    }
+//    // Adds last highlight
+//    [highlightsForRange addObject:[self addHighlightAtRect:previousRect]];
+//    
+//    return highlightsForRange;
+//}
 
 // Highlights occurrences of found string in visible range masked by the user specified range
 - (void)highlightOccurrencesInMaskedVisibleRange
 {
-    // Regex search
-    if (_regex)
-    {
-        if (_performedNewScroll)
-        {
-            // Initial data
-            UITextPosition *visibleStartPosition;
-            NSRange visibleRange = [self visibleRangeConsideringInsets:YES startPosition:&visibleStartPosition endPosition:NULL];
-            
-            // Performs search in masked range
-            NSRange maskedRange = NSIntersectionRange(_searchRange, visibleRange);
-            NSMutableArray *rangeValues = [[NSMutableArray alloc] init];
-            [_regex enumerateMatchesInString:self.text options:0 range:maskedRange usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop){
-                NSValue *rangeValue = [NSValue valueWithRange:match.range];
-                [rangeValues addObject:rangeValue];
-            }];
-            
-            ///// ADDS SECONDARY HIGHLIGHTS /////
-            
-            // Array must have elements
-            if (rangeValues.count)
-            {
-                // Removes already present highlights
-                NSMutableArray *rangesArray = [rangeValues mutableCopy];
-                NSMutableIndexSet *indexesToRemove = [[NSMutableIndexSet alloc] init];
-                [rangeValues enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop){
-                    if ([_highlightsByRange objectForKey:rangeValue])
-                        [indexesToRemove addIndex:idx];
-                }];
-                [rangesArray removeObjectsAtIndexes:indexesToRemove];
-                indexesToRemove = nil;
-                
-                // Filtered array must have elements
-                if (rangesArray.count)
-                {
-                    // Gets text range of first result
-                    NSValue *firstRangeValue = [rangesArray objectAtIndex:0];
-                    NSRange previousRange = [firstRangeValue rangeValue];
-                    UITextPosition *start = [self positionFromPosition:visibleStartPosition offset:(previousRange.location - visibleRange.location)];
-                    UITextPosition *end = [self positionFromPosition:start offset:previousRange.length];
-                    UITextRange *textRange = [self textRangeFromPosition:start toPosition:end];
-                    
-                    // First range
-                    [_highlightsByRange setObject:[self addHighlightAtTextRange:textRange] forKey:firstRangeValue];
-                    
-                    if (rangesArray.count > 1)
-                    {
-                        // Loops through ranges
-                        for (NSUInteger idx = 1; idx < rangesArray.count; idx++)
-                        {
-                            NSValue *rangeValue = [rangesArray objectAtIndex:idx];
-                            NSRange range = [rangeValue rangeValue];
-                            start = [self positionFromPosition:end offset:range.location - (previousRange.location + previousRange.length)];
-                            end = [self positionFromPosition:start offset:range.length];
-                            textRange = [self textRangeFromPosition:start toPosition:end];
-                            [_highlightsByRange setObject:[self addHighlightAtTextRange:textRange] forKey:rangeValue];
-                            previousRange = range;
-                        }
-                    }
-                    
-                    // Memory management
-                    NSInteger remaining = _maxHighlightedMatches - _highlightsByRange.count;
-                    if (remaining < 0)
-                    {
-                        NSInteger tempMin = visibleRange.location - visibleRange.length;
-                        NSUInteger min = tempMin > 0 ? tempMin : 0;
-                        NSUInteger max = min + 3 * visibleRange.length;
-                        // Scans highlighted ranges
-                        NSMutableArray *keysToRemove = [[NSMutableArray alloc] init];
-                        [_highlightsByRange enumerateKeysAndObjectsUsingBlock:^(NSValue *rangeValue, NSArray *highlightsForRange, BOOL *stop){
-                            
-                            // Removes ranges too far from visible range
-                            NSUInteger location = [rangeValue rangeValue].location;
-                            if ((location < min || location > max) && location != _rangeOfFoundString.location)
-                            {
-                                for (UIView *hl in highlightsForRange)
-                                {
-                                    [hl removeFromSuperview];
-                                    [_secondaryHighlights removeObject:hl];
-                                }
-                                [keysToRemove addObject:rangeValue];
-                            }
-                        }];
-                        [_highlightsByRange removeObjectsForKeys:keysToRemove];
-                    }
-                }
-            }
-            
-            // Eventually updates _scanIndex to match visible range
-            if (_shouldUpdateScanIndex)
-                _scanIndex = visibleRange.location + (_regex ? visibleRange.length : 0);
-        }
-        
-        // Sets primary highlight
-        [self setPrimaryHighlightAtRange:_rangeOfFoundString];
-    }
+//    // Regex search
+//    if (_regex)
+//    {
+//        if (_performedNewScroll)
+//        {
+//            // Initial data
+//            UITextPosition *visibleStartPosition;
+//            NSRange visibleRange = [self visibleRangeConsideringInsets:YES startPosition:&visibleStartPosition endPosition:NULL];
+//            
+//            // Performs search in masked range
+//            NSRange maskedRange = NSIntersectionRange(_searchRange, visibleRange);
+//            NSMutableArray *rangeValues = [[NSMutableArray alloc] init];
+//            [_regex enumerateMatchesInString:self.text options:0 range:maskedRange usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop){
+//                NSValue *rangeValue = [NSValue valueWithRange:match.range];
+//                [rangeValues addObject:rangeValue];
+//            }];
+//            
+//            ///// ADDS SECONDARY HIGHLIGHTS /////
+//            
+//            // Array must have elements
+//            if (rangeValues.count)
+//            {
+//                // Removes already present highlights
+//                NSMutableArray *rangesArray = [rangeValues mutableCopy];
+//                NSMutableIndexSet *indexesToRemove = [[NSMutableIndexSet alloc] init];
+//                [rangeValues enumerateObjectsUsingBlock:^(NSValue *rangeValue, NSUInteger idx, BOOL *stop){
+//                    if ([_highlightsByRange objectForKey:rangeValue])
+//                        [indexesToRemove addIndex:idx];
+//                }];
+//                [rangesArray removeObjectsAtIndexes:indexesToRemove];
+//                indexesToRemove = nil;
+//                
+//                // Filtered array must have elements
+//                if (rangesArray.count)
+//                {
+//                    // Gets text range of first result
+//                    NSValue *firstRangeValue = [rangesArray objectAtIndex:0];
+//                    NSRange previousRange = [firstRangeValue rangeValue];
+//                    UITextPosition *start = [self positionFromPosition:visibleStartPosition offset:(previousRange.location - visibleRange.location)];
+//                    UITextPosition *end = [self positionFromPosition:start offset:previousRange.length];
+//                    UITextRange *textRange = [self textRangeFromPosition:start toPosition:end];
+//                    
+//                    // First range
+//                    [_highlightsByRange setObject:[self addHighlightAtTextRange:textRange] forKey:firstRangeValue];
+//                    
+//                    if (rangesArray.count > 1)
+//                    {
+//                        // Loops through ranges
+//                        for (NSUInteger idx = 1; idx < rangesArray.count; idx++)
+//                        {
+//                            NSValue *rangeValue = [rangesArray objectAtIndex:idx];
+//                            NSRange range = [rangeValue rangeValue];
+//                            start = [self positionFromPosition:end offset:range.location - (previousRange.location + previousRange.length)];
+//                            end = [self positionFromPosition:start offset:range.length];
+//                            textRange = [self textRangeFromPosition:start toPosition:end];
+//                            [_highlightsByRange setObject:[self addHighlightAtTextRange:textRange] forKey:rangeValue];
+//                            previousRange = range;
+//                        }
+//                    }
+//                    
+//                    // Memory management
+//                    NSInteger remaining = _maxHighlightedMatches - _highlightsByRange.count;
+//                    if (remaining < 0)
+//                    {
+//                        NSInteger tempMin = visibleRange.location - visibleRange.length;
+//                        NSUInteger min = tempMin > 0 ? tempMin : 0;
+//                        NSUInteger max = min + 3 * visibleRange.length;
+//                        // Scans highlighted ranges
+//                        NSMutableArray *keysToRemove = [[NSMutableArray alloc] init];
+//                        [_highlightsByRange enumerateKeysAndObjectsUsingBlock:^(NSValue *rangeValue, NSArray *highlightsForRange, BOOL *stop){
+//                            
+//                            // Removes ranges too far from visible range
+//                            NSUInteger location = [rangeValue rangeValue].location;
+//                            if ((location < min || location > max) && location != _rangeOfFoundString.location)
+//                            {
+//                                for (UIView *hl in highlightsForRange)
+//                                {
+//                                    [hl removeFromSuperview];
+//                                    [_secondaryHighlights removeObject:hl];
+//                                }
+//                                [keysToRemove addObject:rangeValue];
+//                            }
+//                        }];
+//                        [_highlightsByRange removeObjectsForKeys:keysToRemove];
+//                    }
+//                }
+//            }
+//            
+//            // Eventually updates _scanIndex to match visible range
+//            if (_shouldUpdateScanIndex)
+//                _scanIndex = visibleRange.location + (_regex ? visibleRange.length : 0);
+//        }
+//        
+//        // Sets primary highlight
+//        [self setPrimaryHighlightAtRange:_rangeOfFoundString];
+//    }
 }
 
 
@@ -763,210 +756,210 @@ static BOOL _highlightingSupported;
 
 #pragma mark -- Search --
 
-// Returns string found during last search
-- (NSString *)foundString
-{
-    return [self.text substringWithRange:_rangeOfFoundString];
-}
-
-
-// Resets search, starts from top
-- (void)resetSearch
-{
-    if (_highlightingSupported)
-    {
-        [self initializeHighlights];
-        [_autoRefreshTimer invalidate];
-        _autoRefreshTimer = nil;
-    }
-    _rangeOfFoundString = NSMakeRange(0,0);
-    _regex = nil;
-    _scanIndex = 0;
-    _searchRange = NSMakeRange(0,0);
-}
-
-
-#pragma mark ---- Regex search ----
-
-// Scroll to regex match (returns YES if found, NO otherwise)
-
-- (BOOL)scrollToMatch:(NSString *)pattern
-{
-    return [self scrollToMatch:pattern searchOptions:0 range:NSMakeRange(0, self.text.length)];
-}
-
-- (BOOL)scrollToMatch:(NSString *)pattern searchOptions:(NSRegularExpressionOptions)options
-{
-    return [self scrollToMatch:pattern searchOptions:options range:NSMakeRange(0, self.text.length)];
-}
-
-- (BOOL)scrollToMatch:(NSString *)pattern searchOptions:(NSRegularExpressionOptions)options range:(NSRange)range
-{
-    // Calculates a valid range
-    range = NSIntersectionRange(NSMakeRange(0, self.text.length), range);
-    
-    // Preliminary checks
-    BOOL abort = NO;
-    if (!pattern)
-    {
-#if DEBUG
-        NSLog(@"Pattern cannot be nil.");
-#endif
-        abort = YES;
-    }
-    else if (range.length == 0)
-    {
-#if DEBUG
-        NSLog(@"Specified range is out of bounds.");
-#endif
-        abort = YES;
-    }
-    if (abort)
-    {
-        [self resetSearch];
-        return NO;
-    }
-    
-    // Optimization and coherence checks
-    BOOL samePattern = [pattern isEqualToString:_regex.pattern];
-    BOOL sameOptions = (options == _regex.options);
-    BOOL sameSearchRange = NSEqualRanges(range, _searchRange);
-    
-    // Sets new search range
-    _searchRange = range;
-    
-    // Creates regex
-    NSError *error;
-    _regex = [[NSRegularExpression alloc] initWithPattern:pattern options:options error:&error];
-    if (error)
-    {
-#if DEBUG
-        NSLog(@"Error while creating regex: %@", error);
-#endif
-        [self resetSearch];
-        return NO;
-    }
-    
-    // Resets highlights
-    if (_highlightingSupported && _highlightSearchResults)
-    {
-        [self initializePrimaryHighlights];
-        if (!(samePattern && sameOptions && sameSearchRange))
-            [self initializeSecondaryHighlights];
-    }
-    
-    // Scan index logic
-    if (sameSearchRange && sameOptions)
-    {
-        // Same search pattern, go to next match
-        if (samePattern)
-            _scanIndex += _rangeOfFoundString.length;
-        // Scan index out of range
-        if (_scanIndex < range.location || _scanIndex >= (range.location + range.length))
-            _scanIndex = range.location;
-    }
-    else
-        _scanIndex = range.location;
-    
-    // Gets match
-    NSRange matchRange = [_regex rangeOfFirstMatchInString:self.text options:0 range:NSMakeRange(_scanIndex, range.location + range.length - _scanIndex)];
-    
-    // Match not found
-    if (matchRange.location == NSNotFound)
-    {
-        _rangeOfFoundString = NSMakeRange(NSNotFound, 0);
-        if (_scanIndex)
-        {
-            // Starts from top
-            _scanIndex = range.location;
-            return [self scrollToMatch:pattern searchOptions:options range:range];
-        }
-        _regex = nil;
-        return NO;
-    }
-    
-    // Match found, saves state
-    _rangeOfFoundString = matchRange;
-    _scanIndex = matchRange.location;
-    _shouldUpdateScanIndex = NO;
-    
-    // Adds highlights
-    if (_highlightingSupported && _highlightSearchResults)
-        [self highlightOccurrencesInMaskedVisibleRange];
-    
-    // Scrolls
-    [self scrollRangeToVisible:matchRange consideringInsets:YES];
-    
-    return YES;
-}
+//// Returns string found during last search
+//- (NSString *)foundString
+//{
+//    return [self.text substringWithRange:_rangeOfFoundString];
+//}
+//
+//
+//// Resets search, starts from top
+//- (void)resetSearch
+//{
+//    if (_highlightingSupported)
+//    {
+//        [self initializeHighlights];
+//        [_autoRefreshTimer invalidate];
+//        _autoRefreshTimer = nil;
+//    }
+//    _rangeOfFoundString = NSMakeRange(0,0);
+//    _regex = nil;
+//    _scanIndex = 0;
+//    _searchRange = NSMakeRange(0,0);
+//}
+//
+//
+//#pragma mark ---- Regex search ----
+//
+//// Scroll to regex match (returns YES if found, NO otherwise)
+//
+//- (BOOL)scrollToMatch:(NSString *)pattern
+//{
+//    return [self scrollToMatch:pattern searchOptions:0 range:NSMakeRange(0, self.text.length)];
+//}
+//
+//- (BOOL)scrollToMatch:(NSString *)pattern searchOptions:(NSRegularExpressionOptions)options
+//{
+//    return [self scrollToMatch:pattern searchOptions:options range:NSMakeRange(0, self.text.length)];
+//}
+//
+//- (BOOL)scrollToMatch:(NSString *)pattern searchOptions:(NSRegularExpressionOptions)options range:(NSRange)range
+//{
+//    // Calculates a valid range
+//    range = NSIntersectionRange(NSMakeRange(0, self.text.length), range);
+//    
+//    // Preliminary checks
+//    BOOL abort = NO;
+//    if (!pattern)
+//    {
+//#if DEBUG
+//        NSLog(@"Pattern cannot be nil.");
+//#endif
+//        abort = YES;
+//    }
+//    else if (range.length == 0)
+//    {
+//#if DEBUG
+//        NSLog(@"Specified range is out of bounds.");
+//#endif
+//        abort = YES;
+//    }
+//    if (abort)
+//    {
+//        [self resetSearch];
+//        return NO;
+//    }
+//    
+//    // Optimization and coherence checks
+//    BOOL samePattern = [pattern isEqualToString:_regex.pattern];
+//    BOOL sameOptions = (options == _regex.options);
+//    BOOL sameSearchRange = NSEqualRanges(range, _searchRange);
+//    
+//    // Sets new search range
+//    _searchRange = range;
+//    
+//    // Creates regex
+//    NSError *error;
+//    _regex = [[NSRegularExpression alloc] initWithPattern:pattern options:options error:&error];
+//    if (error)
+//    {
+//#if DEBUG
+//        NSLog(@"Error while creating regex: %@", error);
+//#endif
+//        [self resetSearch];
+//        return NO;
+//    }
+//    
+//    // Resets highlights
+//    if (_highlightingSupported && _highlightSearchResults)
+//    {
+//        [self initializePrimaryHighlights];
+//        if (!(samePattern && sameOptions && sameSearchRange))
+//            [self initializeSecondaryHighlights];
+//    }
+//    
+//    // Scan index logic
+//    if (sameSearchRange && sameOptions)
+//    {
+//        // Same search pattern, go to next match
+//        if (samePattern)
+//            _scanIndex += _rangeOfFoundString.length;
+//        // Scan index out of range
+//        if (_scanIndex < range.location || _scanIndex >= (range.location + range.length))
+//            _scanIndex = range.location;
+//    }
+//    else
+//        _scanIndex = range.location;
+//    
+//    // Gets match
+//    NSRange matchRange = [_regex rangeOfFirstMatchInString:self.text options:0 range:NSMakeRange(_scanIndex, range.location + range.length - _scanIndex)];
+//    
+//    // Match not found
+//    if (matchRange.location == NSNotFound)
+//    {
+//        _rangeOfFoundString = NSMakeRange(NSNotFound, 0);
+//        if (_scanIndex)
+//        {
+//            // Starts from top
+//            _scanIndex = range.location;
+//            return [self scrollToMatch:pattern searchOptions:options range:range];
+//        }
+//        _regex = nil;
+//        return NO;
+//    }
+//    
+//    // Match found, saves state
+//    _rangeOfFoundString = matchRange;
+//    _scanIndex = matchRange.location;
+//    _shouldUpdateScanIndex = NO;
+//    
+//    // Adds highlights
+//    if (_highlightingSupported && _highlightSearchResults)
+//        [self highlightOccurrencesInMaskedVisibleRange];
+//    
+//    // Scrolls
+//    [self scrollRangeToVisible:matchRange consideringInsets:YES];
+//    
+//    return YES;
+//}
 
 
 #pragma mark ---- String search ----
 
 // Scroll to string (returns YES if found, NO otherwise)
 
-- (BOOL)scrollToString:(NSString *)stringToFind
-{
-    return [self scrollToString:stringToFind searchOptions:0 range:NSMakeRange(0, self.text.length)];
-}
-
-- (BOOL)scrollToString:(NSString *)stringToFind searchOptions:(NSRegularExpressionOptions)options
-{
-    return [self scrollToString:stringToFind searchOptions:options range:NSMakeRange(0, self.text.length)];
-}
-
-- (BOOL)scrollToString:(NSString *)stringToFind searchOptions:(NSRegularExpressionOptions)options range:(NSRange)range
-{
-    // Preliminary check
-    if (!stringToFind)
-    {
-#if DEBUG
-        NSLog(@"Search string cannot be nil.");
-#endif
-        [self resetSearch];
-        return NO;
-    }
-    
-    // Escapes metacharacters
-    stringToFind = [NSRegularExpression escapedPatternForString:stringToFind];
-    
-    // These checks allow better automatic search on UITextField or UISearchBar text change
-    if (_regex)
-    {
-        NSString *lcStringToFind = [stringToFind lowercaseString];
-        NSString *lcFoundString = [_regex.pattern lowercaseString];
-        if (!([lcStringToFind hasPrefix:lcFoundString] || [lcFoundString hasPrefix:lcStringToFind]))
-            _scanIndex += _rangeOfFoundString.length;
-    }
-    
-    // Performs search
-    return [self scrollToMatch:stringToFind searchOptions:options range:range];
-}
+//- (BOOL)scrollToString:(NSString *)stringToFind
+//{
+//    return [self scrollToString:stringToFind searchOptions:0 range:NSMakeRange(0, self.text.length)];
+//}
+//
+//- (BOOL)scrollToString:(NSString *)stringToFind searchOptions:(NSRegularExpressionOptions)options
+//{
+//    return [self scrollToString:stringToFind searchOptions:options range:NSMakeRange(0, self.text.length)];
+//}
+//
+//- (BOOL)scrollToString:(NSString *)stringToFind searchOptions:(NSRegularExpressionOptions)options range:(NSRange)range
+//{
+//    // Preliminary check
+//    if (!stringToFind)
+//    {
+//#if DEBUG
+//        NSLog(@"Search string cannot be nil.");
+//#endif
+//        [self resetSearch];
+//        return NO;
+//    }
+//    
+//    // Escapes metacharacters
+//    stringToFind = [NSRegularExpression escapedPatternForString:stringToFind];
+//    
+//    // These checks allow better automatic search on UITextField or UISearchBar text change
+//    if (_regex)
+//    {
+//        NSString *lcStringToFind = [stringToFind lowercaseString];
+//        NSString *lcFoundString = [_regex.pattern lowercaseString];
+//        if (!([lcStringToFind hasPrefix:lcFoundString] || [lcFoundString hasPrefix:lcStringToFind]))
+//            _scanIndex += _rangeOfFoundString.length;
+//    }
+//    
+//    // Performs search
+//    return [self scrollToMatch:stringToFind searchOptions:options range:range];
+//}
 
 
 #pragma mark -- Misc --
 
-// Scrolls to visible range, eventually considering insets
-- (void)scrollRangeToVisible:(NSRange)range consideringInsets:(BOOL)considerInsets
-{
-    // Calculates rect for range
-    UITextPosition *startPosition = [self positionFromPosition:self.beginningOfDocument offset:range.location];
-    UITextPosition *endPosition = [self positionFromPosition:startPosition offset:range.length];
-    UITextRange *textRange = [self textRangeFromPosition:startPosition toPosition:endPosition];
-    CGRect rect = [self firstRectForRange:textRange];
-    
-    
-    [UIView animateWithDuration:0.25 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         // Scrolls to visible rect
-                         [self scrollRectToVisible:rect animated:YES consideringInsets:YES];
-                     }
-                     completion:^(BOOL finished) { }];
-    // Scrolls to visible rect
-    //[self scrollRectToVisible:rect animated:YES consideringInsets:YES];
-}
-
-
+//// Scrolls to visible range, eventually considering insets
+//- (void)scrollRangeToVisible:(NSRange)range consideringInsets:(BOOL)considerInsets
+//{
+//    // Calculates rect for range
+//    UITextPosition *startPosition = [self positionFromPosition:self.beginningOfDocument offset:range.location];
+//    UITextPosition *endPosition = [self positionFromPosition:startPosition offset:range.length];
+//    UITextRange *textRange = [self textRangeFromPosition:startPosition toPosition:endPosition];
+//    CGRect rect = [self firstRectForRange:textRange];
+//    
+//    
+//    [UIView animateWithDuration:0.25 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut
+//                     animations:^{
+//                         // Scrolls to visible rect
+//                         [self scrollRectToVisible:rect animated:YES consideringInsets:YES];
+//                     }
+//                     completion:^(BOOL finished) { }];
+//    // Scrolls to visible rect
+//    //[self scrollRectToVisible:rect animated:YES consideringInsets:YES];
+//}
+//
+//
 // Scrolls to visible rect, eventually considering insets
 - (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated consideringInsets:(BOOL)considerInsets
 {
@@ -996,34 +989,34 @@ static BOOL _highlightingSupported;
         //[self setContentOffset:contentOffset animated:animated];
     }
 }
-
-
-// Returns visible range, eventually considering insets
-- (NSRange)visibleRangeConsideringInsets:(BOOL)considerInsets
-{
-    return [self visibleRangeConsideringInsets:considerInsets startPosition:NULL endPosition:NULL];
-}
-
-
-// Returns visible range, with start and end position, eventually considering insets
-- (NSRange)visibleRangeConsideringInsets:(BOOL)considerInsets startPosition:(UITextPosition *__autoreleasing *)startPosition endPosition:(UITextPosition *__autoreleasing *)endPosition
-{
-    CGRect visibleRect = [self visibleRectConsideringInsets:considerInsets];
-    CGPoint startPoint = visibleRect.origin;
-    CGPoint endPoint = CGPointMake(CGRectGetMaxX(visibleRect), CGRectGetMaxY(visibleRect));
-    
-    UITextPosition *start = [self characterRangeAtPoint:startPoint].start;
-    UITextPosition *end = [self characterRangeAtPoint:endPoint].end;
-    
-    if (startPosition)
-        *startPosition = start;
-    if (endPosition)
-        *endPosition = end;
-    
-    return NSMakeRange([self offsetFromPosition:self.beginningOfDocument toPosition:start], [self offsetFromPosition:start toPosition:end]);
-}
-
-
+//
+//
+//// Returns visible range, eventually considering insets
+//- (NSRange)visibleRangeConsideringInsets:(BOOL)considerInsets
+//{
+//    return [self visibleRangeConsideringInsets:considerInsets startPosition:NULL endPosition:NULL];
+//}
+//
+//
+//// Returns visible range, with start and end position, eventually considering insets
+//- (NSRange)visibleRangeConsideringInsets:(BOOL)considerInsets startPosition:(UITextPosition *__autoreleasing *)startPosition endPosition:(UITextPosition *__autoreleasing *)endPosition
+//{
+//    CGRect visibleRect = [self visibleRectConsideringInsets:considerInsets];
+//    CGPoint startPoint = visibleRect.origin;
+//    CGPoint endPoint = CGPointMake(CGRectGetMaxX(visibleRect), CGRectGetMaxY(visibleRect));
+//    
+//    UITextPosition *start = [self characterRangeAtPoint:startPoint].start;
+//    UITextPosition *end = [self characterRangeAtPoint:endPoint].end;
+//    
+//    if (startPosition)
+//        *startPosition = start;
+//    if (endPosition)
+//        *endPosition = end;
+//    
+//    return NSMakeRange([self offsetFromPosition:self.beginningOfDocument toPosition:start], [self offsetFromPosition:start toPosition:end]);
+//}
+//
+//
 // Returns visible rect, eventually considering insets
 - (CGRect)visibleRectConsideringInsets:(BOOL)considerInsets
 {
@@ -1040,21 +1033,6 @@ static BOOL _highlightingSupported;
     }
     return bounds;
 }
-
-
-#pragma mark - Dealloc
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-//    NSLog(@"dealloc %@", self);
-    NSLog(@"ICTextView dealloced");
-}
-
-
-
-
-
 
 
 #pragma mark 키보드 액세서리 뷰 액션 메소드
@@ -1270,6 +1248,14 @@ static BOOL _highlightingSupported;
     [self moveTextPositionAboveKeyboard:self withAnimation:YES];
 }
 
+
+#pragma mark - Dealloc
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    NSLog(@"ICTextView dealloced: %@", self);
+}
 
 
 @end

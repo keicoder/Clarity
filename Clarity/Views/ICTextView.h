@@ -26,18 +26,18 @@
 
 #pragma mark -- Search --
 
-- (NSString *)foundString;              // Returns string found during last search
-- (void)resetSearch;                    // Resets search, starts from top
+//- (NSString *)foundString;              // Returns string found during last search
+//- (void)resetSearch;                    // Resets search, starts from top
 
 // Scrolls to regex match (returns YES if found, NO otherwise)
-- (BOOL)scrollToMatch:(NSString *)pattern;
-- (BOOL)scrollToMatch:(NSString *)pattern searchOptions:(NSRegularExpressionOptions)options;
-- (BOOL)scrollToMatch:(NSString *)pattern searchOptions:(NSRegularExpressionOptions)options range:(NSRange)range;
+//- (BOOL)scrollToMatch:(NSString *)pattern;
+//- (BOOL)scrollToMatch:(NSString *)pattern searchOptions:(NSRegularExpressionOptions)options;
+//- (BOOL)scrollToMatch:(NSString *)pattern searchOptions:(NSRegularExpressionOptions)options range:(NSRange)range;
 
 // Scrolls to string (returns YES if found, NO otherwise)
-- (BOOL)scrollToString:(NSString *)stringToFind;
-- (BOOL)scrollToString:(NSString *)stringToFind searchOptions:(NSRegularExpressionOptions)options;
-- (BOOL)scrollToString:(NSString *)stringToFind searchOptions:(NSRegularExpressionOptions)options range:(NSRange)range;
+//- (BOOL)scrollToString:(NSString *)stringToFind;
+//- (BOOL)scrollToString:(NSString *)stringToFind searchOptions:(NSRegularExpressionOptions)options;
+//- (BOOL)scrollToString:(NSString *)stringToFind searchOptions:(NSRegularExpressionOptions)options range:(NSRange)range;
 
 #pragma mark -- Misc --
 
