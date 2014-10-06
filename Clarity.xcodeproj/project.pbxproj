@@ -58,7 +58,7 @@
 		C12290E819973B6C00460667 /* jMarkdown.css in Resources */ = {isa = PBXBuildFile; fileRef = C12290E719973B6C00460667 /* jMarkdown.css */; };
 		C12290EC19973BA100460667 /* WelcomePage.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290EB19973BA100460667 /* WelcomePage.m */; };
 		C12290F819973BAA00460667 /* BackgroundLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290EF19973BAA00460667 /* BackgroundLayer.m */; };
-		C12290F919973BAA00460667 /* ICTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290F119973BAA00460667 /* ICTextView.m */; };
+		C12290F919973BAA00460667 /* JTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290F119973BAA00460667 /* JTextView.m */; };
 		C12290FA19973BAA00460667 /* LeftTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290F319973BAA00460667 /* LeftTableViewCell.m */; };
 		C12290FB19973BAA00460667 /* LeftTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C12290F419973BAA00460667 /* LeftTableViewCell.xib */; };
 		C12290FC19973BAA00460667 /* NoteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C12290F619973BAA00460667 /* NoteTableViewCell.m */; };
@@ -202,8 +202,8 @@
 		C12290EB19973BA100460667 /* WelcomePage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WelcomePage.m; path = ../Objects/WelcomePage.m; sourceTree = "<group>"; };
 		C12290EE19973BAA00460667 /* BackgroundLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundLayer.h; sourceTree = "<group>"; };
 		C12290EF19973BAA00460667 /* BackgroundLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundLayer.m; sourceTree = "<group>"; };
-		C12290F019973BAA00460667 /* ICTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICTextView.h; sourceTree = "<group>"; };
-		C12290F119973BAA00460667 /* ICTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ICTextView.m; sourceTree = "<group>"; };
+		C12290F019973BAA00460667 /* JTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JTextView.h; sourceTree = "<group>"; };
+		C12290F119973BAA00460667 /* JTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JTextView.m; sourceTree = "<group>"; };
 		C12290F219973BAA00460667 /* LeftTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftTableViewCell.h; sourceTree = "<group>"; };
 		C12290F319973BAA00460667 /* LeftTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftTableViewCell.m; sourceTree = "<group>"; };
 		C12290F419973BAA00460667 /* LeftTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LeftTableViewCell.xib; path = ../Views/LeftTableViewCell.xib; sourceTree = "<group>"; };
@@ -557,8 +557,8 @@
 			children = (
 				C12290EE19973BAA00460667 /* BackgroundLayer.h */,
 				C12290EF19973BAA00460667 /* BackgroundLayer.m */,
-				C12290F019973BAA00460667 /* ICTextView.h */,
-				C12290F119973BAA00460667 /* ICTextView.m */,
+				C12290F019973BAA00460667 /* JTextView.h */,
+				C12290F119973BAA00460667 /* JTextView.m */,
 				C12290F219973BAA00460667 /* LeftTableViewCell.h */,
 				C12290F319973BAA00460667 /* LeftTableViewCell.m */,
 				C12290F519973BAA00460667 /* NoteTableViewCell.h */,
@@ -923,7 +923,7 @@
 				C12290A719973A7200460667 /* UIImage+MakeThumbnail.m in Sources */,
 				C12290A419973A7200460667 /* UIButtonPressAndHold.m in Sources */,
 				C121D4EC19C93BCE0098BC94 /* Note.m in Sources */,
-				C12290F919973BAA00460667 /* ICTextView.m in Sources */,
+				C12290F919973BAA00460667 /* JTextView.m in Sources */,
 				C12290FC19973BAA00460667 /* NoteTableViewCell.m in Sources */,
 				C1E74E7619AEFE2A00AA3399 /* NDHTMLtoPDF.m in Sources */,
 				C122908A19973A6400460667 /* DoActionSheet.m in Sources */,

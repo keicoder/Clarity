@@ -1,21 +1,15 @@
-/**
-* ICTextView.m - 1.0.2
-**/
-
-#import "ICTextView.h"
-//#import <QuartzCore/QuartzCore.h>
-//#include <tgmath.h>
 
 
-@interface ICTextView ()
+#import "JTextView.h"
+
+@interface JTextView ()
 {
-    BOOL _appliedCharacterRangeAtPointBugfix;
     CGRect _keyboardRect;
 }
 @end
 
 
-@implementation ICTextView
+@implementation JTextView
 
 
 #pragma mark - 텍스트 뷰 속성
@@ -96,8 +90,7 @@
 - (void)keyboardWillShow:(NSNotification *)notification
 {
     NSDictionary *userInfoDictionary = notification.userInfo;
-    CGFloat duration = [[userInfoDictionary objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    //int curve = [[userInfoDictionary objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
+    CGFloat duration = [[userInfoDictionary objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue]; //int curve = [[userInfoDictionary objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
     _keyboardRect = [[userInfoDictionary objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 
     [UIView animateWithDuration:duration delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
@@ -116,11 +109,9 @@
     int curve = [[userInfoDictionary objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
     _keyboardRect = [[userInfoDictionary objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    [UIView animateWithDuration:kMOVE_TEXT_POSITION_DURATION delay:duration options:curve animations:^
-    {
+    [UIView animateWithDuration:kMOVE_TEXT_POSITION_DURATION delay:duration options:curve animations:^{
         [self updateNoteTextViewInsetWithoutKeyboard];
-    } 
-    completion:^(BOOL finished) { }];
+    } completion:^(BOOL finished) { }];
 }
 
 
@@ -128,8 +119,7 @@
 
 - (void)scrollToVisibleCaretAnimated 
 {
-    [UIView animateWithDuration:0.15 animations:^
-    {
+    [UIView animateWithDuration:0.2 animations:^{
         [self scrollRectToVisibleConsideringInsets:[self caretRectForPosition:self.selectedTextRange.end] animated:NO];
     }];
 }
@@ -149,22 +139,8 @@
         } else {
             contentOffset.y = CGRectGetMaxY(rect) + insets.bottom - CGRectGetHeight(self.bounds); //down
         }
-        [self setContentOffset:contentOffset animated:animated];
+        [super setContentOffset:contentOffset animated:animated];
     }
-}
-
-
-- (void)setContentOffset:(CGPoint)contentOffset textView:(UITextView *)textView
-{
-    [super setContentOffset:contentOffset];
-}
-
-
-#pragma mark - 초characterRangeAtPointBugFix
-
-- (void)characterRangeAtPointBugFix
-{
-    _appliedCharacterRangeAtPointBugfix = YES;
 }
 
 
@@ -196,51 +172,6 @@
     
     return self;
 }
-
-
-- (void)setSelectedTextRange:(UITextRange *)selectedTextRange
-{
-    [super setSelectedTextRange:selectedTextRange];
-}
-
-
-- (void)setText:(NSString *)text
-{
-    [super setText:text];
-}
-
-
-#pragma mark - Public methods
-
-//#pragma mark -- Scroll
-//
-//- (void)scrollRectToVisible:(CGRect)rect animated:(BOOL)animated consideringInsets:(BOOL)considerInsets
-//{
-//    CGRect bounds = self.bounds;
-//    UIEdgeInsets contentInset = self.contentInset;
-//    CGRect visibleRect = [self visibleRectConsideringInsets:YES];
-//    
-//    // Do not scroll if rect is on screen
-//    if (!CGRectContainsRect(visibleRect, rect))
-//    {
-//        CGPoint contentOffset = self.contentOffset;
-//        // Calculates new contentOffset
-//        if (rect.origin.y < visibleRect.origin.y)
-//            // rect precedes bounds, scroll up
-//            contentOffset.y = rect.origin.y - contentInset.top;
-//        else
-//            // rect follows bounds, scroll down
-//            contentOffset.y = rect.origin.y + contentInset.bottom + rect.size.height - bounds.size.height;
-//        
-//        [UIView animateWithDuration:0.25 delay:0.0 options: UIViewAnimationOptionCurveEaseInOut
-//                         animations:^{
-//                             // Scrolls to visible rect
-//                             //[self setContentOffset:contentOffset animated:animated];
-//                         }
-//                         completion:^(BOOL finished) { }];
-//        //[self setContentOffset:contentOffset animated:animated];
-//    }
-//}
 
 
 #pragma mark 키보드 액세서리 뷰 액션 메소드
@@ -279,7 +210,7 @@
     {
         UITextPosition *newPosition = [self positionFromPosition:selectedRange.start offset:-1];
         UITextRange *newRange = [self textRangeFromPosition:newPosition toPosition:newPosition];
-        [self setSelectedTextRange:newRange];
+        [super setSelectedTextRange:newRange];
     }
     [self scrollToVisibleCaretAnimated];
 }
@@ -317,7 +248,7 @@
     {
         UITextPosition *newPosition = [self positionFromPosition:selectedRange.start offset:1];
         UITextRange *newRange = [self textRangeFromPosition:newPosition toPosition:newPosition];
-        [self setSelectedTextRange:newRange];
+        [super setSelectedTextRange:newRange];
     }
     [self scrollToVisibleCaretAnimated];
 }
@@ -450,7 +381,7 @@
 }
 
 
-#pragma mark 텍스트 Appending
+#pragma mark - 텍스트 Appending
 
 - (void)addTextOnSelectedRange:(NSString *)text
 {
@@ -544,22 +475,6 @@
     length = end - start;
     
     return NSMakeRange(start, length);
-}
-
-
-#pragma mark - 캐럿 위치 이동 (사용하지 않음 > scrollToVisibleCaretAnimated로 대체)
-
-- (void)moveTextPositionAboveKeyboard:(UITextView *)textView animated:(BOOL)animated
-{
-    CGRect line = [textView caretRectForPosition: textView.selectedTextRange.start];
-    CGFloat overflow = line.origin.y + line.size.height - ( textView.contentOffset.y + textView.bounds.size.height - textView.contentInset.bottom - textView.contentInset.top );
-    CGPoint contentOffset = textView.contentOffset;
-    if ( overflow > 0 ) {
-        contentOffset.y += overflow;
-        [UIView animateWithDuration:0.2 animations:^{
-            [self setContentOffset:contentOffset animated:animated];
-        }];
-    }
 }
 
 

@@ -8,7 +8,7 @@
 
 #import "LocalAddEditViewController.h"
 #import "FRLayeredNavigationController/FRLayeredNavigation.h"
-#import "ICTextView.h"
+#import "JTextView.h"
 #import "MarkdownWebViewController.h"
 #import "NoteDataManager.h"
 #import "UIImage+MakeThumbnail.h"
@@ -33,7 +33,7 @@
 @interface LocalAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate,UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, strong) ICTextView *noteTextView;
+@property (nonatomic, strong) JTextView *noteTextView;
 @property (nonatomic, strong) UILabel *noteTitleLabel;
 @property (nonatomic, strong) UIView *noteTitleLabelBackgroundView;
 @property (nonatomic, strong) NSMutableString *htmlString;
@@ -186,7 +186,7 @@
 
 - (void)addNoteTextView
 {
-    self.noteTextView = [[ICTextView alloc] initWithFrame:self.view.bounds];
+    self.noteTextView = [[JTextView alloc] initWithFrame:self.view.bounds];
     self.noteTextView.delegate = self;
     [self.noteTextView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:self.noteTextView];
