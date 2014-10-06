@@ -128,6 +128,7 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    [self deregisterForNotifications];
 }
 
 
@@ -1447,7 +1448,6 @@
 
 - (void)dealloc
 {
-    [self deregisterForNotifications];
     NSLog(@"dealloc %@", self);
 }
 

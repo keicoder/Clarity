@@ -12,7 +12,7 @@
 #define kINSET_BOTTOM                                        0.0
 #define kINSET_RIGHT                                         0.0
 #define kTEXTVIEW_PADDING                                   20.0
-#define kMOVE_TEXT_POSITION_DURATION                        0.40
+#define kMOVE_TEXT_POSITION_DURATION                        0.30
 
 #define kTEXTVIEW_FONT_IPAD                                 [UIFont fontWithName:@"AvenirNext-Regular" size:22.f]
 #define kTEXTVIEW_FONT                                      [UIFont fontWithName:@"AvenirNext-Regular" size:20.f]
@@ -77,34 +77,26 @@
     int curve = [[userInfoDictionary objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
     _keyboardRect = [[userInfoDictionary objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    [UIView animateWithDuration:duration delay:0.0 options:curve
-                     animations:^{
-                         [self updateNoteTextViewInsetWithKeyboard:notification]; //[self updateScrollInsets:notification];
+    [UIView animateWithDuration:duration delay:0.0 options:curve animations:^{
+                         [self updateNoteTextViewInsetWithKeyboard:notification];
                      } completion:^(BOOL finished) { }];
 }
 
 
-- (void)updateScrollInsets:(NSNotification *)notification
+- (void)updateNoteTextViewInsetWithKeyboard:(NSNotification*)notification
 {
-    CGFloat contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
+    CGFloat contentInsetBottom = 0.f;
     if (iPad) {
         CGFloat contentInsetTop = kINSET_TOP_IPAD;
+        contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
         UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT_IPAD, contentInsetBottom, kINSET_RIGHT_IPAD);
-        [self setInsets:contentInset givenUserInfo:notification.userInfo];
+        self.contentInset = contentInset;
     } else {
         CGFloat contentInsetTop = kINSET_TOP;
+        contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
         UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
-        [self setInsets:contentInset givenUserInfo:notification.userInfo];
+        self.contentInset = contentInset;
     }
-}
-
-
-- (void) setInsets:(UIEdgeInsets)contentInsets givenUserInfo:(NSDictionary *)userInfo
-{
-    double duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.contentInset = contentInsets;
-    } completion:nil];
 }
 
 
@@ -115,7 +107,7 @@
     int curve = [[userInfoDictionary objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
     _keyboardRect = [[userInfoDictionary objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
-    [UIView animateWithDuration:kMOVE_TEXT_POSITION_DURATION delay:duration options:curve animations:^{
+    [UIView animateWithDuration:duration delay:0.0 options:curve animations:^{
         [self updateNoteTextViewInsetWithoutKeyboard];
     } completion:^(BOOL finished) { }];
 }
@@ -129,7 +121,6 @@
     } else {
         UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
         self.contentInset = contentInset;
-        //self.scrollIndicatorInsets = UIEdgeInsetsMake(_scrollIndicatorInsetTop, kINSET_LEFT, _scrollIndicatorInsetBottom, kINSET_RIGHT);
     }
 }
 
@@ -154,42 +145,12 @@
     if (!CGRectContainsRect(visibleRect, rect)) {
         CGPoint contentOffset = self.contentOffset;
         if (CGRectGetMinY(rect) < CGRectGetMinY(visibleRect)) {
-            contentOffset.y = CGRectGetMinY(rect) - insets.top;     //up
+            contentOffset.y = CGRectGetMinY(rect) - insets.top;                                     //up
         } else {
-            contentOffset.y = CGRectGetMaxY(rect) + insets.bottom - CGRectGetHeight(self.bounds); //down
+            contentOffset.y = CGRectGetMaxY(rect) + insets.bottom - CGRectGetHeight(self.bounds);   //down
         }
         [super setContentOffset:contentOffset animated:animated];
     }
-}
-
-
-#pragma mark - Overrides
-
-- (id)initWithFrame:(CGRect)frame
-{
-    return [self initWithFrame:frame textContainer:nil];
-}
-
-
-- (instancetype)initWithFrame:(CGRect)frame textContainer:(NSTextContainer *)textContainer
-{
-    NSTextStorage *textStorage = [[NSTextStorage alloc] init];
-    NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init];
-    
-    [textStorage addLayoutManager:layoutManager];
-    
-    if (!textContainer)
-    {
-        textContainer = [[NSTextContainer alloc] initWithSize:frame.size];
-    }
-    
-    textContainer.heightTracksTextView = YES;
-    
-    [layoutManager addTextContainer:textContainer];
-    
-    self = [super initWithFrame:frame textContainer:textContainer];
-    
-    return self;
 }
 
 
@@ -520,22 +481,29 @@
 }
 
 
-#pragma mark - updateNoteTextViewInsetWithKeyboard
+#pragma mark - updateScrollInsets
 
-- (void)updateNoteTextViewInsetWithKeyboard:(NSNotification*)notification
+- (void)updateScrollInsets:(NSNotification *)notification
 {
-    CGFloat contentInsetBottom = 0.f;
+    CGFloat contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
     if (iPad) {
         CGFloat contentInsetTop = kINSET_TOP_IPAD;
-        contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
         UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT_IPAD, contentInsetBottom, kINSET_RIGHT_IPAD);
-        self.contentInset = contentInset;
+        [self setInsets:contentInset givenUserInfo:notification.userInfo];
     } else {
         CGFloat contentInsetTop = kINSET_TOP;
-        contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
         UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
-        self.contentInset = contentInset;
+        [self setInsets:contentInset givenUserInfo:notification.userInfo];
     }
+}
+
+
+- (void) setInsets:(UIEdgeInsets)contentInsets givenUserInfo:(NSDictionary *)userInfo
+{
+    double duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.contentInset = contentInsets;
+    } completion:nil];
 }
 
 
