@@ -240,7 +240,8 @@
 
 - (void)showNavigationBar
 {
-    [self performSelector:@selector(showNavigationBarAfterDelay) withObject:nil afterDelay:0.2];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+//    [self performSelector:@selector(showNavigationBarAfterDelay) withObject:nil afterDelay:0.2];
 }
 
 

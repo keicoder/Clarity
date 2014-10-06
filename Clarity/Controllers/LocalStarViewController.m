@@ -486,7 +486,7 @@
     UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     barButtonItemFixed.width = 22.0f;
     
-    UIView* infoButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 130, 40)];
+    UIView* infoButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 90, 40)];
     self.infoButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.infoButton.backgroundColor = [UIColor clearColor];
     self.infoButton.frame = infoButtonView.frame;
@@ -533,7 +533,7 @@
     }
     else if (_totalNotes > 1)
     {
-        [self.infoButton setTitle:[NSString stringWithFormat:@"%d starred notes", _totalNotes] forState:UIControlStateNormal];
+        [self.infoButton setTitle:[NSString stringWithFormat:@"%d notes", _totalNotes] forState:UIControlStateNormal];
     }
 }
 
