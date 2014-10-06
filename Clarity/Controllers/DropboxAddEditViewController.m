@@ -554,6 +554,7 @@
     MarkdownWebViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"MarkdownWebViewController"];
     self.currentNote.noteBody = self.noteTextView.text;
     controller.currentNote = self.currentNote;
+    [self.noteTextView hideKeyboard:sender];
     [self.navigationController pushViewController:controller animated:YES];
 }
 
@@ -1304,20 +1305,6 @@
 #pragma mark - FRLayeredNavigationControllerDelegate
 
 - (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-                 willMoveController:(UIViewController*)controller
-{
-    
-}
-
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-               movingViewController:(UIViewController*)controller
-{
-    
-}
-
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
                   didMoveController:(UIViewController*)controller
 {
     [self showStatbarNavbarAndHideFullScreenButton];
@@ -1514,9 +1501,9 @@
 #define kTextNormalColor        [UIColor grayColor]
 #define kTextHighlightedColor   [UIColor blackColor]
 #define kOneImage               @"left"
-#define kOneAction              previousWord //previousCharacter
+#define kOneAction              previousCharacter
 #define kTwoImage               @"right"
-#define kTwoAction              nextWord //nextCharacter
+#define kTwoAction              nextCharacter
 #define kThreeImage             @"keyboard_hide"
 #define kThreeAction            hideKeyboard
 #define kFour                   @"#"

@@ -565,6 +565,7 @@
     MarkdownWebViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"MarkdownWebViewController"];
     self.currentNote.noteBody = self.noteTextView.text;
     controller.currentLocalNote = self.currentNote;
+    [self.noteTextView hideKeyboard:sender];
     [self.navigationController pushViewController:controller animated:YES];
 }
 

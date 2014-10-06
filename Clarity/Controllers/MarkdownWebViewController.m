@@ -176,7 +176,7 @@
 {
     if ( navigationType == UIWebViewNavigationTypeLinkClicked ) {
         if (self.navigationController.navigationBarHidden == YES) {
-            _didHideNavigationBar = NO;
+            _didHideNavigationBar = !_didHideNavigationBar;
             [self showStatusBar];
             [self.navigationController setNavigationBarHidden:NO animated:YES];
         }
@@ -205,14 +205,14 @@
 {
     if ( _didHideNavigationBar == NO)
     {
-        _didHideNavigationBar = YES;
+        _didHideNavigationBar = !_didHideNavigationBar;
         [self hideStatusBar];
         [self hideNavigationBar];
         [self showButtonForFullscreenWithAnimation];
     }
     else
     {
-        _didHideNavigationBar = NO;
+        _didHideNavigationBar = !_didHideNavigationBar;
         [self showStatusBar];
         [self showNavigationBar];
         [self hideButtonForFullscreenWithAnimation];
@@ -305,7 +305,7 @@
         [self hideStatusBar];
         [self hideNavigationBar];
         [self showButtonForFullscreenWithAnimation];
-        _didHideNavigationBar = YES;
+        _didHideNavigationBar = !_didHideNavigationBar;
     }
 }
 
@@ -366,7 +366,7 @@
         [self showStatusBar];
         [self showNavigationBar];
         [self hideButtonForFullscreenWithAnimation];
-        _didHideNavigationBar = NO;
+        _didHideNavigationBar = !_didHideNavigationBar;
     }
 }
 
