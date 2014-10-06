@@ -45,11 +45,12 @@
     
     [[UITextView appearance] setTintColor:[UIColor colorWithRed:0.949 green:0.427 blue:0.188 alpha:1]];
     self.alwaysBounceVertical = YES;
+    self.alwaysBounceHorizontal = NO;
     self.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-    self.layer.cornerRadius = 0.0;
-    self.editable = YES;
     self.autocapitalizationType = UITextAutocapitalizationTypeSentences;
     self.autocorrectionType = UITextAutocorrectionTypeYes;
+    
+    [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     
     _scrollIndicatorInsetTop = 0.0f;
     _scrollIndicatorInsetBottom = 0.0f;
@@ -58,7 +59,7 @@
         UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP_IPAD, kINSET_LEFT_IPAD, kINSET_BOTTOM_IPAD, kINSET_RIGHT_IPAD);
         self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING_IPAD;
         self.contentInset = contentInset;
-        self.scrollIndicatorInsets = UIEdgeInsetsMake(_scrollIndicatorInsetTop, kINSET_LEFT_IPAD, _scrollIndicatorInsetBottom, kINSET_RIGHT_IPAD);
+        //self.scrollIndicatorInsets = UIEdgeInsetsMake(_scrollIndicatorInsetTop, kINSET_LEFT_IPAD, _scrollIndicatorInsetBottom, kINSET_RIGHT_IPAD);
     } else {
         self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING;
         UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
@@ -67,52 +68,43 @@
 }
 
 
-#pragma mark 인셋 조정
-
-- (void)updateNoteTextViewInsetWithKeyboard
-{
-    CGFloat contentInsetBottom = 0.f;
-    if (iPad) {
-        CGFloat contentInsetTop = kINSET_TOP_IPAD;
-        contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
-        UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT_IPAD, contentInsetBottom, kINSET_RIGHT_IPAD);
-        self.contentInset = contentInset;
-    } else {
-        CGFloat contentInsetTop = kINSET_TOP;
-        contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
-        UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
-        self.contentInset = contentInset;
-    }
-}
-
-
-- (void)updateNoteTextViewInsetWithoutKeyboard
-{
-    if (iPad) {
-        UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP_IPAD, kINSET_LEFT_IPAD, kINSET_BOTTOM_IPAD, kINSET_RIGHT_IPAD);
-        self.contentInset = contentInset;
-    } else {
-        UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
-        self.contentInset = contentInset;
-        self.scrollIndicatorInsets = UIEdgeInsetsMake(_scrollIndicatorInsetTop, kINSET_LEFT, _scrollIndicatorInsetBottom, kINSET_RIGHT);
-    }
-}
-
-
-#pragma mark 키보드 handle
+#pragma mark 키보드 handle, 인셋 조정
 
 - (void)keyboardWillShow:(NSNotification *)notification
 {
     NSDictionary *userInfoDictionary = notification.userInfo;
-    CGFloat duration = [[userInfoDictionary objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue]; //int curve = [[userInfoDictionary objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
+    CGFloat duration = [[userInfoDictionary objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    int curve = [[userInfoDictionary objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
     _keyboardRect = [[userInfoDictionary objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    [UIView animateWithDuration:duration delay:0.0 options:curve
+                     animations:^{
+                         [self updateNoteTextViewInsetWithKeyboard:notification]; //[self updateScrollInsets:notification];
+                     } completion:^(BOOL finished) { }];
+}
 
-    [UIView animateWithDuration:duration delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-                    animations:^{ 
-                        [self updateNoteTextViewInsetWithKeyboard];
-                    } completion:^(BOOL finished) {
-                        [self scrollToVisibleCaretAnimated];
-                    }];
+
+- (void)updateScrollInsets:(NSNotification *)notification
+{
+    CGFloat contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
+    if (iPad) {
+        CGFloat contentInsetTop = kINSET_TOP_IPAD;
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT_IPAD, contentInsetBottom, kINSET_RIGHT_IPAD);
+        [self setInsets:contentInset givenUserInfo:notification.userInfo];
+    } else {
+        CGFloat contentInsetTop = kINSET_TOP;
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
+        [self setInsets:contentInset givenUserInfo:notification.userInfo];
+    }
+}
+
+
+- (void) setInsets:(UIEdgeInsets)contentInsets givenUserInfo:(NSDictionary *)userInfo
+{
+    double duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.contentInset = contentInsets;
+    } completion:nil];
 }
 
 
@@ -126,6 +118,19 @@
     [UIView animateWithDuration:kMOVE_TEXT_POSITION_DURATION delay:duration options:curve animations:^{
         [self updateNoteTextViewInsetWithoutKeyboard];
     } completion:^(BOOL finished) { }];
+}
+
+
+- (void)updateNoteTextViewInsetWithoutKeyboard
+{
+    if (iPad) {
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP_IPAD, kINSET_LEFT_IPAD, kINSET_BOTTOM_IPAD, kINSET_RIGHT_IPAD);
+        self.contentInset = contentInset;
+    } else {
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
+        self.contentInset = contentInset;
+        //self.scrollIndicatorInsets = UIEdgeInsetsMake(_scrollIndicatorInsetTop, kINSET_LEFT, _scrollIndicatorInsetBottom, kINSET_RIGHT);
+    }
 }
 
 
@@ -512,6 +517,25 @@
     
     NSLog (@":paragraphRanges > %@\n", paragraphRanges);
     return paragraphRanges;
+}
+
+
+#pragma mark - updateNoteTextViewInsetWithKeyboard
+
+- (void)updateNoteTextViewInsetWithKeyboard:(NSNotification*)notification
+{
+    CGFloat contentInsetBottom = 0.f;
+    if (iPad) {
+        CGFloat contentInsetTop = kINSET_TOP_IPAD;
+        contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT_IPAD, contentInsetBottom, kINSET_RIGHT_IPAD);
+        self.contentInset = contentInset;
+    } else {
+        CGFloat contentInsetTop = kINSET_TOP;
+        contentInsetBottom = __tg_fmin(CGRectGetHeight(_keyboardRect), CGRectGetWidth(_keyboardRect));
+        UIEdgeInsets contentInset = UIEdgeInsetsMake(contentInsetTop, kINSET_LEFT, contentInsetBottom, kINSET_RIGHT);
+        self.contentInset = contentInset;
+    }
 }
 
 

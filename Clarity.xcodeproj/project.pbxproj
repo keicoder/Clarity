@@ -81,6 +81,7 @@
 		C12FE79019CFBA64001209B2 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C12FE78F19CFBA64001209B2 /* Main_iPad.storyboard */; };
 		C12FE79319CFD54A001209B2 /* BlankViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12FE79219CFD54A001209B2 /* BlankViewController.m */; };
 		C12FE79819D12014001209B2 /* JGActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = C12FE79719D12014001209B2 /* JGActionSheet.m */; };
+		C1303D4C19E28CF100A6FB03 /* jMarkdown_iPad_ForWebView.css in Resources */ = {isa = PBXBuildFile; fileRef = C1303D4B19E28CF100A6FB03 /* jMarkdown_iPad_ForWebView.css */; };
 		C173258F19D24C1C001ED5D5 /* AboutClarity_iPad.html in Resources */ = {isa = PBXBuildFile; fileRef = C173258C19D24C1C001ED5D5 /* AboutClarity_iPad.html */; };
 		C173259019D24C1C001ED5D5 /* Clarity_OpenSourceLicences_iPad.html in Resources */ = {isa = PBXBuildFile; fileRef = C173258D19D24C1C001ED5D5 /* Clarity_OpenSourceLicences_iPad.html */; };
 		C173259119D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html in Resources */ = {isa = PBXBuildFile; fileRef = C173258E19D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html */; };
@@ -241,6 +242,7 @@
 		C12FE79419D1110E001209B2 /* ClarityHD 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ClarityHD 4.xcdatamodel"; sourceTree = "<group>"; };
 		C12FE79619D12014001209B2 /* JGActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGActionSheet.h; sourceTree = "<group>"; };
 		C12FE79719D12014001209B2 /* JGActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGActionSheet.m; sourceTree = "<group>"; };
+		C1303D4B19E28CF100A6FB03 /* jMarkdown_iPad_ForWebView.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = jMarkdown_iPad_ForWebView.css; sourceTree = "<group>"; };
 		C173258C19D24C1C001ED5D5 /* AboutClarity_iPad.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AboutClarity_iPad.html; sourceTree = "<group>"; };
 		C173258D19D24C1C001ED5D5 /* Clarity_OpenSourceLicences_iPad.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Clarity_OpenSourceLicences_iPad.html; sourceTree = "<group>"; };
 		C173258E19D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ClarityMarkdownSyntaxGuide_iPad.html; sourceTree = "<group>"; };
@@ -548,6 +550,7 @@
 			children = (
 				C12290E719973B6C00460667 /* jMarkdown.css */,
 				C173259219D24F29001ED5D5 /* jMarkdown_iPad.css */,
+				C1303D4B19E28CF100A6FB03 /* jMarkdown_iPad_ForWebView.css */,
 			);
 			path = MarkdownData;
 			sourceTree = "<group>";
@@ -843,6 +846,7 @@
 				C173258F19D24C1C001ED5D5 /* AboutClarity_iPad.html in Resources */,
 				C12290E419973B6000460667 /* Clarity_OpenSourceLicences.html in Resources */,
 				C1EF466D19D7F9C200CD7E32 /* TOWebViewControllerLocalizable.strings in Resources */,
+				C1303D4C19E28CF100A6FB03 /* jMarkdown_iPad_ForWebView.css in Resources */,
 				C122903B19973A2B00460667 /* InfoPlist.strings in Resources */,
 				C125D34D19AEDA4800D9E892 /* What's New.plist in Resources */,
 				C173259119D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html in Resources */,

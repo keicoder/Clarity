@@ -177,7 +177,7 @@
 {
     self.noteTextView = [[JTextView alloc] initWithFrame:self.view.bounds];
     self.noteTextView.delegate = self;
-    [self.noteTextView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    //[self.noteTextView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:self.noteTextView];
 }
 
@@ -224,6 +224,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification object:self.view.window];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillChangeFrameNotification object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification object:self.view.window];
 }
@@ -243,39 +246,39 @@
 
 #pragma mark - UITextView delegate method (optional)
 
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
-{
-    if (_didHideNavigationBar == NO) {
-        if (iPad) {
-                [self hideStatusBar];
-                [self hideNavigationBar];
-                _didHideNavigationBar = YES;
-            }
-        [self hideButtonForFullscreenWithAnimation];
-    }
-    return YES;
-}
+//- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+//{
+//    if (_didHideNavigationBar == NO) {
+//        if (iPad) {
+//                [self hideStatusBar];
+//                [self hideNavigationBar];
+//                _didHideNavigationBar = !_didHideNavigationBar;
+//            }
+//        [self hideButtonForFullscreenWithAnimation];
+//    }
+//    return YES;
+//}
 
 
 #pragma mark textViewDidChange > 텍스트 스크롤링
 
-- (void)textViewDidChange:(UITextView *)textView
-{
-    [self.noteTextView scrollToVisibleCaretAnimated];
-}
+//- (void)textViewDidChange:(UITextView *)textView
+//{
+//    //[self.noteTextView scrollToVisibleCaretAnimated];
+//}
 
 
-- (BOOL)textViewShouldEndEditing:(UITextView *)textView
-{
-    if (_didHideNavigationBar == YES) {
-        if (iPad) {
-            [self showStatusBar];
-            [self showNavigationBar];
-            _didHideNavigationBar = NO;
-        }
-    }
-    return YES;
-}
+//- (BOOL)textViewShouldEndEditing:(UITextView *)textView
+//{
+//    if (_didHideNavigationBar == YES) {
+//        if (iPad) {
+//            [self showStatusBar];
+//            [self showNavigationBar];
+//            _didHideNavigationBar = !_didHideNavigationBar;
+//        }
+//    }
+//    return YES;
+//}
 
 
 #pragma mark - 바 버튼
@@ -405,7 +408,7 @@
         [self hideStatusBar];
         [self hideNavigationBar];
         [self showButtonForFullscreenWithAnimation];
-        _didHideNavigationBar = YES;
+        _didHideNavigationBar = !_didHideNavigationBar;
     }
 }
 
@@ -466,7 +469,7 @@
         [self showStatusBar];
         [self showNavigationBar];
         [self hideButtonForFullscreenWithAnimation];
-        _didHideNavigationBar = NO;
+        _didHideNavigationBar = !_didHideNavigationBar;
     }
 }
 
@@ -675,7 +678,7 @@
     if (_didHideNavigationBar == YES) {
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
         [self.navigationController setNavigationBarHidden:NO animated:NO];
-        _didHideNavigationBar = NO;
+        _didHideNavigationBar = !_didHideNavigationBar;
     }
     
     NoteTitlePopinViewController *controller;
@@ -809,6 +812,8 @@
 
 - (void)displayDoActionSheet:(id)sender
 {
+    [self.noteTextView hideKeyboard:sender];
+    
     DoActionSheet *vActionSheet = [[DoActionSheet alloc] init];
     [vActionSheet setStyle];
     vActionSheet.dRound = 7;
@@ -1142,7 +1147,10 @@
 
 #pragma mark - JG 액션 시트
 
-- (void)displayJGActionSheet:(UIBarButtonItem *)barButtonItem withEvent:(UIEvent *)event {
+- (void)displayJGActionSheet:(UIBarButtonItem *)barButtonItem withEvent:(UIEvent *)event
+{
+    [self.noteTextView hideKeyboard:self];
+    
     UIView *view = [event.allTouches.anyObject view];
     
     JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as HTML", @"Email as HTML Attachment", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"Delete Note", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];

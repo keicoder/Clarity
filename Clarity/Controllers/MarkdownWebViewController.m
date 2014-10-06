@@ -132,7 +132,7 @@
     NSError *error = nil;
     NSString *filePath;
     if (iPad) {
-        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad" ofType:@"css"];
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad_ForWebView" ofType:@"css"];
     } else {
         filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown" ofType:@"css"];
     }

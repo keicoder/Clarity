@@ -272,7 +272,7 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    [self.noteTextView scrollToVisibleCaretAnimated];
+    //[self.noteTextView scrollToVisibleCaretAnimated];
 }
 
 
@@ -1759,14 +1759,12 @@
 - (void)previousCharacter:(id)sender
 {
     [self.noteTextView previousCharacter:sender];
-    [self.noteTextView scrollToVisibleCaretAnimated];
 }
 
 
 - (void)nextCharacter:(id)sender
 {
     [self.noteTextView nextCharacter:sender];
-    [self.noteTextView scrollToVisibleCaretAnimated];
 }
 
 
