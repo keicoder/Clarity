@@ -672,7 +672,7 @@
     }
     else if (_totalNotes > 1)
     {
-        [self.infoButton setTitle:[NSString stringWithFormat:@"%d local notes", _totalNotes] forState:UIControlStateNormal];
+        [self.infoButton setTitle:[NSString stringWithFormat:@"Local %d notes", _totalNotes] forState:UIControlStateNormal];
     }
 }
 

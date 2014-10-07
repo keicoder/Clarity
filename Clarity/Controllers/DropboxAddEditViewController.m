@@ -162,7 +162,7 @@
 
 - (void)setCursorToBeginning:(UITextView *)inView
 {
-    inView.selectedRange = NSMakeRange(100, 0);
+    inView.selectedRange = NSMakeRange(0, 1);
 }
 
 
@@ -232,8 +232,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification object:self.view.window];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillChangeFrameNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
+//                                                 name:UIKeyboardWillChangeFrameNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification object:self.view.window];
@@ -448,17 +448,6 @@
                                               self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.0, 1.0);}
                                           completion:^(BOOL finished) { }];
                      }];
-}
-
-
-- (void)showStatbarNavbarAndHideFullScreenButton
-{
-    if (_didHideNavigationBar == YES) {
-        [self showStatusBar];
-        [self showNavigationBar];
-        [self hideButtonForFullscreenWithAnimation];
-        _didHideNavigationBar = !_didHideNavigationBar;
-    }
 }
 
 
@@ -1309,7 +1298,7 @@
 - (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
                   didMoveController:(UIViewController*)controller
 {
-    [self showStatbarNavbarAndHideFullScreenButton];
+    [self resignFullScreenButtonPressed];
     [self.noteTextView resignFirstResponder];
     [self autoSave];
     
@@ -1803,7 +1792,6 @@
 - (void)selectWord:(id)sender
 {
     [self.noteTextView selectWord:sender];
-    
 }
 
 

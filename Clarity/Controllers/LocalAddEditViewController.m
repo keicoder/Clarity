@@ -27,10 +27,12 @@
 #import "JGActionSheet.h"
 #import "BlankViewController.h"
 #import "FCFileManager.h"
-#import "DropboxAddEditViewController.h"
 
 
-@interface LocalAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate,UIAlertViewDelegate>
+#define kHideOrShowStatusAndNavigationBarDelay 0.4
+
+
+@interface LocalAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) JTextView *noteTextView;
@@ -70,16 +72,6 @@
 }
 
 
-//- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-//{
-//    [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-//    if (self) {
-//        
-//    }
-//    return self;
-//}
-
-
 #pragma mark - 뷰 life cycle
 
 - (void)viewDidLoad
@@ -89,7 +81,6 @@
         self.layeredNavigationController.delegate = self;
     }
     self.title = @"";
-    self.automaticallyAdjustsScrollViewInsets = NO;
     [self addNoteTextView];
     [self addNoteTitleLabel];
     [self registerKeyboardNotifications];
@@ -162,9 +153,16 @@
     if ([self.currentNote.isNewNote boolValue] == YES) {
         [self.noteTextView becomeFirstResponder];
     } else {
-        [self.noteTextView becomeFirstResponder];
-        [self.noteTextView resignFirstResponder];
+        [self setCursorToBeginning:self.noteTextView];
     }
+}
+
+
+#pragma mark 커서 포지션
+
+- (void)setCursorToBeginning:(UITextView *)inView
+{
+    inView.selectedRange = NSMakeRange(0, 1);
 }
 
 
@@ -186,9 +184,8 @@
 
 - (void)addNoteTextView
 {
-    self.noteTextView = [[JTextView alloc] initWithFrame:self.view.bounds];
+    self.noteTextView = [[JTextView alloc] initWithFrame:self.view.frame];
     self.noteTextView.delegate = self;
-    [self.noteTextView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self.view addSubview:self.noteTextView];
 }
 
@@ -235,6 +232,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification object:self.view.window];
     
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
+//                                                 name:UIKeyboardWillChangeFrameNotification object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification object:self.view.window];
 }
@@ -257,33 +257,16 @@
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
     if (_didHideNavigationBar == NO) {
-        if (iPad) {
-            [self hideStatusBar];
-            [self hideNavigationBar];
-            _didHideNavigationBar = YES;
-        }
-        [self hideButtonForFullscreenWithAnimation];
+        [self hideOrShowStatusAndNavigationBar];
     }
     return YES;
-}
-
-
-#pragma mark textViewDidChange > 텍스트 스크롤링
-
-- (void)textViewDidChange:(UITextView *)textView
-{
-    //[self.noteTextView scrollToVisibleCaretAnimated];
 }
 
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
     if (_didHideNavigationBar == YES) {
-        if (iPad) {
-            [self showStatusBar];
-            [self showNavigationBar];
-            _didHideNavigationBar = NO;
-        }
+        [self performSelector:@selector(hideOrShowStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
     }
     return YES;
 }
@@ -413,10 +396,7 @@
 - (void)barButtonItemFullScreenPressed:(id)sender
 {
     if (_didHideNavigationBar == NO) {
-        [self hideStatusBar];
-        [self hideNavigationBar];
-        [self showButtonForFullscreenWithAnimation];
-        _didHideNavigationBar = YES;
+        [self fullScreenButtonPressed];
     }
 }
 
@@ -433,7 +413,7 @@
     self.buttonForFullscreen.tintColor = [UIColor colorWithRed:0.094 green:0.071 blue:0.188 alpha:1];
     [self.view addSubview:self.buttonForFullscreen];
     
-    [self.buttonForFullscreen addTarget:self action:@selector(showStatbarNavbarAndHideFullScreenButton) forControlEvents:UIControlEventTouchUpInside];
+    [self.buttonForFullscreen addTarget:self action:@selector(resignFullScreenButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 }
 
 
@@ -468,17 +448,6 @@
                                               self.buttonForFullscreen.transform = CGAffineTransformMakeScale(1.0, 1.0);}
                                           completion:^(BOOL finished) { }];
                      }];
-}
-
-
-- (void)showStatbarNavbarAndHideFullScreenButton
-{
-    if (_didHideNavigationBar == YES) {
-        [self showStatusBar];
-        [self showNavigationBar];
-        [self hideButtonForFullscreenWithAnimation];
-        _didHideNavigationBar = NO;
-    }
 }
 
 
@@ -683,10 +652,8 @@
 
 - (void)showPopInNoteTitleField:(UITapGestureRecognizer *)gesture
 {
-    if (_didHideNavigationBar == YES) {
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-        [self.navigationController setNavigationBarHidden:NO animated:NO];
-        _didHideNavigationBar = NO;
+    if (_didHideNavigationBar == NO) {
+        [self hideOrShowStatusAndNavigationBar];
     }
     
     NoteTitlePopinViewController *controller;
@@ -704,7 +671,7 @@
     [controller localNote:self.currentNote inManagedObjectContext:managedObjectContext];
     
     [controller setPopinTransitionStyle:BKTPopinTransitionStyleSlide];
-    [controller setPopinOptions:BKTPopinDefault]; //BKTPopinDefault > Dismissable
+    [controller setPopinOptions:BKTPopinDefault];
     [controller setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
     [controller setPopinAlignment:BKTPopinAlignementOptionUp];
     [controller setPopinOptions:[controller popinOptions]|BKTPopinDefault];
@@ -741,6 +708,10 @@
         }
         else {
             self.noteTitleLabel.text = @"Untitled";
+        }
+        
+        if (_didHideNavigationBar == YES) {
+            [self performSelector:@selector(hideOrShowStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
         }
     }
 }
@@ -820,6 +791,8 @@
 
 - (void)displayDoActionSheet:(id)sender
 {
+    [self.noteTextView hideKeyboard:sender];
+    
     DoActionSheet *vActionSheet = [[DoActionSheet alloc] init];
     [vActionSheet setStyle];
     vActionSheet.dRound = 7;
@@ -848,7 +821,7 @@
                  self.htmlString = nil;
                  [self setDefaultBodyText];
                  [self createHTMLString];
-                 [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlString:self.htmlString];
+                 [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlStringForAttachment:self.htmlString];
              }
                  break;
              case 2:
@@ -1029,7 +1002,7 @@
 
 #pragma mark 이메일 공유 (attach HTML file)
 
-- (void)sendEmailWithTitle:(NSString *)title withHtmlString:(NSString *)htmlString
+- (void)sendEmailWithTitle:(NSString *)title withHtmlStringForAttachment:(NSString *)htmlString
 {
     if (![MFMailComposeViewController canSendMail]) {
         return;
@@ -1153,7 +1126,10 @@
 
 #pragma mark - JG 액션 시트
 
-- (void)displayJGActionSheet:(UIBarButtonItem *)barButtonItem withEvent:(UIEvent *)event {
+- (void)displayJGActionSheet:(UIBarButtonItem *)barButtonItem withEvent:(UIEvent *)event
+{
+    [self.noteTextView hideKeyboard:self];
+    
     UIView *view = [event.allTouches.anyObject view];
     
     JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as HTML", @"Email as HTML Attachment", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"Delete Note", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
@@ -1187,7 +1163,7 @@
                     self.htmlString = nil;
                     [self setDefaultBodyText];
                     [self createHTMLString];
-                    [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlString:self.htmlString];
+                    [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlStringForAttachment:self.htmlString];
                 }
                     break;
                 case 2:
@@ -1320,23 +1296,9 @@
 #pragma mark - FRLayeredNavigationControllerDelegate
 
 - (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-                 willMoveController:(UIViewController*)controller
-{
-    
-}
-
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
-               movingViewController:(UIViewController*)controller
-{
-    
-}
-
-
-- (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
                   didMoveController:(UIViewController*)controller
 {
-    [self showStatbarNavbarAndHideFullScreenButton];
+    [self resignFullScreenButtonPressed];
     [self.noteTextView resignFirstResponder];
     [self autoSave];
     
@@ -1356,7 +1318,7 @@
 
 - (void)showNavigationBar
 {
-    [self performSelector:@selector(showNavigationBarAfterDelay) withObject:nil afterDelay:0.2];
+    [self performSelector:@selector(showNavigationBarAfterDelay) withObject:nil afterDelay:0.0];
 }
 
 
@@ -1375,6 +1337,41 @@
 - (void)showStatusBar
 {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+}
+
+
+- (void)hideOrShowStatusAndNavigationBar
+{
+    if (_didHideNavigationBar == YES) {
+        [self showStatusBar];
+        [self showNavigationBarAfterDelay];
+    } else {
+        [self hideStatusBar];
+        [self hideNavigationBar];
+    }
+    _didHideNavigationBar = !_didHideNavigationBar;
+}
+
+
+- (void)fullScreenButtonPressed
+{
+    if (_didHideNavigationBar == NO) {
+        [self hideStatusBar];
+        [self hideNavigationBar];
+        [self showButtonForFullscreenWithAnimation];
+        _didHideNavigationBar = !_didHideNavigationBar;
+    }
+}
+
+
+- (void)resignFullScreenButtonPressed
+{
+    if (_didHideNavigationBar == YES) {
+        [self showStatusBar];
+        [self showNavigationBarAfterDelay];
+        [self hideButtonForFullscreenWithAnimation];
+        _didHideNavigationBar = !_didHideNavigationBar;
+    }
 }
 
 
@@ -1530,9 +1527,9 @@
 #define kTextNormalColor        [UIColor grayColor]
 #define kTextHighlightedColor   [UIColor blackColor]
 #define kOneImage               @"left"
-#define kOneAction              previousCharacter
+#define kOneAction              previousCharacter //previousCharacter //previousWord
 #define kTwoImage               @"right"
-#define kTwoAction              nextCharacter
+#define kTwoAction              nextCharacter //nextCharacter //nextWord
 #define kThreeImage             @"keyboard_hide"
 #define kThreeAction            hideKeyboard
 #define kFour                   @"#"
