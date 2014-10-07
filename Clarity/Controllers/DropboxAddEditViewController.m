@@ -257,7 +257,11 @@
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
     if (_didHideNavigationBar == NO) {
-        [self hideOrShowStatusAndNavigationBar];
+        if (iPad) {
+            
+        } else {
+            [self hideOrShowStatusAndNavigationBar];
+        }
     }
     return YES;
 }
@@ -266,7 +270,11 @@
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
     if (_didHideNavigationBar == YES) {
-        [self performSelector:@selector(hideOrShowStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
+        if (iPad) {
+            
+        } else {
+            [self performSelector:@selector(hideOrShowStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
+        }
     }
     return YES;
 }
@@ -536,6 +544,7 @@
 - (void)barButtonItemMarkdownPressed:(id)sender
 {
     MarkdownWebViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"MarkdownWebViewController"];
+    self.currentNote.noteTitle = self.noteTitleLabel.text;
     self.currentNote.noteBody = self.noteTextView.text;
     controller.currentNote = self.currentNote;
     [self.noteTextView hideKeyboard:sender];

@@ -164,6 +164,7 @@
 {
     NSError *error = nil;
     NSString *markdownString = @"";
+    
     if ([self.currentNote.noteBody length] == 0 && [self.currentLocalNote.noteBody length] == 0) {
         markdownString = @"*No content*";
     }
@@ -178,7 +179,12 @@
         NSLog(@"Error: %@", error);
         return nil;
     }
-    return markdownString;
+    
+    NSString *hash = @"# ";
+    NSString *newline = @"\n\n";
+    NSString *concatenateString = [NSString stringWithFormat:@"%@%@%@%@", hash, self.currentNote.noteTitle, newline, markdownString];
+    
+    return concatenateString;
 }
 
 
