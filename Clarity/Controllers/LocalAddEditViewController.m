@@ -1337,7 +1337,8 @@
 
 - (void)showNavigationBarAfterDelay
 {
-    [self performSelector:@selector(showNavigationBar) withObject:nil afterDelay:0.0];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    //[self performSelector:@selector(showNavigationBar) withObject:nil afterDelay:0.0];
 }
 
 
@@ -1374,6 +1375,7 @@
     if (_didHideNavigationBar == YES) {
         [self showStatusBar];
         [self showNavigationBarAfterDelay];
+        [self hideButtonForFullscreenWithAnimation];
         _didHideNavigationBar = NO;
     }
 }
