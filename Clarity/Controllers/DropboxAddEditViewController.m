@@ -841,7 +841,7 @@
                  self.htmlString = nil;
                  [self setDefaultBodyText];
                  [self createHTMLString];
-                 [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlString:self.htmlString];
+                 [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlStringForAttachment:self.htmlString];
              }
                  break;
              case 2:
@@ -1022,7 +1022,7 @@
 
 #pragma mark 이메일 공유 (attach HTML file)
 
-- (void)sendEmailWithTitle:(NSString *)title withHtmlString:(NSString *)htmlString
+- (void)sendEmailWithTitle:(NSString *)title withHtmlStringForAttachment:(NSString *)htmlString
 {
     if (![MFMailComposeViewController canSendMail]) {
         return;
@@ -1183,7 +1183,7 @@
                     self.htmlString = nil;
                     [self setDefaultBodyText];
                     [self createHTMLString];
-                    [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlString:self.htmlString];
+                    [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlStringForAttachment:self.htmlString];
                 }
                     break;
                 case 2:
