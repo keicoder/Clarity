@@ -29,6 +29,9 @@
 #import "FCFileManager.h"
 
 
+#define kHideOrShowStatusAndNavigationBarDelay 0.4
+
+
 @interface DropboxAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
@@ -78,7 +81,6 @@
         self.layeredNavigationController.delegate = self;
     }
     self.title = @"";
-    self.automaticallyAdjustsScrollViewInsets = NO;
     [self addNoteTextView];
     [self addNoteTitleLabel];
     [self registerKeyboardNotifications];
@@ -151,9 +153,16 @@
     if ([self.currentNote.isNewNote boolValue] == YES) {
         [self.noteTextView becomeFirstResponder];
     } else {
-        [self.noteTextView becomeFirstResponder];
-        [self.noteTextView resignFirstResponder];
+        [self setCursorToBeginning:self.noteTextView];
     }
+}
+
+
+#pragma mark 커서 포지션
+
+- (void)setCursorToBeginning:(UITextView *)inView
+{
+    inView.selectedRange = NSMakeRange(100, 0);
 }
 
 
@@ -245,39 +254,22 @@
 
 #pragma mark - UITextView delegate method (optional)
 
-//- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
-//{
-//    if (_didHideNavigationBar == NO) {
-//        if (iPad) {
-//                [self hideStatusBar];
-//                [self hideNavigationBar];
-//                _didHideNavigationBar = !_didHideNavigationBar;
-//            }
-//        [self hideButtonForFullscreenWithAnimation];
-//    }
-//    return YES;
-//}
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    if (_didHideNavigationBar == NO) {
+        [self hideOrShowStatusAndNavigationBar];
+    }
+    return YES;
+}
 
 
-#pragma mark textViewDidChange > 텍스트 스크롤링
-
-//- (void)textViewDidChange:(UITextView *)textView
-//{
-//    //[self.noteTextView scrollToVisibleCaretAnimated];
-//}
-
-
-//- (BOOL)textViewShouldEndEditing:(UITextView *)textView
-//{
-//    if (_didHideNavigationBar == YES) {
-//        if (iPad) {
-//            [self showStatusBar];
-//            [self showNavigationBar];
-//            _didHideNavigationBar = !_didHideNavigationBar;
-//        }
-//    }
-//    return YES;
-//}
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
+{
+    if (_didHideNavigationBar == YES) {
+        [self performSelector:@selector(hideOrShowStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
+    }
+    return YES;
+}
 
 
 #pragma mark - 바 버튼
@@ -404,10 +396,7 @@
 - (void)barButtonItemFullScreenPressed:(id)sender
 {
     if (_didHideNavigationBar == NO) {
-        [self hideStatusBar];
-        [self hideNavigationBar];
-        [self showButtonForFullscreenWithAnimation];
-        _didHideNavigationBar = !_didHideNavigationBar;
+        [self fullScreenButtonPressed];
     }
 }
 
@@ -424,7 +413,7 @@
     self.buttonForFullscreen.tintColor = [UIColor colorWithRed:0.094 green:0.071 blue:0.188 alpha:1];
     [self.view addSubview:self.buttonForFullscreen];
     
-    [self.buttonForFullscreen addTarget:self action:@selector(showStatbarNavbarAndHideFullScreenButton) forControlEvents:UIControlEventTouchUpInside];
+    [self.buttonForFullscreen addTarget:self action:@selector(resignFullScreenButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 }
 
 
@@ -674,10 +663,8 @@
 
 - (void)showPopInNoteTitleField:(UITapGestureRecognizer *)gesture
 {
-    if (_didHideNavigationBar == YES) {
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
-        [self.navigationController setNavigationBarHidden:NO animated:NO];
-        _didHideNavigationBar = !_didHideNavigationBar;
+    if (_didHideNavigationBar == NO) {
+        [self hideOrShowStatusAndNavigationBar];
     }
     
     NoteTitlePopinViewController *controller;
@@ -695,7 +682,7 @@
     [controller note:self.currentNote inManagedObjectContext:mainManagedObjectContext];
     
     [controller setPopinTransitionStyle:BKTPopinTransitionStyleSlide];
-    [controller setPopinOptions:BKTPopinDefault]; //BKTPopinDefault > Dismissable
+    [controller setPopinOptions:BKTPopinDefault];
     [controller setPopinTransitionDirection:BKTPopinTransitionDirectionTop];
     [controller setPopinAlignment:BKTPopinAlignementOptionUp];
     [controller setPopinOptions:[controller popinOptions]|BKTPopinDefault];
@@ -732,6 +719,10 @@
         }
         else {
             self.noteTitleLabel.text = @"Untitled";
+        }
+        
+        if (_didHideNavigationBar == YES) {
+            [self performSelector:@selector(hideOrShowStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
         }
     }
 }
@@ -1338,7 +1329,7 @@
 
 - (void)showNavigationBar
 {
-    [self performSelector:@selector(showNavigationBarAfterDelay) withObject:nil afterDelay:0.2];
+    [self performSelector:@selector(showNavigationBarAfterDelay) withObject:nil afterDelay:0.0];
 }
 
 
@@ -1357,6 +1348,41 @@
 - (void)showStatusBar
 {
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+}
+
+
+- (void)hideOrShowStatusAndNavigationBar
+{
+    if (_didHideNavigationBar == YES) {
+        [self showStatusBar];
+        [self showNavigationBarAfterDelay];
+    } else {
+        [self hideStatusBar];
+        [self hideNavigationBar];
+    }
+    _didHideNavigationBar = !_didHideNavigationBar;
+}
+
+
+- (void)fullScreenButtonPressed
+{
+    if (_didHideNavigationBar == NO) {
+        [self hideStatusBar];
+        [self hideNavigationBar];
+        [self showButtonForFullscreenWithAnimation];
+        _didHideNavigationBar = !_didHideNavigationBar;
+    }
+}
+
+
+- (void)resignFullScreenButtonPressed
+{
+    if (_didHideNavigationBar == YES) {
+        [self showStatusBar];
+        [self showNavigationBarAfterDelay];
+        [self hideButtonForFullscreenWithAnimation];
+        _didHideNavigationBar = !_didHideNavigationBar;
+    }
 }
 
 

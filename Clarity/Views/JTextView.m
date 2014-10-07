@@ -1,22 +1,5 @@
 
 
-#define kINSET_TOP_IPAD                                    150.0
-#define kINSET_LEFT_IPAD                                     0.0
-#define kINSET_BOTTOM_IPAD                                   0.0
-#define kINSET_RIGHT_IPAD                                    0.0
-#define kTEXTVIEW_PADDING_IPAD                             100.0
-#define kMOVE_TEXT_POSITION_DURATION_IPAD                   0.30
-
-#define kINSET_TOP                                         120.0
-#define kINSET_LEFT                                          0.0
-#define kINSET_BOTTOM                                        0.0
-#define kINSET_RIGHT                                         0.0
-#define kTEXTVIEW_PADDING                                   20.0
-#define kMOVE_TEXT_POSITION_DURATION                        0.40
-
-#define kTEXTVIEW_FONT_IPAD                                 [UIFont fontWithName:@"AvenirNext-Regular" size:22.f]
-#define kTEXTVIEW_FONT                                      [UIFont fontWithName:@"AvenirNext-Regular" size:20.f]
-
 #import "JTextView.h"
 
 @interface JTextView ()
@@ -88,12 +71,13 @@
     self.scrollIndicatorInsets = UIEdgeInsetsMake(_scrollIndicatorInsetTop, kINSET_LEFT_IPAD, _scrollIndicatorInsetBottom, kINSET_RIGHT_IPAD);
     if (iPad) {
         UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP_IPAD, kINSET_LEFT_IPAD, kINSET_BOTTOM_IPAD, kINSET_RIGHT_IPAD);
-        self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING_IPAD;
         self.contentInset = contentInset;
+        self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING_IPAD;
     } else {
-        self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING;
+        
         UIEdgeInsets contentInset = UIEdgeInsetsMake(kINSET_TOP, kINSET_LEFT, kINSET_BOTTOM, kINSET_RIGHT);
         self.contentInset = contentInset;
+        self.textContainer.lineFragmentPadding = kTEXTVIEW_PADDING;
     }
 }
 

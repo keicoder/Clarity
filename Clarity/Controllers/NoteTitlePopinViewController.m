@@ -98,7 +98,7 @@
 
 - (IBAction)popinButtonCancelPressed:(id)sender
 {
-    [self performSelector:@selector(dismissView:) withObject:self afterDelay:0.0];
+    [self dismissView];
 }
 
 
@@ -133,13 +133,13 @@
         [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeNoteTitleNotification" object:nil userInfo:userInfo];
     }
     
-    [self performSelector:@selector(dismissView:) withObject:self afterDelay:0.1];
+    [self dismissView];
 }
 
 
-- (void)dismissView:(id)sender
+- (void)dismissView
 {
-    [self.presentingPopinViewController dismissCurrentPopinControllerAnimated:YES completion:^{ }];
+    [self.navigationController dismissCurrentPopinControllerAnimated:YES completion:^{ }];
 }
 
 

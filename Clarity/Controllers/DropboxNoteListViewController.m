@@ -672,7 +672,7 @@
     }
     else if (_totalNotes > 1)
     {
-        [self.infoButton setTitle:[NSString stringWithFormat:@"%d dropbox notes", _totalNotes] forState:UIControlStateNormal];
+        [self.infoButton setTitle:[NSString stringWithFormat:@"Dropbox %d notes", _totalNotes] forState:UIControlStateNormal];
     }
 }
 

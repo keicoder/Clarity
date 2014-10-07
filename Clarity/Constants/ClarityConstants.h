@@ -19,7 +19,7 @@ extern BOOL const       kHasLaunchedOnce;
 extern NSString * const kIS_FIRST_TIME;
 
 
-#define debug 1
+#define debug 0
 #define kLOGBOOL(BOOL) NSLog(@"%s: %@",#BOOL, BOOL ? @"YES" : @"NO" )   
 //사용법: BOOL success = NO;,
 //kLOGBOOL(success);, Prints out 'success: NO' to the console
@@ -94,14 +94,14 @@ extern NSString * const kIS_FIRST_TIME;
 #define kTABLE_VIEW_CELL_TEXTLABEL_FONT                     [UIFont fontWithName:@"AvenirNext-Regular" size:18.0]
 #define kTABLE_VIEW_CELL_DETAILTEXTLABEL_FONT               [UIFont fontWithName:@"AvenirNext-Regular" size:14.0]
 
-#define kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT         [UIColor colorWithRed:0.51 green:0.506 blue:0.498 alpha:1] //[UIColor colorWithRed:0.953 green:0.839 blue:0.706 alpha:1]
+#define kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT         [UIColor colorWithRed:0.51 green:0.506 blue:0.498 alpha:1]
 #define kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_MONDAY          [UIColor colorWithRed:0.996 green:0.937 blue:0.51 alpha:1]
 #define kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_TUESDAY         [UIColor colorWithRed:0.98 green:0.82 blue:0.282 alpha:1]
 #define kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_WEDNESDAY       [UIColor colorWithRed:0.984 green:0.639 blue:0.18 alpha:1]
 #define kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_THURSDAY        [UIColor colorWithRed:0.973 green:0.545 blue:0.165 alpha:1]
 #define kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_FRIDAY          [UIColor colorWithRed:0.416 green:0.714 blue:0.706 alpha:1]
-#define kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SATURDAY        [UIColor colorWithRed:0.973 green:0.545 blue:0.165 alpha:1] //[UIColor colorWithRed:0.070 green:0.522 blue:0.780 alpha:1.000]
-#define kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SUNDAY          [UIColor colorWithRed:0.373 green:0.494 blue:0.604 alpha:1] //[UIColor colorWithRed:0.548 green:0.371 blue:0.000 alpha:1.000]
+#define kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SATURDAY        [UIColor colorWithRed:0.973 green:0.545 blue:0.165 alpha:1]
+#define kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SUNDAY          [UIColor colorWithRed:0.373 green:0.494 blue:0.604 alpha:1]
 
 #define kTABLE_VIEW_CELL_DATELABEL_TEXTCOLOR_DEFAULT        kTABLE_VIEW_CELL_DETAILTEXTLABEL_TEXTCOLOR
 #define kTABLE_VIEW_CELL_DATELABEL_TEXTCOLOR_MONDAY         kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_MONDAY
@@ -129,6 +129,23 @@ extern NSString * const kIS_FIRST_TIME;
 
 
 #pragma mark - 텍스트 뷰
+#define kINSET_TOP_IPAD                                    120.0
+#define kINSET_LEFT_IPAD                                     0.0
+#define kINSET_BOTTOM_IPAD                                  20.0
+#define kINSET_RIGHT_IPAD                                    0.0
+#define kTEXTVIEW_PADDING_IPAD                             120.0
+#define kMOVE_TEXT_POSITION_DURATION_IPAD                   0.30
+
+#define kINSET_TOP                                          50.0
+#define kINSET_LEFT                                          0.0
+#define kINSET_BOTTOM                                       20.0
+#define kINSET_RIGHT                                         0.0
+#define kTEXTVIEW_PADDING                                   20.0
+#define kMOVE_TEXT_POSITION_DURATION                        0.40
+
+#define kTEXTVIEW_FONT_IPAD                                 [UIFont fontWithName:@"AvenirNext-Regular" size:22.f]
+#define kTEXTVIEW_FONT                                      [UIFont fontWithName:@"AvenirNext-Regular" size:20.f]
+
 #define kTEXTVIEW_LABEL_FONT_IPAD                           [UIFont fontWithName:@"Avenir-Black" size:24.f]
 #define kTEXTVIEW_LABEL_FONT                                [UIFont fontWithName:@"Avenir-Black" size:22.f]
 
