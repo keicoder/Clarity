@@ -232,8 +232,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification object:self.view.window];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
-//                                                 name:UIKeyboardWillChangeFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillChangeFrameNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification object:self.view.window];
@@ -258,9 +258,9 @@
 {
     if (_didHideNavigationBar == NO) {
         if (iPad) {
-            
+            [self hideStatusAndNavigationBar];
         } else {
-            [self hideOrShowStatusAndNavigationBar];
+            [self hideStatusAndNavigationBar];
         }
     }
     return YES;
@@ -271,9 +271,9 @@
 {
     if (_didHideNavigationBar == YES) {
         if (iPad) {
-            
+            [self performSelector:@selector(showStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
         } else {
-            [self performSelector:@selector(hideOrShowStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
+            [self performSelector:@selector(showStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
         }
     }
     return YES;
@@ -404,7 +404,7 @@
 - (void)barButtonItemFullScreenPressed:(id)sender
 {
     if (_didHideNavigationBar == NO) {
-        [self fullScreenButtonPressed];
+        [self hideStatusAndNavigationBarAndShowButton];
     }
 }
 
@@ -421,7 +421,7 @@
     self.buttonForFullscreen.tintColor = [UIColor colorWithRed:0.094 green:0.071 blue:0.188 alpha:1];
     [self.view addSubview:self.buttonForFullscreen];
     
-    [self.buttonForFullscreen addTarget:self action:@selector(resignFullScreenButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.buttonForFullscreen addTarget:self action:@selector(showStatusAndNavigationBarAndHideButton) forControlEvents:UIControlEventTouchUpInside];
 }
 
 
@@ -662,7 +662,7 @@
 - (void)showPopInNoteTitleField:(UITapGestureRecognizer *)gesture
 {
     if (_didHideNavigationBar == NO) {
-        [self hideOrShowStatusAndNavigationBar];
+        [self hideStatusAndNavigationBar];
     }
     
     NoteTitlePopinViewController *controller;
@@ -720,7 +720,11 @@
         }
         
         if (_didHideNavigationBar == YES) {
-            [self performSelector:@selector(hideOrShowStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
+            if (iPad) {
+                [self performSelector:@selector(showStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
+            } else {
+                [self performSelector:@selector(showStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
+            }
         }
     }
 }
@@ -1307,7 +1311,7 @@
 - (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
                   didMoveController:(UIViewController*)controller
 {
-    [self resignFullScreenButtonPressed];
+    [self showStatusAndNavigationBarAndHideButton];
     [self.noteTextView resignFirstResponder];
     [self autoSave];
     
@@ -1325,13 +1329,13 @@
 }
 
 
-- (void)showNavigationBar
+- (void)showNavigationBarAfterDelay
 {
-    [self performSelector:@selector(showNavigationBarAfterDelay) withObject:nil afterDelay:0.0];
+    [self performSelector:@selector(showNavigationBar) withObject:nil afterDelay:0.0];
 }
 
 
-- (void)showNavigationBarAfterDelay
+- (void)showNavigationBar
 {
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
@@ -1349,37 +1353,44 @@
 }
 
 
-- (void)hideOrShowStatusAndNavigationBar
+- (void)hideStatusAndNavigationBar
+{
+    if (_didHideNavigationBar == NO) {
+        [self hideStatusBar];
+        [self hideNavigationBar];
+        _didHideNavigationBar = YES;
+    }
+}
+
+
+- (void)showStatusAndNavigationBar
 {
     if (_didHideNavigationBar == YES) {
         [self showStatusBar];
         [self showNavigationBarAfterDelay];
-    } else {
-        [self hideStatusBar];
-        [self hideNavigationBar];
+        _didHideNavigationBar = NO;
     }
-    _didHideNavigationBar = !_didHideNavigationBar;
 }
 
 
-- (void)fullScreenButtonPressed
+- (void)hideStatusAndNavigationBarAndShowButton
 {
     if (_didHideNavigationBar == NO) {
         [self hideStatusBar];
         [self hideNavigationBar];
         [self showButtonForFullscreenWithAnimation];
-        _didHideNavigationBar = !_didHideNavigationBar;
+        _didHideNavigationBar = YES;
     }
 }
 
 
-- (void)resignFullScreenButtonPressed
+- (void)showStatusAndNavigationBarAndHideButton
 {
     if (_didHideNavigationBar == YES) {
         [self showStatusBar];
         [self showNavigationBarAfterDelay];
         [self hideButtonForFullscreenWithAnimation];
-        _didHideNavigationBar = !_didHideNavigationBar;
+        _didHideNavigationBar = NO;
     }
 }
 
@@ -1459,6 +1470,7 @@
     [center removeObserver:self name:UIKeyboardDidShowNotification object:nil];
     [center removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [center removeObserver:self name:UIKeyboardDidHideNotification object:nil];
+    [center removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
     [center removeObserver:self name:@"DidChangeNoteTitleNotification" object:nil];
     [center removeObserver:self name:@"ApplicationWillResignActiveNotification" object:nil];
     [center removeObserver:self name:@"AddNewNoteNotification" object:nil];

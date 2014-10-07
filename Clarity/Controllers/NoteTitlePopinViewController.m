@@ -67,7 +67,7 @@
     self.titleTextField.autocorrectionType = UITextAutocorrectionTypeYes;
     self.titleTextField.placeholder = @"Title";
     self.titleTextField.returnKeyType = UIReturnKeyDone;
-    [[UITextField appearance] setTintColor:[UIColor colorWithRed:0.949 green:0.427 blue:0.188 alpha:1]]; //텍스트 필드 캐럿 색상 변경
+    [[UITextField appearance] setTintColor:[UIColor colorWithRed:0.949 green:0.427 blue:0.188 alpha:1]];
     
     if (self.currentNote) {
         self.titleTextField.text = self.currentNote.noteTitle;
@@ -76,7 +76,6 @@
     {
         self.titleTextField.text = self.currentLocalNote.noteTitle;
     }
-    
 //    [self.titleTextField performSelector:@selector(selectAll:) withObject:self.titleTextField afterDelay:0.f];
 }
 
@@ -90,7 +89,10 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     [self.titleTextField resignFirstResponder];
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentNote forKey:@"didChangeNoteTitleKey"];
+    [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeNoteTitleNotification" object:nil userInfo:userInfo];
 }
 
 
@@ -119,8 +121,6 @@
         } else if ([self.titleTextField.text length] > 0) {
             self.currentNote.noteTitle = self.titleTextField.text;
         }
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentNote forKey:@"didChangeNoteTitleKey"];
-        [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeNoteTitleNotification" object:nil userInfo:userInfo];
     }
     else if (self.currentLocalNote.isLocalNote)
     {
@@ -129,10 +129,7 @@
         } else if ([self.titleTextField.text length] > 0) {
             self.currentLocalNote.noteTitle = self.titleTextField.text;
         }
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentLocalNote forKey:@"didChangeNoteTitleKey"];
-        [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeNoteTitleNotification" object:nil userInfo:userInfo];
     }
-    
     [self dismissView];
 }
 
@@ -158,7 +155,6 @@
 {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center removeObserver:self name:@"DidChangeNoteTitleNotification" object:nil];
-    [center removeObserver:self name:@"AddNewNoteNotification" object:nil];
     [center removeObserver:self];
 }
 
