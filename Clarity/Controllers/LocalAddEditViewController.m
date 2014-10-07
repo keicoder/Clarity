@@ -603,14 +603,20 @@
 - (NSString *)createHTMLString
 {
     NSError *error;
+    
+    NSString *hash = @"# ";
+    NSString *newline = @"\n\n";
     self.htmlString = [[NSMutableString alloc] init];
+    NSString *htmlString = [NSString stringWithFormat:@"%@%@%@%@", hash, self.currentNote.noteTitle, newline, self.currentNote.noteBody];
+    
     [self.htmlString appendString:[NSString stringWithFormat:@"<html>"
                                    " <head>"
                                    " <meta charset='UTF-8'/>"
                                    " <style> %@ </style>"
                                    " </head> ", [self cssUTF8String]]];
-    [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:[self noteString] error:&error]];
+    [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:htmlString error:&error]];
     
+    htmlString = nil;
     return self.htmlString;
 }
 
