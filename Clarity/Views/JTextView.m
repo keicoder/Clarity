@@ -536,7 +536,8 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    NSLog(@"ICTextView dealloced: %@", self);
+    NSLog(@"JTextView dealloced");
+//    NSLog(@"JTextView dealloced: %@", self);
 }
 
 

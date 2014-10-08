@@ -324,7 +324,7 @@
     }
     else if(indexPath.section == 3 && indexPath.row == 2)
     {
-        NSString *urlString = @"https://twitter.com/hyun2012";
+        NSString *urlString = @"http://twitter.com/hyun2012";
         self.toWebViewController = [[TOWebViewController alloc] initWithURLString:urlString];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.toWebViewController];
         if (iPad) {
