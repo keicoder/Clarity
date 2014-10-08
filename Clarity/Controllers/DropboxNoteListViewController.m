@@ -442,22 +442,14 @@
 {
     NSDate *now = [NSDate date];
     
-    [self.formatter setDateFormat:@"MMM"];
-    NSString *stringMonth = [self.formatter stringFromDate:now];
+    [self.formatter setDateFormat:@"MMM dd"];
+    NSString *stringMonthAndDay = [self.formatter stringFromDate:now];
     
-    [self.formatter setDateFormat:@"dd"];
-    NSString *stringDay = [self.formatter stringFromDate:now];
-    
-    [self.formatter setDateFormat:@"HH"];
-    NSString *stringHour = [self.formatter stringFromDate:now];
-    
-    [self.formatter setDateFormat:@"mm"];
-    NSString *stringMinute = [self.formatter stringFromDate:now];
+    [self.formatter setDateFormat:@"' 'HH:mm"];
+    NSString *stringHourAndMinute = [self.formatter stringFromDate:now];
     
     _titleString = nil;
-    NSString *blank = @" ";
-    NSString *colon = @":";
-    _titleString = [NSString stringWithFormat:@"%@%@%@%@%@%@%@", stringMonth, blank, stringDay, blank, stringHour, colon, stringMinute];
+    _titleString = [NSString stringWithFormat:@"%@%@", stringMonthAndDay, stringHourAndMinute];
     
     return _titleString;
 }

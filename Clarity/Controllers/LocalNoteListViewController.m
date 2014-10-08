@@ -425,7 +425,6 @@
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
         
         [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-//            layeredNavigationItem.width = 400;
             layeredNavigationItem.nextItemDistance = 0;
             layeredNavigationItem.hasChrome = NO;
             layeredNavigationItem.hasBorder = NO;
@@ -443,22 +442,14 @@
 {
     NSDate *now = [NSDate date];
     
-    [self.formatter setDateFormat:@"MMM"];
-    NSString *stringMonth = [self.formatter stringFromDate:now];
+    [self.formatter setDateFormat:@"MMM dd"];
+    NSString *stringMonthAndDay = [self.formatter stringFromDate:now];
     
-    [self.formatter setDateFormat:@"dd"];
-    NSString *stringDay = [self.formatter stringFromDate:now];
-    
-    [self.formatter setDateFormat:@"H"];
-    NSString *stringHour = [self.formatter stringFromDate:now];
-    
-    [self.formatter setDateFormat:@"m"];
-    NSString *stringMinute = [self.formatter stringFromDate:now];
+    [self.formatter setDateFormat:@"' 'HH:mm"];
+    NSString *stringHourAndMinute = [self.formatter stringFromDate:now];
     
     _titleString = nil;
-    NSString *blank = @" ";
-    NSString *colon = @":";
-    _titleString = [NSString stringWithFormat:@"%@%@%@%@%@%@%@", stringMonth, blank, stringDay, blank, stringHour, colon, stringMinute];
+    _titleString = [NSString stringWithFormat:@"%@%@", stringMonthAndDay, stringHourAndMinute];
     
     return _titleString;
 }
@@ -466,7 +457,7 @@
 
 #pragma mark 데이트 Formatter
 
-- (NSDateFormatter *)formatter  // When you need, just use self.formatter
+- (NSDateFormatter *)formatter //self.formatter
 {
     if (! _formatter) {
         _formatter = [[NSDateFormatter alloc] init];
