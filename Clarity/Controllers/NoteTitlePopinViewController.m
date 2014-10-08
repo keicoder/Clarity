@@ -63,7 +63,7 @@
     self.titleTextField.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     self.titleTextField.textColor = kTEXTVIEW_TEXT_COLOR;
     self.titleTextField.delegate = self;
-    self.titleTextField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
+    self.titleTextField.autocapitalizationType = UITextAutocapitalizationTypeWords;
     self.titleTextField.autocorrectionType = UITextAutocorrectionTypeYes;
     self.titleTextField.placeholder = @"Title";
     self.titleTextField.returnKeyType = UIReturnKeyDone;
