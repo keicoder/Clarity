@@ -98,7 +98,6 @@
     } else {
         [self addKeyboardAccessoryToolBar];
     }
-//    [self showNoteDataToLogConsole];
 }
 
 
@@ -117,6 +116,7 @@
     } else {
         [self checkToShowHelpMessage];
     }
+    //[self showNoteDataToLogConsole];
 }
 
 
@@ -762,17 +762,11 @@
 
 - (void)checkToShowHelpMessage
 {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == YES) {
-        
-    }
-    else if ([self.currentNote.isNewNote boolValue] == YES && [[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == NO)
-    {
+    if ([self.currentNote.isNewNote boolValue] == YES && [[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == NO) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kDIDSHOW_NOTEVIEW_HELP];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        self.noteTextView.text = @"\n# Quick Guide\n\n### Notice\n**This quick guide note will not show again**.\n\n### Edit\n* To edit title, tap the date.\n* To save note, swipe right.\n* To remove keyboard, just swipe down.\n\n### Preview\n* To preview markdown, tap 'M' button.\n* In preview mode, double tap anywhere to enter full screen\n\n### Navigation\n* Swipe right to reveal lists.\n\n> Thank you for purchasing Clarity.  \nEnjoy Writing!";
-    }
-    else {
-        
+        self.noteTitleLabel.text = @"Quick Guide";
+        self.noteTextView.text = @"**This quick guide note will not show again**.\n\n### Edit\n* To edit title, tap the date.\n* To save note, swipe right.\n* To remove keyboard, just swipe down.\n\n### Preview\n* To preview markdown, tap 'M' button.\n* In preview mode, double tap anywhere to enter full screen\n\n### Navigation\n* Swipe right to reveal lists.\n\n> Thank you for purchasing Clarity.  \nEnjoy Writing!";
     }
 }
 

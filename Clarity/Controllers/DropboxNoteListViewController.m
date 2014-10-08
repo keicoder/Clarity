@@ -425,7 +425,6 @@
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
         
         [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-//            layeredNavigationItem.width = 400;
             layeredNavigationItem.nextItemDistance = 0;
             layeredNavigationItem.hasChrome = NO;
             layeredNavigationItem.hasBorder = NO;
@@ -449,10 +448,10 @@
     [self.formatter setDateFormat:@"dd"];
     NSString *stringDay = [self.formatter stringFromDate:now];
     
-    [self.formatter setDateFormat:@"H"];
+    [self.formatter setDateFormat:@"HH"];
     NSString *stringHour = [self.formatter stringFromDate:now];
     
-    [self.formatter setDateFormat:@"m"];
+    [self.formatter setDateFormat:@"mm"];
     NSString *stringMinute = [self.formatter stringFromDate:now];
     
     _titleString = nil;
@@ -466,7 +465,7 @@
 
 #pragma mark 데이트 Formatter
 
-- (NSDateFormatter *)formatter  // When you need, just use self.formatter
+- (NSDateFormatter *)formatter //self.formatter
 {
     if (! _formatter) {
         _formatter = [[NSDateFormatter alloc] init];
