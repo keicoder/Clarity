@@ -25,6 +25,7 @@
 #import "MTZWhatsNew.h"
 #import "MTZWhatsNewGridViewController.h"
 #import "BlankViewController.h"
+#import "UIColor+HBVHarmonies.h"
 
 
 @interface DropboxNoteListViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UIAlertViewDelegate, FRLayeredNavigationControllerDelegate>
@@ -242,6 +243,8 @@
     
     cell.dateLabel.textColor = kTABLE_VIEW_CELL_DATELABEL_TEXTCOLOR_DEFAULT;
     
+    UIColor *randomColor = [UIColor randomColor];
+    
     if ([cell.dateLabel.text isEqualToString:@"SAT"])
     {
         cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SATURDAY;
@@ -250,7 +253,7 @@
         cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SUNDAY;
     }
     else {
-        cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT;
+        cell.dayLabel.textColor = randomColor; //kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT;
     }
 }
 

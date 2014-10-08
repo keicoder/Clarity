@@ -82,6 +82,7 @@
 		C12FE79319CFD54A001209B2 /* BlankViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C12FE79219CFD54A001209B2 /* BlankViewController.m */; };
 		C12FE79819D12014001209B2 /* JGActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = C12FE79719D12014001209B2 /* JGActionSheet.m */; };
 		C1303D4C19E28CF100A6FB03 /* jMarkdown_iPad_ForWebView.css in Resources */ = {isa = PBXBuildFile; fileRef = C1303D4B19E28CF100A6FB03 /* jMarkdown_iPad_ForWebView.css */; };
+		C14EBAD719E4BC3E00AD7A17 /* UIColor+HBVHarmonies.m in Sources */ = {isa = PBXBuildFile; fileRef = C14EBAD619E4BC3E00AD7A17 /* UIColor+HBVHarmonies.m */; };
 		C173258F19D24C1C001ED5D5 /* AboutClarity_iPad.html in Resources */ = {isa = PBXBuildFile; fileRef = C173258C19D24C1C001ED5D5 /* AboutClarity_iPad.html */; };
 		C173259019D24C1C001ED5D5 /* Clarity_OpenSourceLicences_iPad.html in Resources */ = {isa = PBXBuildFile; fileRef = C173258D19D24C1C001ED5D5 /* Clarity_OpenSourceLicences_iPad.html */; };
 		C173259119D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html in Resources */ = {isa = PBXBuildFile; fileRef = C173258E19D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html */; };
@@ -243,6 +244,8 @@
 		C12FE79619D12014001209B2 /* JGActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGActionSheet.h; sourceTree = "<group>"; };
 		C12FE79719D12014001209B2 /* JGActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGActionSheet.m; sourceTree = "<group>"; };
 		C1303D4B19E28CF100A6FB03 /* jMarkdown_iPad_ForWebView.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = jMarkdown_iPad_ForWebView.css; sourceTree = "<group>"; };
+		C14EBAD519E4BC3E00AD7A17 /* UIColor+HBVHarmonies.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+HBVHarmonies.h"; sourceTree = "<group>"; };
+		C14EBAD619E4BC3E00AD7A17 /* UIColor+HBVHarmonies.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HBVHarmonies.m"; sourceTree = "<group>"; };
 		C173258C19D24C1C001ED5D5 /* AboutClarity_iPad.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AboutClarity_iPad.html; sourceTree = "<group>"; };
 		C173258D19D24C1C001ED5D5 /* Clarity_OpenSourceLicences_iPad.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Clarity_OpenSourceLicences_iPad.html; sourceTree = "<group>"; };
 		C173258E19D24C1C001ED5D5 /* ClarityMarkdownSyntaxGuide_iPad.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ClarityMarkdownSyntaxGuide_iPad.html; sourceTree = "<group>"; };
@@ -462,6 +465,7 @@
 		C122909819973A7100460667 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				C14EBAD419E4BC3E00AD7A17 /* RandomColor */,
 				C122909919973A7100460667 /* NSUserDefaults+Extension.h */,
 				C122909A19973A7100460667 /* NSUserDefaults+Extension.m */,
 				C122909B19973A7100460667 /* UIButtonPressAndHold.h */,
@@ -672,6 +676,15 @@
 				C12FE79719D12014001209B2 /* JGActionSheet.m */,
 			);
 			path = JGActionSheet;
+			sourceTree = "<group>";
+		};
+		C14EBAD419E4BC3E00AD7A17 /* RandomColor */ = {
+			isa = PBXGroup;
+			children = (
+				C14EBAD519E4BC3E00AD7A17 /* UIColor+HBVHarmonies.h */,
+				C14EBAD619E4BC3E00AD7A17 /* UIColor+HBVHarmonies.m */,
+			);
+			path = RandomColor;
 			sourceTree = "<group>";
 		};
 		C1734D2919D8F21400813FA1 /* File */ = {
@@ -940,6 +953,7 @@
 				C12290DB19973A7E00460667 /* OpenSourceLicencesViewController.m in Sources */,
 				C1F1CC8519DE522600E916AA /* LocalNote.m in Sources */,
 				C122904119973A2B00460667 /* AppDelegate.m in Sources */,
+				C14EBAD719E4BC3E00AD7A17 /* UIColor+HBVHarmonies.m in Sources */,
 				C12290EC19973BA100460667 /* WelcomePage.m in Sources */,
 				C12290D219973A7E00460667 /* DropboxStarViewController.m in Sources */,
 				C12290A519973A7200460667 /* UIColor+CustomColors.m in Sources */,
