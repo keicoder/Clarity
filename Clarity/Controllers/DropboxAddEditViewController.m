@@ -741,6 +741,16 @@
                 [self performSelector:@selector(showStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
             }
         }
+        
+        [self performSelector:@selector(becomeFirstResponderAfterDelay) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
+    }
+}
+
+
+- (void)becomeFirstResponderAfterDelay
+{
+    if ([self.currentNote.isNewNote boolValue] == YES) {
+        [self.noteTextView becomeFirstResponder];
     }
 }
 
