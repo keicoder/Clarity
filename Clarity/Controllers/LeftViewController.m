@@ -418,7 +418,7 @@
 
 - (void)sendFeedbackEmail
 {
-    if (![MFMailComposeViewController canSendMail]) //이메일 공유 : email 공유를 위해선 MessageUI 프레임워크가 필요함
+    if (![MFMailComposeViewController canSendMail])
     {
         NSLog(@"Can't send email");
         return;
@@ -426,15 +426,17 @@
     
     MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
     mailViewController.mailComposeDelegate = self;
+    [mailViewController setToRecipients:@[@"lovejun.soft@gmail.com"]];
     
-    [mailViewController setToRecipients:@[@"lovejun.soft@gmail.com"]];              //Set params
-    [mailViewController setSubject:NSLocalizedString(@"Clarity iOS Feedback", @"Clarity iOS Feedback")];
-    [mailViewController setMessageBody:NSLocalizedString(@"\n\n\n\n----\nClarity iOS\n", @"\n\n\n\n----\nClarity iOS\n") isHTML:NO];
+    NSString *messageSubject = @"Clarity iOS Feedback";
+    NSString *messageBody = [NSString stringWithFormat:@"\n\n\n\n----\nClarity iOS Version %@, Build Number %@\n",[NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"], [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"]];
+    [mailViewController setSubject:NSLocalizedString(messageSubject, messageSubject)];
+    [mailViewController setMessageBody:NSLocalizedString(messageBody, messageBody) isHTML:NO];
     
     [self presentViewController:mailViewController animated:YES completion:^{
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent]; //상태 바 속성
-        [[UINavigationBar appearance] setBarTintColor:kWINDOW_BACKGROUND_COLOR];            //냅바 색상
-        [[UINavigationBar appearance] setTintColor:kWHITE_COLOR];                           //냅바 버튼 색상
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+        [[UINavigationBar appearance] setBarTintColor:kWINDOW_BACKGROUND_COLOR];
+        [[UINavigationBar appearance] setTintColor:kWHITE_COLOR];
         [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName:kWHITE_COLOR, NSFontAttributeName:[UIFont fontWithName:@"AvenirNext-Medium" size:18.0]};
     }];
 }
