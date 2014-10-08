@@ -29,7 +29,8 @@
 #import "FCFileManager.h"
 
 
-#define kHideOrShowStatusAndNavigationBarDelay 0.4
+#define kHideOrShowStatusAndNavigationBarDelay  0.4
+#define kAlreadyPopInViewLaunched               @"alreadyPopInViewLaunched"
 
 
 @interface DropboxAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate, UIAlertViewDelegate>
@@ -97,7 +98,7 @@
     } else {
         [self addKeyboardAccessoryToolBar];
     }
-    //[self showNoteDataToLogConsole];
+//    [self showNoteDataToLogConsole];
 }
 
 
@@ -153,7 +154,7 @@
 
 - (void)checkNewNote
 {
-    if ([self.currentNote.isNewNote boolValue] == YES) {
+    if ([self.currentNote.isNewNote boolValue] == YES && ![self.currentNote.noteAnnotate isEqualToString:kAlreadyPopInViewLaunched]) {
         [self popInNoteTitleField];
     } else {
         [self setCursorToBeginning:self.noteTextView];
@@ -750,8 +751,9 @@
 
 - (void)becomeFirstResponderAfterDelay
 {
-    if ([self.currentNote.isNewNote boolValue] == YES) {
+    if ([self.currentNote.isNewNote boolValue] == YES && ![self.currentNote.noteAnnotate isEqualToString:kAlreadyPopInViewLaunched]) {
         [self.noteTextView becomeFirstResponder];
+        self.currentNote.noteAnnotate = kAlreadyPopInViewLaunched;
     }
 }
 
@@ -792,7 +794,6 @@
 {
     if ([[notification name] isEqualToString:@"ApplicationWillResignActiveNotification"])
     {
-        NSLog(@"ApplicationWillResignActive Notification Received");
         [self autoSave];
         NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentNote forKey:@"currentNoteObjectIDKey"];
         [[NSNotificationCenter defaultCenter] postNotificationName: @"CurrentNoteObjectIDKeyNotification" object:nil userInfo:userInfo];
@@ -1337,7 +1338,14 @@
 - (void)layeredNavigationController:(FRLayeredNavigationController*)layeredController
                   didMoveController:(UIViewController*)controller
 {
-    [self showStatusAndNavigationBarAndHideButton];
+    if (_didHideNavigationBar == YES) {
+        if (iPad) {
+            [self performSelector:@selector(showStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
+        } else {
+            [self performSelector:@selector(showStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
+        }
+    }
+    
     [self.noteTextView resignFirstResponder];
     [self autoSave];
     
@@ -1352,13 +1360,6 @@
 - (void)hideNavigationBar
 {
     [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-
-
-- (void)showNavigationBarAfterDelay
-{
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    //[self performSelector:@selector(showNavigationBar) withObject:nil afterDelay:0.0];
 }
 
 
@@ -1394,7 +1395,7 @@
 {
     if (_didHideNavigationBar == YES) {
         [self showStatusBar];
-        [self showNavigationBarAfterDelay];
+        [self showNavigationBar];
         [self hideButtonForFullscreenWithAnimation];
         _didHideNavigationBar = NO;
     }
@@ -1416,7 +1417,7 @@
 {
     if (_didHideNavigationBar == YES) {
         [self showStatusBar];
-        [self showNavigationBarAfterDelay];
+        [self showNavigationBar];
         [self hideButtonForFullscreenWithAnimation];
         _didHideNavigationBar = NO;
     }

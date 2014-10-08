@@ -76,7 +76,7 @@
     {
         self.titleTextField.text = self.currentLocalNote.noteTitle;
     }
-//    [self.titleTextField performSelector:@selector(selectAll:) withObject:self.titleTextField afterDelay:0.f];
+    [self.titleTextField performSelector:@selector(selectAll:) withObject:self.titleTextField afterDelay:0.f];
 }
 
 
@@ -91,8 +91,13 @@
 {
     [super viewWillDisappear:animated];
     [self.titleTextField resignFirstResponder];
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentNote forKey:@"didChangeNoteTitleKey"];
-    [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeNoteTitleNotification" object:nil userInfo:userInfo];
+    if (self.currentNote.isDropboxNote) {
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentNote forKey:@"didChangeNoteTitleKey"];
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeNoteTitleNotification" object:nil userInfo:userInfo];
+    } else if (self.currentLocalNote.isLocalNote) {
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.currentLocalNote forKey:@"didChangeNoteTitleKey"];
+        [[NSNotificationCenter defaultCenter] postNotificationName: @"DidChangeNoteTitleNotification" object:nil userInfo:userInfo];
+    }
 }
 
 
@@ -114,16 +119,13 @@
 
 - (void)saveMethodInvoked
 {
-    if (self.currentNote)
-    {
+    if (self.currentNote.isDropboxNote) {
         if ([self.titleTextField.text length] == 0) {
             self.currentNote.noteTitle = @"Untitled";
         } else if ([self.titleTextField.text length] > 0) {
             self.currentNote.noteTitle = self.titleTextField.text;
         }
-    }
-    else if (self.currentLocalNote.isLocalNote)
-    {
+    } else if (self.currentLocalNote.isLocalNote) {
         if ([self.titleTextField.text length] == 0) {
             self.currentLocalNote.noteTitle = @"Untitled";
         } else if ([self.titleTextField.text length] > 0) {
