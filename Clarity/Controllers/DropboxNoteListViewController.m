@@ -444,12 +444,11 @@
 {
     NSDate *now = [NSDate date];
     
+    [self.formatter setDateFormat:@"MMM"];
+    NSString *stringMonth = [self.formatter stringFromDate:now];
+    
     [self.formatter setDateFormat:@"dd"];
     NSString *stringDay = [self.formatter stringFromDate:now];
-    
-    [self.formatter setDateFormat:@"EEEE"];
-    NSString *stringDate = [self.formatter stringFromDate:now];
-    NSString *stringdaysOfTheWeek = [[stringDate substringToIndex:3] uppercaseString];
     
     [self.formatter setDateFormat:@"H"];
     NSString *stringHour = [self.formatter stringFromDate:now];
@@ -457,13 +456,10 @@
     [self.formatter setDateFormat:@"m"];
     NSString *stringMinute = [self.formatter stringFromDate:now];
     
-    [self.formatter setDateFormat:@"s"];
-    NSString *stringSeconds = [self.formatter stringFromDate:now];
-    
     _titleString = nil;
     NSString *blank = @" ";
     NSString *colon = @":";
-    _titleString = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@", stringdaysOfTheWeek, blank, stringDay, blank, stringHour, colon, stringMinute, colon, stringSeconds];
+    _titleString = [NSString stringWithFormat:@"%@%@%@%@%@%@%@", stringMonth, blank, stringDay, blank, stringHour, colon, stringMinute];
     
     return _titleString;
 }
