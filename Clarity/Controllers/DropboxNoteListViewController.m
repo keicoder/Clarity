@@ -251,8 +251,7 @@
         cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SUNDAY;
     }
     else {
-        UIColor *randomColor = [UIColor randomColor];
-        cell.dayLabel.textColor = randomColor; //kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT;
+        cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT;
     }
 }
 
