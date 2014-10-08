@@ -9,8 +9,8 @@ body{
     -webkit-font-smoothing: antialiased;
     font-size:20px;
     line-height:1.4em;
-    margin:0rem;
-    padding:0px 12px 12px 12px;
+    margin:1rem;
+    padding:0rem;
     max-width:100em;
     height:100%; }
 a{
@@ -81,8 +81,8 @@ pre code {
     background: transparent; }
 blockquote {
     font-family: 'Georgia-Italic', serif;
-    width: 97%;
-    margin-left: 0.7em;
+    width: 90%;
+    margin-left: 0.5em;
     border-left: 0.3em solid #BBD9F5;
     padding: 0 0.5em;
     color:#777777; }

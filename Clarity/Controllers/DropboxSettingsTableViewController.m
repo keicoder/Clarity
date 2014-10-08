@@ -46,7 +46,7 @@
 
 - (void)configureViewAndTableView
 {
-    self.tableView.separatorColor = [UIColor colorWithWhite:0.333 alpha:0.300];
+    self.tableView.separatorColor = [UIColor whiteColor];
 }
 
 

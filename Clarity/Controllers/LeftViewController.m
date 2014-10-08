@@ -313,7 +313,6 @@
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.toWebViewController];
         if (iPad) {
             [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-                //layeredNavigationItem.width = 320;
                 layeredNavigationItem.nextItemDistance = 0;
                 layeredNavigationItem.hasChrome = NO;
                 layeredNavigationItem.hasBorder = NO;
@@ -325,12 +324,11 @@
     }
     else if(indexPath.section == 3 && indexPath.row == 2)
     {
-        NSString *urlString = @"https://twitter.com/lovejunsoft";
+        NSString *urlString = @"https://twitter.com/hyun2012";
         self.toWebViewController = [[TOWebViewController alloc] initWithURLString:urlString];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.toWebViewController];
         if (iPad) {
             [self.layeredNavigationController pushViewController:navigationController inFrontOf:self.navigationController maximumWidth:YES animated:YES configuration:^(FRLayeredNavigationItem *layeredNavigationItem) {
-                //layeredNavigationItem.width = 320;
                 layeredNavigationItem.nextItemDistance = 0;
                 layeredNavigationItem.hasChrome = NO;
                 layeredNavigationItem.hasBorder = NO;
@@ -428,8 +426,13 @@
     mailViewController.mailComposeDelegate = self;
     [mailViewController setToRecipients:@[@"lovejun.soft@gmail.com"]];
     
-    NSString *messageSubject = @"Clarity iOS Feedback";
-    NSString *messageBody = [NSString stringWithFormat:@"\n\n\n\n----\nClarity iOS Version %@, Build Number %@\n",[NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"], [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"]];
+    
+    NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
+    NSString *buildNumberString = [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"];
+    self.versionLabel.text = [NSString stringWithFormat:@"Version %@ (%@)\nSeptember 25, 2014\nThank you for purchasing Clarity.\nEnjoy Writing!", versionString, buildNumberString];
+    
+    NSString *messageSubject = [NSString stringWithFormat:@"Clarity iOS Version %@ (%@) Feedback", versionString, buildNumberString];
+    NSString *messageBody = [NSString stringWithFormat:@"\n\n\n\n----\nClarity iOS Version %@ (%@)\n", versionString, buildNumberString];
     [mailViewController setSubject:NSLocalizedString(messageSubject, messageSubject)];
     [mailViewController setMessageBody:NSLocalizedString(messageBody, messageBody) isHTML:NO];
     

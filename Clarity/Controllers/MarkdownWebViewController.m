@@ -39,11 +39,11 @@
 
 @interface MarkdownWebViewController () <UIWebViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIScrollViewDelegate>
 
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (strong, nonatomic) TOWebViewController *toWebViewController;
-@property (weak, nonatomic) IBOutlet UIWebView *markdownWebView;
-@property (strong, nonatomic) NSMutableString *htmlString;
-@property (assign) CGPoint tapPoint;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) TOWebViewController *toWebViewController;
+@property (nonatomic, weak) IBOutlet UIWebView *markdownWebView;
+@property (nonatomic, strong) NSString *markdownString;
+@property (nonatomic, strong) NSMutableString *htmlString;
 @property (nonatomic, strong) UIButton *buttonForFullscreen;
 
 @end
@@ -72,7 +72,6 @@
     if (debug==1) {NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));}
     [super viewWillAppear:animated];
     self.title = @"Preview";
-    //self.automaticallyAdjustsScrollViewInsets = NO;
     [self assignAttributeToMarkdownWebView];
     [self makeMarkdownString];
 }
@@ -96,11 +95,7 @@
     self.markdownWebView.delegate = self;
     self.markdownWebView.scrollView.delegate = self;
     self.markdownWebView.scrollView.scrollEnabled = YES;
-    if (iPad) {
-        self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(0.0, 0, 0, 0);
-    } else {
-        self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(0.0, 0, 0, 0);
-    }
+    self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
 
@@ -134,7 +129,8 @@
                                    "  <meta charset='UTF-8'/>"
                                    "  <style>%@</style>"
                                    "</head>", [self cssUTF8String]]];
-    [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:[self markdownString] error:&error]];
+    self.markdownString = [self makeContentString];
+    [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:self.markdownString error:&error]];
     [self.markdownWebView loadHTMLString:self.htmlString baseURL:nil];
 }
 
@@ -160,29 +156,42 @@
 }
 
 
-- (NSString *)markdownString
+- (NSString *)makeContentString
 {
     NSError *error = nil;
-    NSString *markdownString = @"";
     
+    NSString *titleString;
+    if ([self.currentNote.noteTitle length] == 0 && [self.currentLocalNote.noteTitle length] == 0) {
+        titleString = @"# No Title";
+    }
+    else if ([self.currentNote.noteTitle length] > 0 && [self.currentLocalNote.noteTitle length] == 0) {
+        titleString = self.currentNote.noteTitle;
+    }
+    else if ([self.currentLocalNote.noteTitle length] > 0 && [self.currentNote.noteTitle length] == 0) {
+        titleString = self.currentLocalNote.noteTitle;
+    }
+    
+    NSString *bodyString;
     if ([self.currentNote.noteBody length] == 0 && [self.currentLocalNote.noteBody length] == 0) {
-        markdownString = @"*No content*";
+        bodyString = @"*No content*";
     }
     else if ([self.currentNote.noteBody length] > 0 && [self.currentLocalNote.noteBody length] == 0) {
-        markdownString = self.currentNote.noteBody;
+        bodyString = self.currentNote.noteBody;
     }
-    else if ([self.currentNote.noteBody length] == 0 && [self.currentLocalNote.noteBody length] > 0) {
-        markdownString = self.currentLocalNote.noteBody;
-    }
-    if (error != nil)
-    {
-        NSLog(@"Error: %@", error);
-        return nil;
+    else if ([self.currentLocalNote.noteBody length] > 0 && [self.currentNote.noteBody length] == 0) {
+        bodyString = self.currentLocalNote.noteBody;
     }
     
     NSString *hash = @"# ";
     NSString *newline = @"\n\n";
-    NSString *concatenateString = [NSString stringWithFormat:@"%@%@%@%@", hash, self.currentNote.noteTitle, newline, markdownString];
+    NSString *concatenateString;
+
+    concatenateString = [NSString stringWithFormat:@"%@%@%@%@", hash, titleString, newline, bodyString];
+    
+    if (error != nil) {
+        NSLog(@"Error: %@", error.localizedDescription);
+       return nil;
+    }
     
     return concatenateString;
 }
