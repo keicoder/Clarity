@@ -149,7 +149,7 @@
 
 
 #pragma mark - 노트 텍스트 뷰
-#pragma mark 노트 체크 > 키보드 Up
+#pragma mark 노트 체크 > 팝인 뷰
 
 - (void)checkNewNote
 {
@@ -697,6 +697,7 @@
     
     [self.navigationController presentPopinController:controller animated:YES completion:^{ }];
 }
+
 
 - (void)showPopInNoteTitleField:(UITapGestureRecognizer *)gesture
 {

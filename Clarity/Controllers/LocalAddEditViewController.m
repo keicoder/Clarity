@@ -92,7 +92,6 @@
     [self addObserverForNoteTitleChanged];
     [self addObserverForApplicationWillResignActive];
     [self addButtonForFullscreen];
-    [self checkNewNote];
     if (self.keyboardAccessoryToolBar != nil) {
         self.noteTextView.inputAccessoryView = self.keyboardAccessoryToolBar;
     } else {
@@ -112,7 +111,11 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self checkToShowHelpMessage];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kDIDSHOW_NOTEVIEW_HELP] == YES) {
+        [self checkNewNote];
+    } else {
+        [self checkToShowHelpMessage];
+    }
 }
 
 
@@ -146,12 +149,12 @@
 
 
 #pragma mark - 노트 텍스트 뷰
-#pragma mark 노트 체크 > 키보드 Up
+#pragma mark 노트 체크 > 팝인 뷰
 
 - (void)checkNewNote
 {
     if ([self.currentNote.isNewNote boolValue] == YES) {
-        [self.noteTextView becomeFirstResponder];
+        [self popInNoteTitleField];
     } else {
         [self setCursorToBeginning:self.noteTextView];
     }
@@ -666,7 +669,7 @@
 
 #pragma mark 탭 제스처 > 팝인 노트 타이틀 필드
 
-- (void)showPopInNoteTitleField:(UITapGestureRecognizer *)gesture
+- (void)popInNoteTitleField
 {
     if (_didHideNavigationBar == NO) {
         [self hideStatusAndNavigationBar];
@@ -693,6 +696,12 @@
     [controller setPopinOptions:[controller popinOptions]|BKTPopinDefault];
     
     [self.navigationController presentPopinController:controller animated:YES completion:^{ }];
+}
+
+
+- (void)showPopInNoteTitleField:(UITapGestureRecognizer *)gesture
+{
+    [self popInNoteTitleField];
 }
 
 
@@ -733,6 +742,16 @@
                 [self performSelector:@selector(showStatusAndNavigationBar) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
             }
         }
+        
+        [self performSelector:@selector(becomeFirstResponderAfterDelay) withObject:nil afterDelay:kHideOrShowStatusAndNavigationBarDelay];
+    }
+}
+
+
+- (void)becomeFirstResponderAfterDelay
+{
+    if ([self.currentNote.isNewNote boolValue] == YES) {
+        [self.noteTextView becomeFirstResponder];
     }
 }
 
