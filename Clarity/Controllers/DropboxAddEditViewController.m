@@ -606,8 +606,9 @@
     
     NSString *hash = @"# ";
     NSString *newline = @"\n\n";
+    NSString *doubleBlank = @"  ";
     self.htmlString = [[NSMutableString alloc] init];
-    NSString *htmlString = [NSString stringWithFormat:@"%@%@%@%@", hash, self.currentNote.noteTitle, newline, self.currentNote.noteBody];
+    NSString *htmlString = [NSString stringWithFormat:@"%@%@%@%@%@", hash, self.currentNote.noteTitle, newline, self.currentNote.noteBody, doubleBlank];
     
     [self.htmlString appendString:[NSString stringWithFormat:@"<html>"
                                    " <head>"
@@ -630,7 +631,7 @@
     if (iPad) {
         filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad" ofType:@"css"];
     } else {
-        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown" ofType:@"css"];
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPhone" ofType:@"css"];
     }
     NSString *cssString = [NSString stringWithContentsOfFile:filePath
                                                     encoding:NSUTF8StringEncoding

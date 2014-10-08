@@ -9,8 +9,8 @@ body{
     -webkit-font-smoothing: antialiased;
     font-size:20px;
     line-height:1.4em;
-    margin:1rem;
-    padding:0rem;
+    margin:0rem;
+    padding:0px 12px 12px 12px;
     max-width:100em;
     height:100%; }
 a{

@@ -146,7 +146,7 @@
     if (iPad) {
         filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad_ForWebView" ofType:@"css"];
     } else {
-        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown" ofType:@"css"];
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPhone_ForWebView" ofType:@"css"];
     }
     NSString *cssString = [NSString stringWithContentsOfFile:filePath
                                                     encoding:NSUTF8StringEncoding
