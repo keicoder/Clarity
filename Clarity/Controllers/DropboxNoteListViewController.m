@@ -243,8 +243,6 @@
     
     cell.dateLabel.textColor = kTABLE_VIEW_CELL_DATELABEL_TEXTCOLOR_DEFAULT;
     
-    UIColor *randomColor = [UIColor randomColor];
-    
     if ([cell.dateLabel.text isEqualToString:@"SAT"])
     {
         cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SATURDAY;
@@ -253,6 +251,7 @@
         cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SUNDAY;
     }
     else {
+        UIColor *randomColor = [UIColor randomColor];
         cell.dayLabel.textColor = randomColor; //kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT;
     }
 }

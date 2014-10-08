@@ -25,6 +25,7 @@
 #import "MTZWhatsNew.h"
 #import "MTZWhatsNewGridViewController.h"
 #import "BlankViewController.h"
+#import "UIColor+HBVHarmonies.h"
 
 
 @interface LocalNoteListViewController () <UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate, NSFetchedResultsControllerDelegate, UISearchDisplayDelegate, UISearchBarDelegate, UIAlertViewDelegate, FRLayeredNavigationControllerDelegate>
@@ -250,7 +251,8 @@
         cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_SUNDAY;
     }
     else {
-        cell.dayLabel.textColor = kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT;
+        UIColor *randomColor = [UIColor randomColor];
+        cell.dayLabel.textColor = randomColor; //kTABLE_VIEW_CELL_DAYLABEL_TEXTCOLOR_DEFAULT;
     }
 }
 
