@@ -600,8 +600,17 @@
 }
 
 
-#pragma mark HTML 스트링 Parcing
+#pragma mark Make Plain String Containing Title 스트링
 
+- (NSString *)makePlainStringContainingTitle:(NSString *)titleString andBodyString:(NSString *)bodyString
+{
+    NSString *newline = @"\n\n";
+    NSString *plainEmailBodyStringContainingTitle = [NSString stringWithFormat:@"%@%@%@", titleString, newline, bodyString];
+    return plainEmailBodyStringContainingTitle;
+}
+
+
+#pragma mark HTML 스트링 Parcing
 #pragma mark HTML 스트링
 
 - (NSString *)createHTMLString
@@ -869,24 +878,25 @@
                  break;
              case 3:
              {
-                 self.htmlString = nil;
                  [self setDefaultBodyText];
                  [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
              }
                  break;
              case 4:
              {
-                 self.htmlString = nil;
                  [self setDefaultBodyText];
+                 NSString *plainBody = nil;
+                 plainBody = [self makePlainStringContainingTitle:self.noteTitleLabel.text andBodyString:self.noteTextView.text];
                  UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                 pasteboard.string = self.noteTextView.text;
+                 pasteboard.string = plainBody;
              }
                  break;
              case 5:
              {
-                 self.htmlString = nil;
                  [self setDefaultBodyText];
-                 NSArray *itemsToShare = @[self.noteTextView.text];
+                 NSString *plainBody = nil;
+                 plainBody = [self makePlainStringContainingTitle:self.noteTitleLabel.text andBodyString:self.noteTextView.text];
+                 NSArray *itemsToShare = @[plainBody];
                  UIActivityViewController *activityViewController;
                  activityViewController = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
                  [self presentViewController:activityViewController animated:YES completion:^{
@@ -1034,7 +1044,7 @@
 }
 
 
-#pragma mark 이메일 공유 (attach HTML file)
+#pragma mark 이메일 공유 (email with HTML file)
 
 - (void)sendEmailWithTitle:(NSString *)title withHtmlStringForAttachment:(NSString *)htmlString
 {
@@ -1072,7 +1082,7 @@
 }
 
 
-#pragma mark 이메일 공유 (send HTML mail)
+#pragma mark 이메일 공유 (email with Plain TXT or HTML)
 
 - (void)sendEmailWithTitle:(NSString *)title andBody:(NSString *)body
 {
@@ -1088,7 +1098,9 @@
     if (self.htmlString) {
         [mailViewController setMessageBody:body isHTML:YES];
     } else {
-        [mailViewController setMessageBody:body isHTML:NO];
+        NSString *plainBody = nil;
+        plainBody = [self makePlainStringContainingTitle:title andBodyString:body];
+        [mailViewController setMessageBody:plainBody isHTML:NO];
     }
     
     [self setupMailComposeViewModalTransitionStyle:mailViewController];
@@ -1211,17 +1223,17 @@
                     break;
                 case 3:
                 {
-                    self.htmlString = nil;
                     [self setDefaultBodyText];
                     [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
                 }
                     break;
                 case 4:
                 {
-                    self.htmlString = nil;
                     [self setDefaultBodyText];
+                    NSString *plainBody = nil;
+                    plainBody = [self makePlainStringContainingTitle:self.noteTitleLabel.text andBodyString:self.noteTextView.text];
                     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                    pasteboard.string = self.noteTextView.text;
+                    pasteboard.string = plainBody;
                 }
                     break;
                 case 5:

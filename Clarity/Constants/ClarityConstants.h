@@ -133,7 +133,7 @@ extern NSString * const kIS_FIRST_TIME;
 #define kINSET_LEFT_IPAD                                     0.0
 #define kINSET_BOTTOM_IPAD                                  20.0
 #define kINSET_RIGHT_IPAD                                    0.0
-#define kTEXTVIEW_PADDING_IPAD                             100.0
+#define kTEXTVIEW_PADDING_IPAD                             120.0
 #define kMOVE_TEXT_POSITION_DURATION_IPAD                   0.30
 
 #define kINSET_TOP                                          50.0
