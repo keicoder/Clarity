@@ -600,7 +600,7 @@
 }
 
 
-#pragma mark Make Plain String Containing Title 스트링
+#pragma mark Make Body String Containing Title
 
 - (NSString *)makePlainStringContainingTitle:(NSString *)titleString andBodyString:(NSString *)bodyString
 {
