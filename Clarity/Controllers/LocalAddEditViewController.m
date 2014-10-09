@@ -946,7 +946,7 @@
 - (void)showAlertView
 {
     UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Delete"
-                                                     message:@"do you really want to delete this note?"
+                                                     message:@"Do you really want to delete this note?"
                                                     delegate:self
                                            cancelButtonTitle:@"Cancel"
                                            otherButtonTitles: nil];
