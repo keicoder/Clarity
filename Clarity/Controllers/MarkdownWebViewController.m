@@ -181,7 +181,7 @@
     
     NSString *bodyString;
     if ([self.currentNote.noteBody length] == 0 && [self.currentLocalNote.noteBody length] == 0) {
-        bodyString = @"*No content*";
+        bodyString = @"*No Contents*";
     }
     else if ([self.currentNote.noteBody length] > 0 && [self.currentLocalNote.noteBody length] == 0) {
         bodyString = self.currentNote.noteBody;
@@ -226,16 +226,15 @@
 
 
 #pragma mark Action Sheet 액션
+#pragma mark HTML Attachment Document 생성
 
-#pragma mark PDF 생성
-
-- (void)createPDFDocumentWithTitle:(NSString *)title
+- (void)createHTMLAttachmentDocumentWithTitle:(NSString *)title
 {
     if (![MFMailComposeViewController canSendMail]) {
         return;
     }
     
-    [self makePDFString];
+    [self createHTMLAttachmentString];
     
     NSString *fileNameWithExtension = [NSString stringWithFormat:@"%@.html", title];
     NSString *tempPath = [FCFileManager pathForTemporaryDirectoryWithPath:fileNameWithExtension];
@@ -274,7 +273,9 @@
 }
 
 
-- (void)makePDFString
+#pragma mark make HTML Attachment 스트링
+
+- (void)createHTMLAttachmentString
 {
     NSError *error;
     self.htmlString = [[NSMutableString alloc] init];
@@ -283,9 +284,32 @@
                                    "<head>"
                                    "  <meta charset='UTF-8'/>"
                                    "  <style>%@</style>"
-                                   "</head>", [self cssUTF8String]]];
+                                   "</head>", [self cssUTF8StringForiPhoneAttachment]]];
     self.markdownString = [self makeContentString];
     [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:self.markdownString error:&error]];
+}
+
+
+#pragma mark make cssUTF8String for HTML Attachment
+
+- (NSString *)cssUTF8StringForiPhoneAttachment
+{
+    NSError *error = nil;
+    NSString *filePath;
+    if (iPad) {
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad_ForWebView" ofType:@"css"];
+    } else {
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad_ForWebView" ofType:@"css"];
+    }
+    NSString *cssString = [NSString stringWithContentsOfFile:filePath
+                                                    encoding:NSUTF8StringEncoding
+                                                       error:&error];
+    if (error != nil)
+    {
+        NSLog(@"Error: %@", error);
+        return nil;
+    }
+    return cssString;
 }
 
 
@@ -459,7 +483,7 @@
     
     [vActionSheet showC:@""
                  cancel:@"Cancel"
-                buttons:@[@"Email as PDF Attachment"]
+                buttons:@[@"Email as Attachment"]
                  result:^(int nResult)
      {
          switch (nResult)
@@ -468,10 +492,10 @@
              {
                  self.htmlString = nil;
                  if ([self.currentNote.noteTitle length] > 0 && [self.currentLocalNote.noteTitle length] == 0) {
-                     [self createPDFDocumentWithTitle:self.currentNote.noteTitle];
+                     [self createHTMLAttachmentDocumentWithTitle:self.currentNote.noteTitle];
                  }
                  else if ([self.currentLocalNote.noteTitle length] > 0 && [self.currentNote.noteTitle length] == 0) {
-                     [self createPDFDocumentWithTitle:self.currentLocalNote.noteTitle];
+                     [self createHTMLAttachmentDocumentWithTitle:self.currentLocalNote.noteTitle];
                  }
              }
                  break;
@@ -486,7 +510,7 @@
 {
     UIView *view = [event.allTouches.anyObject view];
     
-    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as PDF Attachment", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
+    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as Attachment", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
     
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:0];
     [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:1];
@@ -504,10 +528,10 @@
                  {
                      self.htmlString = nil;
                      if ([self.currentNote.noteTitle length] > 0 && [self.currentLocalNote.noteTitle length] == 0) {
-                         [self createPDFDocumentWithTitle:self.currentNote.noteTitle];
+                         [self createHTMLAttachmentDocumentWithTitle:self.currentNote.noteTitle];
                      }
                      else if ([self.currentLocalNote.noteTitle length] > 0 && [self.currentNote.noteTitle length] == 0) {
-                         [self createPDFDocumentWithTitle:self.currentLocalNote.noteTitle];
+                         [self createHTMLAttachmentDocumentWithTitle:self.currentLocalNote.noteTitle];
                      }
                  }
                      break;
