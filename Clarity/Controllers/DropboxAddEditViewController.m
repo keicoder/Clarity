@@ -1758,7 +1758,8 @@
     UIBarButtonItem *barButtonItemSeven = [[UIBarButtonItem alloc] initWithCustomView: buttonSeven];
     buttonSeven.backgroundColor = kButtonBackgroundColor;
     
-    if (iPad || [SDiPhoneVersion deviceSize] == iPhone55inch) {
+    
+    if (iPad) {
         UIButton *buttonEight = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         [buttonEight setTitle:kEight forState:UIControlStateNormal];
         [buttonEight setTitleColor:kTextNormalColor forState:UIControlStateNormal];
@@ -1798,7 +1799,53 @@
         
         NSArray *navigationBarItems = @[f, barButtonItemOne, fixed, f, barButtonItemSix, f, barButtonItemFour, f, barButtonItemFive, f, barButtonItemThree, f, barButtonItemEight, f, barButtonItemNine, f, barButtonItemSeven, f, fixed, barButtonItemTwo, f];
         self.keyboardAccessoryToolBar.items = navigationBarItems;
-    } else {
+    }
+    
+    else if ([SDiPhoneVersion deviceSize] == iPhone55inch) {
+        UIButton *buttonEight = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [buttonEight setTitle:kEight forState:UIControlStateNormal];
+        [buttonEight setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+        [buttonEight setTitleColor:kTextHighlightedColor forState:UIControlStateSelected];
+        [buttonEight setTitleColor:kTextHighlightedColor forState:UIControlStateHighlighted];
+        
+        if (iPad) {
+            buttonEight.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Medium_iPad];
+            [buttonEight setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+            buttonEight.frame = kToolBarFrame_iPad;
+        }
+        else {
+            buttonEight.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Medium_iPhone];
+            [buttonEight setContentEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+            buttonEight.frame = kToolBarFrame_iPhone;
+        }
+        [buttonEight addTarget:self action:@selector(kEightAction:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *barButtonItemEight = [[UIBarButtonItem alloc] initWithCustomView: buttonEight];
+        buttonEight.backgroundColor = kButtonBackgroundColor;
+        
+        
+        UIButton *buttonNine = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [buttonNine setTitle:kNine forState:UIControlStateNormal];
+        [buttonNine setTitleColor:kTextNormalColor forState:UIControlStateNormal];
+        [buttonNine setTitleColor:kTextHighlightedColor forState:UIControlStateSelected];
+        [buttonNine setTitleColor:kTextHighlightedColor forState:UIControlStateHighlighted];
+        if (iPad) {
+            buttonNine.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Small_iPad];
+            [buttonNine setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
+            buttonNine.frame = kToolBarFrame_iPad;
+        } else {
+            buttonNine.titleLabel.font = [UIFont fontWithName:kFont size:kFontSize_Medium_iPhone];
+            [buttonNine setContentEdgeInsets:UIEdgeInsetsMake(4, 0, 0, 0)];
+            buttonNine.frame = kToolBarFrame_iPhone;
+        }
+        [buttonNine addTarget:self action:@selector(kNineAction:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *barButtonItemNine = [[UIBarButtonItem alloc] initWithCustomView: buttonNine];
+        buttonNine.backgroundColor = kButtonBackgroundColor;
+        
+        NSArray *navigationBarItems = @[f, barButtonItemOne, fixed, f, barButtonItemSix, f, barButtonItemFour, f, barButtonItemFive, f, barButtonItemThree, f, barButtonItemEight, f, barButtonItemNine, f, barButtonItemSeven, f, fixed, barButtonItemTwo, f];
+        self.keyboardAccessoryToolBar.items = navigationBarItems;
+    }
+    
+    else {
         NSArray *navigationBarItems = @[f, barButtonItemOne, f, barButtonItemFour, f, barButtonItemFive, f, barButtonItemThree, f, barButtonItemSix, f, barButtonItemSeven, f, barButtonItemTwo, f];
         self.keyboardAccessoryToolBar.items = navigationBarItems;
     }
