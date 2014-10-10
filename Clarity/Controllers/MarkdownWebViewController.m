@@ -231,6 +231,10 @@
 
 - (void)createPDFDocumentWithTitle:(NSString *)title
 {
+    if (![MFMailComposeViewController canSendMail]) {
+        return;
+    }
+    
     [self makePDFString];
     
     NSString *fileNameWithExtension = [NSString stringWithFormat:@"%@.html", title];
@@ -242,6 +246,31 @@
     }
     
     [FCFileManager createFileAtPath:tempPath withContent:self.htmlString];
+    NSData *htmlFileData = [NSData dataWithContentsOfFile:tempPath];
+    
+    if (![MFMailComposeViewController canSendMail]) {
+        return;
+    }
+    MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+    mailViewController.mailComposeDelegate = self;
+    
+    if ([self.currentNote.noteTitle length] > 0 && [self.currentLocalNote.noteTitle length] == 0) {
+        [mailViewController setSubject:self.currentNote.noteTitle];
+    }
+    else if ([self.currentLocalNote.noteTitle length] > 0 && [self.currentNote.noteTitle length] == 0) {
+        [mailViewController setSubject:self.currentLocalNote.noteTitle];
+    }
+    
+    [mailViewController setMessageBody:@"" isHTML:YES];
+    NSString *mimeType = @"text/html";
+    [mailViewController addAttachmentData:htmlFileData mimeType:mimeType fileName:fileNameWithExtension];
+    
+    [self setupMailComposeViewModalTransitionStyle:mailViewController];
+    mailViewController.modalPresentationCapturesStatusBarAppearance = YES;
+    
+    [self presentViewController:mailViewController animated:YES completion:^ {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }];
 }
 
 
@@ -257,6 +286,37 @@
                                    "</head>", [self cssUTF8String]]];
     self.markdownString = [self makeContentString];
     [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:self.markdownString error:&error]];
+}
+
+
+#pragma mark 이메일 공유 (Mail ComposeView Modal Transition Style)
+
+- (void)setupMailComposeViewModalTransitionStyle:(MFMailComposeViewController *)mailViewController
+{
+    if (iPad) {
+        mailViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+    } else {
+        mailViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+    }
+}
+
+
+#pragma mark 델리게이트 메소드 (MFMailComposeViewControllerDelegate)
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            break;
+        case MFMailComposeResultSaved:
+            break;
+        case MFMailComposeResultSent:
+            break;
+        case MFMailComposeResultFailed:
+            break;
+    }
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -332,9 +392,6 @@
     UIColor *buttonHighlightedColor = [UIColor orangeColor];
     CGRect buttonFrame = CGRectMake(0 ,0, 40, 40);
     
-    UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    barButtonItemFixed.width = 4.0f;
-    
     
     NSString *ss = @"upload";
     UIImage *share = [UIImage imageNameForChangingColor:ss color:kWHITE_COLOR];
@@ -371,9 +428,15 @@
     
     
     if (iPad) {
+        UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        barButtonItemFixed.width = 40.0f;
+        
         NSArray *navigationBarItems = @[barButtonItemFixed, barButtonItemFullScreen, barButtonItemFixed, barButtonItemShare];
         self.navigationItem.rightBarButtonItems = navigationBarItems;
     } else {
+        UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        barButtonItemFixed.width = 4.0f;
+        
         NSArray *navigationBarItems = @[barButtonItemFullScreen, barButtonItemFixed, barButtonItemShare];
         self.navigationItem.rightBarButtonItems = navigationBarItems;
     }
