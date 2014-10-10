@@ -27,6 +27,7 @@
 #import "JGActionSheet.h"
 #import "BlankViewController.h"
 #import "FCFileManager.h"
+#import "SDiPhoneVersion.h"
 
 
 #define kHideOrShowStatusAndNavigationBarDelay  0.4
@@ -1757,8 +1758,7 @@
     UIBarButtonItem *barButtonItemSeven = [[UIBarButtonItem alloc] initWithCustomView: buttonSeven];
     buttonSeven.backgroundColor = kButtonBackgroundColor;
     
-    
-    if (iPad) {
+    if (iPad || [SDiPhoneVersion deviceSize] == iPhone55inch) {
         UIButton *buttonEight = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         [buttonEight setTitle:kEight forState:UIControlStateNormal];
         [buttonEight setTitleColor:kTextNormalColor forState:UIControlStateNormal];

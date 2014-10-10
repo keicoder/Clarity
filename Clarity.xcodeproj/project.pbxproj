@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C10EB48219E7579D00409AEE /* SDiPhoneVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = C10EB48119E7579D00409AEE /* SDiPhoneVersion.m */; };
 		C121D4EC19C93BCE0098BC94 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = C121D4EB19C93BCE0098BC94 /* Note.m */; };
 		C122902F19973A2B00460667 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122902E19973A2B00460667 /* Foundation.framework */; };
 		C122903119973A2B00460667 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C122903019973A2B00460667 /* CoreGraphics.framework */; };
@@ -122,6 +123,8 @@
 
 /* Begin PBXFileReference section */
 		62EF1565489047DBA75023BE /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		C10EB48019E7579D00409AEE /* SDiPhoneVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDiPhoneVersion.h; sourceTree = "<group>"; };
+		C10EB48119E7579D00409AEE /* SDiPhoneVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDiPhoneVersion.m; sourceTree = "<group>"; };
 		C121D4E619C93AB30098BC94 /* ClarityHD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ClarityHD 2.xcdatamodel"; sourceTree = "<group>"; };
 		C121D4EA19C93BCE0098BC94 /* Note.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Note.h; sourceTree = "<group>"; };
 		C121D4EB19C93BCE0098BC94 /* Note.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Note.m; sourceTree = "<group>"; };
@@ -330,6 +333,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C10EB47F19E7579D00409AEE /* SDiPhoneVersion */ = {
+			isa = PBXGroup;
+			children = (
+				C10EB48019E7579D00409AEE /* SDiPhoneVersion.h */,
+				C10EB48119E7579D00409AEE /* SDiPhoneVersion.m */,
+			);
+			path = SDiPhoneVersion;
+			sourceTree = "<group>";
+		};
 		C122902219973A2B00460667 = {
 			isa = PBXGroup;
 			children = (
@@ -371,6 +383,7 @@
 		C122903619973A2B00460667 /* Clarity */ = {
 			isa = PBXGroup;
 			children = (
+				C10EB47F19E7579D00409AEE /* SDiPhoneVersion */,
 				C1734D2919D8F21400813FA1 /* File */,
 				C122906319973A6400460667 /* 3rdParties */,
 				C12290DF19973B6000460667 /* HTML */,
@@ -975,6 +988,7 @@
 				C1F1CC8819DE541300E916AA /* DropboxNote.m in Sources */,
 				C12290D819973A7E00460667 /* MarkdownWebViewController.m in Sources */,
 				C12290CF19973A7E00460667 /* DropboxAddEditViewController.m in Sources */,
+				C10EB48219E7579D00409AEE /* SDiPhoneVersion.m in Sources */,
 				C1F0580C19C961BA0073530A /* UIViewController+MaryPopin.m in Sources */,
 				C12290D719973A7E00460667 /* MarkdownGuideViewController.m in Sources */,
 				C125D34519AEDA1D00D9E892 /* MTZWhatsNewFeatureCollectionViewCell.m in Sources */,
