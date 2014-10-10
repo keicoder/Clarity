@@ -35,9 +35,13 @@
 #import "UIImage+MakeThumbnail.h"
 #import "TOWebViewController.h"
 #import "UIImage+ChangeColor.h"
+#import "FCFileManager.h"
+#import <MessageUI/MessageUI.h>
+#import "DoActionSheet.h"
+#import "JGActionSheet.h"
 
 
-@interface MarkdownWebViewController () <UIWebViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIScrollViewDelegate>
+@interface MarkdownWebViewController () <UIWebViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIScrollViewDelegate, MFMailComposeViewControllerDelegate, JGActionSheetDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) TOWebViewController *toWebViewController;
@@ -52,6 +56,10 @@
 @implementation MarkdownWebViewController
 {
     BOOL _didHideNavigationBar;
+    
+    JGActionSheet *_currentAnchoredActionSheet;
+    UIView *_anchorView;
+    BOOL _anchorLeft;
 }
 
 #pragma mark - 뷰 life cycle
@@ -217,6 +225,41 @@
 }
 
 
+#pragma mark Action Sheet 액션
+
+#pragma mark PDF 생성
+
+- (void)createPDFDocumentWithTitle:(NSString *)title
+{
+    [self makePDFString];
+    
+    NSString *fileNameWithExtension = [NSString stringWithFormat:@"%@.html", title];
+    NSString *tempPath = [FCFileManager pathForTemporaryDirectoryWithPath:fileNameWithExtension];
+    
+    BOOL fileExists = [FCFileManager existsItemAtPath:tempPath];
+    if (fileExists) {
+        [FCFileManager removeItemAtPath:tempPath];
+    }
+    
+    [FCFileManager createFileAtPath:tempPath withContent:self.htmlString];
+}
+
+
+- (void)makePDFString
+{
+    NSError *error;
+    self.htmlString = [[NSMutableString alloc] init];
+    [self.htmlString appendString:[NSString stringWithFormat:@"<!DOCTYPE html>"
+                                   "<html>"
+                                   "<head>"
+                                   "  <meta charset='UTF-8'/>"
+                                   "  <style>%@</style>"
+                                   "</head>", [self cssUTF8String]]];
+    self.markdownString = [self makeContentString];
+    [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:self.markdownString error:&error]];
+}
+
+
 #pragma mark - 탭 제스처
 
 - (void)addTapGestureRecognizer
@@ -260,13 +303,6 @@
 - (void)showNavigationBar
 {
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-//    [self performSelector:@selector(showNavigationBarAfterDelay) withObject:nil afterDelay:0.2];
-}
-
-
-- (void)showNavigationBarAfterDelay
-{
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 
@@ -300,6 +336,25 @@
     barButtonItemFixed.width = 4.0f;
     
     
+    NSString *ss = @"upload";
+    UIImage *share = [UIImage imageNameForChangingColor:ss color:kWHITE_COLOR];
+    UIImage *shareH = [UIImage imageNameForChangingColor:ss color:buttonHighlightedColor];
+    UIButton *buttonShare = [UIButton buttonWithType:UIButtonTypeCustom];
+    if (iPad) {
+        [buttonShare addTarget:self action:@selector(displayJGActionSheet:withEvent:)forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        [buttonShare addTarget:self action:@selector(displayDoActionSheet:)forControlEvents:UIControlEventTouchUpInside];
+    }
+    [buttonShare setImage:share forState:UIControlStateNormal];
+    [buttonShare setImage:shareH forState:UIControlStateSelected];
+    [buttonShare setImage:shareH forState:UIControlStateHighlighted];
+    buttonShare.frame = buttonFrame;
+    float sImageInset = 10.0;
+    [buttonShare setImageEdgeInsets:UIEdgeInsetsMake(9.0, sImageInset, 7.0, sImageInset)];
+    UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithCustomView:buttonShare];
+    buttonShare.backgroundColor = tmpColor;
+    
+    
     NSString *fs = @"expand-256";
     UIImage *fullScreen = [UIImage imageNamed:fs];
     UIImage *fullScreenH = [UIImage imageNameForChangingColor:fs color:buttonHighlightedColor];
@@ -316,12 +371,147 @@
     
     
     if (iPad) {
-        NSArray *navigationBarItems = @[barButtonItemFixed, barButtonItemFullScreen];
+        NSArray *navigationBarItems = @[barButtonItemFixed, barButtonItemFullScreen, barButtonItemFixed, barButtonItemShare];
         self.navigationItem.rightBarButtonItems = navigationBarItems;
     } else {
-        NSArray *navigationBarItems = @[barButtonItemFullScreen];
+        NSArray *navigationBarItems = @[barButtonItemFullScreen, barButtonItemFixed, barButtonItemShare];
         self.navigationItem.rightBarButtonItems = navigationBarItems;
     }
+}
+
+
+#pragma mark - Do 액션 sheet (HTML 내보내기, 메일, 기타 공유 등)
+
+#pragma mark Do Action sheet
+
+- (void)displayDoActionSheet:(id)sender
+{
+    DoActionSheet *vActionSheet = [[DoActionSheet alloc] init];
+    [vActionSheet setStyle];
+    vActionSheet.dRound = 7;
+    vActionSheet.dButtonRound = 3;
+    vActionSheet.nAnimationType = 2; //2 > POP
+    vActionSheet.doDimmedColor = [UIColor colorWithWhite:0.000 alpha:0.500];
+    vActionSheet.nDestructiveIndex = 1;
+    
+    [vActionSheet showC:@""
+                 cancel:@"Cancel"
+                buttons:@[@"Email as PDF Attachment"]
+                 result:^(int nResult)
+     {
+         switch (nResult)
+         {
+             case 0:
+             {
+                 self.htmlString = nil;
+                 if ([self.currentNote.noteTitle length] > 0 && [self.currentLocalNote.noteTitle length] == 0) {
+                     [self createPDFDocumentWithTitle:self.currentNote.noteTitle];
+                 }
+                 else if ([self.currentLocalNote.noteTitle length] > 0 && [self.currentNote.noteTitle length] == 0) {
+                     [self createPDFDocumentWithTitle:self.currentLocalNote.noteTitle];
+                 }
+             }
+                 break;
+         }
+     }];
+}
+
+
+#pragma mark - JG 액션 시트
+
+- (void)displayJGActionSheet:(UIBarButtonItem *)barButtonItem withEvent:(UIEvent *)event
+{
+    UIView *view = [event.allTouches.anyObject view];
+    
+    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as PDF Attachment", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
+    
+    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:0];
+    [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:1];
+    
+    NSArray *sections = (iPad ? @[section] : @[section, [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"Cancel"] buttonStyle:JGActionSheetButtonStyleCancel]]);
+    
+    JGActionSheet *sheet = [[JGActionSheet alloc] initWithSections:sections];
+    sheet.delegate = self;
+    
+    [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath)
+     {
+         if (indexPath.section == 0) {
+             switch (indexPath.row) {
+                 case 0:
+                 {
+                     self.htmlString = nil;
+                     if ([self.currentNote.noteTitle length] > 0 && [self.currentLocalNote.noteTitle length] == 0) {
+                         [self createPDFDocumentWithTitle:self.currentNote.noteTitle];
+                     }
+                     else if ([self.currentLocalNote.noteTitle length] > 0 && [self.currentNote.noteTitle length] == 0) {
+                         [self createPDFDocumentWithTitle:self.currentLocalNote.noteTitle];
+                     }
+                 }
+                     break;
+                 case 1:
+                     break;
+                 default:
+                     break;
+             }
+         }
+         [sheet dismissAnimated:YES];
+     }];
+    
+    if (iPad) {
+        [sheet setOutsidePressBlock:^(JGActionSheet *sheet) {
+            [sheet dismissAnimated:YES];
+        }];
+        
+        CGPoint point = (CGPoint){CGRectGetMidX(view.bounds), CGRectGetMaxY(view.bounds)};
+        
+        point = [self.navigationController.view convertPoint:point fromView:view];
+        
+        _currentAnchoredActionSheet = sheet;
+        _anchorView = view;
+        _anchorLeft = NO;
+        
+        [sheet showFromPoint:point inView:self.navigationController.view arrowDirection:JGActionSheetArrowDirectionTop animated:YES];
+    }
+    else {
+        [sheet showInView:self.navigationController.view animated:YES];
+    }
+}
+
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (!iOS7) {
+        [self.navigationController.view.superview bringSubviewToFront:self.navigationController.view]; //Use this on iOS < 7 to prevent the UINavigationBar from overlapping your action sheet!
+    }
+    
+    if (_currentAnchoredActionSheet) {
+        UIView *view = _anchorView;
+        
+        CGPoint point = (_anchorLeft ? (CGPoint){-5.0f, CGRectGetMidY(view.bounds)} : (CGPoint){CGRectGetMidX(view.bounds), CGRectGetMaxY(view.bounds)});
+        
+        point = [self.navigationController.view convertPoint:point fromView:view];
+        
+        [_currentAnchoredActionSheet moveToPoint:point arrowDirection:(_anchorLeft ? JGActionSheetArrowDirectionRight : JGActionSheetArrowDirectionTop) animated:NO];
+    }
+}
+
+
+#pragma mark JGActionSheet Delegate
+
+- (void)actionSheetWillPresent:(JGActionSheet *)actionSheet {
+    
+}
+
+- (void)actionSheetDidPresent:(JGActionSheet *)actionSheet {
+    
+}
+
+- (void)actionSheetWillDismiss:(JGActionSheet *)actionSheet {
+    
+    _currentAnchoredActionSheet = nil;
+}
+
+- (void)actionSheetDidDismiss:(JGActionSheet *)actionSheet {
+    
 }
 
 

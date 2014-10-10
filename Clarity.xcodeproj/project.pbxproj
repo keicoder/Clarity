@@ -95,8 +95,6 @@
 		C1ABF0CF19985CF400E622CA /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = C1ABF0CC19985CF400E622CA /* UIViewController+JASidePanel.m */; };
 		C1E7469A19E4D82A00FCACE5 /* jMarkdown_iPhone.css in Resources */ = {isa = PBXBuildFile; fileRef = C1E7469919E4D82A00FCACE5 /* jMarkdown_iPhone.css */; };
 		C1E7469C19E4D99700FCACE5 /* jMarkdown_iPhone_ForWebView.css in Resources */ = {isa = PBXBuildFile; fileRef = C1E7469B19E4D99700FCACE5 /* jMarkdown_iPhone_ForWebView.css */; };
-		C1E74E7219AEFE1500AA3399 /* BNHtmlPdfKit.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E74E7119AEFE1500AA3399 /* BNHtmlPdfKit.m */; };
-		C1E74E7619AEFE2A00AA3399 /* NDHTMLtoPDF.m in Sources */ = {isa = PBXBuildFile; fileRef = C1E74E7519AEFE2A00AA3399 /* NDHTMLtoPDF.m */; };
 		C1EF466D19D7F9C200CD7E32 /* TOWebViewControllerLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C1EF465C19D7F9C200CD7E32 /* TOWebViewControllerLocalizable.strings */; };
 		C1EF466E19D7F9C200CD7E32 /* TOActivityChrome.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF466419D7F9C200CD7E32 /* TOActivityChrome.m */; };
 		C1EF466F19D7F9C200CD7E32 /* TOActivitySafari.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF466619D7F9C200CD7E32 /* TOActivitySafari.m */; };
@@ -268,10 +266,6 @@
 		C1ADEA9619CD67E800C4DDE0 /* ClarityHD 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ClarityHD 3.xcdatamodel"; sourceTree = "<group>"; };
 		C1E7469919E4D82A00FCACE5 /* jMarkdown_iPhone.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = jMarkdown_iPhone.css; sourceTree = "<group>"; };
 		C1E7469B19E4D99700FCACE5 /* jMarkdown_iPhone_ForWebView.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = jMarkdown_iPhone_ForWebView.css; sourceTree = "<group>"; };
-		C1E74E7019AEFE1500AA3399 /* BNHtmlPdfKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNHtmlPdfKit.h; sourceTree = "<group>"; };
-		C1E74E7119AEFE1500AA3399 /* BNHtmlPdfKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNHtmlPdfKit.m; sourceTree = "<group>"; };
-		C1E74E7419AEFE2A00AA3399 /* NDHTMLtoPDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDHTMLtoPDF.h; sourceTree = "<group>"; };
-		C1E74E7519AEFE2A00AA3399 /* NDHTMLtoPDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NDHTMLtoPDF.m; sourceTree = "<group>"; };
 		C1E74E7919AEFED500AA3399 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C1EF465D19D7F9C200CD7E32 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/TOWebViewControllerLocalizable.strings; sourceTree = "<group>"; };
 		C1EF465E19D7F9C200CD7E32 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/TOWebViewControllerLocalizable.strings; sourceTree = "<group>"; };
@@ -435,8 +429,6 @@
 				C1EF465B19D7F9C200CD7E32 /* TOWebViewController */,
 				C12FE79519D12014001209B2 /* JGActionSheet */,
 				C1F0580919C961BA0073530A /* MaryPopin */,
-				C1E74E7319AEFE2A00AA3399 /* NDHTMLtoPDF */,
-				C1E74E6F19AEFE1500AA3399 /* BNHtmlPdfKit */,
 				C125D32B19AEDA1D00D9E892 /* WhatsNew */,
 				C1ABF0C619985CF400E622CA /* JASidePanels */,
 				C122906419973A6400460667 /* DoActionSheet */,
@@ -733,24 +725,6 @@
 			path = JASidePanels;
 			sourceTree = "<group>";
 		};
-		C1E74E6F19AEFE1500AA3399 /* BNHtmlPdfKit */ = {
-			isa = PBXGroup;
-			children = (
-				C1E74E7019AEFE1500AA3399 /* BNHtmlPdfKit.h */,
-				C1E74E7119AEFE1500AA3399 /* BNHtmlPdfKit.m */,
-			);
-			path = BNHtmlPdfKit;
-			sourceTree = "<group>";
-		};
-		C1E74E7319AEFE2A00AA3399 /* NDHTMLtoPDF */ = {
-			isa = PBXGroup;
-			children = (
-				C1E74E7419AEFE2A00AA3399 /* NDHTMLtoPDF.h */,
-				C1E74E7519AEFE2A00AA3399 /* NDHTMLtoPDF.m */,
-			);
-			path = NDHTMLtoPDF;
-			sourceTree = "<group>";
-		};
 		C1EF465B19D7F9C200CD7E32 /* TOWebViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -959,7 +933,6 @@
 				C121D4EC19C93BCE0098BC94 /* Note.m in Sources */,
 				C12290F919973BAA00460667 /* JTextView.m in Sources */,
 				C12290FC19973BAA00460667 /* NoteTableViewCell.m in Sources */,
-				C1E74E7619AEFE2A00AA3399 /* NDHTMLtoPDF.m in Sources */,
 				C122908A19973A6400460667 /* DoActionSheet.m in Sources */,
 				C12290F819973BAA00460667 /* BackgroundLayer.m in Sources */,
 				C122908E19973A6400460667 /* UIImage+ResizeMagick.m in Sources */,
@@ -995,7 +968,6 @@
 				C125D34819AEDA1D00D9E892 /* NSLayoutConstraint+Common.m in Sources */,
 				C122903D19973A2B00460667 /* main.m in Sources */,
 				C122910819973BE100460667 /* NoteDataManager.m in Sources */,
-				C1E74E7219AEFE1500AA3399 /* BNHtmlPdfKit.m in Sources */,
 				C122910C19973CE100460667 /* Clarity.xcdatamodeld in Sources */,
 				C12290A319973A7200460667 /* NSUserDefaults+Extension.m in Sources */,
 				C12FE79819D12014001209B2 /* JGActionSheet.m in Sources */,

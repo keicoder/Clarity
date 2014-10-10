@@ -21,8 +21,6 @@
 #import "NoteTitlePopinViewController.h"
 #import "UIButtonPressAndHold.h"
 #import "NSUserDefaults+Extension.h"
-#import "NDHTMLtoPDF.h"
-#import "BNHtmlPdfKit.h"
 #import "UIImage+ResizeMagick.h"
 #import "JGActionSheet.h"
 #import "BlankViewController.h"
@@ -34,7 +32,7 @@
 #define kAlreadyPopInViewLaunched               @"alreadyPopInViewLaunched"
 
 
-@interface LocalAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, NDHTMLtoPDFDelegate, BNHtmlPdfKitDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate, UIAlertViewDelegate>
+@interface LocalAddEditViewController () <UITextViewDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIPrintInteractionControllerDelegate, UIGestureRecognizerDelegate, FRLayeredNavigationControllerDelegate, UIPopoverControllerDelegate, JGActionSheetDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) JTextView *noteTextView;
@@ -45,7 +43,6 @@
 @property (nonatomic, strong) UIButton *buttonStar;
 @property (nonatomic, strong) UIButton *buttonForFullscreen;
 @property (nonatomic, strong) UIImage *starImage;
-@property (nonatomic, strong) NDHTMLtoPDF *pdfCreator;
 @property (nonatomic, strong) UIToolbar *keyboardAccessoryToolBar;
 
 @end
@@ -60,8 +57,6 @@
     JGActionSheet *_currentAnchoredActionSheet;
     UIView *_anchorView;
     BOOL _anchorLeft;
-    
-    BNHtmlPdfKit *_htmlPdfKit;
 }
 
 
@@ -601,16 +596,6 @@
 }
 
 
-#pragma mark Make Body String Containing Title
-
-- (NSString *)makePlainStringContainingTitle:(NSString *)titleString andBodyString:(NSString *)bodyString
-{
-    NSString *newline = @"\n\n";
-    NSString *plainEmailBodyStringContainingTitle = [NSString stringWithFormat:@"%@%@%@", titleString, newline, bodyString];
-    return plainEmailBodyStringContainingTitle;
-}
-
-
 #pragma mark HTML 스트링 Parcing
 #pragma mark HTML 스트링
 
@@ -984,55 +969,6 @@
 
 
 #pragma mark Action Sheet 액션
-
-#pragma mark PDF 생성
-
-- (void)createPDFDocument:(NSString *)htmlString
-{
-    //    self.pdfCreator.delegate = self;
-    //
-    NSString *path = [[[NSString stringWithFormat:@"~/Documents/%@.pdf", self.noteTitleLabel.text] stringByExpandingTildeInPath] stringByExpandingTildeInPath];
-    //    CGSize size = kPaperSizeA4;
-    //    UIEdgeInsets insets = UIEdgeInsetsMake(20, 20, 20, 20);
-    //
-    //    self.pdfCreator = [NDHTMLtoPDF createPDFWithHTML:htmlString pathForPDF:path pageSize:size margins:insets successBlock:^(NDHTMLtoPDF *htmlToPDF) {
-    //        NSString *result = [NSString stringWithFormat:@"HTMLtoPDF did succeed (%@ / %@)", htmlToPDF, htmlToPDF.PDFpath];
-    //        NSLog(@"%@",result);
-    //
-    //    } errorBlock:^(NDHTMLtoPDF *htmlToPDF) {
-    //        NSString *result = [NSString stringWithFormat:@"HTMLtoPDF did fail (%@)", htmlToPDF];
-    //        NSLog(@"%@",result);
-    //        [self showErrorMessageView];
-    //    }];
-    
-    
-    _htmlPdfKit = [[BNHtmlPdfKit alloc] init];
-    _htmlPdfKit.delegate = self;
-    _htmlPdfKit.pageSize = BNPageSizeA4;
-    [_htmlPdfKit saveHtmlAsPdf:htmlString toFile:path];
-}
-
-
-#pragma mark BNHtmlPdfKit Delegate
-
-- (void)htmlPdfKit:(BNHtmlPdfKit *)htmlPdfKit didSavePdfData:(NSData *)data
-{
-    
-}
-
-
-- (void)htmlPdfKit:(BNHtmlPdfKit *)htmlPdfKit didSavePdfFile:(NSString *)file
-{
-    NSLog(@"pdf file saved");
-}
-
-
-- (void)htmlPdfKit:(BNHtmlPdfKit *)htmlPdfKit didFailWithError:(NSError *)error
-{
-    NSLog(@"pdf error");
-}
-
-
 #pragma mark 이메일 공유 (Mail ComposeView Modal Transition Style)
 
 - (void)setupMailComposeViewModalTransitionStyle:(MFMailComposeViewController *)mailViewController
@@ -1110,6 +1046,16 @@
     [self presentViewController:mailViewController animated:YES completion:^ {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     }];
+}
+
+
+#pragma mark Make Body String Containing Title
+
+- (NSString *)makePlainStringContainingTitle:(NSString *)titleString andBodyString:(NSString *)bodyString
+{
+    NSString *newline = @"\n\n";
+    NSString *plainEmailBodyStringContainingTitle = [NSString stringWithFormat:@"%@%@%@", titleString, newline, bodyString];
+    return plainEmailBodyStringContainingTitle;
 }
 
 
