@@ -96,17 +96,6 @@
 }
 
 
-#pragma mark - 마크다운 웹 뷰 속성
-
-- (void)assignAttributeToMarkdownWebView
-{
-    self.markdownWebView.delegate = self;
-    self.markdownWebView.scrollView.delegate = self;
-    self.markdownWebView.scrollView.scrollEnabled = YES;
-    self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-}
-
-
 #pragma mark - UIWebView Delegate (마크다운 웹 뷰 Finish Load)
 
 - (void)webViewDidFinishLoad:(UIWebView *)aWebView
@@ -122,6 +111,37 @@
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
 {
     self.markdownWebView.scrollView.maximumZoomScale = 20;
+}
+
+
+#pragma mark - 마크다운 웹 뷰 속성
+
+- (void)assignAttributeToMarkdownWebView
+{
+    self.markdownWebView.delegate = self;
+    self.markdownWebView.scrollView.delegate = self;
+    self.markdownWebView.scrollView.scrollEnabled = YES;
+    self.markdownWebView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+}
+
+
+#pragma mark - 웹 뷰
+
+-(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    if ( navigationType == UIWebViewNavigationTypeLinkClicked ) {
+        if (self.navigationController.navigationBarHidden == YES) {
+            _didHideNavigationBar = !_didHideNavigationBar;
+            [self showStatusBar];
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+        }
+        NSURL *url = nil;
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [request URL]]];
+        self.toWebViewController = [[TOWebViewController alloc] initWithURL:url];
+        [self.navigationController pushViewController:self.toWebViewController animated:YES];
+        return NO;
+    }
+    return YES;
 }
 
 
@@ -205,27 +225,7 @@
 }
 
 
-#pragma mark - 웹 뷰
-
--(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    if ( navigationType == UIWebViewNavigationTypeLinkClicked ) {
-        if (self.navigationController.navigationBarHidden == YES) {
-            _didHideNavigationBar = !_didHideNavigationBar;
-            [self showStatusBar];
-            [self.navigationController setNavigationBarHidden:NO animated:YES];
-        }
-        NSURL *url = nil;
-        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [request URL]]];
-        self.toWebViewController = [[TOWebViewController alloc] initWithURL:url];
-        [self.navigationController pushViewController:self.toWebViewController animated:YES];
-        return NO;
-    }
-    return YES;
-}
-
-
-#pragma mark Action Sheet 액션
+#pragma mark - Action Sheet - 액션
 #pragma mark HTML Attachment Document 생성
 
 - (void)createHTMLAttachmentDocumentWithTitle:(NSString *)title
@@ -290,7 +290,7 @@
 }
 
 
-#pragma mark make cssUTF8String for HTML Attachment
+#pragma mark Make CSSUTF8String for HTML Attachment
 
 - (NSString *)cssUTF8StringForiPhoneAttachment
 {
@@ -310,160 +310,6 @@
         return nil;
     }
     return cssString;
-}
-
-
-#pragma mark 이메일 공유 (Mail ComposeView Modal Transition Style)
-
-- (void)setupMailComposeViewModalTransitionStyle:(MFMailComposeViewController *)mailViewController
-{
-    if (iPad) {
-        mailViewController.modalPresentationStyle = UIModalPresentationFormSheet;
-    } else {
-        mailViewController.modalPresentationStyle = UIModalPresentationPageSheet;
-    }
-}
-
-
-#pragma mark 델리게이트 메소드 (MFMailComposeViewControllerDelegate)
-
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
-{
-    switch (result)
-    {
-        case MFMailComposeResultCancelled:
-            break;
-        case MFMailComposeResultSaved:
-            break;
-        case MFMailComposeResultSent:
-            break;
-        case MFMailComposeResultFailed:
-            break;
-    }
-    [controller dismissViewControllerAnimated:YES completion:nil];
-}
-
-
-#pragma mark - 탭 제스처
-
-- (void)addTapGestureRecognizer
-{
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    tapGesture.delegate = self;
-    tapGesture.numberOfTapsRequired = 2;
-    [self.markdownWebView addGestureRecognizer:tapGesture];
-}
-
-
-- (void)handleTap:(UITapGestureRecognizer *)gesture
-{
-    if ( _didHideNavigationBar == NO)
-    {
-        _didHideNavigationBar = !_didHideNavigationBar;
-        [self hideStatusBar];
-        [self hideNavigationBar];
-        [self showButtonForFullscreenWithAnimation];
-    }
-    else
-    {
-        _didHideNavigationBar = !_didHideNavigationBar;
-        [self showStatusBar];
-        [self showNavigationBar];
-        [self hideButtonForFullscreenWithAnimation];
-    }
-}
-
-
-#pragma mark 제스처 Recognizer 델리게이트
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
-{
-    return YES;
-}
-
-
-#pragma mark 내비게이션 및 상태 바 컨트롤
-
-- (void)showNavigationBar
-{
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-}
-
-
-- (void)hideNavigationBar
-{
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-
-
-- (void)showStatusBar
-{
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-}
-
-
-- (void)hideStatusBar
-{
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-}
-
-
-#pragma mark - 바 버튼
-
-- (void)addBarButtonItems
-{
-    UIColor *tmpColor = [UIColor clearColor];
-    UIColor *buttonHighlightedColor = [UIColor orangeColor];
-    CGRect buttonFrame = CGRectMake(0 ,0, 40, 40);
-    
-    
-    NSString *ss = @"upload";
-    UIImage *share = [UIImage imageNameForChangingColor:ss color:kWHITE_COLOR];
-    UIImage *shareH = [UIImage imageNameForChangingColor:ss color:buttonHighlightedColor];
-    UIButton *buttonShare = [UIButton buttonWithType:UIButtonTypeCustom];
-    if (iPad) {
-        [buttonShare addTarget:self action:@selector(displayJGActionSheet:withEvent:)forControlEvents:UIControlEventTouchUpInside];
-    } else {
-        [buttonShare addTarget:self action:@selector(displayDoActionSheet:)forControlEvents:UIControlEventTouchUpInside];
-    }
-    [buttonShare setImage:share forState:UIControlStateNormal];
-    [buttonShare setImage:shareH forState:UIControlStateSelected];
-    [buttonShare setImage:shareH forState:UIControlStateHighlighted];
-    buttonShare.frame = buttonFrame;
-    float sImageInset = 10.0;
-    [buttonShare setImageEdgeInsets:UIEdgeInsetsMake(9.0, sImageInset, 7.0, sImageInset)];
-    UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithCustomView:buttonShare];
-    buttonShare.backgroundColor = tmpColor;
-    
-    
-    NSString *fs = @"expand-256";
-    UIImage *fullScreen = [UIImage imageNamed:fs];
-    UIImage *fullScreenH = [UIImage imageNameForChangingColor:fs color:buttonHighlightedColor];
-    UIButton *buttonFullScreen = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buttonFullScreen addTarget:self action:@selector(barButtonItemFullScreenPressed:)forControlEvents:UIControlEventTouchUpInside];
-    [buttonFullScreen setImage:fullScreen forState:UIControlStateNormal];
-    [buttonFullScreen setImage:fullScreenH forState:UIControlStateSelected];
-    [buttonFullScreen setImage:fullScreenH forState:UIControlStateHighlighted];
-    buttonFullScreen.frame = buttonFrame;
-    float fImageInset = 10.0;
-    [buttonFullScreen setImageEdgeInsets:UIEdgeInsetsMake(12.0, fImageInset, 8.0, fImageInset)];
-    UIBarButtonItem *barButtonItemFullScreen = [[UIBarButtonItem alloc] initWithCustomView:buttonFullScreen];
-    buttonFullScreen.backgroundColor = tmpColor;
-    
-    
-    if (iPad) {
-        UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        barButtonItemFixed.width = 40.0f;
-        
-        NSArray *navigationBarItems = @[barButtonItemFixed, barButtonItemFullScreen, barButtonItemFixed, barButtonItemShare];
-        self.navigationItem.rightBarButtonItems = navigationBarItems;
-    } else {
-        UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        barButtonItemFixed.width = 4.0f;
-        
-        NSArray *navigationBarItems = @[barButtonItemFullScreen, barButtonItemFixed, barButtonItemShare];
-        self.navigationItem.rightBarButtonItems = navigationBarItems;
-    }
 }
 
 
@@ -567,7 +413,7 @@
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     if (!iOS7) {
-        [self.navigationController.view.superview bringSubviewToFront:self.navigationController.view]; //Use this on iOS < 7 to prevent the UINavigationBar from overlapping your action sheet!
+        [self.navigationController.view.superview bringSubviewToFront:self.navigationController.view]; //iOS < 7 to prevent the UINavigationBar from overlapping your action sheet!
     }
     
     if (_currentAnchoredActionSheet) {
@@ -673,6 +519,182 @@
         [self hideButtonForFullscreenWithAnimation];
         _didHideNavigationBar = !_didHideNavigationBar;
     }
+}
+
+
+#pragma mark - 탭 제스처
+
+- (void)addTapGestureRecognizer
+{
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    tapGesture.delegate = self;
+    tapGesture.numberOfTapsRequired = 2;
+    [self.markdownWebView addGestureRecognizer:tapGesture];
+}
+
+
+- (void)handleTap:(UITapGestureRecognizer *)gesture
+{
+    if ( _didHideNavigationBar == NO)
+    {
+        _didHideNavigationBar = !_didHideNavigationBar;
+        [self hideStatusBar];
+        [self hideNavigationBar];
+        [self showButtonForFullscreenWithAnimation];
+    }
+    else
+    {
+        _didHideNavigationBar = !_didHideNavigationBar;
+        [self showStatusBar];
+        [self showNavigationBar];
+        [self hideButtonForFullscreenWithAnimation];
+    }
+}
+
+
+#pragma mark 제스처 Recognizer 델리게이트
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
+
+
+#pragma mark - 바 버튼
+
+- (void)addBarButtonItems
+{
+    UIColor *tmpColor = [UIColor clearColor];
+    UIColor *buttonHighlightedColor = [UIColor orangeColor];
+    CGRect buttonFrame = CGRectMake(0 ,0, 40, 40);
+    
+    
+    NSString *ss = @"upload";
+    UIImage *share = [UIImage imageNameForChangingColor:ss color:kWHITE_COLOR];
+    UIImage *shareH = [UIImage imageNameForChangingColor:ss color:buttonHighlightedColor];
+    UIButton *buttonShare = [UIButton buttonWithType:UIButtonTypeCustom];
+    if (iPad) {
+        [buttonShare addTarget:self action:@selector(displayJGActionSheet:withEvent:)forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        [buttonShare addTarget:self action:@selector(displayDoActionSheet:)forControlEvents:UIControlEventTouchUpInside];
+    }
+    [buttonShare setImage:share forState:UIControlStateNormal];
+    [buttonShare setImage:shareH forState:UIControlStateSelected];
+    [buttonShare setImage:shareH forState:UIControlStateHighlighted];
+    buttonShare.frame = buttonFrame;
+    float sImageInset = 10.0;
+    [buttonShare setImageEdgeInsets:UIEdgeInsetsMake(9.0, sImageInset, 7.0, sImageInset)];
+    UIBarButtonItem *barButtonItemShare = [[UIBarButtonItem alloc] initWithCustomView:buttonShare];
+    buttonShare.backgroundColor = tmpColor;
+    
+    
+    NSString *fs = @"expand-256";
+    UIImage *fullScreen = [UIImage imageNamed:fs];
+    UIImage *fullScreenH = [UIImage imageNameForChangingColor:fs color:buttonHighlightedColor];
+    UIButton *buttonFullScreen = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonFullScreen addTarget:self action:@selector(barButtonItemFullScreenPressed:)forControlEvents:UIControlEventTouchUpInside];
+    [buttonFullScreen setImage:fullScreen forState:UIControlStateNormal];
+    [buttonFullScreen setImage:fullScreenH forState:UIControlStateSelected];
+    [buttonFullScreen setImage:fullScreenH forState:UIControlStateHighlighted];
+    buttonFullScreen.frame = buttonFrame;
+    float fImageInset = 10.0;
+    [buttonFullScreen setImageEdgeInsets:UIEdgeInsetsMake(12.0, fImageInset, 8.0, fImageInset)];
+    UIBarButtonItem *barButtonItemFullScreen = [[UIBarButtonItem alloc] initWithCustomView:buttonFullScreen];
+    buttonFullScreen.backgroundColor = tmpColor;
+    
+    
+    if (iPad) {
+        UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        barButtonItemFixed.width = 40.0f;
+        
+        NSArray *navigationBarItems = @[barButtonItemFixed, barButtonItemFullScreen, barButtonItemFixed, barButtonItemShare];
+        self.navigationItem.rightBarButtonItems = navigationBarItems;
+    } else {
+        UIBarButtonItem *barButtonItemFixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        barButtonItemFixed.width = 4.0f;
+        
+        NSArray *navigationBarItems = @[barButtonItemFullScreen, barButtonItemFixed, barButtonItemShare];
+        self.navigationItem.rightBarButtonItems = navigationBarItems;
+    }
+}
+
+
+#pragma mark 내비게이션 및 상태 바 컨트롤
+
+- (void)showNavigationBar
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
+
+- (void)hideNavigationBar
+{
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
+
+- (void)showStatusBar
+{
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+}
+
+
+- (void)hideStatusBar
+{
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+}
+
+
+#pragma mark 이메일 공유 (Mail ComposeView Modal Transition Style)
+
+- (void)setupMailComposeViewModalTransitionStyle:(MFMailComposeViewController *)mailViewController
+{
+    if (iPad) {
+        mailViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+    } else {
+        mailViewController.modalPresentationStyle = UIModalPresentationPageSheet;
+    }
+}
+
+
+#pragma mark MFMailComposeViewController 델리게이트 메소드
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            break;
+        case MFMailComposeResultSaved:
+            break;
+        case MFMailComposeResultSent:
+            break;
+        case MFMailComposeResultFailed:
+            break;
+    }
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+#pragma mark Create PDF
+
+- (void)generatePDFUsingDelegate:(id)sender
+{
+    //    NSString *htmlFileNameWithExtension = [NSString stringWithFormat:@"%@.html", self.currentNote.noteTitle];
+    //    NSString *htmlTempPath = [FCFileManager pathForTemporaryDirectoryWithPath:htmlFileNameWithExtension];
+    //    NSLog (@"htmlTempPath: %@\n", htmlTempPath);
+    //
+    //    NSURL *htmlFileURL = [[NSURL alloc] initFileURLWithPath:htmlTempPath];
+    //    NSLog (@"htmlFileURL: %@\n", htmlFileURL);
+    //
+    //    NSString *pdfFileNameWithExtension = [NSString stringWithFormat:@"%@.pdf", self.currentNote.noteTitle];
+    //    NSString *pdfTempPath = [FCFileManager pathForTemporaryDirectoryWithPath:pdfFileNameWithExtension];
+    //
+    //    BOOL fileExists = [FCFileManager existsItemAtPath:pdfTempPath];
+    //    if (fileExists) {
+    //        [FCFileManager removeItemAtPath:pdfTempPath];
+    //    }
+    
 }
 
 
