@@ -848,9 +848,7 @@
              case 1:
              {
                  self.htmlString = nil;
-                 [self setDefaultBodyText];
-                 [self createHTMLString];
-                 [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlStringForAttachment:self.htmlString];
+                 [self createHTMLAttachmentDocumentWithTitle:self.currentNote.noteTitle];
              }
                  break;
              case 2:
@@ -981,13 +979,16 @@
 }
 
 
-#pragma mark 이메일 공유 (email with HTML file)
+#pragma mark HTML Attachment Document 생성
 
-- (void)sendEmailWithTitle:(NSString *)title withHtmlStringForAttachment:(NSString *)htmlString
+- (void)createHTMLAttachmentDocumentWithTitle:(NSString *)title
 {
     if (![MFMailComposeViewController canSendMail]) {
         return;
     }
+    
+    [self createHTMLAttachmentString];
+    
     NSString *fileNameWithExtension = [NSString stringWithFormat:@"%@.html", title];
     NSString *tempPath = [FCFileManager pathForTemporaryDirectoryWithPath:fileNameWithExtension];
     
@@ -996,7 +997,7 @@
         [FCFileManager removeItemAtPath:tempPath];
     }
     
-    [FCFileManager createFileAtPath:tempPath withContent:htmlString];
+    [FCFileManager createFileAtPath:tempPath withContent:self.htmlString];
     NSData *htmlFileData = [NSData dataWithContentsOfFile:tempPath];
     
     if (![MFMailComposeViewController canSendMail]) {
@@ -1005,7 +1006,8 @@
     MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
     mailViewController.mailComposeDelegate = self;
     
-    [mailViewController setSubject:self.noteTitleLabel.text];
+    [mailViewController setSubject:self.currentNote.noteTitle];
+    
     [mailViewController setMessageBody:@"" isHTML:YES];
     NSString *mimeType = @"text/html";
     [mailViewController addAttachmentData:htmlFileData mimeType:mimeType fileName:fileNameWithExtension];
@@ -1016,6 +1018,79 @@
     [self presentViewController:mailViewController animated:YES completion:^ {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     }];
+}
+
+
+#pragma mark make HTML Attachment 스트링
+
+- (void)createHTMLAttachmentString
+{
+    NSError *error;
+    self.htmlString = [[NSMutableString alloc] init];
+    [self.htmlString appendString:[NSString stringWithFormat:@"<!DOCTYPE html>"
+                                   "<html>"
+                                   "<head>"
+                                   "  <meta charset='UTF-8'/>"
+                                   "  <style>%@</style>"
+                                   "</head>", [self cssUTF8StringForiPhoneAttachment]]];
+    NSString *htmlString = [self makeContentString];
+    [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:htmlString error:&error]];
+}
+
+
+#pragma mark make cssUTF8String for HTML Attachment
+
+- (NSString *)cssUTF8StringForiPhoneAttachment
+{
+    NSError *error = nil;
+    NSString *filePath;
+    if (iPad) {
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad_ForWebView" ofType:@"css"];
+    } else {
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad_ForWebView" ofType:@"css"];
+    }
+    NSString *cssString = [NSString stringWithContentsOfFile:filePath
+                                                    encoding:NSUTF8StringEncoding
+                                                       error:&error];
+    if (error != nil)
+    {
+        NSLog(@"Error: %@", error);
+        return nil;
+    }
+    return cssString;
+}
+
+
+- (NSString *)makeContentString
+{
+    NSError *error = nil;
+    
+    NSString *titleString;
+    if ([self.currentNote.noteTitle length] == 0) {
+        titleString = @"# No Title";
+    } else {
+        titleString = self.currentNote.noteTitle;
+    }
+    
+    NSString *bodyString;
+    if ([self.currentNote.noteBody length] == 0) {
+        bodyString = @"*No Contents*";
+    } else {
+        bodyString = self.currentNote.noteBody;
+    }
+    
+    NSString *hash = @"# ";
+    NSString *newline = @"\n\n";
+    NSString *concatenateString;
+    
+    concatenateString = [NSString stringWithFormat:@"%@%@%@%@", hash, titleString, newline, bodyString];
+    
+    if (error != nil) {
+        NSLog(@"Error: %@", error.localizedDescription);
+        return nil;
+    }
+    
+    return concatenateString;
 }
 
 
@@ -1154,9 +1229,7 @@
                 case 1:
                 {
                     self.htmlString = nil;
-                    [self setDefaultBodyText];
-                    [self createHTMLString];
-                    [self sendEmailWithTitle:self.noteTitleLabel.text withHtmlStringForAttachment:self.htmlString];
+                    [self createHTMLAttachmentDocumentWithTitle:self.currentNote.noteTitle];
                 }
                     break;
                 case 2:
