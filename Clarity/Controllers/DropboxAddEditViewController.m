@@ -863,7 +863,7 @@
                           case 1:
                           {
                               self.htmlString = nil;
-                              [self createHTMLAttachmentDocumentWithTitle:self.currentNote.noteTitle];
+                              [self createHTMLAttachmentDocumentWithTitle:self.noteTitleLabel.text];
                           }
                               break;
                           case 2:
@@ -942,17 +942,6 @@
                  break;
          }
      }];
-}
-
-
-#pragma mark 디폴트 바디 텍스트
-
-- (void)setDefaultBodyText
-{
-    NSString *noContents = @"*No Contents*";
-    if ([self.noteTextView.text length] == 0) {
-        self.noteTextView.text = noContents;
-    }
 }
 
 
@@ -1260,7 +1249,6 @@
                 case 0:
                 {
                     self.htmlString = nil;
-                    //[self setDefaultBodyText];
                     [self createHTMLString];
                     [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];
                 }
@@ -1268,13 +1256,12 @@
                 case 1:
                 {
                     self.htmlString = nil;
-                    [self createHTMLAttachmentDocumentWithTitle:self.currentNote.noteTitle];
+                    [self createHTMLAttachmentDocumentWithTitle:self.noteTitleLabel.text];
                 }
                     break;
                 case 2:
                 {
                     self.htmlString = nil;
-                    //[self setDefaultBodyText];
                     [self createHTMLString];
                     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                     pasteboard.string = self.htmlString;
@@ -1282,13 +1269,13 @@
                     break;
                 case 3:
                 {
-                    //[self setDefaultBodyText];
+                    self.htmlString = nil;
                     [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
                 }
                     break;
                 case 4:
                 {
-                    //[self setDefaultBodyText];
+                    self.htmlString = nil;
                     NSString *plainBody = nil;
                     plainBody = [self makePlainStringContainingTitle:self.noteTitleLabel.text andBodyString:self.noteTextView.text];
                     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
