@@ -607,7 +607,7 @@
     NSString *newline = @"\n\n";
     NSString *doubleBlank = @"  ";
     self.htmlString = [[NSMutableString alloc] init];
-    NSString *htmlString = [NSString stringWithFormat:@"%@%@%@%@%@", hash, self.currentNote.noteTitle, newline, self.currentNote.noteBody, doubleBlank];
+    NSString *htmlString = [NSString stringWithFormat:@"%@%@%@%@%@", hash, self.noteTitleLabel.text, newline, self.noteTextView.text, doubleBlank];
     
     [self.htmlString appendString:[NSString stringWithFormat:@"<html>"
                                    " <head>"
@@ -843,9 +843,8 @@
                  [vActionSheet setStyle];
                  vActionSheet.dRound = 7;
                  vActionSheet.dButtonRound = 3;
-                 vActionSheet.nAnimationType = 2; //2 > POP
+                 vActionSheet.nAnimationType = 2;
                  vActionSheet.doDimmedColor = [UIColor colorWithWhite:0.000 alpha:0.500];
-                 //vActionSheet.nDestructiveIndex = 3;
                  
                  [vActionSheet showC:@""
                               cancel:@"Cancel"
@@ -857,7 +856,6 @@
                           case 0:
                           {
                               self.htmlString = nil;
-                              [self setDefaultBodyText];
                               [self createHTMLString];
                               [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];
                           }
@@ -871,7 +869,6 @@
                           case 2:
                           {
                               self.htmlString = nil;
-                              [self setDefaultBodyText];
                               [self createHTMLString];
                               UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                               pasteboard.string = self.htmlString;
@@ -888,9 +885,8 @@
                  [vActionSheet setStyle];
                  vActionSheet.dRound = 7;
                  vActionSheet.dButtonRound = 3;
-                 vActionSheet.nAnimationType = 2; //2 > POP
+                 vActionSheet.nAnimationType = 2;
                  vActionSheet.doDimmedColor = [UIColor colorWithWhite:0.000 alpha:0.500];
-                 //vActionSheet.nDestructiveIndex = 3;
                  
                  [vActionSheet showC:@""
                               cancel:@"Cancel"
@@ -901,13 +897,13 @@
                       {
                           case 0:
                           {
-                              [self setDefaultBodyText];
+                              self.htmlString = nil;
                               [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
                           }
                               break;
                           case 1:
                           {
-                              [self setDefaultBodyText];
+                              self.htmlString = nil;
                               NSString *plainBody = nil;
                               plainBody = [self makePlainStringContainingTitle:self.noteTitleLabel.text andBodyString:self.noteTextView.text];
                               UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
@@ -916,7 +912,7 @@
                               break;
                           case 2:
                           {
-                              [self setDefaultBodyText];
+                              self.htmlString = nil;
                               NSString *plainBody = nil;
                               plainBody = [self makePlainStringContainingTitle:self.noteTitleLabel.text andBodyString:self.noteTextView.text];
                               NSArray *itemsToShare = @[plainBody];
@@ -933,7 +929,6 @@
              case 2:
              {
                  self.htmlString = nil;
-                 [self setDefaultBodyText];
                  [self createHTMLString];
                  NSString *noteStringForPrint = self.htmlString;
                  [self printNoteAsHTML:noteStringForPrint];
@@ -941,6 +936,7 @@
                  break;
              case 3:
              {
+                 self.htmlString = nil;
                  [self showAlertView];
              }
                  break;
@@ -1151,7 +1147,7 @@
     [mailViewController setSubject:title];
     
     if (self.htmlString) {
-        [mailViewController setMessageBody:body isHTML:YES];
+        [mailViewController setMessageBody:self.htmlString isHTML:YES];
     } else {
         NSString *plainBody = nil;
         plainBody = [self makePlainStringContainingTitle:title andBodyString:body];
@@ -1172,7 +1168,7 @@
 - (NSString *)makePlainStringContainingTitle:(NSString *)titleString andBodyString:(NSString *)bodyString
 {
     NSString *newline = @"\n\n";
-    NSString *plainEmailBodyStringContainingTitle = [NSString stringWithFormat:@"%@%@%@", titleString, newline, bodyString];
+    NSString *plainEmailBodyStringContainingTitle = [NSString stringWithFormat:@"%@%@%@", self.noteTitleLabel.text, newline, self.noteTextView.text];
     return plainEmailBodyStringContainingTitle;
 }
 
@@ -1264,7 +1260,7 @@
                 case 0:
                 {
                     self.htmlString = nil;
-                    [self setDefaultBodyText];
+                    //[self setDefaultBodyText];
                     [self createHTMLString];
                     [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];
                 }
@@ -1278,7 +1274,7 @@
                 case 2:
                 {
                     self.htmlString = nil;
-                    [self setDefaultBodyText];
+                    //[self setDefaultBodyText];
                     [self createHTMLString];
                     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                     pasteboard.string = self.htmlString;
@@ -1286,13 +1282,13 @@
                     break;
                 case 3:
                 {
-                    [self setDefaultBodyText];
+                    //[self setDefaultBodyText];
                     [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
                 }
                     break;
                 case 4:
                 {
-                    [self setDefaultBodyText];
+                    //[self setDefaultBodyText];
                     NSString *plainBody = nil;
                     plainBody = [self makePlainStringContainingTitle:self.noteTitleLabel.text andBodyString:self.noteTextView.text];
                     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
