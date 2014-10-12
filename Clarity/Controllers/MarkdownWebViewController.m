@@ -125,7 +125,7 @@
 }
 
 
-#pragma mark - 웹 뷰
+#pragma mark - TO 웹 뷰
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -695,6 +695,27 @@
     //        [FCFileManager removeItemAtPath:pdfTempPath];
     //    }
     
+}
+
+
+#pragma mark Load File From Documents Folder
+
+-(void)loadFileFromDocumentsFolder:(NSString *)filename
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:filename];
+    NSURL *fileUrl = [NSURL fileURLWithPath:filePath];
+    self.toWebViewController = [[TOWebViewController alloc] initWithURL:fileUrl];
+    [self.navigationController pushViewController:self.toWebViewController animated:YES];
+    //NSURLRequest *requestURL = [NSURLRequest requestWithURL:fileUrl];
+    //[self.markdownWebView loadRequest:requestURL];
+}
+
+
+- (void)displayFile
+{
+    [self loadFileFromDocumentsFolder:@"regularExpression-Cheatsheet.pdf"];
 }
 
 
