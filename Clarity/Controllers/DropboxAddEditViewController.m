@@ -828,66 +828,109 @@
     vActionSheet.dButtonRound = 3;
     vActionSheet.nAnimationType = 2; //2 > POP
     vActionSheet.doDimmedColor = [UIColor colorWithWhite:0.000 alpha:0.500];
-    vActionSheet.nDestructiveIndex = 7;
+    vActionSheet.nDestructiveIndex = 3;
     
     [vActionSheet showC:@""
                  cancel:@"Cancel"
-                buttons:@[@"Email as HTML", @"Email as HTML Attachment", @"Copy as HTML", @"Email as Plain Text", @"Copy as Plain Text", @"More actions as Plain Text...", @"Print Note", @"Delete Note"]
+                buttons:@[@"Actions as HTML Text...", @"Actions as Plain Text...", @"Print Note", @"Delete Note"]
                  result:^(int nResult)
      {
          switch (nResult)
          {
              case 0:
              {
-                 self.htmlString = nil;
-                 [self setDefaultBodyText];
-                 [self createHTMLString];
-                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];
+                 DoActionSheet *vActionSheet = [[DoActionSheet alloc] init];
+                 [vActionSheet setStyle];
+                 vActionSheet.dRound = 7;
+                 vActionSheet.dButtonRound = 3;
+                 vActionSheet.nAnimationType = 2; //2 > POP
+                 vActionSheet.doDimmedColor = [UIColor colorWithWhite:0.000 alpha:0.500];
+                 //vActionSheet.nDestructiveIndex = 3;
+                 
+                 [vActionSheet showC:@""
+                              cancel:@"Cancel"
+                             buttons:@[@"Email as HTML", @"Email as HTML Attachment", @"Copy as HTML"]
+                              result:^(int nResult)
+                  {
+                      switch (nResult)
+                      {
+                          case 0:
+                          {
+                              self.htmlString = nil;
+                              [self setDefaultBodyText];
+                              [self createHTMLString];
+                              [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.htmlString];
+                          }
+                              break;
+                          case 1:
+                          {
+                              self.htmlString = nil;
+                              [self createHTMLAttachmentDocumentWithTitle:self.currentNote.noteTitle];
+                          }
+                              break;
+                          case 2:
+                          {
+                              self.htmlString = nil;
+                              [self setDefaultBodyText];
+                              [self createHTMLString];
+                              UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                              pasteboard.string = self.htmlString;
+                          }
+                              break;
+                      }
+                  }];
+                              
              }
                  break;
              case 1:
              {
-                 self.htmlString = nil;
-                 [self createHTMLAttachmentDocumentWithTitle:self.currentNote.noteTitle];
+                 DoActionSheet *vActionSheet = [[DoActionSheet alloc] init];
+                 [vActionSheet setStyle];
+                 vActionSheet.dRound = 7;
+                 vActionSheet.dButtonRound = 3;
+                 vActionSheet.nAnimationType = 2; //2 > POP
+                 vActionSheet.doDimmedColor = [UIColor colorWithWhite:0.000 alpha:0.500];
+                 //vActionSheet.nDestructiveIndex = 3;
+                 
+                 [vActionSheet showC:@""
+                              cancel:@"Cancel"
+                             buttons:@[@"Email as Plain Text", @"Copy as Plain Text", @"More actions as Plain Text..."]
+                              result:^(int nResult)
+                  {
+                      switch (nResult)
+                      {
+                          case 0:
+                          {
+                              [self setDefaultBodyText];
+                              [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
+                          }
+                              break;
+                          case 1:
+                          {
+                              [self setDefaultBodyText];
+                              NSString *plainBody = nil;
+                              plainBody = [self makePlainStringContainingTitle:self.noteTitleLabel.text andBodyString:self.noteTextView.text];
+                              UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                              pasteboard.string = plainBody;
+                          }
+                              break;
+                          case 2:
+                          {
+                              [self setDefaultBodyText];
+                              NSString *plainBody = nil;
+                              plainBody = [self makePlainStringContainingTitle:self.noteTitleLabel.text andBodyString:self.noteTextView.text];
+                              NSArray *itemsToShare = @[plainBody];
+                              UIActivityViewController *activityViewController;
+                              activityViewController = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+                              [self presentViewController:activityViewController animated:YES completion:^{
+                              }];
+                          }
+                              break;
+                      }
+                  }];
              }
                  break;
              case 2:
-             {
-                 self.htmlString = nil;
-                 [self setDefaultBodyText];
-                 [self createHTMLString];
-                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                 pasteboard.string = self.htmlString;
-             }
-                 break;
-             case 3:
-             {
-                 [self setDefaultBodyText];
-                 [self sendEmailWithTitle:self.noteTitleLabel.text andBody:self.noteTextView.text];
-             }
-                 break;
-             case 4:
-             {
-                 [self setDefaultBodyText];
-                 NSString *plainBody = nil;
-                 plainBody = [self makePlainStringContainingTitle:self.noteTitleLabel.text andBodyString:self.noteTextView.text];
-                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                 pasteboard.string = plainBody;
-             }
-                 break;
-             case 5:
-             {
-                 [self setDefaultBodyText];
-                 NSString *plainBody = nil;
-                 plainBody = [self makePlainStringContainingTitle:self.noteTitleLabel.text andBodyString:self.noteTextView.text];
-                 NSArray *itemsToShare = @[plainBody];
-                 UIActivityViewController *activityViewController;
-                 activityViewController = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
-                 [self presentViewController:activityViewController animated:YES completion:^{
-                 }];
-             }
-                 break;
-             case 6:
              {
                  self.htmlString = nil;
                  [self setDefaultBodyText];
@@ -896,7 +939,7 @@
                  [self printNoteAsHTML:noteStringForPrint];
              }
                  break;
-             case 7:
+             case 3:
              {
                  [self showAlertView];
              }
