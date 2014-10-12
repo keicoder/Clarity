@@ -59,6 +59,9 @@
 {
     [super viewDidLoad];
     
+//    [self.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    [self.view setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    
     self.view.backgroundColor = [UIColor colorWithRed:0.192 green:0.706 blue:0.643 alpha:1];
     self.titleTextField.backgroundColor = kTEXTVIEW_BACKGROUND_COLOR;
     self.titleTextField.textColor = kTEXTVIEW_TEXT_COLOR;
