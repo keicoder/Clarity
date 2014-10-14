@@ -429,10 +429,10 @@
     
     NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
     NSString *buildNumberString = [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"];
-    self.versionLabel.text = [NSString stringWithFormat:@"Version %@ (%@)\nSeptember 25, 2014\nThank you for purchasing Clarity.\nEnjoy Writing!", versionString, buildNumberString];
+    self.versionLabel.text = [NSString stringWithFormat:@"Version %@ (%@)\n\nThank you for purchasing Clarity.\nEnjoy Writing!", versionString, buildNumberString];
     
-    NSString *messageSubject = [NSString stringWithFormat:@"Clarity iOS Version %@ (%@) Feedback", versionString, buildNumberString];
-    NSString *messageBody = [NSString stringWithFormat:@"\n\n\n\n----\nClarity iOS Version %@ (%@)\n", versionString, buildNumberString];
+    NSString *messageSubject = @"Clarity iOS Feedback";
+    NSString *messageBody = [NSString stringWithFormat:@"\n\n\n\n----\nClarity iOS Version %@ (Build %@)\n", versionString, buildNumberString];
     [mailViewController setSubject:NSLocalizedString(messageSubject, messageSubject)];
     [mailViewController setMessageBody:NSLocalizedString(messageBody, messageBody) isHTML:NO];
     

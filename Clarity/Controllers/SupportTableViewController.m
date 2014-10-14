@@ -41,7 +41,7 @@
     
     NSString *versionString = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
     NSString *buildNumberString = [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"];
-    self.versionLabel.text = [NSString stringWithFormat:@"Version %@ (%@)\nSeptember 25, 2014\nThank you for purchasing Clarity.\nEnjoy Writing!", versionString, buildNumberString];
+    self.versionLabel.text = [NSString stringWithFormat:@"Version %@ (Build %@)\nOctober 12, 2014\nThank you for purchasing Clarity.\nEnjoy Writing!", versionString, buildNumberString];
 }
 
 

@@ -1060,7 +1060,7 @@
                                    "<head>"
                                    "  <meta charset='UTF-8'/>"
                                    "  <style>%@</style>"
-                                   "</head>", [self cssUTF8StringForiPhoneAttachment]]];
+                                   "</head>", [self cssUTF8StringForAttachment]]];
     NSString *htmlString = [self makeContentString];
     [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:htmlString error:&error]];
 }
@@ -1068,7 +1068,7 @@
 
 #pragma mark make cssUTF8String for HTML Attachment
 
-- (NSString *)cssUTF8StringForiPhoneAttachment
+- (NSString *)cssUTF8StringForAttachment
 {
     NSError *error = nil;
     NSString *filePath;

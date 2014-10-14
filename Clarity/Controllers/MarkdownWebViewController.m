@@ -163,27 +163,6 @@
 }
 
 
-- (NSString *)cssUTF8String
-{
-    NSError *error = nil;
-    NSString *filePath;
-    if (iPad) {
-        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad_ForWebView" ofType:@"css"];
-    } else {
-        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPhone_ForWebView" ofType:@"css"];
-    }
-    NSString *cssString = [NSString stringWithContentsOfFile:filePath
-                                                    encoding:NSUTF8StringEncoding
-                                                       error:&error];
-    if (error != nil)
-    {
-        NSLog(@"Error: %@", error);
-        return nil;
-    }
-    return cssString;
-}
-
-
 - (NSString *)makeContentString
 {
     NSError *error = nil;
@@ -324,15 +303,38 @@
                                    "<head>"
                                    "  <meta charset='UTF-8'/>"
                                    "  <style>%@</style>"
-                                   "</head>", [self cssUTF8StringForiPhoneAttachment]]];
+                                   "</head>", [self cssUTF8StringForAttachment]]];
     self.markdownString = [self makeContentString];
     [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:self.markdownString error:&error]];
 }
 
 
+#pragma mark Make CSSUTF8String
+
+- (NSString *)cssUTF8String
+{
+    NSError *error = nil;
+    NSString *filePath;
+    if (iPad) {
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad" ofType:@"css"];
+    } else {
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPhone" ofType:@"css"];
+    }
+    NSString *cssString = [NSString stringWithContentsOfFile:filePath
+                                                    encoding:NSUTF8StringEncoding
+                                                       error:&error];
+    if (error != nil)
+    {
+        NSLog(@"Error: %@", error);
+        return nil;
+    }
+    return cssString;
+}
+
+
 #pragma mark Make CSSUTF8String for HTML Attachment
 
-- (NSString *)cssUTF8StringForiPhoneAttachment
+- (NSString *)cssUTF8StringForAttachment
 {
     NSError *error = nil;
     NSString *filePath;
@@ -409,7 +411,8 @@
     JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as HTML", @"Email as Attachment", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
     
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:0];
-    [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:1];
+    [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:1];
+    [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:2];
     
     NSArray *sections = (iPad ? @[section] : @[section, [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"Cancel"] buttonStyle:JGActionSheetButtonStyleCancel]]);
     
