@@ -81,7 +81,7 @@
     [super viewWillAppear:animated];
     self.title = @"Preview";
     [self assignAttributeToMarkdownWebView];
-    [self makeMarkdownString];
+    [self makeMarkdownStringForView];
 }
 
 
@@ -319,6 +319,47 @@
         filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad" ofType:@"css"];
     } else {
         filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPhone" ofType:@"css"];
+    }
+    NSString *cssString = [NSString stringWithContentsOfFile:filePath
+                                                    encoding:NSUTF8StringEncoding
+                                                       error:&error];
+    if (error != nil)
+    {
+        NSLog(@"Error: %@", error);
+        return nil;
+    }
+    return cssString;
+}
+
+
+#pragma mark 마크다운 스트링 for View
+
+- (void)makeMarkdownStringForView
+{
+    NSError *error;
+    self.htmlString = [[NSMutableString alloc] init];
+    [self.htmlString appendString:[NSString stringWithFormat:@"<!DOCTYPE html>"
+                                   "<html>"
+                                   "<head>"
+                                   "  <meta charset='UTF-8'/>"
+                                   "  <style>%@</style>"
+                                   "</head>", [self cssUTF8StringForView]]];
+    self.markdownString = [self makeContentString];
+    [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:self.markdownString error:&error]];
+    [self.markdownWebView loadHTMLString:self.htmlString baseURL:nil];
+}
+
+
+#pragma mark Make CSSUTF8String for View
+
+- (NSString *)cssUTF8StringForView
+{
+    NSError *error = nil;
+    NSString *filePath;
+    if (iPad) {
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPad_ForWebView" ofType:@"css"];
+    } else {
+        filePath = [[NSBundle mainBundle] pathForResource:@"jMarkdown_iPhone_ForWebView" ofType:@"css"];
     }
     NSString *cssString = [NSString stringWithContentsOfFile:filePath
                                                     encoding:NSUTF8StringEncoding
