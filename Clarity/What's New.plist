@@ -43,13 +43,13 @@
 			<string>memo</string>
 		</dict>
 	</array>
-	<key>1.3.9.5</key>
+	<key>1.4.0</key>
 	<array>
 		<dict>
 			<key>title</key>
 			<string>Landscape and Icon</string>
 			<key>detail</key>
-			<string>Now iPhone support landscape mode too. and New fantastic icon</string>
+			<string>Now iPhone support landscape mode too. and new fantastic icon</string>
 			<key>icon</key>
 			<string>iphone_landscape</string>
 		</dict>
