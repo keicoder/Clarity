@@ -156,7 +156,7 @@
                                    "<head>"
                                    "  <meta charset='UTF-8'/>"
                                    "  <style>%@</style>"
-                                   "</head>", [self cssUTF8String]]];
+                                   "</head>", [self cssUTF8StringForAttachment]]];
     self.markdownString = [self makeContentString];
     [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:self.markdownString error:&error]];
     [self.markdownWebView loadHTMLString:self.htmlString baseURL:nil];
