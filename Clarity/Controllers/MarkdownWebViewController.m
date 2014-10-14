@@ -412,7 +412,7 @@
     
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:0];
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:1];
-    [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:2];
+    [section setButtonStyle:JGActionSheetButtonStyleBlue forButtonAtIndex:2];
     
     NSArray *sections = (iPad ? @[section] : @[section, [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"Cancel"] buttonStyle:JGActionSheetButtonStyleCancel]]);
     
