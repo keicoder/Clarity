@@ -832,7 +832,7 @@
     
     [vActionSheet showC:@""
                  cancel:@"Cancel"
-                buttons:@[@"Actions as HTML Text...", @"Actions as Plain Text...", @"Print Note", @"Delete Note"]
+                buttons:@[@"Actions as HTML...", @"Actions as Plain Text...", @"Print Note", @"Delete Note"]
                  result:^(int nResult)
      {
          switch (nResult)

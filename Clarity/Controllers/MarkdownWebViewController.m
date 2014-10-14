@@ -226,6 +226,31 @@
 
 
 #pragma mark - Action Sheet - 액션
+#pragma mark 이메일 공유 (email with Plain TXT or HTML)
+
+- (void)sendEmailWithTitle:(NSString *)title andBody:(NSString *)body
+{
+    if (![MFMailComposeViewController canSendMail]) {
+        return;
+    }
+    
+    [self createHTMLString];
+    
+    MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+    mailViewController.mailComposeDelegate = self;
+    
+    [mailViewController setSubject:title];
+    [mailViewController setMessageBody:self.htmlString isHTML:YES];
+    
+    [self setupMailComposeViewModalTransitionStyle:mailViewController];
+    mailViewController.modalPresentationCapturesStatusBarAppearance = YES;
+    
+    [self presentViewController:mailViewController animated:YES completion:^ {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }];
+}
+
+
 #pragma mark HTML Attachment Document 생성
 
 - (void)createHTMLAttachmentDocumentWithTitle:(NSString *)title
@@ -270,6 +295,21 @@
     [self presentViewController:mailViewController animated:YES completion:^ {
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     }];
+}
+
+
+- (void)createHTMLString
+{
+    NSError *error;
+    self.htmlString = [[NSMutableString alloc] init];
+    [self.htmlString appendString:[NSString stringWithFormat:@"<!DOCTYPE html>"
+                                   "<html>"
+                                   "<head>"
+                                   "  <meta charset='UTF-8'/>"
+                                   "  <style>%@</style>"
+                                   "</head>", [self cssUTF8String]]];
+    self.markdownString = [self makeContentString];
+    [self.htmlString appendString:[MMMarkdown HTMLStringWithMarkdown:self.markdownString error:&error]];
 }
 
 
@@ -323,18 +363,28 @@
     [vActionSheet setStyle];
     vActionSheet.dRound = 7;
     vActionSheet.dButtonRound = 3;
-    vActionSheet.nAnimationType = 2; //2 > POP
+    vActionSheet.nAnimationType = 2;
     vActionSheet.doDimmedColor = [UIColor colorWithWhite:0.000 alpha:0.500];
-    vActionSheet.nDestructiveIndex = 1;
     
     [vActionSheet showC:@""
                  cancel:@"Cancel"
-                buttons:@[@"Email as Attachment"]
+                buttons:@[@"Email as HTML", @"Email as Attachment"]
                  result:^(int nResult)
      {
          switch (nResult)
          {
              case 0:
+             {
+                 self.htmlString = nil;
+                 if ([self.currentNote.noteTitle length] > 0 && [self.currentLocalNote.noteTitle length] == 0) {
+                     [self sendEmailWithTitle:self.currentNote.noteTitle andBody:self.htmlString];
+                 }
+                 else if ([self.currentLocalNote.noteTitle length] > 0 && [self.currentNote.noteTitle length] == 0) {
+                     [self sendEmailWithTitle:self.currentLocalNote.noteTitle andBody:self.htmlString];
+                 }
+             }
+                 break;
+             case 1:
              {
                  self.htmlString = nil;
                  if ([self.currentNote.noteTitle length] > 0 && [self.currentLocalNote.noteTitle length] == 0) {
@@ -356,7 +406,7 @@
 {
     UIView *view = [event.allTouches.anyObject view];
     
-    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as Attachment", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
+    JGActionSheetSection *section = [JGActionSheetSection sectionWithTitle:@"" message:@"" buttonTitles:@[@"Email as HTML", @"Email as Attachment", @"Cancel"] buttonStyle:JGActionSheetButtonStyleBlue];
     
     [section setButtonStyle:JGActionSheetButtonStyleGreen forButtonAtIndex:0];
     [section setButtonStyle:JGActionSheetButtonStyleRed forButtonAtIndex:1];
@@ -374,6 +424,17 @@
                  {
                      self.htmlString = nil;
                      if ([self.currentNote.noteTitle length] > 0 && [self.currentLocalNote.noteTitle length] == 0) {
+                         [self sendEmailWithTitle:self.currentNote.noteTitle andBody:self.htmlString];
+                     }
+                     else if ([self.currentLocalNote.noteTitle length] > 0 && [self.currentNote.noteTitle length] == 0) {
+                         [self sendEmailWithTitle:self.currentLocalNote.noteTitle andBody:self.htmlString];
+                     }
+                 }
+                     break;
+                 case 1:
+                 {
+                     self.htmlString = nil;
+                     if ([self.currentNote.noteTitle length] > 0 && [self.currentLocalNote.noteTitle length] == 0) {
                          [self createHTMLAttachmentDocumentWithTitle:self.currentNote.noteTitle];
                      }
                      else if ([self.currentLocalNote.noteTitle length] > 0 && [self.currentNote.noteTitle length] == 0) {
@@ -381,7 +442,7 @@
                      }
                  }
                      break;
-                 case 1:
+                 case 2:
                      break;
                  default:
                      break;
