@@ -26,7 +26,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [self applicationDocumentsDirectory];
-    
+    [NSThread sleepForTimeInterval:0.5];
     if (iPad) {
         self.storyboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle: nil];
         LeftViewController *controller = (LeftViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"LeftViewController"];
