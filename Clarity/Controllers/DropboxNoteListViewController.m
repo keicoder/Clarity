@@ -402,7 +402,7 @@
     
     Note *note = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:managedObjectContext];
     
-    NSString *uniqueNoteIDString = [NSString stringWithFormat:@"%lli", arc4random() % 999999999999999999];
+    NSString *uniqueNoteIDString = [NSString stringWithFormat:@"%li", (long)arc4random() % (long)999999999999999999];
     note.uniqueNoteIDString = uniqueNoteIDString;
     
     note.isNewNote = [NSNumber numberWithBool:YES];
