@@ -47,11 +47,22 @@
 	<array>
 		<dict>
 			<key>title</key>
-			<string>Landscape and Icon</string>
+			<string>Landscape</string>
 			<key>detail</key>
-			<string>Now iPhone support landscape mode too. and new fantastic icon</string>
+			<string>Now iPhone support landscape mode too.</string>
 			<key>icon</key>
 			<string>iphone_landscape</string>
+		</dict>
+	</array>
+	<key>1.4.1</key>
+	<array>
+		<dict>
+			<key>title</key>
+			<string>iPhone 6 and 6 Plus</string>
+			<key>detail</key>
+			<string>Optimized for iPhone 6 and 6 Plus</string>
+			<key>icon</key>
+			<string>fill</string>
 		</dict>
 	</array>
 </dict>
