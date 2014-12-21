@@ -1886,7 +1886,15 @@
         UIBarButtonItem *barButtonItemNine = [[UIBarButtonItem alloc] initWithCustomView: buttonNine];
         buttonNine.backgroundColor = kButtonBackgroundColor;
         
-        NSArray *navigationBarItems = @[f, barButtonItemOne, fixed, f, barButtonItemSix, f, barButtonItemFour, f, barButtonItemFive, f, barButtonItemThree, f, barButtonItemEight, f, barButtonItemNine, f, barButtonItemSeven, f, fixed, barButtonItemTwo, f];
+        
+        NSArray *navigationBarItems;
+        if ([SDiPhoneVersion deviceSize] == iPhone55inch) {
+            navigationBarItems = @[f, barButtonItemOne, f, barButtonItemSix, f, barButtonItemFour, f, barButtonItemFive, f, barButtonItemThree, f, barButtonItemEight, f, barButtonItemNine, f, barButtonItemSeven, f, barButtonItemTwo, f];
+        }
+        else if (iPad) {
+            navigationBarItems = @[f, barButtonItemOne, fixed, f, barButtonItemSix, f, barButtonItemFour, f, barButtonItemFive, f, barButtonItemThree, f, barButtonItemEight, f, barButtonItemNine, f, barButtonItemSeven, f, fixed, barButtonItemTwo, f];
+        }
+        
         self.keyboardAccessoryToolBar.items = navigationBarItems;
     }
     
